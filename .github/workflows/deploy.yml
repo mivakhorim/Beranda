@@ -1,10 +1,11 @@
-name: Deploy to GitHub Pages
+name: Universal Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
       - master
+  workflow_dispatch: # Memungkinkan Anda memicu deploy secara manual di tab Actions
 
 permissions:
   contents: read
@@ -22,29 +23,50 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      # 1. Mendownload seluruh file dari repository Anda ke server runner
+      - name: Checkout Code
         uses: actions/checkout@v4
 
+      # 2. Menyiapkan environment Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-size: '20'
+          node-version: '20'
           cache: 'npm'
 
+      # 3. Mendownload semua dependensi yang diperlukan (seperti TailwindCSS)
       - name: Install dependencies
-        run: npm ci || npm install
+        run: npm install
 
+      # 4. PENANGANAN ERROR: Otomatis membuat file/folder yang hilang
+      - name: Ensure required files exist
+        run: |
+          # Membuat folder src jika belum ada
+          mkdir -p src
+          
+          # Jika input.css tidak ada, otomatis buatkan versi defaultnya
+          if [ ! -f ./src/input.css ]; then
+            echo "File ./src/input.css tidak ditemukan! Mendownload/Membuat file default..."
+            echo "@tailwind base;" > ./src/input.css
+            echo "@tailwind components;" >> ./src/input.css
+            echo "@tailwind utilities;" >> ./src/input.css
+          fi
+
+      # 5. Menjalankan proses build Tailwind
       - name: Build Tailwind CSS
         run: npm run build:css
 
+      # 6. Menyiapkan GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      # 7. Mengunggah hasil build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '.' # Ubah ini jika hasil build Anda ada di folder spesifik (misal: './dist')
 
+      # 8. Proses Deploy Final
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
