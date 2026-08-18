@@ -1,0 +1,14 @@
+{
+  "name": "real-estate-corporate-website",
+  "version": "1.0.0",
+  "description": "Static corporate website for Real Estate Developer with interactive SVG siteplan, KPR calculator, and WhatsApp integration.",
+  "main": "index.html",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./css/tailwind.css --minify",
+    "watch:css": "npx tailwindcss -i ./src/input.css -o ./css/tailwind.css --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tailwindcss": "^3.4.15"
+  }
+}

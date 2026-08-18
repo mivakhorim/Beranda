@@ -1,0 +1,87 @@
+/* 
+ * ============================================================
+ * PROJECT   : Athera Properti Klaten (athro.biz.id)
+ * VERSION   : 3.4.19 (Tailwind Production Build)
+ * SECTIONS  : Base, Layout, Spacing, Typography, Colors, 
+ *             Components, Siteplan & Animations, Responsive.
+ * ============================================================
+ */
+
+/* --- 1. BASE & RESET STYLES --- 
+   (Reset browser, font standar, box-sizing) */
+*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }
+::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }
+* ,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}
+:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Plus Jakarta Sans,Inter,sans-serif;-webkit-tap-highlight-color:transparent}
+body{margin:0;line-height:inherit;scroll-behavior:smooth;--tw-bg-opacity:1;background-color:rgb(247 246 242/var(--tw-bg-opacity,1));color:rgb(30 45 36/var(--tw-text-opacity,1));-webkit-font-smoothing:antialiased}
+
+/* --- 2. LAYOUT & POSITIONING --- 
+   (Flex, Grid, Absolute, Relative, Z-index) */
+.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}
+.inset-0{inset:0}.-inset-4{inset:-1rem}.z-0{z-index:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}
+.flex{display:flex}.grid{display:grid}.hidden{display:none}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* --- 3. SPACING & SIZING --- 
+   (Margin, Padding, Width, Height) */
+.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.mb-10{margin-bottom:2.5rem}.mb-16{margin-bottom:4rem}
+.mt-2{margin-top:.5rem}.p-4{padding:1rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.py-12{padding-top:3rem;padding-bottom:3rem}
+.w-full{width:100%}.h-full{height:100%}.h-20{height:5rem}.max-w-7xl{max-width:80rem}.aspect-\[4\/3\]{aspect-ratio:4/3}
+
+/* --- 4. TYPOGRAPHY --- 
+   (Font sizes, weights, leading) */
+.font-display{font-family:Outfit,sans-serif}.font-sans{font-family:Plus Jakarta Sans,Inter,sans-serif}
+.text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-base{font-size:1rem}.text-xl{font-size:1.25rem}.text-3xl{font-size:1.875rem}.text-7xl{font-size:4.5rem}
+.font-bold{font-weight:700}.font-light{font-weight:300}.font-semibold{font-weight:600}
+.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.tracking-widest{letter-spacing:.1em}
+
+/* --- 5. COLORS & BACKGROUNDS --- 
+   (Brand colors, Gradients, Opacity) */
+.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}
+.text-brand-gold{--tw-text-opacity:1;color:rgb(197 168 128/var(--tw-text-opacity,1))}
+.text-brand-dark{--tw-text-opacity:1;color:rgb(30 45 36/var(--tw-text-opacity,1))}
+.bg-brand-dark{--tw-bg-opacity:1;background-color:rgb(30 45 36/var(--tw-bg-opacity,1))}
+.bg-brand-gold{--tw-bg-opacity:1;background-color:rgb(197 168 128/var(--tw-bg-opacity,1))}
+.bg-brand-light{--tw-bg-opacity:1;background-color:rgb(247 246 242/var(--tw-bg-opacity,1))}
+.opacity-35{opacity:.35}.bg-gradient-to-t{background-image:linear-gradient(to top,var(--tw-gradient-stops))}
+
+/* --- 6. UI COMPONENTS --- 
+   (Borders, Shadows, Buttons, Transitions) */
+.rounded-full{border-radius:9999px}.rounded-2xl{border-radius:1rem}.border{border-width:1px}.border-white\/10{border-color:hsla(0,0%,100%,.1)}
+.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25)}
+.transition-all{transition-property:all;transition-duration:.15s}.duration-300{transition-duration:.3s}.ease-in-out{transition-timing-function:cubic-bezier(.4,0,.2,1)}
+
+/* --- 7. CUSTOM SITEPLAN & ANIMATIONS --- 
+   (Area khusus interaktif peta kavling) */
+.text-glow{text-shadow:0 0 10px hsla(35,37%,64%,.3)}
+.kavling-path{transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.kavling-path:hover{filter:brightness(1.15) saturate(1.1);stroke-width:2.5}
+.kavling-available{fill:#34d399;stroke:#059669}.kavling-booked{fill:#fbbf24;stroke:#d97706}.kavling-sold{fill:#f87171;stroke:#dc2626;cursor:not-allowed}
+
+@keyframes custom-pulse {
+  0%,to{transform:scale(1);box-shadow:0 4px 6px -1px hsla(35,37%,64%,.4)}
+  50%{transform:scale(1.05);box-shadow:0 10px 15px -3px hsla(35,37%,64%,.6)}
+}
+.pulse-gold{animation:custom-pulse 2s ease-in-out infinite}
+
+/* --- 8. RESPONSIVE MEDIA QUERIES --- 
+   (Pengaturan tampilan Mobile, Tablet, Desktop) */
+
+/* SM: Mobile Large (640px+) */
+@media (min-width:640px){
+  .sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sm\:flex-row{flex-direction:row}
+}
+
+/* MD: Tablet (768px+) */
+@media (min-width:768px){
+  .md\:flex{display:flex}.md\:hidden{display:none}
+  .md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .md\:py-32{padding-top:8rem;padding-bottom:8rem}
+}
+
+/* LG: Desktop (1024px+) */
+@media (min-width:1024px){
+  .lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .lg\:px-8{padding-left:2rem;padding-right:2rem}
+}

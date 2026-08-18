@@ -1,0 +1,12 @@
+# Athro Biz ID
+
+> Website resmi Athro yang menyediakan informasi, produk, dan layanan pilihan.
+
+## Halaman Utama
+- [Beranda](https://athro.biz.id/): Halaman utama website Athro.
+- [Tentang Kami](https://athro.biz.id/about): Informasi profil dan latar belakang Athro.
+- [Kontak](https://athro.biz.id/contact): Informasi kontak dan bantuan.
+
+## Layanan & Produk
+- [Layanan](https://athro.biz.id/services): Daftar layanan yang ditawarkan.
+- [Blog / Artikel](https://athro.biz.id/blog): Artikel dan panduan terbaru.
