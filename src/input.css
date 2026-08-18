@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Styling & Micro-animations */
+@layer base {
+  body {
+    @apply bg-brand-light text-brand-dark font-sans scroll-smooth antialiased;
+  }
+}
+
+@layer utilities {
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glassmorphism-dark {
+    background: rgba(30, 45, 36, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px rgba(197, 168, 128, 0.3);
+  }
+}
+
+/* Custom Interactive Siteplan Styling */
+.kavling-path {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.kavling-path:hover {
+  filter: brightness(1.15) saturate(1.1);
+  stroke-width: 2.5;
+}
+
+/* Available Status style */
+.kavling-available {
+  fill: #34d399; /* emerald-400 */
+  stroke: #059669; /* emerald-600 */
+}
+.kavling-available:hover {
+  fill: #10b981; /* emerald-500 */
+}
+
+/* Booked Status style */
+.kavling-booked {
+  fill: #fbbf24; /* amber-400 */
+  stroke: #d97706; /* amber-600 */
+}
+.kavling-booked:hover {
+  fill: #f59e0b; /* amber-500 */
+}
+
+/* Sold Status style */
+.kavling-sold {
+  fill: #f87171; /* red-400 */
+  stroke: #dc2626; /* red-600 */
+  cursor: not-allowed;
+}
+.kavling-sold:hover {
+  fill: #f87171; /* no color shift on hover for sold */
+}
+
+/* Pulse animation for CTA */
+@keyframes custom-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 6px -1px rgba(197, 168, 128, 0.4), 0 2px 4px -1px rgba(197, 168, 128, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px -3px rgba(197, 168, 128, 0.6), 0 4px 6px -2px rgba(197, 168, 128, 0.3);
+  }
+}
+
+.pulse-gold {
+  animation: custom-pulse 2s infinite ease-in-out;
+}
