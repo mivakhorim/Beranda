@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master
-  workflow_dispatch: # Memungkinkan Anda memicu deploy secara manual di tab Actions
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -23,22 +23,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # 1. Mendownload seluruh file dari repository Anda ke server runner
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Menyiapkan environment Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '24' # Diperbarui ke versi 24 untuk mengatasi warning deprecation
+          # Baris cache: 'npm' Dihapus agar tidak error saat package-lock.json tidak ditemukan
 
-      # 3. Mendownload semua dependensi yang diperlukan (seperti TailwindCSS)
       - name: Install dependencies
         run: npm install
 
-      # 4. PENANGANAN ERROR: Otomatis membuat file/folder yang hilang
       - name: Ensure required files exist
         run: |
           # Membuat folder src jika belum ada
@@ -52,21 +48,17 @@ jobs:
             echo "@tailwind utilities;" >> ./src/input.css
           fi
 
-      # 5. Menjalankan proses build Tailwind
       - name: Build Tailwind CSS
         run: npm run build:css
 
-      # 6. Menyiapkan GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      # 7. Mengunggah hasil build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Ubah ini jika hasil build Anda ada di folder spesifik (misal: './dist')
+          path: '.' 
 
-      # 8. Proses Deploy Final
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
