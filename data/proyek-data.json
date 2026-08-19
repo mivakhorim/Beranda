@@ -1,0 +1,164 @@
+{
+  "subsidi-asri": {
+    "proyekId": "subsidi-asri",
+    "namaProyek": "Griya Asri Residence",
+    "kategori": "Rumah Subsidi",
+    "deskripsi": "Perumahan subsidi berkualitas premium dengan desain modern minimalis. Berlokasi strategis bebas banjir, dekat dengan akses transportasi publik, pusat perbelanjaan, dan fasilitas kesehatan. Pilihan terbaik untuk keluarga muda yang menginginkan hunian idaman dengan angsuran super ringan.",
+    "legalitas": "SHM & PBG Terpecah per Kavling (Sudah Sertifikat)",
+    "koordinatMaps": "-6.2088,106.8456",
+    "koordinatText": "Jl. Raya Utama No. 12, Semarang, Jawa Tengah",
+    "fasilitas": [
+      "Dekat Stasiun & Akses Tol (10 Menit)",
+      "Sistem Keamanan One Gate System",
+      "Taman Bermain Anak & Area Terbuka Hijau",
+      "Sarana Ibadah (Masjid)",
+      "Bebas Banjir (Sistem Drainase Tertutup)"
+    ],
+    "kavling": {
+      "A1": {
+        "status": "tersedia",
+        "harga": 185000000,
+        "luasTanah": 60,
+        "luasBangunan": 36,
+        "dimensi": "6x10 m",
+        "sertifikat": "SHM No. 441/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A2": {
+        "status": "booked",
+        "harga": 185000000,
+        "luasTanah": 60,
+        "luasBangunan": 36,
+        "dimensi": "6x10 m",
+        "sertifikat": "SHM No. 442/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A3": {
+        "status": "terjual",
+        "harga": 185000000,
+        "luasTanah": 60,
+        "luasBangunan": 36,
+        "dimensi": "6x10 m",
+        "sertifikat": "SHM No. 443/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A4": {
+        "status": "tersedia",
+        "harga": 185000000,
+        "luasTanah": 60,
+        "luasBangunan": 36,
+        "dimensi": "6x10 m",
+        "sertifikat": "SHM No. 444/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A5": {
+        "status": "tersedia",
+        "harga": 190000000,
+        "luasTanah": 72,
+        "luasBangunan": 36,
+        "dimensi": "6x12 m",
+        "sertifikat": "SHM No. 445/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A6": {
+        "status": "terjual",
+        "harga": 190000000,
+        "luasTanah": 72,
+        "luasBangunan": 36,
+        "dimensi": "6x12 m",
+        "sertifikat": "SHM No. 446/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A7": {
+        "status": "tersedia",
+        "harga": 185000000,
+        "luasTanah": 60,
+        "luasBangunan": 36,
+        "dimensi": "6x10 m",
+        "sertifikat": "SHM No. 447/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      },
+      "A8": {
+        "status": "booked",
+        "harga": 185000000,
+        "luasTanah": 60,
+        "luasBangunan": 36,
+        "dimensi": "6x10 m",
+        "sertifikat": "SHM No. 448/Asri",
+        "biayaLain": { "bphtb": 0, "ajbNotaris": 5000000, "provisiBank": 2000000 }
+      }
+    }
+  },
+  "komersil-elite": {
+    "proyekId": "komersil-elite",
+    "namaProyek": "Griya Elite Mansion",
+    "kategori": "Rumah Komersil",
+    "deskripsi": "Hunian eksklusif 2 lantai berkonsep Modern Tropical Smart Home. Berlokasi di kawasan elit kota dengan keamanan 24 jam, cctv, club house, dan kolam renang pribadi. Material kelas satu dan finishing premium untuk gaya hidup berkelas Anda.",
+    "legalitas": "SHM & IMB Split / PBG Ready (Bisa Langsung KPR Bank Manapun)",
+    "koordinatMaps": "-6.1754,106.8272",
+    "koordinatText": "Kawasan Elit CBD Candi Baru No. 88, Semarang, Jawa Tengah",
+    "fasilitas": [
+      "Smart Home System & Fingerprint Lock",
+      "Club House & Swimming Pool",
+      "Underground Utility Cables (Kabel Bawah Tanah)",
+      "24 Hours Security & Panic Button",
+      "Row Jalan Utama Lebar (12 Meter)"
+    ],
+    "kavling": {
+      "B1": {
+        "status": "tersedia",
+        "harga": 850000000,
+        "luasTanah": 120,
+        "luasBangunan": 90,
+        "dimensi": "8x15 m",
+        "sertifikat": "SHM No. 901/Elite",
+        "biayaLain": { "bphtb": 37500000, "ajbNotaris": 15000000, "provisiBank": 8500000 }
+      },
+      "B2": {
+        "status": "booked",
+        "harga": 850000000,
+        "luasTanah": 120,
+        "luasBangunan": 90,
+        "dimensi": "8x15 m",
+        "sertifikat": "SHM No. 902/Elite",
+        "biayaLain": { "bphtb": 37500000, "ajbNotaris": 15000000, "provisiBank": 8500000 }
+      },
+      "B3": {
+        "status": "terjual",
+        "harga": 875000000,
+        "luasTanah": 130,
+        "luasBangunan": 100,
+        "dimensi": "8.5x15 m",
+        "sertifikat": "SHM No. 903/Elite",
+        "biayaLain": { "bphtb": 38750000, "ajbNotaris": 15000000, "provisiBank": 8750000 }
+      },
+      "B4": {
+        "status": "tersedia",
+        "harga": 850000000,
+        "luasTanah": 120,
+        "luasBangunan": 90,
+        "dimensi": "8x15 m",
+        "sertifikat": "SHM No. 904/Elite",
+        "biayaLain": { "bphtb": 37500000, "ajbNotaris": 15000000, "provisiBank": 8500000 }
+      },
+      "B5": {
+        "status": "tersedia",
+        "harga": 950000000,
+        "luasTanah": 150,
+        "luasBangunan": 110,
+        "dimensi": "10x15 m",
+        "sertifikat": "SHM No. 905/Elite",
+        "biayaLain": { "bphtb": 42500000, "ajbNotaris": 18000000, "provisiBank": 9500000 }
+      },
+      "B6": {
+        "status": "terjual",
+        "harga": 950000000,
+        "luasTanah": 150,
+        "luasBangunan": 110,
+        "dimensi": "10x15 m",
+        "sertifikat": "SHM No. 906/Elite",
+        "biayaLain": { "bphtb": 42500000, "ajbNotaris": 18000000, "provisiBank": 9500000 }
+      }
+    }
+  }
+}
