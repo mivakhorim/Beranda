@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - Halaman Tidak Ditemukan | DUTAMIK.ID</title>
+  
+  <meta name="description" content="Mohon maaf, halaman yang Anda tuju tidak ditemukan atau telah dipindahkan ke tautan baru. Silakan kembali ke Beranda atau Master Katalog DUTAMIK.ID." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0284c7', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- TOP RUNNING TICKER -->
+  <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
+    <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
+      <span class="mx-4">🌟 Memuat Kontributor DUTAMIK.ID...</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-2">
+        <a href="./" class="flex items-center gap-2 flex-shrink-0 group">
+          <img src="assets/images/logo.svg" alt="DUTAMIK.ID Logo" class="h-9 sm:h-10 w-auto transform transition duration-300 group-hover:scale-105" />
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <a href="./" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Beranda</a>
+          <a href="katalog/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
+            <i data-lucide="grid" class="w-3.5 h-3.5 text-blue-500"></i>
+            <span>Master Katalog</span>
+          </a>
+          <a href="tools/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Fitur Gratis</a>
+          <a href="jasa/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Katalog Jasa</a>
+          <a href="produk/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Produk Digital</a>
+          <a href="donasi/" class="px-3 py-2 rounded-xl hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/20 transition whitespace-nowrap">Donasi QRIS</a>
+        </nav>
+
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="openSearchModal()" aria-label="Cari" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
+            <i data-lucide="search" class="w-4 h-4 text-blue-600"></i>
+            <span class="hidden md:inline">Cari...</span>
+          </button>
+          <button onclick="toggleTheme()" aria-label="Toggle Theme" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <span class="theme-toggle-icon"><i data-lucide="moon" class="w-4 h-4"></i></span>
+          </button>
+          <button onclick="openConsultationModal()" class="hidden sm:inline-flex items-center gap-2 gradient-brand text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md hover:opacity-95 transition">
+            <span>Konsultasi Gratis</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 404 MAIN HERO -->
+  <main class="flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    
+    <div class="max-w-xl w-full text-center space-y-6 relative z-10">
+      
+      <!-- Flying Drone Avatar -->
+      <div class="w-20 h-16 sm:w-24 sm:h-20 mx-auto flex items-center justify-center filter drop-shadow-[0_12px_24px_rgba(0,210,255,0.45)]">
+        <img src="assets/images/robot-waving.svg" alt="Drone Robot 404" class="w-full h-full object-contain" />
+      </div>
+
+      <div class="space-y-2">
+        <span class="text-xs font-mono font-extrabold uppercase px-3 py-1 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full border border-rose-500/20">
+          Galat 404 &bull; Halaman Tidak Ditemukan
+        </span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          Halaman Sedang <span class="text-gradient">Di luar Radar</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+          Tautan yang Anda tuju mungkin telah dipindahkan ke format URL bersih baru, dihapus, atau sedang dalam pembaruan sistem.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="./" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Kembali ke Beranda</span>
+        </a>
+        <a href="katalog/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs shadow-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+          <i data-lucide="grid" class="w-4 h-4 text-blue-500"></i>
+          <span>Jelajahi Master Katalog</span>
+        </a>
+        <button onclick="openSearchModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Cari Layanan</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Core Scripts & Helpers -->
+  <script src="assets/js/catalog-data.js"></script>
+  <script src="assets/js/gas-client.js"></script>
+  <script src="assets/js/search-engine.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>

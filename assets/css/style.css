@@ -257,79 +257,162 @@ body {
 }
 
 /* ==========================================================================
-   INTERACTIVE CUTE 3D ROBOT ASSISTANT ANIMATIONS
+   COMPACT FLYING ROBOT DRONE HEAD (SMOOTH GLIDE, NOD & BLINK ANIMATIONS)
    ========================================================================== */
-@keyframes robotArmWave {
+
+/* 1. Aerodynamic Gliding & Hovering (Penerbangan Melayang Halus) */
+@keyframes robotAirplaneHover {
   0% {
-    transform: rotate(0deg);
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(-2deg);
   }
   50% {
-    transform: rotate(22deg) translateX(2px);
+    transform: translateY(-1px) rotate(1.5deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-1deg);
   }
   100% {
-    transform: rotate(-8deg) translateX(-1px);
+    transform: translateY(0px) rotate(0deg);
   }
 }
 
-@keyframes robotLevitate {
-  0% {
-    transform: translateY(0px);
+.robot-flight-idle {
+  animation: robotAirplaneHover 3.6s ease-in-out infinite !important;
+}
+
+/* 2. LED Eye Stripes Blinking (Berkedip Bergaris Digital) */
+@keyframes robotLedEyeBlink {
+  0%, 86%, 94%, 100% {
+    transform: scaleY(1);
+    opacity: 1;
   }
-  50% {
-    transform: translateY(-8px);
-  }
-  100% {
-    transform: translateY(0px);
+  90%, 92% {
+    transform: scaleY(0.08);
+    opacity: 0.8;
   }
 }
 
-@keyframes robotSittingBounce {
+.robot-led-eyes {
+  animation: robotLedEyeBlink 3.8s infinite ease-in-out !important;
+  transform-origin: 110px 88px;
+}
+
+/* 3. Jet Thruster Glow Pulsing */
+@keyframes thrusterPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
+.robot-thruster-glow {
+  animation: thrusterPulse 1.6s ease-in-out infinite alternate !important;
+  transform-origin: center;
+}
+
+/* 4. Airplane Takeoff & Smooth Glide Landing (Lepas Landas & Mendarat Perlahan di Atas Dropdown) */
+@keyframes robotAirplaneLandingGlide {
   0% {
-    transform: translateY(-30px) scale(0.7) rotate(-10deg);
+    transform: translate(220px, 110px) rotate(-18deg) scale(0.4);
     opacity: 0;
   }
-  60% {
-    transform: translateY(6px) scale(1.08) rotate(3deg);
+  35% {
+    /* Climb & Bank curve across screen */
+    transform: translate(45px, -35px) rotate(-12deg) scale(1.15);
     opacity: 1;
   }
-  80% {
-    transform: translateY(-3px) scale(0.98) rotate(-1deg);
+  65% {
+    /* Smooth glide descent */
+    transform: translate(-10px, -12px) rotate(3deg) scale(1.04);
+    opacity: 1;
+  }
+  85% {
+    /* Flare pitch up slightly */
+    transform: translate(3px, -4px) rotate(-2deg) scale(1.01);
   }
   100% {
-    transform: translateY(0px) scale(1) rotate(0deg);
+    /* Soft Touchdown */
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
     opacity: 1;
   }
 }
 
-@keyframes robotJumpHide {
+.robot-airplane-landing-active {
+  animation: robotAirplaneLandingGlide 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+}
+
+/* 5. Airplane Takeoff & Return Flight (Lepas Landas Pulang) */
+@keyframes robotAirplaneReturnTakeoff {
   0% {
-    transform: translateY(0px) scale(1);
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
     opacity: 1;
   }
-  40% {
-    transform: translateY(-25px) scale(1.1) rotate(15deg);
+  25% {
+    transform: translate(-8px, -15px) rotate(-10deg) scale(1.06);
+    opacity: 1;
+  }
+  55% {
+    transform: translate(60px, -25px) rotate(14deg) scale(1.1);
     opacity: 0.9;
   }
   100% {
-    transform: translateX(120px) translateY(40px) scale(0.5);
+    transform: translate(240px, 60px) rotate(20deg) scale(0.3);
     opacity: 0;
   }
 }
 
-.robot-waving-arm {
-  animation: robotArmWave 1.4s ease-in-out infinite alternate !important;
-  transform-origin: 145px 105px;
+.robot-airplane-return-active {
+  animation: robotAirplaneReturnTakeoff 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
 }
 
-.robot-float-anim {
-  animation: robotLevitate 3s ease-in-out infinite alternate !important;
+/* 6. Inquisitive Drone Tilt on Dropdown Focus (Gaya Penasaran Halus) */
+.robot-drone-curious {
+  transform: translateY(-5px) rotate(-10deg) scale(1.08) !important;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  filter: drop-shadow(0 8px 18px rgba(0, 210, 255, 0.6)) !important;
 }
 
-.robot-sitting-active {
-  animation: robotSittingBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+/* 7. Smooth Gentle Nodding & Blinking upon Option Selection (Mengangguk Halus & Kedip) */
+@keyframes robotSmoothNodAndBlink {
+  0% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(5px) rotate(6deg) scale(1.05);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-3deg) scale(1.02);
+  }
+  75% {
+    transform: translateY(3px) rotate(4deg) scale(1.03);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
 }
 
-.robot-jumping-back {
-  animation: robotJumpHide 0.4s ease-in forwards !important;
+.robot-smooth-nod {
+  animation: robotSmoothNodAndBlink 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
+/* 8. Pure Unboxed Flying Robot Dock (Kanan Tengah Agak ke Bawah) */
+#peeking-robot-dock {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#robot-peek-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+}

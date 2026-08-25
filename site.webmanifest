@@ -1,0 +1,16 @@
+{
+  "name": "DUTAMIK.ID - Duta Media Informasi berKarya",
+  "short_name": "DUTAMIK",
+  "description": "Layanan Digital Terpadu, Tools Gratis In-Browser & PaySheet QRIS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/assets/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -169,15 +169,15 @@
   <script src="../../assets/js/tools.js"></script>
   <script src="../../assets/js/search-engine.js"></script>
   <script src="../../assets/js/gas-client.js"></script>
-        <!-- PEEKING ROBOT ASSISTANT (RIGHT EDGE DOCK - INTERACTIVE 3D VECTOR) -->
-  <div id="peeking-robot-dock" class="fixed right-0 bottom-20 sm:bottom-24 z-50 select-none transition-all duration-500 ease-out translate-x-[calc(100%-48px)] hover:translate-x-[calc(100%-58px)] sm:translate-x-[calc(100%-54px)] flex items-end" data-state="peek">
+          <!-- PEEKING ROBOT ASSISTANT (PURE UNBOXED FLOATING 3D VECTOR CHARACTER) -->
+  <div id="peeking-robot-dock" class="fixed right-0 bottom-20 sm:bottom-24 z-50 select-none transition-all duration-500 ease-out translate-x-[calc(100%-48px)] hover:translate-x-[calc(100%-64px)] sm:translate-x-[calc(100%-56px)] flex items-end pointer-events-auto" data-state="peek">
     
-    <!-- Robot Peeking Trigger Avatar (Sticks out on right edge) -->
-    <button onclick="toggleRobotAssistant()" id="robot-peek-btn" aria-label="Bantuan &amp; Konsultasi" class="relative group p-1.5 pr-3 bg-slate-900/95 dark:bg-slate-900/95 border-2 border-r-0 border-blue-500/60 hover:border-blue-400 rounded-l-3xl shadow-2xl backdrop-blur-xl flex items-center gap-2 cursor-pointer focus:outline-none transition-all duration-300">
+    <!-- Pure Robot Trigger (Tanpa Box / Border / Dark Container) -->
+    <button onclick="toggleRobotAssistant()" id="robot-peek-btn" aria-label="Tanya Robot Asisten" title="Hai! Klik untuk konsultasi" class="relative group bg-transparent border-0 p-0 m-0 cursor-pointer focus:outline-none select-none transition-transform duration-300 hover:scale-110 active:scale-95 filter drop-shadow-[0_8px_20px_rgba(0,240,255,0.45)]">
       
-      <!-- 3D Glossy Robot Vector (Waving & Blinking) -->
-      <div class="relative w-11 h-12 flex items-center justify-center flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" class="w-full h-full drop-shadow-2xl select-none" fill="none">
+      <!-- 3D Glossy Robot Vector (Waving, Hovering & Natural Eye Blinking) -->
+      <div class="relative w-16 h-20 sm:w-20 sm:h-24 flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="100%" height="100%" class="w-full h-full drop-shadow-2xl select-none" fill="none" style="max-height: 110px; max-width: 110px;">
   <defs>
     <radialGradient id="headGrad" cx="40%" cy="30%" r="70%">
       <stop offset="0%" stop-color="#ffffff"/>
@@ -274,8 +274,8 @@
     <rect x="62" y="24" width="76" height="60" rx="24" fill="url(#visorGrad)" stroke="#334155" stroke-width="2"/>
     <path d="M68 34 Q100 26 132 34 Q128 42 100 36 Q74 42 68 34 Z" fill="#ffffff" opacity="0.25"/>
 
-    <!-- Eyes (Friendly Left + Winking Right) -->
-    <g filter="url(#glow)">
+    <!-- Eyes (Interactive Blinking & Cyan Glow) -->
+    <g class="robot-blink-anim" filter="url(#glow)">
       <circle cx="82" cy="50" r="10" fill="url(#cyanGlow)"/>
       <circle cx="82" cy="50" r="5.5" fill="#020617"/>
       <circle cx="85" cy="47" r="2.5" fill="#ffffff"/>
@@ -284,58 +284,19 @@
       <circle cx="126" cy="48" r="2" fill="#ffffff"/>
     </g>
 
-    <!-- Smile -->
+    <!-- Cheerful Glowing Smile -->
     <g filter="url(#glow)">
       <path d="M84 66 Q100 78 116 66 Q100 73 84 66 Z" fill="url(#cyanGlow)"/>
       <path d="M84 66 Q100 78 116 66" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
     </g>
   </g>
 </svg>
-        <span class="absolute -top-1 -left-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900 animate-ping"></span>
-        <span class="absolute -top-1 -left-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
-      </div>
-
-      <div class="hidden sm:flex flex-col text-left pr-1">
-        <span class="text-[11px] font-black text-white leading-tight whitespace-nowrap">Bantuan</span>
-        <span class="text-[9px] text-blue-400 font-bold font-mono whitespace-nowrap">Tanya Kami</span>
+        <!-- Glowing Beacon Point -->
+        <span class="absolute top-2 left-2 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white shadow-sm animate-ping pointer-events-none"></span>
+        <span class="absolute top-2 left-2 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white shadow-sm pointer-events-none"></span>
       </div>
     </button>
   </div>
-        <button onclick="closeRobotAssistant()" aria-label="Tutup Asisten" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Halo! Butuh bantuan atau konsultasi seputar jasa arsitektur, legalitas NIB/Peta OSS, web serverless, atau tools gratis?
-      </p>
-
-      <div class="space-y-2.5">
-        <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Topik Minat:</label>
-          <select id="robot-service-interest" class="w-full px-3 py-2 rounded-xl text-xs bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-blue-500">
-            <option value="Jasa 3D &amp; PBG Arsitektur">🏢 Jasa 3D &amp; PBG Arsitektur</option>
-            <option value="Legalitas NIB &amp; Peta SHP OSS">🗺️ Legalitas NIB &amp; Peta SHP OSS</option>
-            <option value="Pembuatan Web Serverless">🌐 Pembuatan Web Serverless</option>
-            <option value="Optimasi Laptop/PC Remote">💻 Optimasi Laptop/PC Remote</option>
-            <option value="Produk Kasir POS / Template">📦 Produk Kasir POS / Template</option>
-            <option value="Pertanyaan Seputar Tool Gratis">🛠️ Pertanyaan Tool Gratis</option>
-          </select>
-        </div>
-
-        <input type="text" id="robot-client-name" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-xl text-xs bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
-        <textarea id="robot-client-msg" rows="2" placeholder="Tuliskan pertanyaan atau kebutuhan Anda..." class="w-full px-3 py-2 rounded-xl text-xs bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"></textarea>
-
-        <button onclick="sendRobotWaMessage()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
-          <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          <span>Kirim ke WhatsApp Admin</span>
-        </button>
-      </div>
-
-      <div class="text-[10px] text-slate-400 text-center flex items-center justify-center gap-2 pt-1 border-t border-slate-800/80">
-        <span>💡 Geser ke kanan untuk menutup</span>
-      </div>
-    </div>
 
   </div>
 

@@ -433,46 +433,113 @@ async function handleConsultationSubmit(event) {
   window.open(waUrl, '_blank', 'noopener,noreferrer');
 }
 
-function openConsultationModal(preselectedService = '') {
-  const modal = document.getElementById('modal-consultation-service');
-  if (!modal) return;
 
-  const select = document.getElementById('consult-service-select');
-  if (select && preselectedService) {
-    for (let i = 0; i < select.options.length; i++) {
-      if (select.options[i].text.toLowerCase().includes(preselectedService.toLowerCase()) || select.options[i].value.toLowerCase().includes(preselectedService.toLowerCase())) {
-        select.selectedIndex = i;
-        break;
+// ==========================================================================
+// SCENE CHOREOGRAPHY: ATRACTIVE ROBOT JUMP & SITTING INTERACTION
+// ==========================================================================
+
+
+// ==========================================================================
+// SCENE CHOREOGRAPHY: FLYING ROBOT DRONE HEAD (SMOOTH FLIGHT & LANDING)
+// ==========================================================================
+
+
+// ==========================================================================
+// SCENE CHOREOGRAPHY: COMPACT FLYING ROBOT DRONE HEAD (PURE FLIGHT & NOD)
+// ==========================================================================
+
+function openConsultationModal(preselectedService = null) {
+  const modal = document.getElementById('modal-consultation-service');
+  const robotSitting = document.getElementById('modal-robot-sitting');
+  const peekingDock = document.getElementById('peeking-robot-dock');
+
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    // Hide dock while drone is in flight
+    if (peekingDock) {
+      peekingDock.style.opacity = '0';
+      peekingDock.style.pointerEvents = 'none';
+    }
+
+    // Trigger smooth airplane glide landing animation
+    if (robotSitting) {
+      robotSitting.classList.remove('robot-airplane-return-active');
+      robotSitting.classList.remove('robot-airplane-landing-active');
+      void robotSitting.offsetWidth; // force reflow
+      robotSitting.classList.add('robot-airplane-landing-active');
+    }
+
+    // If preselected
+    if (preselectedService) {
+      const sel = document.getElementById('consult-service-select');
+      if (sel) {
+        for (let opt of sel.options) {
+          if (opt.value.toLowerCase().includes(preselectedService.toLowerCase()) || preselectedService.toLowerCase().includes(opt.value.toLowerCase())) {
+            sel.value = opt.value;
+            break;
+          }
+        }
       }
     }
-  }
 
-  // Animate robot jumping to sitting position atop the modal
-  const sittingRobot = document.getElementById('modal-robot-sitting');
-  if (sittingRobot) {
-    sittingRobot.classList.remove('robot-jumping-back');
-    sittingRobot.classList.add('robot-sitting-active');
+    if (window.lucide) lucide.createIcons();
   }
-
-  openModal('modal-consultation-service');
 }
 
 function closeConsultationModal() {
-  const sittingRobot = document.getElementById('modal-robot-sitting');
-  if (sittingRobot) {
-    sittingRobot.classList.remove('robot-sitting-active');
-    sittingRobot.classList.add('robot-jumping-back');
+  const modal = document.getElementById('modal-consultation-service');
+  const robotSitting = document.getElementById('modal-robot-sitting');
+  const peekingDock = document.getElementById('peeking-robot-dock');
+
+  if (robotSitting) {
+    robotSitting.classList.remove('robot-airplane-landing-active');
+    robotSitting.classList.add('robot-airplane-return-active');
   }
 
   setTimeout(() => {
-    closeModal('modal-consultation-service');
-    // Ensure peeking robot is returned
-    const dock = document.getElementById('peeking-robot-dock');
-    if (dock) dock.setAttribute('data-state', 'peek');
-  }, 250);
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+    if (robotSitting) {
+      robotSitting.classList.remove('robot-airplane-return-active');
+    }
+    // Reappear dock at right-center-lower smoothly
+    if (peekingDock) {
+      peekingDock.style.opacity = '1';
+      peekingDock.style.pointerEvents = 'auto';
+      peekingDock.classList.remove('robot-peek-reappear');
+      void peekingDock.offsetWidth; // force reflow
+      peekingDock.classList.add('robot-peek-reappear');
+    }
+  }, 500);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initDonationSection();
-});
+// Dropdown Flight Reactions (Gaya Penasaran & Mengangguk Halus)
+function handleDropdownFocus() {
+  const avatar = document.getElementById('robot-sitting-avatar');
+  if (avatar) {
+    avatar.classList.add('robot-drone-curious');
+  }
+}
 
+function handleDropdownBlur() {
+  const avatar = document.getElementById('robot-sitting-avatar');
+  if (avatar) {
+    avatar.classList.remove('robot-drone-curious');
+  }
+}
+
+function handleDropdownChange(selectEl) {
+  const avatar = document.getElementById('robot-sitting-avatar');
+  if (avatar) {
+    avatar.classList.remove('robot-drone-curious');
+    avatar.classList.remove('robot-smooth-nod');
+    void avatar.offsetWidth; // trigger reflow
+    avatar.classList.add('robot-smooth-nod');
+  }
+}

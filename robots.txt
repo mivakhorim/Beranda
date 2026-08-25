@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://dutamik.id/sitemap.xml
