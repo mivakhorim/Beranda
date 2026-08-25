@@ -301,31 +301,32 @@
 
     </div>
 
-    <!-- ========================================================================= -->
+        <!-- ========================================================================= -->
     <!-- TAB 2: PRODUK DIGITAL & GITHUB COMMIT / PUSH / PULL                       -->
     <!-- ========================================================================= -->
     <div id="tab-github-products" class="admin-tab-content hidden space-y-6">
       
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-3xl bg-dark-900 border border-slate-800">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-3xl bg-dark-900 border border-slate-800 shadow-lg">
         <div>
           <h3 class="font-bold text-sm text-white flex items-center gap-2">
-            <span>Manajemen Registri Produk Digital &amp; Afiliasi</span>
-            <code class="text-[11px] text-blue-400 bg-blue-950/60 px-2 py-0.5 rounded border border-blue-800/40">assets/data/products.json</code>
+            <svg class="w-4 h-4 text-blue-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            <span>Manajemen Registri Produk &amp; Afiliasi</span>
+            <code class="text-[10px] text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded border border-blue-800/40">products.json</code>
           </h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Sinkronisasi data langsung dengan repositori GitHub Pages.</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Kelola baris data produk digital dan link afiliasi dengan mudah melalui pop-up modal.</p>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="pullFileFromGithub('products')" class="px-3.5 py-2 bg-dark-800 hover:bg-dark-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-700 shadow">
+        <div class="grid grid-cols-3 sm:flex items-center gap-2">
+          <button onclick="pullFileFromGithub('products')" class="px-3 py-2.5 bg-dark-800 hover:bg-dark-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 border border-slate-700 shadow cursor-pointer">
             <svg class="w-3.5 h-3.5 text-blue-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
-            <span>Pull dari GitHub</span>
+            <span>Pull Git</span>
           </button>
-          <button onclick="openAddProductModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-            <span>Tambah Item</span>
+          <button onclick="openAddProductModal()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer">
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>+ Tambah</span>
           </button>
-          <button onclick="commitAndPushFileToGithub('products')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg">
+          <button onclick="commitAndPushFileToGithub('products')" class="px-3 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer">
             <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
-            <span>Commit &amp; Push ke GitHub</span>
+            <span>Push Git</span>
           </button>
         </div>
       </div>
@@ -338,7 +339,8 @@
         <a id="git-commit-result-link" href="#" target="_blank" class="font-bold underline text-emerald-400 hover:text-emerald-200">Lihat Commit &rarr;</a>
       </div>
 
-      <div class="glass-admin rounded-3xl border border-slate-800/80 overflow-hidden">
+      <!-- DESKTOP TABLE VIEW (MD UP) -->
+      <div class="hidden md:block glass-admin rounded-3xl border border-slate-800/80 overflow-hidden shadow-xl">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-300">
             <thead class="bg-dark-900 text-slate-400 uppercase text-[10px] border-b border-slate-800">
@@ -356,6 +358,11 @@
             </tbody>
           </table>
         </div>
+      </div>
+
+      <!-- MOBILE RESPONSIVE CARD FEED (SM & PHONE VIEW) -->
+      <div id="admin-products-mobile-feed" class="md:hidden space-y-3.5">
+        <!-- Rendered via JS for Phone Screens -->
       </div>
 
     </div>

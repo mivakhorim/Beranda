@@ -1,157 +1,14 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 - Halaman Tidak Ditemukan | DUTAMIK.ID</title>
-  
-  <meta name="description" content="Mohon maaf, halaman yang Anda tuju tidak ditemukan atau telah dipindahkan ke tautan baru. Silakan kembali ke Beranda atau Master Katalog DUTAMIK.ID." />
-  <meta name="robots" content="noindex, follow" />
-  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0284c7', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f172a' }
-          }
-        }
-      }
-    }
-  </script>
-  
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <meta http-equiv="refresh" content="0; url=dashboard.html" />
+  <title>Mengarahkan ke Admin Dashboard...</title>
+  <script>window.location.replace("dashboard.html");</script>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
-
-  <!-- TOP RUNNING TICKER -->
-  <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
-    <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
-  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <strong class="text-slate-900 dark:text-white font-bold">Bpk. Hendra S.</strong> 
-    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
-    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Jasa Remote Laptop lancar & aman!"</span>
-  </span> • 
-  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <strong class="text-slate-900 dark:text-white font-bold">Ibu Rina Kartika</strong> 
-    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 100.000</span>
-    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Gambar Kerja PBG lolos verifikasi SIMBG."</span>
-  </span> • 
-  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <strong class="text-slate-900 dark:text-white font-bold">Mas Dimas Pratama</strong> 
-    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 75.000</span>
-    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Aplikasi POS Kasir Sheet sangat membantu toko!"</span>
-  </span> • 
-  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <strong class="text-slate-900 dark:text-white font-bold">CV Berkah Mandiri</strong> 
-    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 150.000</span>
-    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Peta SHP valid langsung lolos OSS RBA."</span>
-  </span> • 
-  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <strong class="text-slate-900 dark:text-white font-bold">Kedai Kopi Bahagia</strong> 
-    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
-    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"PaySheet QRIS mantap tanpa potongan bulanan!"</span>
-  </span>
-</div>
-  </div>
-
-  <!-- NAVBAR -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-18 py-2">
-        <a href="./" class="flex items-center gap-2 flex-shrink-0 group">
-          <img src="assets/images/logo.svg" alt="DUTAMIK.ID Logo" class="h-9 sm:h-10 w-auto transform transition duration-300 group-hover:scale-105" />
-        </a>
-
-        <nav class="hidden lg:flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-          <a href="./" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Beranda</a>
-          <a href="katalog/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
-            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span>Master Katalog</span>
-          </a>
-          <a href="tools/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Fitur Gratis</a>
-          <a href="jasa/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Katalog Jasa</a>
-          <a href="produk/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Produk Digital</a>
-          <a href="donasi/" class="px-3 py-2 rounded-xl hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/20 transition whitespace-nowrap">Donasi QRIS</a>
-        </nav>
-
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <button onclick="openSearchModal()" aria-label="Cari" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
-            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <span class="hidden md:inline">Cari...</span>
-          </button>
-          <button onclick="toggleTheme()" id="btn-theme-toggle" aria-label="Toggle Theme" title="Ganti Mode Gelap / Terang" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer flex items-center justify-center">
-  <span class="theme-toggle-icon flex items-center justify-center">
-    <svg class="w-4 h-4 text-amber-400 hidden dark:inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-    <svg class="w-4 h-4 text-slate-700 dark:hidden inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-  </span>
-</button>
-          <button onclick="openConsultationModal()" class="hidden sm:inline-flex items-center gap-2 gradient-brand text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md hover:opacity-95 transition">
-            <span>Konsultasi Gratis</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- 404 MAIN HERO -->
-  <main class="flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-    
-    <div class="max-w-xl w-full text-center space-y-6 relative z-10">
-      
-      <!-- Flying Drone Avatar -->
-      <div class="w-20 h-16 sm:w-24 sm:h-20 mx-auto flex items-center justify-center filter drop-shadow-[0_12px_24px_rgba(0,210,255,0.45)]">
-        <img src="assets/images/robot-waving.svg" alt="Drone Robot 404" class="w-full h-full object-contain" />
-      </div>
-
-      <div class="space-y-2">
-        <span class="text-xs font-mono font-extrabold uppercase px-3 py-1 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full border border-rose-500/20">
-          Galat 404 &bull; Halaman Tidak Ditemukan
-        </span>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Halaman Sedang <span class="text-gradient">Di luar Radar</span>
-        </h1>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
-          Tautan yang Anda tuju mungkin telah dipindahkan ke format URL bersih baru, dihapus, atau sedang dalam pembaruan sistem.
-        </p>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="./" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-          <svg class="w-5 h-5 text-purple-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-          <span>Kembali ke Beranda</span>
-        </a>
-        <a href="katalog/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs shadow-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-          <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span>Jelajahi Master Katalog</span>
-        </a>
-        <button onclick="openSearchModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-          <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <span>Cari Layanan</span>
-        </button>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- Core Scripts & Helpers -->
-  <script src="assets/js/catalog-data.js"></script>
-  <script src="assets/js/gas-client.js"></script>
-  <script src="assets/js/search-engine.js"></script>
-  <script src="assets/js/main.js"></script>
-  <script>
-    if (window.lucide) lucide.createIcons();
-  </script>
+<body style="background:#070d18;color:#94a3b8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+  <p>Mengarahkan ke <a href="dashboard.html" style="color:#38bdf8;">Admin Dashboard &rarr;</a></p>
+<script src="../assets/js/main.js"></script>
 <!-- BORDERLESS CLEAN FLOATING ROBOT ASSISTANT -->
   <div id="peeking-robot-dock" class="fixed right-3 sm:right-6 bottom-20 sm:bottom-24 z-50 select-none pointer-events-auto" data-state="peek">
     <button onclick="openConsultationModal()" id="robot-peek-btn" aria-label="Konsultasi Robot Asisten" title="Klik untuk konsultasi cepat" class="p-0 bg-transparent border-none outline-none focus:outline-none cursor-pointer flex items-center justify-center group transition-transform hover:scale-110 active:scale-95">
@@ -415,5 +272,6 @@
 
     </div>
   </div>
+<script src="../assets/js/gas-client.js"></script>
 </body>
 </html>

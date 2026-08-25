@@ -38,7 +38,7 @@ function renderKontributorWall() {
               <span class="text-[10px] text-slate-400 font-mono">${s.date}</span>
             </div>
           </div>
-          <span class="text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <span class="text-[11px] font-black px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 whitespace-nowrap flex-shrink-0 leading-none">
             Rp ${Number(s.amount).toLocaleString('id-ID')}
           </span>
         </div>
@@ -88,13 +88,29 @@ function selectDonationPreset(amount, category) {
     btn.classList.add('border-slate-200', 'dark:border-slate-800', 'bg-white', 'dark:bg-slate-900');
   });
 
-  const activeBtn = event?.currentTarget || document.querySelector(`.preset-card-donasi[data-amount="${amount}"]`);
+  const activeBtn = (window.event && window.event.currentTarget) ? window.event.currentTarget : null;
   if (activeBtn) {
-    activeBtn.classList.add('border-blue-600', 'bg-blue-50/80', 'dark:bg-blue-900/30', 'ring-2', 'ring-blue-500/50');
     activeBtn.classList.remove('border-slate-200', 'dark:border-slate-800', 'bg-white', 'dark:bg-slate-900');
+    activeBtn.classList.add('border-blue-600', 'bg-blue-50/80', 'dark:bg-blue-900/30', 'ring-2', 'ring-blue-500/50');
   }
 
   updateDonationQris(amount, category);
+}
+
+function showCustomDonationInput() {
+  const customBox = document.getElementById('donasi-custom-box');
+  if (customBox) customBox.classList.remove('hidden');
+
+  document.querySelectorAll('.preset-card-donasi').forEach(btn => {
+    btn.classList.remove('border-blue-600', 'bg-blue-50/80', 'dark:bg-blue-900/30', 'ring-2', 'ring-blue-500/50');
+    btn.classList.add('border-slate-200', 'dark:border-slate-800', 'bg-white', 'dark:bg-slate-900');
+  });
+
+  const activeBtn = (window.event && window.event.currentTarget) ? window.event.currentTarget : null;
+  if (activeBtn) {
+    activeBtn.classList.remove('border-slate-200', 'dark:border-slate-800', 'bg-white', 'dark:bg-slate-900');
+    activeBtn.classList.add('border-blue-600', 'bg-blue-50/80', 'dark:bg-blue-900/30', 'ring-2', 'ring-blue-500/50');
+  }
 }
 
 function updateDonationQris(amount, label) {
@@ -181,30 +197,20 @@ function closeConsultationModal() {
   const robotSitting = document.getElementById('modal-robot-sitting');
   const robotAvatar = document.getElementById('robot-sitting-avatar');
 
-  if (robotAvatar && robotSitting) {
-    robotAvatar.classList.remove('robot-airplane-landing-active', 'robot-drone-curious', 'robot-smooth-nod');
-    void robotAvatar.offsetWidth;
-    robotAvatar.classList.add('robot-airplane-return-active');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
 
-    setTimeout(() => {
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        document.body.style.overflow = '';
-      }
-      if (dock) {
-        dock.style.opacity = '1';
-        dock.classList.add('robot-peek-reappear');
-        setTimeout(() => dock.classList.remove('robot-peek-reappear'), 600);
-      }
-    }, 450);
-  } else {
-    if (modal) {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.body.style.overflow = '';
-    }
-    if (dock) dock.style.opacity = '1';
+  if (dock) {
+    dock.style.opacity = '1';
+    dock.style.display = 'block';
+    dock.style.pointerEvents = 'auto';
+  }
+
+  if (robotAvatar) {
+    robotAvatar.classList.remove('robot-airplane-landing-active', 'robot-airplane-return-active', 'robot-drone-curious', 'robot-smooth-nod');
   }
 }
 
@@ -225,13 +231,29 @@ function handleDropdownBlur() {
 function handleDropdownChange(selectEl) {
   const robotAvatar = document.getElementById('robot-sitting-avatar');
   if (robotAvatar) {
-    robotAvatar.classList.remove('robot-drone-curious', 'robot-smooth-nod');
+    robotAvatar.classList.remove('robot-drone-curious');
     void robotAvatar.offsetWidth;
     robotAvatar.classList.add('robot-smooth-nod');
     setTimeout(() => {
       robotAvatar.classList.remove('robot-smooth-nod');
-    }, 700);
+    }, 600);
   }
+}
+
+function openServiceOrderWithName(serviceName) {
+  openConsultationModal();
+  setTimeout(() => {
+    const select = document.getElementById('consult-service-select');
+    if (select) {
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === serviceName || select.options[i].text.includes(serviceName)) {
+          select.selectedIndex = i;
+          handleDropdownChange(select);
+          break;
+        }
+      }
+    }
+  }, 100);
 }
 
 async function handleConsultationSubmit(event) {
@@ -250,16 +272,6 @@ async function handleConsultationSubmit(event) {
     showToast('Mohon lengkapi Nama, No. WhatsApp, dan Detail Kebutuhan Anda', 'error');
     return;
   }
-
-  const payload = {
-    action: "submit_consultation",
-    timestamp: new Date().toISOString(),
-    serviceType: serviceType,
-    clientName: clientName,
-    clientWhatsapp: clientWhatsapp,
-    clientEmail: clientEmail,
-    projectDetails: projectDetails
-  };
 
   submitBtn.disabled = true;
   submitBtn.innerHTML = `Mengirim Permintaan...`;

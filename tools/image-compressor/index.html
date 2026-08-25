@@ -196,134 +196,101 @@
   <script src="../../assets/js/search-engine.js"></script>
   <script src="../../assets/js/gas-client.js"></script>
           <!-- PEEKING ROBOT ASSISTANT (PURE UNBOXED FLOATING 3D VECTOR CHARACTER) -->
-  <div id="peeking-robot-dock" class="fixed right-0 bottom-20 sm:bottom-24 z-50 select-none transition-all duration-500 ease-out translate-x-[calc(100%-48px)] hover:translate-x-[calc(100%-64px)] sm:translate-x-[calc(100%-56px)] flex items-end pointer-events-auto" data-state="peek">
-    
-    <!-- Pure Robot Trigger (Tanpa Box / Border / Dark Container) -->
-    <button onclick="toggleRobotAssistant()" id="robot-peek-btn" aria-label="Tanya Robot Asisten" title="Hai! Klik untuk konsultasi" class="relative group bg-transparent border-0 p-0 m-0 cursor-pointer focus:outline-none select-none transition-transform duration-300 hover:scale-110 active:scale-95 filter drop-shadow-[0_8px_20px_rgba(0,240,255,0.45)]">
-      
-      <!-- 3D Glossy Robot Vector (Waving, Hovering & Natural Eye Blinking) -->
-      <div class="relative w-16 h-20 sm:w-20 sm:h-24 flex items-center justify-center flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="100%" height="100%" class="w-full h-full drop-shadow-2xl select-none" fill="none" style="max-height: 110px; max-width: 110px;">
+  <!-- BORDERLESS CLEAN FLOATING ROBOT ASSISTANT -->
+  <div id="peeking-robot-dock" class="fixed right-3 sm:right-6 bottom-20 sm:bottom-24 z-50 select-none pointer-events-auto" data-state="peek">
+    <button onclick="openConsultationModal()" id="robot-peek-btn" aria-label="Konsultasi Robot Asisten" title="Klik untuk konsultasi cepat" class="p-0 bg-transparent border-none outline-none focus:outline-none cursor-pointer flex items-center justify-center group transition-transform hover:scale-110 active:scale-95">
+      <div class="relative w-14 h-12 sm:w-16 sm:h-14 flex items-center justify-center filter drop-shadow-[0_8px_18px_rgba(0,210,255,0.55)]">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%" class="w-full h-full drop-shadow-xl select-none" fill="none" style="max-height: 52px; max-width: 62px;">
   <defs>
-    <radialGradient id="headGrad" cx="40%" cy="30%" r="70%">
+    <radialGradient id="helmetShellGrad" cx="50%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#f1f5f9"/>
+      <stop offset="85%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </radialGradient>
+    <linearGradient id="thrusterPodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="60%" stop-color="#e2e8f0"/>
       <stop offset="100%" stop-color="#94a3b8"/>
-    </radialGradient>
-    <radialGradient id="visorGrad" cx="50%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="80%" stop-color="#020617"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </radialGradient>
-    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="70%" stop-color="#e2e8f0"/>
-      <stop offset="100%" stop-color="#94a3b8"/>
     </linearGradient>
-    <linearGradient id="jointGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#475569"/>
-      <stop offset="50%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="cyanBezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8"/>
-      <stop offset="50%" stop-color="#00f0ff"/>
+      <stop offset="50%" stop-color="#00d2ff"/>
       <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2.5" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    <radialGradient id="screenGlassGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="90%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <linearGradient id="cyanStripeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="50%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <pattern id="crtScanlines" width="100" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.45"/>
+      <line x1="0" y1="2" x2="100" y2="2" stroke="#00f0ff" stroke-width="2" opacity="0.95"/>
+    </pattern>
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="blur1"/>
+      <feGaussianBlur stdDeviation="7" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
 
-  <g class="robot-float-anim">
-    <!-- Shadow -->
-    <ellipse cx="100" cy="232" rx="42" ry="6" fill="#000000" opacity="0.25" />
-
-    <!-- Feet -->
-    <ellipse cx="78" cy="226" rx="16" ry="7" fill="#1e293b"/>
-    <ellipse cx="78" cy="224" rx="14" ry="5" fill="#334155"/>
-    <ellipse cx="122" cy="226" rx="16" ry="7" fill="#1e293b"/>
-    <ellipse cx="122" cy="224" rx="14" ry="5" fill="#334155"/>
-
-    <!-- Legs -->
-    <path d="M70 178 Q66 200 70 220 L86 220 Q88 200 84 178 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
-    <path d="M116 178 Q112 200 114 220 L130 220 Q134 200 130 178 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
-    
-    <!-- Pelvis -->
-    <path d="M68 160 Q100 182 132 160 Q122 178 100 180 Q78 178 68 160 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
-
-    <!-- Waist Joints -->
-    <ellipse cx="100" cy="154" rx="16" ry="5" fill="url(#jointGrad)"/>
-    <ellipse cx="100" cy="148" rx="17" ry="5" fill="url(#jointGrad)"/>
-    <ellipse cx="100" cy="142" rx="18" ry="5" fill="url(#jointGrad)"/>
-
-    <!-- Right Arm (Hanging) -->
-    <g>
-      <circle cx="56" cy="116" r="7" fill="url(#jointGrad)"/>
-      <ellipse cx="53" cy="125" rx="5" ry="3" fill="url(#jointGrad)"/>
-      <ellipse cx="50" cy="131" rx="5" ry="3" fill="url(#jointGrad)"/>
-      <path d="M44 136 Q38 162 42 182 Q50 184 54 180 Q52 160 52 136 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.2"/>
-      <ellipse cx="45" cy="186" rx="5" ry="6" fill="#1e293b"/>
-      <path d="M42 186 L38 200 L44 200 Z" fill="#0f172a"/>
-      <path d="M46 186 L44 202 L49 202 Z" fill="#0f172a"/>
+  <g class="robot-flight-idle">
+    <ellipse cx="120" cy="180" rx="34" ry="9" fill="url(#cyanStripeGlow)" opacity="0.6" filter="url(#neonGlow)" class="robot-thruster-glow"/>
+    <ellipse cx="120" cy="180" rx="16" ry="4" fill="#ffffff" opacity="0.9"/>
+    <g transform="translate(8, 62)">
+      <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+      <rect x="18" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
+      <ellipse cx="10" cy="33" rx="5" ry="14" fill="#0f172a"/>
+      <ellipse cx="10" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     </g>
-
-    <!-- Chest Torso -->
-    <path d="M64 100 Q100 90 136 100 Q142 144 100 148 Q58 144 64 100 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="2"/>
-    <path d="M72 104 Q100 96 128 104 Q132 136 100 138 Q68 136 72 104 Z" fill="#ffffff" opacity="0.6"/>
-    <ellipse cx="100" cy="94" rx="12" ry="4" fill="url(#jointGrad)"/>
-
-    <!-- Left Arm & Waving Hand -->
-    <g class="robot-waving-arm" style="transform-origin: 145px 105px;">
-      <circle cx="145" cy="105" r="8" fill="url(#jointGrad)"/>
-      <ellipse cx="152" cy="98" rx="6" ry="4" fill="url(#jointGrad)" transform="rotate(-30 152 98)"/>
-      <ellipse cx="158" cy="90" rx="6" ry="4" fill="url(#jointGrad)" transform="rotate(-35 158 90)"/>
-      <path d="M156 86 Q168 60 174 46 Q184 50 180 62 Q172 78 166 90 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.2"/>
-      
-      <!-- Open Hand & Glowing Cyan Palm Disc -->
-      <circle cx="180" cy="42" r="14" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-      <circle cx="180" cy="42" r="7" fill="url(#cyanGlow)" filter="url(#glow)"/>
-      <circle cx="180" cy="42" r="3.5" fill="#ffffff"/>
-      <path d="M168 46 Q160 48 158 40 Q164 36 170 40 Z" fill="#0f172a"/>
-      <path d="M174 30 L172 12 Q177 10 180 12 L180 30 Z" fill="#0f172a"/>
-      <path d="M182 29 L184 8 Q189 8 191 10 L188 29 Z" fill="#0f172a"/>
-      <path d="M190 32 L196 14 Q200 15 201 18 L194 33 Z" fill="#0f172a"/>
-      <path d="M193 38 L202 26 Q205 28 204 31 L196 42 Z" fill="#0f172a"/>
+    <g transform="translate(198, 62)">
+      <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+      <rect x="6" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
+      <ellipse cx="24" cy="33" rx="5" ry="14" fill="#0f172a"/>
+      <ellipse cx="24" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     </g>
-
-    <!-- Head -->
-    <ellipse cx="100" cy="56" rx="50" ry="46" fill="url(#headGrad)" stroke="#cbd5e1" stroke-width="2"/>
-    <ellipse cx="88" cy="24" rx="20" ry="8" fill="#ffffff" opacity="0.75" transform="rotate(-15 88 24)"/>
-
-    <!-- Visor -->
-    <rect x="62" y="24" width="76" height="60" rx="24" fill="url(#visorGrad)" stroke="#334155" stroke-width="2"/>
-    <path d="M68 34 Q100 26 132 34 Q128 42 100 36 Q74 42 68 34 Z" fill="#ffffff" opacity="0.25"/>
-
-    <!-- Eyes (Interactive Blinking & Cyan Glow) -->
-    <g class="robot-blink-anim" filter="url(#glow)">
-      <circle cx="82" cy="50" r="10" fill="url(#cyanGlow)"/>
-      <circle cx="82" cy="50" r="5.5" fill="#020617"/>
-      <circle cx="85" cy="47" r="2.5" fill="#ffffff"/>
-      <path d="M110 52 Q118 42 126 50 Q118 46 110 52 Z" fill="url(#cyanGlow)"/>
-      <path d="M109 52 L127 48" stroke="#00f0ff" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="126" cy="48" r="2" fill="#ffffff"/>
+    <rect x="36" y="18" width="168" height="154" rx="66" fill="url(#helmetShellGrad)" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M84 18 C84 12, 94 12, 94 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
+    <path d="M146 18 C146 12, 156 12, 156 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
+    <ellipse cx="120" cy="32" rx="48" ry="8" fill="#ffffff" opacity="0.85"/>
+    <rect x="48" y="32" width="144" height="126" rx="52" fill="none" stroke="url(#cyanBezelGrad)" stroke-width="8" filter="drop-shadow(0 2px 6px rgba(0,210,255,0.4))"/>
+    <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#screenGlassGrad)"/>
+    <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#crtScanlines)" opacity="0.35"/>
+    <path d="M58 56 Q120 38 182 56 Q160 42 120 42 Q78 42 58 56 Z" fill="#ffffff" opacity="0.3"/>
+    <ellipse cx="76" cy="56" rx="14" ry="5" fill="#ffffff" opacity="0.45" transform="rotate(-15 76 56)"/>
+    <g class="robot-led-eyes" filter="url(#neonGlow)">
+      <g>
+        <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
+        <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
+        <ellipse cx="93" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
+      </g>
+      <g>
+        <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
+        <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
+        <ellipse cx="147" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
+      </g>
     </g>
-
-    <!-- Cheerful Glowing Smile -->
-    <g filter="url(#glow)">
-      <path d="M84 66 Q100 78 116 66 Q100 73 84 66 Z" fill="url(#cyanGlow)"/>
-      <path d="M84 66 Q100 78 116 66" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    <g filter="url(#neonGlow)">
+      <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#cyanStripeGlow)"/>
+      <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#crtScanlines)"/>
+      <path d="M97 126 Q120 142 143 126" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
     </g>
   </g>
 </svg>
-        <!-- Glowing Beacon Point -->
-        <span class="absolute top-2 left-2 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white shadow-sm animate-ping pointer-events-none"></span>
-        <span class="absolute top-2 left-2 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white shadow-sm pointer-events-none"></span>
+        <span class="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping pointer-events-none"></span>
+        <span class="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white pointer-events-none"></span>
       </div>
     </button>
-  </div>
-
   </div>
 
   <!-- MODAL: SOCIAL SHARE -->
@@ -429,45 +396,175 @@
     </div>
   </div>
 
-    <!-- FLOATING ACTION DOCK (SHARE & WHATSAPP) -->
-  
-        <button onclick="toggleWaWidget()" aria-label="Tutup" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
-          <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
-        Halo! Ada kebutuhan teknis, perizinan usaha, atau pertanyaan seputar layanan kami yang bisa dibantu?
-      </p>
-      <div class="space-y-2">
-        <input type="text" id="wa-client-name" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-        <textarea id="wa-client-msg" rows="2" placeholder="Ceritakan kebutuhan atau kendala Anda..." class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
-        <button onclick="sendFloatingWaMessage()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
-          <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-          <span>Konsultasi Lewat WhatsApp</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Trigger Capsule Action Group -->
-    <div class="flex items-center gap-2">
-      <!-- Quick Floating Share Button -->
-      <button onclick="openModal('modal-share-site')" aria-label="Bagikan Halaman Ini" class="group p-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center">
-        <svg class="w-4 h-4 text-slate-600 dark:text-slate-300 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-      </button>
-
-      <!-- Floating WA Help Button -->
-      <button onclick="toggleWaWidget()" id="floating-wa-btn" aria-label="Bantuan & Konsultasi" class="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-xl shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
-        <div class="relative flex items-center justify-center">
-          <svg class="w-5 h-5 text-emerald-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700 animate-ping"></span>
-          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700"></span>
-        </div>
-        <span class="tracking-wide">Bantuan &amp; Konsultasi</span>
-      </button>
-    </div>
-
-  </div>
+    
 
   <script>lucide.createIcons();</script>
+<!-- MODAL: KONSULTASI & PEMESANAN LAYANAN -->
+  <div id="modal-consultation-service" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4 pt-8 sm:pt-12">
+    <div class="relative modal-content glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto space-y-4">
+      
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <h3 class="font-extrabold text-lg sm:text-xl text-slate-900 dark:text-white">Konsultasi &amp; Pemesanan Layanan</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Diskusikan kebutuhan proyek Anda langsung dengan tim ahli kami</p>
+        </div>
+        <button onclick="closeConsultationModal()" aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form onsubmit="handleConsultationSubmit(event)" class="space-y-3.5 text-xs text-left">
+        
+        <!-- DROPDOWN CONTAINER DENGAN ROBOT MENDARAT DI ATASNYA -->
+        <div class="relative pt-6">
+          
+          <div id="modal-robot-sitting" class="absolute -top-5 sm:-top-6 right-2 sm:right-4 w-14 h-11 sm:w-16 sm:h-12 z-20 pointer-events-none transition-all duration-300">
+            <div id="robot-sitting-avatar" class="w-full h-full transform transition-all duration-300 filter drop-shadow-[0_6px_14px_rgba(0,210,255,0.45)]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%" class="w-full h-full drop-shadow-xl select-none" fill="none" style="max-height: 52px; max-width: 62px;">
+  <defs>
+    <radialGradient id="helmetShellGrad" cx="50%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#f1f5f9"/>
+      <stop offset="85%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </radialGradient>
+    <linearGradient id="thrusterPodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="cyanBezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#00d2ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <radialGradient id="screenGlassGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="90%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <linearGradient id="cyanStripeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="50%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <pattern id="crtScanlines" width="100" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.45"/>
+      <line x1="0" y1="2" x2="100" y2="2" stroke="#00f0ff" stroke-width="2" opacity="0.95"/>
+    </pattern>
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="blur1"/>
+      <feGaussianBlur stdDeviation="7" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g class="robot-flight-idle">
+    <ellipse cx="120" cy="180" rx="34" ry="9" fill="url(#cyanStripeGlow)" opacity="0.6" filter="url(#neonGlow)" class="robot-thruster-glow"/>
+    <ellipse cx="120" cy="180" rx="16" ry="4" fill="#ffffff" opacity="0.9"/>
+    <g transform="translate(8, 62)">
+      <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+      <rect x="18" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
+      <ellipse cx="10" cy="33" rx="5" ry="14" fill="#0f172a"/>
+      <ellipse cx="10" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
+    </g>
+    <g transform="translate(198, 62)">
+      <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+      <rect x="6" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
+      <ellipse cx="24" cy="33" rx="5" ry="14" fill="#0f172a"/>
+      <ellipse cx="24" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
+    </g>
+    <rect x="36" y="18" width="168" height="154" rx="66" fill="url(#helmetShellGrad)" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M84 18 C84 12, 94 12, 94 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
+    <path d="M146 18 C146 12, 156 12, 156 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
+    <ellipse cx="120" cy="32" rx="48" ry="8" fill="#ffffff" opacity="0.85"/>
+    <rect x="48" y="32" width="144" height="126" rx="52" fill="none" stroke="url(#cyanBezelGrad)" stroke-width="8" filter="drop-shadow(0 2px 6px rgba(0,210,255,0.4))"/>
+    <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#screenGlassGrad)"/>
+    <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#crtScanlines)" opacity="0.35"/>
+    <path d="M58 56 Q120 38 182 56 Q160 42 120 42 Q78 42 58 56 Z" fill="#ffffff" opacity="0.3"/>
+    <ellipse cx="76" cy="56" rx="14" ry="5" fill="#ffffff" opacity="0.45" transform="rotate(-15 76 56)"/>
+    <g class="robot-led-eyes" filter="url(#neonGlow)">
+      <g>
+        <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
+        <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
+        <ellipse cx="93" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
+      </g>
+      <g>
+        <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
+        <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
+        <ellipse cx="147" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
+      </g>
+    </g>
+    <g filter="url(#neonGlow)">
+      <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#cyanStripeGlow)"/>
+      <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#crtScanlines)"/>
+      <path d="M97 126 Q120 142 143 126" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
+    </g>
+  </g>
+</svg>
+            </div>
+          </div>
+
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+            Pilih Layanan yang Diinginkan:
+          </label>
+          
+                    <select id="consult-service-select" name="serviceType" onfocus="handleDropdownFocus()" onblur="handleDropdownBlur()" onchange="handleDropdownChange(this)" class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-all cursor-pointer">
+            <optgroup label="Layanan Jasa &amp; Arsitektur">
+              <option value="Jasa Optimasi Laptop &amp; PC Remote">💻 Optimasi Laptop/PC</option>
+              <option value="3D Modeling Bangunan &amp; Render">🏢 3D Model &amp; Render</option>
+              <option value="Gambar Kerja &amp; PBG Bangunan">📐 Gambar Kerja PBG</option>
+              <option value="Peta Format SHP &amp; Validasi OSS">🗺️ Peta SHP OSS</option>
+              <option value="Penerbitan NIB Usaha OSS RBA">📜 NIB Usaha OSS</option>
+              <option value="Pembuatan Web Serverless &amp; Profil UMKM">🌐 Web Profil UMKM</option>
+            </optgroup>
+            <optgroup label="Produk Digital &amp; Kasir">
+              <option value="Aplikasi Kasir POS Google Sheets">📦 Kasir POS Sheets</option>
+              <option value="Paket Desain Rumah 2D/3D Lengkap">🏠 Desain Rumah 2D/3D</option>
+              <option value="Template Website Modern Siap Pakai">💻 Template Website</option>
+              <option value="E-Book Google Apps Script Master">📘 E-Book Script Master</option>
+              <option value="PaySheet QRIS Payment Engine">⚡ PaySheet QRIS Engine</option>
+            </optgroup>
+            <optgroup label="Pertanyaan Lain">
+              <option value="Konsultasi Kustom / Tanya Fitur Gratis">🛠️ Konsultasi Kustom</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap / Usaha: *</label>
+          <input type="text" name="clientName" placeholder="Nama Anda atau Nama Usaha" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" required />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp Aktif: *</label>
+          <input type="tel" name="clientWhatsapp" placeholder="081234567890" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" required />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Email Anda (Untuk Salinan Resume):</label>
+          <input type="email" name="clientEmail" placeholder="emailanda@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Ceritakan Rencana / Kebutuhan Proyek Anda: *</label>
+          <textarea name="projectDetails" rows="3" placeholder="Jelaskan kebutuhan, tenggat waktu, atau pertanyaan yang ingin Anda konsultasikan..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" required></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Kirim Konsultasi / Pesanan Sekarang</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
 </body>
 </html>

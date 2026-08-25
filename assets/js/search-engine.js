@@ -63,7 +63,7 @@ async function performSearch(rawQuery) {
                   <p class="text-[11px] opacity-90">Klik tombol untuk membuka Panel Kontrol Admin.</p>
                 </div>
               </div>
-              <a href="${rel}admin/" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow transition">
+              <a href="${rel}admin/dashboard.html" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow transition">
                 Buka Admin Hub &rarr;
               </a>
             </div>

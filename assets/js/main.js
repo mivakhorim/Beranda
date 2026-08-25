@@ -3,6 +3,25 @@
  * Duta Media Informasi berKarya
  */
 
+// Clean URL Bar Formatter: Strips .html, index.html, and trailing slashes from browser address bar
+function cleanBrowserUrlBar() {
+  try {
+    if (window.location.protocol.startsWith('http')) {
+      let path = window.location.pathname;
+      let cleanPath = path.replace(/\/index\.html$/i, '').replace(/\.html$/i, '');
+      if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
+        cleanPath = cleanPath.slice(0, -1);
+      }
+      if (cleanPath !== path && cleanPath !== '') {
+        const newUrl = window.location.origin + cleanPath + window.location.search + window.location.hash;
+        window.history.replaceState(null, '', newUrl);
+      }
+    }
+  } catch (e) {}
+}
+
+cleanBrowserUrlBar();
+
 const DUTAMIK_CONFIG = {
   adminWhatsApp: localStorage.getItem('dutamik_cfg_wa') || '6281234567890',
   gasApiUrl: localStorage.getItem('dutamik_cfg_gas_url') || 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
@@ -38,6 +57,10 @@ function toggleTheme() {
   }
 }
 
+function toggleDarkMode() {
+  toggleTheme();
+}
+
 function updateThemeIcons(isDark) {
   const icons = document.querySelectorAll('.theme-toggle-icon');
   icons.forEach(icon => {
@@ -46,6 +69,7 @@ function updateThemeIcons(isDark) {
 }
 
 window.toggleTheme = toggleTheme;
+window.toggleDarkMode = toggleTheme;
 window.initTheme = initTheme;
 
 // 2. Toast Notification System
@@ -103,6 +127,13 @@ function closeModal(modalId) {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     document.body.style.overflow = '';
+  }
+  // Guarantee floating robot dock is 100% visible and interactive
+  const dock = document.getElementById('peeking-robot-dock');
+  if (dock) {
+    dock.style.opacity = '1';
+    dock.style.display = 'block';
+    dock.style.pointerEvents = 'auto';
   }
 }
 
@@ -258,6 +289,7 @@ window.initDragToScroll = initSliderEngine;
 // Immediate Theme & Event Bindings
 initTheme();
 document.addEventListener('DOMContentLoaded', () => {
+  cleanBrowserUrlBar();
   initTheme();
   initSliderEngine();
   document.querySelectorAll('.modal-backdrop').forEach(modal => {
