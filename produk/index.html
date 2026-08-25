@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toko Produk Digital &amp; Rekomendasi Afiliasi - DUTAMIK.ID</title>
+  
+  <meta name="description" content="Toko aset digital siap pakai dan rekomendasi peralatan usaha dari DUTAMIK.ID (Duta Media Informasi berKarya). Dilengkapi checkout PaySheet QRIS otomatis." />
+  <meta name="keywords" content="toko produk digital, paysheet qris, download source code, template website, aplikasi kasir google sheet, gambar rumah 2d 3d" />
+  <meta name="author" content="DUTAMIK.ID - Duta Media Informasi berKarya" />
+  <link rel="canonical" href="https://dutamik.id/produk/" />
+  
+  <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0284c7', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- TOP RUNNING TICKER -->
+  <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
+    <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
+      <span class="mx-4">🌟 Memuat Kontributor DUTAMIK.ID...</span>
+    </div>
+  </div>
+
+  <!-- REDESIGNED NAVBAR -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-2">
+        <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 group">
+          <img src="../assets/images/logo.svg" alt="DUTAMIK.ID Logo" class="h-9 sm:h-10 w-auto transform transition duration-300 group-hover:scale-105" />
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <a href="../index.html" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
+            Beranda
+          </a>
+          <a href="../katalog.html" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
+            <i data-lucide="grid" class="w-3.5 h-3.5 text-blue-500"></i>
+            <span>Master Katalog</span>
+          </a>
+          <a href="../tools/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
+            Fitur Gratis
+          </a>
+          <a href="../jasa/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
+            Katalog Jasa
+          </a>
+          <a href="index.html" class="px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 font-bold bg-blue-50/90 dark:bg-blue-900/30 whitespace-nowrap">
+            Produk Digital
+          </a>
+          <a href="../donasi.html" class="px-3 py-2 rounded-xl hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/20 transition whitespace-nowrap">
+            Donasi QRIS
+          </a>
+        </nav>
+
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="openSearchModal()" aria-label="Cari" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
+            <i data-lucide="search" class="w-4 h-4 text-blue-600"></i>
+            <span class="hidden md:inline">Cari...</span>
+            <kbd class="hidden xl:inline px-1.5 py-0.5 text-[10px] bg-slate-200 dark:bg-slate-800 rounded font-mono text-slate-500">Ctrl+K</kbd>
+          </button>
+                    <button onclick="openModal('modal-share-site')" aria-label="Share" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+          </button>
+          <button onclick="toggleTheme()" aria-label="Theme" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <span class="theme-toggle-icon"><i data-lucide="moon" class="w-4 h-4"></i></span>
+          </button>
+          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
+      <div class="flex flex-col gap-1.5 pt-2 text-sm font-medium">
+        <a href="../index.html" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Beranda</a>
+        <a href="../katalog.html" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Master Katalog</a>
+        <a href="../tools/" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Fitur &amp; Tools Gratis</a>
+        <a href="../jasa/" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Katalog Jasa</a>
+        <a href="index.html" class="px-3 py-2 rounded-xl text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30">Produk Digital PaySheet</a>
+        <a href="../donasi.html" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Donasi QRIS</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB & HEADER -->
+  <section class="py-12 border-b border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <nav class="flex justify-center items-center gap-2 text-xs text-slate-500 mb-3 font-medium">
+        <a href="../index.html" class="hover:text-blue-600">Beranda</a>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        <span class="text-slate-800 dark:text-slate-200 font-bold">Produk Digital &amp; Afiliasi</span>
+      </nav>
+      <div class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-2">
+        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+        <span>PaySheet QRIS Instant Checkout</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+        Toko Produk Digital &amp; Rekomendasi Afiliasi
+      </h1>
+      <p class="text-slate-600 dark:text-slate-400 text-sm mt-3 max-w-2xl mx-auto leading-relaxed">
+        Dapatkan template, source code, dan rancangan teknis siap pakai dengan sistem pembayaran QRIS terverifikasi otomatis.
+      </p>
+    </div>
+  </section>
+
+  <!-- DYNAMIC STORE CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-8">
+    
+    <!-- Category Tabs & Sort Bar -->
+    <div class="max-w-3xl mx-auto space-y-4">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+          <input type="text" id="store-search-input" placeholder="Cari nama produk digital atau template..." oninput="handleStoreFilter()" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" />
+        </div>
+        <select id="store-sort-select" onchange="handleStoreFilter()" class="px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none shadow-sm">
+          <option value="default">Urutkan: Rekomendasi</option>
+          <option value="name_asc">Nama: A ke Z</option>
+          <option value="price_low">Harga: Termurah</option>
+          <option value="price_high">Harga: Tertinggi</option>
+        </select>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-2" id="store-category-tabs">
+        <button onclick="setStoreCategory('all')" class="store-tab-btn active px-4 py-1.5 rounded-full text-xs font-bold bg-blue-600 text-white shadow">Semua Produk (<span id="store-count-all">0</span>)</button>
+        <button onclick="setStoreCategory('software')" class="store-tab-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500">Software &amp; Template (<span id="store-count-software">0</span>)</button>
+        <button onclick="setStoreCategory('architecture')" class="store-tab-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-emerald-500">Desain Rumah 2D/3D (<span id="store-count-architecture">0</span>)</button>
+        <button onclick="setStoreCategory('affiliate')" class="store-tab-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-amber-500">Rekomendasi Afiliasi (<span id="store-count-affiliate">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- Product Grid Container (Pre-rendered for Instant Loading & SEO) -->
+    <div id="products-catalog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- 1. POS Sheet -->
+      <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Software &amp; Template</span>
+            <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.9</span>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">Aplikasi Kasir POS Google Sheet Otomatis</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Template kasir digital berbasis spreadsheet terotomasi. Pencatatan transaksi kilat, cetak nota struk thermal, laporan laba rugi otomatis tanpa biaya langganan bulanan.</p>
+        </div>
+        <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-[11px] text-slate-400 line-through">Rp 250.000</div>
+              <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 75.000</div>
+            </div>
+            <span class="text-[10px] bg-rose-500/10 text-rose-600 font-bold px-2 py-0.5 rounded-full">Hemat 70%</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="pos-sheet.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+            <button onclick="openProductCheckoutModal('prod_pos_sheet', 'Aplikasi Kasir POS Google Sheet Otomatis', 75000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+              <span>Beli QRIS</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Desain Rumah 2D/3D -->
+      <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Desain Rumah 2D/3D</span>
+            <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.9</span>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">Paket Gambar 2D Rumah Lengkap + 3D Fasad</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Paket komplit gambar kerja arsitektur, denah tata ruang, tampak bangunan, potongan melintang, rencana struktur pondasi, RAB Excel, dan 3 view render fasad 3D HD.</p>
+        </div>
+        <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-[11px] text-slate-400 line-through">Rp 250.000</div>
+              <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 75.000</div>
+            </div>
+            <span class="text-[10px] bg-rose-500/10 text-rose-600 font-bold px-2 py-0.5 rounded-full">Hemat 70%</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="rumah-2d3d.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+            <button onclick="openProductCheckoutModal('prod_rumah_2d3d', 'Paket Gambar 2D Rumah Lengkap + 3D Fasad', 75000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+              <span>Beli QRIS</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Template Website -->
+      <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Software &amp; Template</span>
+            <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.8</span>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">Template Website UMKM &amp; Landing Page</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Source code website modern responsif HTML5 + Tailwind CSS, terintegrasi form order Google Sheet, dark mode otomatis, widget WhatsApp, dan siap deploy gratis ke GitHub Pages.</p>
+        </div>
+        <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-[11px] text-slate-400 line-through">Rp 150.000</div>
+              <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 49.000</div>
+            </div>
+            <span class="text-[10px] bg-rose-500/10 text-rose-600 font-bold px-2 py-0.5 rounded-full">Hemat 67%</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="template-web.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+            <button onclick="openProductCheckoutModal('prod_template_web', 'Template Website UMKM & Landing Page', 49000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+              <span>Beli QRIS</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PaySheet Engine -->
+      <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Software &amp; Template</span>
+            <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 5.0</span>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">PaySheet Dynamic QRIS Payment Engine</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Modul JavaScript + Google Apps Script untuk generate dynamic QRIS dengan CRC16 checksum dan verifikasi transaksi digital otomatis tanpa fee bulanan payment gateway.</p>
+        </div>
+        <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-[11px] text-slate-400 line-through">Rp 350.000</div>
+              <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 99.000</div>
+            </div>
+            <span class="text-[10px] bg-rose-500/10 text-rose-600 font-bold px-2 py-0.5 rounded-full">Hemat 72%</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="paysheet-engine.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+            <button onclick="openProductCheckoutModal('prod_paysheet_engine', 'PaySheet Dynamic QRIS Payment Engine', 99000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+              <span>Beli QRIS</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. E-Book GAS -->
+      <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Software &amp; Template</span>
+            <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.8</span>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">E-Book Mastering Google Apps Script &amp; Otomasi</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Panduan praktis Google Apps Script bahasa Indonesia. Dilengkapi 20+ contoh skrip automasi spreadsheet, web app tanpa server, dan bot notifikasi WhatsApp.</p>
+        </div>
+        <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-[11px] text-slate-400 line-through">Rp 120.000</div>
+              <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 39.000</div>
+            </div>
+            <span class="text-[10px] bg-rose-500/10 text-rose-600 font-bold px-2 py-0.5 rounded-full">Hemat 68%</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="ebook-gas.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+            <button onclick="openProductCheckoutModal('prod_ebook_gas', 'E-Book Mastering Google Apps Script', 39000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+              <span>Beli QRIS</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-sm mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="space-y-4">
+          <a href="../index.html" class="inline-block">
+            <img src="../assets/images/logo.svg" alt="DUTAMIK.ID" class="h-9 w-auto brightness-200" />
+          </a>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            <strong class="text-slate-200 font-bold">Duta Media Informasi berKarya</strong> menghadirkan solusi teknologi digital terpadu, akses tool online gratis, dan layanan pendampingan profesional yang mudah diakses untuk mendukung kemajuan usaha Anda.
+          </p>
+
+          <!-- Social Media Channels (FB, Instagram, TikTok, X, YouTube) -->
+          <div class="pt-2">
+            <h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-300 mb-2.5">Media Sosial Resmi:</h5>
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <!-- Facebook -->
+              <a href="https://facebook.com" target="_blank" rel="noopener nofollow" title="Facebook DUTAMIK.ID" aria-label="Facebook DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-[#1877F2] hover:border-[#1877F2] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <!-- Instagram -->
+              <a href="https://instagram.com" target="_blank" rel="noopener nofollow" title="Instagram @dutamik.id" aria-label="Instagram DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:border-transparent flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <!-- TikTok -->
+              <a href="https://tiktok.com" target="_blank" rel="noopener nofollow" title="TikTok @dutamik.id" aria-label="TikTok DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-[#25F4EE] hover:bg-black hover:border-[#FE2C55] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
+              </a>
+              <!-- X (Twitter) -->
+              <a href="https://x.com" target="_blank" rel="noopener nofollow" title="X (Twitter) @dutamik_id" aria-label="X (Twitter) DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-black hover:border-slate-500 flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <!-- YouTube -->
+              <a href="https://youtube.com" target="_blank" rel="noopener nofollow" title="YouTube DUTAMIK.ID" aria-label="YouTube DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-[#FF0000] hover:border-[#FF0000] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Halaman Legal</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="../about.html" class="hover:text-white transition">Tentang Kami</a></li>
+            <li><a href="../contact.html" class="hover:text-white transition">Hubungi Kami</a></li>
+            <li><a href="../privacy-policy.html" class="hover:text-white transition">Kebijakan Privasi</a></li>
+            <li><a href="../terms-of-service.html" class="hover:text-white transition">Syarat &amp; Ketentuan</a></li>
+            <li><a href="../disclaimer.html" class="hover:text-white transition">Disclaimer</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Klasifikasi Layanan</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="../katalog.html" class="hover:text-white transition text-blue-400 font-semibold">Master Katalog</a></li>
+            <li><a href="../tools/" class="hover:text-white transition">Kategori Tool Online Gratis</a></li>
+            <li><a href="../jasa/" class="hover:text-white transition">Kategori Desain &amp; Arsitektur</a></li>
+            <li><a href="../jasa/" class="hover:text-white transition">Kategori Legalitas &amp; Geospasial</a></li>
+            <li><a href="../produk/" class="hover:text-white transition">Kategori Solusi Digital Mandiri</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Dukungan Komunitas</h4>
+          <p class="text-xs text-slate-400 mb-3 leading-relaxed">Dukung optimasi sistem &amp; pengembangan tool baru lewat kontribusi QRIS:</p>
+          <a href="../donasi.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-xl text-xs font-bold transition shadow-lg">
+            <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i>
+            <span>Wall of Kontributor</span>
+          </a>
+        </div>
+      </div>
+      <div class="mt-10 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+        <p>&copy; 2026 <a href="https://dutamik.id" class="text-blue-400 font-bold hover:underline">Duta Media Informasi berKarya</a> (DUTAMIK.ID). Seluruh Hak Cipta Dilindungi.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL CHECKOUT PAYSHEET -->
+  <div id="modal-checkout-product" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[95vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 flex items-center justify-center"><i data-lucide="qr-code" class="w-4 h-4"></i></div>
+          <div><h3 class="font-extrabold text-base text-slate-900 dark:text-white">PaySheet QRIS Checkout</h3><span class="text-[10px] text-slate-500">Verifikasi Pembayaran Otomatis</span></div>
+        </div>
+        <button onclick="closeModal('modal-checkout-product')" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div id="checkout-step-pay" class="space-y-4">
+        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+          <div class="flex justify-between mb-1"><span class="text-slate-500">Produk:</span><strong id="checkout-product-name" class="text-slate-800 dark:text-slate-200 text-right"></strong></div>
+          <div class="flex justify-between mb-1"><span class="text-slate-500">Harga Normal:</span><span id="checkout-base-price" class="text-slate-600 dark:text-slate-400"></span></div>
+          <div class="flex justify-between mb-1 text-emerald-600 font-semibold"><span>Kode Unik:</span><span id="checkout-unique-code"></span></div>
+          <div class="flex justify-between pt-2 border-t border-slate-200 dark:border-slate-800 font-bold text-sm"><span>Total Tagihan:</span><span id="checkout-total-price" class="text-blue-600 dark:text-blue-400 font-extrabold"></span></div>
+          <div class="mt-2 text-[10px] text-slate-400 font-mono">ID Trx: <span id="checkout-trx-id"></span></div>
+        </div>
+
+        <div id="checkout-qris-container"></div>
+
+        <div class="space-y-2">
+          <input type="text" id="checkout-buyer-name" placeholder="Nama Pembeli" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900" />
+          <input type="email" id="checkout-buyer-email" placeholder="Email (untuk salinan link unduhan)" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900" />
+        </div>
+
+        <button id="btn-verify-paysheet" onclick="verifyPaySheetPayment()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Saya Sudah Bayar (Verifikasi &amp; Unduh)</span>
+        </button>
+      </div>
+
+      <div id="checkout-step-success" class="hidden text-center py-4 space-y-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto"><i data-lucide="download-cloud" class="w-7 h-7"></i></div>
+        <h4 class="text-xl font-bold text-slate-900 dark:text-white">Pembayaran Sukses!</h4>
+        <p class="text-xs text-slate-500">File produk digital Anda siap diunduh sekarang.</p>
+        <a id="checkout-download-btn" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Unduh File Produk (.ZIP)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH MODAL -->
+  <div id="modal-global-search" class="modal-backdrop fixed inset-0 z-50 hidden items-start justify-center p-4 pt-16">
+    <div class="modal-content glass-panel w-full max-w-xl rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+        <i data-lucide="search" class="w-5 h-5 text-blue-600"></i>
+        <input type="text" id="search-input-field" placeholder="Ketik apa saja (tools, jasa, produk, atau kata kunci)..." oninput="performSearch(this.value)" class="w-full bg-transparent border-none text-sm font-semibold focus:outline-none text-slate-900 dark:text-white" />
+        <button onclick="closeSearchModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="search-backdoor-container" class="hidden"></div>
+      <div id="search-results-container" class="overflow-y-auto flex-1 pr-1 space-y-2"></div>
+    </div>
+  </div>
+
+  <script src="../assets/js/catalog-data.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/analytics.js"></script>
+  <script src="../assets/js/qris-generator.js"></script>
+  <script src="../assets/js/search-engine.js"></script>
+  <script src="../assets/js/gas-client.js"></script>
+    <!-- MODAL: SOCIAL SHARE -->
+  <div id="modal-share-site" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2.5 text-left">
+          <div class="w-9 h-9 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          </div>
+          <div>
+            <h4 class="font-extrabold text-base text-slate-900 dark:text-white">Bagikan DUTAMIK.ID</h4>
+            <span class="text-[10px] text-slate-400">Sebarkan akses tool gratis &amp; solusi kreatif</span>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-share-site')" aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed text-left">
+        Ajak rekan, mitra usaha, dan komunitas Anda menikmati puluhan tool online gratis dan solusi pendampingan terpercaya dari kami.
+      </p>
+
+      <!-- Dynamic Share Buttons with Crisp Inline SVGs -->
+      <div class="grid grid-cols-4 gap-2.5 sm:gap-3">
+        <!-- WhatsApp -->
+        <button onclick="shareTo('whatsapp')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-slate-700 dark:text-slate-200 hover:text-white border border-emerald-500/20 hover:border-emerald-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">WhatsApp</span>
+        </button>
+
+        <!-- Telegram -->
+        <button onclick="shareTo('telegram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-sky-500/10 hover:bg-sky-500 text-slate-700 dark:text-slate-200 hover:text-white border border-sky-500/20 hover:border-sky-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Telegram</span>
+        </button>
+
+        <!-- Facebook -->
+        <button onclick="shareTo('facebook')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-600/10 hover:bg-[#1877F2] text-slate-700 dark:text-slate-200 hover:text-white border border-blue-600/20 hover:border-[#1877F2] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-[#1877F2] text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Facebook</span>
+        </button>
+
+        <!-- X (Twitter) -->
+        <button onclick="shareTo('x')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-white border border-slate-300 dark:border-slate-700 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">X (Twitter)</span>
+        </button>
+
+        <!-- Instagram -->
+        <button onclick="shareTo('instagram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-pink-500/10 hover:bg-pink-600 text-slate-700 dark:text-slate-200 hover:text-white border border-pink-500/20 hover:border-pink-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Instagram</span>
+        </button>
+
+        <!-- TikTok -->
+        <button onclick="shareTo('tiktok')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-cyan-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-[#25F4EE] border border-cyan-500/20 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">TikTok</span>
+        </button>
+
+        <!-- YouTube -->
+        <button onclick="shareTo('youtube')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-rose-500/10 hover:bg-[#FF0000] text-slate-700 dark:text-slate-200 hover:text-white border border-rose-500/20 hover:border-[#FF0000] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-[#FF0000] text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">YouTube</span>
+        </button>
+
+        <!-- Salin Cepat -->
+        <button onclick="shareTo('copy')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-500/10 hover:bg-blue-600 text-slate-700 dark:text-slate-200 hover:text-white border border-blue-500/20 hover:border-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-none stroke-currentColor stroke-width-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Salin URL</span>
+        </button>
+      </div>
+
+      <!-- Quick Copy Link Box -->
+      <div class="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 pl-2 overflow-hidden text-xs text-slate-500 font-mono truncate">
+          <i data-lucide="link" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+          <span class="truncate">https://dutamik.id</span>
+        </div>
+        <button onclick="shareTo('copy')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow flex-shrink-0 cursor-pointer">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Salin Tautan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <!-- FLOATING ACTION DOCK (SHARE & WHATSAPP) -->
+  <div id="floating-help-dock" class="fixed bottom-8 right-5 sm:bottom-10 sm:right-8 z-50 flex flex-col items-end gap-3 select-none">
+    
+    <!-- Popover Chat Form -->
+    <div id="wa-widget-popover" class="hidden mb-1 w-[310px] sm:w-[340px] glass-panel rounded-3xl p-5 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm">Konsultasi Ramah</h4>
+            <span class="flex items-center gap-1.5 text-[11px] text-emerald-500 font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Online (Siap Membantu)
+            </span>
+          </div>
+        </div>
+        <button onclick="toggleWaWidget()" aria-label="Tutup" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
+        Halo! Ada kebutuhan teknis, perizinan usaha, atau pertanyaan seputar layanan kami yang bisa dibantu?
+      </p>
+      <div class="space-y-2">
+        <input type="text" id="wa-client-name" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+        <textarea id="wa-client-msg" rows="2" placeholder="Ceritakan kebutuhan atau kendala Anda..." class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
+        <button onclick="sendFloatingWaMessage()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          <span>Konsultasi Lewat WhatsApp</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Trigger Capsule Action Group -->
+    <div class="flex items-center gap-2">
+      <!-- Quick Floating Share Button -->
+      <button onclick="openModal('modal-share-site')" aria-label="Bagikan Halaman Ini" class="group p-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center">
+        <i data-lucide="share-2" class="w-4.5 h-4.5"></i>
+      </button>
+
+      <!-- Floating WA Help Button -->
+      <button onclick="toggleWaWidget()" id="floating-wa-btn" aria-label="Bantuan & Konsultasi" class="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-xl shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+        <div class="relative flex items-center justify-center">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700 animate-ping"></span>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700"></span>
+        </div>
+        <span class="tracking-wide">Bantuan &amp; Konsultasi</span>
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    let allStoreData = [];
+    let currentStoreCategory = 'all';
+
+    function initStore() {
+      allStoreData = (window.DUTAMIK_PRODUCTS_DATA || []).concat(window.DUTAMIK_AFFILIATE_DATA || []);
+      
+      const elAll = document.getElementById('store-count-all');
+      if (elAll) elAll.textContent = allStoreData.length;
+      
+      const elSoft = document.getElementById('store-count-software');
+      if (elSoft) elSoft.textContent = (window.DUTAMIK_PRODUCTS_DATA || []).filter(p => p.category === 'software').length;
+
+      const elArch = document.getElementById('store-count-architecture');
+      if (elArch) elArch.textContent = (window.DUTAMIK_PRODUCTS_DATA || []).filter(p => p.category === 'architecture').length;
+
+      const elAff = document.getElementById('store-count-affiliate');
+      if (elAff) elAff.textContent = (window.DUTAMIK_AFFILIATE_DATA || []).length;
+    }
+
+    function setStoreCategory(category) {
+      currentStoreCategory = category;
+      document.querySelectorAll('#store-category-tabs .store-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white', 'shadow');
+        btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
+      });
+      if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('bg-blue-600', 'text-white', 'shadow');
+        window.event.currentTarget.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
+      }
+      handleStoreFilter();
+    }
+
+    function handleStoreFilter() {
+      const keyword = (document.getElementById('store-search-input')?.value || '').toLowerCase().trim();
+      const sortType = document.getElementById('store-sort-select')?.value || 'default';
+
+      let list = allStoreData.filter(p => {
+        if (currentStoreCategory !== 'all' && p.category !== currentStoreCategory) return false;
+        if (keyword) {
+          const matchName = (p.name || '').toLowerCase().includes(keyword);
+          const matchDesc = (p.description || '').toLowerCase().includes(keyword);
+          return matchName || matchDesc;
+        }
+        return true;
+      });
+
+      if (sortType === 'name_asc') {
+        list.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortType === 'price_low') {
+        list.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      } else if (sortType === 'price_high') {
+        list.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      }
+
+      renderStoreGrid(list);
+    }
+
+    function renderStoreGrid(products) {
+      const container = document.getElementById('products-catalog-container');
+      if (!container) return;
+
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-400">
+            <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+            <p class="text-sm font-semibold">Tidak ada produk yang sesuai dengan kategori atau pencarian.</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = products.map(p => {
+        if (p.type === 'affiliate' || p.category === 'affiliate') {
+          return `
+            <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between border border-amber-500/30">
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-[10px] font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-300 px-2.5 py-1 rounded-full uppercase">${p.affiliateBadge || 'Partner'}</span>
+                  <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> ${p.rating}</span>
+                </div>
+                <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">${p.name}</h3>
+                <p class="text-xs text-slate-500 mt-2 leading-relaxed">${p.description}</p>
+              </div>
+              <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-[11px] text-slate-400 line-through">Rp ${Number(p.originalPrice).toLocaleString('id-ID')}</div>
+                    <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp ${Number(p.price).toLocaleString('id-ID')}</div>
+                  </div>
+                  <span class="text-[10px] bg-amber-500/10 text-amber-600 font-bold px-2 py-0.5 rounded-full">${p.discountBadge || 'Diskon'}</span>
+                </div>
+                <a href="${p.url}" target="_blank" rel="noopener nofollow" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 shadow">
+                  <span>Beli di ${p.platform || 'Partner'}</span>
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">${p.categoryLabel || 'Produk'}</span>
+                <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> ${p.rating}</span>
+              </div>
+              <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug">${p.name}</h3>
+              <p class="text-xs text-slate-500 mt-2 leading-relaxed">${p.description}</p>
+            </div>
+            <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-[11px] text-slate-400 line-through">Rp ${Number(p.originalPrice).toLocaleString('id-ID')}</div>
+                  <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp ${Number(p.price).toLocaleString('id-ID')}</div>
+                </div>
+                <span class="text-[10px] bg-rose-500/10 text-rose-600 font-bold px-2 py-0.5 rounded-full">${p.discountBadge || 'Hemat'}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <a href="${p.slug}.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+                <button onclick="openProductCheckoutModal('${p.id}', '${p.name}', ${p.price})" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1 cursor-pointer">
+                  <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                  <span>Beli QRIS</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initStore();
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

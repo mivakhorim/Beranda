@@ -1,0 +1,257 @@
+/* ==========================================================================
+   DUTAMIK.ID - Premium Stylesheet
+   Duta Media Informasi berKarya
+   Soft UI, Responsive Glassmorphism, Theme Variables & Universal Smooth Slider
+   ========================================================================== */
+
+/* Custom Color Tokens & Typography */
+:root {
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --bg-light: #f8fafc;
+  --bg-dark: #030712;
+  --card-light: rgba(255, 255, 255, 0.85);
+  --card-dark: rgba(15, 23, 42, 0.75);
+  --border-light: rgba(226, 232, 240, 0.8);
+  --border-dark: rgba(51, 65, 85, 0.4);
+  --primary-blue: #2563eb;
+  --primary-indigo: #4f46e5;
+}
+
+body {
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Navigation & Panels */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.dark .glass-nav {
+  background: rgba(3, 7, 18, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-panel {
+  background: var(--card-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dark .glass-panel {
+  background: var(--card-dark);
+  border: 1px solid var(--border-dark);
+}
+
+/* Gradients */
+.gradient-brand {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #0284c7 40%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient {
+  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 40%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glow & Hover Effects */
+.glow-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -10px rgba(37, 99, 235, 0.15);
+}
+.dark .glow-card:hover {
+  box-shadow: 0 14px 30px -10px rgba(96, 165, 250, 0.12);
+}
+
+/* Running Ticker Bar */
+.ticker-bar {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #475569;
+}
+.dark .ticker-bar {
+  background: #0b1120;
+  border-color: #1e293b;
+  color: #94a3b8;
+}
+
+.ticker-wrapper {
+  white-space: nowrap;
+  position: relative;
+}
+
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-animation 32s linear infinite;
+}
+.ticker-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-animation {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 440px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.3s ease;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-info {
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #334155;
+}
+.toast-success {
+  background: #064e3b;
+  color: #ecfdf5;
+  border: 1px solid #059669;
+}
+.toast-error {
+  background: #881337;
+  color: #fff1f2;
+  border: 1px solid #e11d48;
+}
+
+/* Modals */
+.modal-backdrop {
+  background-color: rgba(3, 7, 18, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Floating Help Shortcut Dock & Dynamic Smooth Slide Widget */
+#floating-help-dock {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+#floating-help-dock.dock-hidden {
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#wa-widget-popover {
+  transform-origin: bottom right;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+#wa-widget-popover.popover-hidden {
+  opacity: 0;
+  transform: scale(0.92) translateY(12px);
+  pointer-events: none;
+}
+
+.wa-floating-btn {
+  box-shadow: 0 8px 24px 0 rgba(16, 185, 129, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.wa-floating-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 30px 0 rgba(16, 185, 129, 0.55);
+}
+
+/* Scrollbar Remover */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ==========================================================================
+   PURE CLICK & DRAG HORIZONTAL SCROLL ENGINE (NO AUTO-SLIDE, NO SNAP JUMP)
+   ========================================================================== */
+.dutamik-slider-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  gap: 1.25rem !important;
+  scroll-behavior: auto !important;
+  scroll-snap-type: none !important;
+  -webkit-overflow-scrolling: touch;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  cursor: grab;
+  padding-top: 1rem !important;
+  padding-bottom: 1.5rem !important;
+  margin-top: -0.5rem !important;
+  margin-bottom: -0.5rem !important;
+}
+
+.dutamik-slider-container.is-dragging {
+  scroll-behavior: auto !important;
+  scroll-snap-type: none !important;
+  cursor: grabbing !important;
+}
+
+.dutamik-slider-container * {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+.mobile-slide-card {
+  width: 84vw !important;
+  max-width: 320px !important;
+  flex-shrink: 0 !important;
+  scroll-snap-align: none !important;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+@media (min-width: 640px) {
+  .mobile-slide-card {
+    width: 330px !important;
+    max-width: 330px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-slide-card {
+    width: 350px !important;
+    max-width: 350px !important;
+  }
+}

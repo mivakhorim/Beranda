@@ -1,0 +1,80 @@
+[
+  {
+    "id": "jasa-remote-pc",
+    "name": "Optimasi Laptop & PC Remote",
+    "slug": "remote-pc",
+    "url": "jasa/remote-pc.html",
+    "icon": "monitor",
+    "price": "Rp 50.000",
+    "priceUnit": "/ unit",
+    "duration": "1 Jam Selesai",
+    "category": "Teknologi & IT",
+    "description": "Percepat kinerja laptop/PC lemot, pembersihan virus/malware, perbaikan registry error, dan instalasi software via UltraViewer / AnyDesk.",
+    "tags": ["remote pc", "service laptop", "antivirus", "ultraviewer", "windows"]
+  },
+  {
+    "id": "jasa-3d-modeling",
+    "name": "3D Modeling Bangunan & Render",
+    "slug": "3d-modeling",
+    "url": "jasa/3d-modeling.html",
+    "icon": "box",
+    "price": "Rp 150.000",
+    "priceUnit": "/ view",
+    "duration": "Render 4K Ultra HD",
+    "category": "Arsitektur & Desain",
+    "description": "Visualisasi 3D arsitektur fotorealistik Ultra HD untuk fasad eksterior dan interior rumah, ruko, cafe, perumahan, serta master file SketchUp.",
+    "tags": ["3d render", "sketchup", "arsitektur", "desain rumah", "interior"]
+  },
+  {
+    "id": "jasa-gambar-pbg",
+    "name": "Gambar 2D Bangunan Izin PBG",
+    "slug": "gambar-pbg",
+    "url": "jasa/gambar-pbg.html",
+    "icon": "pencil-ruler",
+    "price": "Rp 15.000",
+    "priceUnit": "/ m²",
+    "duration": "Standar SIMBG PUPR",
+    "category": "Perizinan & Arsitektur",
+    "description": "Gambar kerja teknis arsitektur, struktur pondasi/balok, dan sanitasi/MEP format AutoCAD & PDF sesuai standar unggah portal SIMBG PUPR.",
+    "tags": ["gambar pbg", "simbg", "autocad", "ded", "izin bangunan"]
+  },
+  {
+    "id": "jasa-peta-shp-oss",
+    "name": "Peta SHP / ZIP ESRI (OSS & AMDALNET)",
+    "slug": "peta-shp-oss",
+    "url": "jasa/peta-shp-oss.html",
+    "icon": "map",
+    "price": "Rp 75.000",
+    "priceUnit": "/ lokasi",
+    "duration": "1 Jam Selesai",
+    "category": "Pemetaan & Legalitas",
+    "description": "Pembuatan peta poligon batas lahan format ESRI Shapefile ZIP (.shp, .shx, .dbf, .prj) WGS 84 bergaransi 100% lolos validasi KKPR OSS RBA dan AMDALNET KLHK.",
+    "tags": ["peta shp", "shapefile", "oss rba", "kkpr", "amdalnet", "arcgis"]
+  },
+  {
+    "id": "jasa-nib-oss",
+    "name": "Pembuatan NIB Usaha Mikro OSS",
+    "slug": "nib-oss",
+    "url": "jasa/nib-oss.html",
+    "icon": "award",
+    "price": "Rp 75.000",
+    "priceUnit": "/ NIB",
+    "duration": "1 Hari Terbit",
+    "category": "Legalitas Usaha",
+    "description": "Pendaftaran dan penerbitan Nomor Induk Berusaha (NIB) resmi BKPM RI untuk usaha mikro / risiko rendah. Wajib untuk syarat KUR Bank, izin edar & sertifikasi Halal.",
+    "tags": ["nib oss", "legalitas usaha", "kur bank", "sertifikat halal", "bkpm"]
+  },
+  {
+    "id": "jasa-web-umkm",
+    "name": "Website UMKM & Landing Page",
+    "slug": "web-umkm",
+    "url": "jasa/web-umkm.html",
+    "icon": "globe",
+    "price": "Rp 299.000",
+    "priceUnit": "Paket Lengkap",
+    "duration": "Free Hosting Seumur Hidup",
+    "category": "Web Development",
+    "description": "Pembuatan website profil usaha, katalog produk, dan landing page penjualan dengan form order Google Sheets, WhatsApp chat, dan tanpa biaya sewa server bulanan.",
+    "tags": ["website umkm", "landing page", "jasa web", "github pages", "seo"]
+  }
+]

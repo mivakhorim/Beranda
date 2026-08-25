@@ -1,1444 +1,1227 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Athera Properti Klaten | Developer Perumahan &amp; Kavling Terpercaya</title>
-  <meta name="description" content="Athera Properti Klaten menghadirkan hunian impian berkualitas tinggi. Pasarkan Rumah Subsidi, Rumah Komersil, dan Tanah Kavling siap bangun dengan legalitas SHM terjamin.">
-  <meta name="keywords" content="developer perumahan, rumah subsidi semarang, rumah komersil mewah, tanah kavling murah, investasi properti, Athera Properti Klaten">
-  <meta name="author" content="Athera Properti Klaten">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://athro.biz.id/">
-  <meta name="theme-color" content="#1e2d24">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DUTAMIK.ID - Duta Media Informasi berKarya | Sahabat Solusi Digital &amp; Layanan Profesional</title>
+  
+  <!-- SEO Primary Meta Tags -->
+  <meta name="description" content="DUTAMIK.ID (Duta Media Informasi berKarya) adalah mitra terpercaya yang menyediakan akses tool online premium gratis in-browser, pendampingan legalitas usaha OSS, gambar arsitektur PBG SIMBG, dan sistem digital mandiri." />
+  <meta name="keywords" content="dutamik, dutamik id, duta media informasi berkarya, solusi digital umkm, akses tool online premium gratis, konsultasi bisnis gratis, jasa remote pc, jasa 3d modeling, gambar pbg simbg, peta shp oss, nib oss rba, paysheet qris" />
+  <meta name="author" content="DUTAMIK.ID - Duta Media Informasi berKarya" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://dutamik.id/" />
 
-  <!-- Link Icon -->
-  <link rel="icon" type="image/png" href="assets/icon.png"> 
-  <link rel="apple-touch-icon" href="assets/icon.png">
+  <!-- OpenGraph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dutamik.id/" />
+  <meta property="og:title" content="DUTAMIK.ID - Duta Media Informasi berKarya" />
+  <meta property="og:description" content="Sahabat solusi digital terpercaya: akses tool online premium gratis, konsultasi ramah, dan layanan profesional untuk kemajuan usaha Anda." />
+  <meta property="og:image" content="https://dutamik.id/assets/images/logo.svg" />
+  <meta property="og:site_name" content="DUTAMIK.ID" />
 
-  <!-- OpenGraph Metadata -->
-  <meta property="og:title" content="Athera Properti Klaten | Developer Perumahan Terpercaya">
-  <meta property="og:description" content="Temukan Rumah Subsidi, Rumah Komersil, dan Tanah Kavling siap bangun dengan legalitas SHM &amp; PBG terpecah. Unit terbatas!">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://athro.biz.id/">
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DUTAMIK.ID - Duta Media Informasi berKarya" />
+  <meta name="twitter:description" content="Sahabat solusi digital terpercaya: akses tool online premium gratis, konsultasi ramah, dan layanan profesional untuk kemajuan usaha Anda." />
+  <meta name="twitter:image" content="https://dutamik.id/assets/images/logo.svg" />
 
-  <!-- Preload Critical LCP Hero Image -->
-  <link rel="preload" as="image" href="assets/bg-home.webp" fetchpriority="high">
+  <!-- Favicon & Manifest -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg" />
+  <link rel="manifest" href="site.webmanifest" />
 
-  <!-- Tailwind CSS CDN Engine -->
+  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             brand: {
-              dark: '#1e2d24',
-              gold: '#664D03',
-              'gold-dark': '#664d03',
-              'gold-light': '#c5a880',
-              light: '#f7f6f2',
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#0f172a'
             }
-          },
-          fontFamily: {
-            display: ['Outfit', 'sans-serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
           }
         }
       }
     }
   </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-  <!-- Alpine.js Engine CDN -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css" />
 
-  <!-- JSON-LD Structured Data Schema -->
+  <!-- GOOGLE SITELINKS & SEARCHBOX SCHEMA (JSON-LD) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "RealEstateAgent",
-    "name": "Athera Properti Klaten",
-    "alternateName": "Athera Properti Klaten",
-    "description": "Developer properti terpercaya yang membangun Rumah Subsidi, Rumah Komersil, dan Tanah Kavling dengan status legalitas aman dan sertifikat siap balik nama.",
-    "logo": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=200&q=80",
-    "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-    "@id": "https://athro.biz.id/#organization",
-    "url": "https://athro.biz.id/",
-    "telephone": "+6285124665145",
-    "priceRange": "Rp 160.000.000 - Rp 1.500.000.000",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Jalan Perintis Kemerdekaan No. 28 Klaten Utara",
-      "addressLocality": "Klaten",
-      "addressRegion": "Jawa Tengah",
-      "postalCode": "57438",
-      "addressCountry": "ID"
-    }
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://dutamik.id/#website",
+        "url": "https://dutamik.id/",
+        "name": "DUTAMIK.ID",
+        "alternateName": "Duta Media Informasi berKarya",
+        "description": "Sahabat Solusi Digital Terpadu, Akses Tool Online Premium Gratis In-Browser & Layanan Profesional",
+        "publisher": {
+          "@id": "https://dutamik.id/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://dutamik.id/tools/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://dutamik.id/#organization",
+        "name": "Duta Media Informasi berKarya",
+        "alternateName": "DUTAMIK",
+        "url": "https://dutamik.id/",
+        "logo": "https://dutamik.id/assets/images/logo.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+62-812-3456-7890",
+          "contactType": "customer service",
+          "areaServed": "ID",
+          "availableLanguage": "Indonesian"
+        }
+      }
+    ]
   }
   </script>
-
-  <style>
-    [x-cloak] { display: none !important; }
-
-    @font-face {
-      font-family: 'Outfit';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('fonts/outfit-400.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Outfit';
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url('fonts/outfit-500.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Outfit';
-      font-style: normal;
-      font-weight: 600;
-      font-display: swap;
-      src: url('fonts/outfit-600.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Outfit';
-      font-style: normal;
-      font-weight: 700;
-      font-display: swap;
-      src: url('fonts/outfit-700.woff2') format('woff2');
-    }
-
-    @font-face {
-      font-family: 'Plus Jakarta Sans';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('fonts/plus-jakarta-sans-400.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Plus Jakarta Sans';
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url('fonts/plus-jakarta-sans-500.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Plus Jakarta Sans';
-      font-style: normal;
-      font-weight: 600;
-      font-display: swap;
-      src: url('fonts/plus-jakarta-sans-600.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Plus Jakarta Sans';
-      font-style: normal;
-      font-weight: 700;
-      font-display: swap;
-      src: url('fonts/plus-jakarta-sans-700.woff2') format('woff2');
-    }
-
-    @font-face {
-      font-family: 'Souvenir';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('fonts/souvenir-400.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'Souvenir';
-      font-style: normal;
-      font-weight: 700;
-      font-display: swap;
-      src: url('fonts/souvenir-bold.woff2') format('woff2'),
-           url('fonts/souvenir-700.woff2') format('woff2');
-    }
-
-    :root {
-      --brand-dark: #1e2d24;
-      --brand-gold: #664D03;
-      --brand-gold-dark: #664d03;  
-      --brand-light: #f7f6f2;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    @keyframes customPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 4px 6px -1px rgba(102, 77, 3, 0.4); }
-      50% { transform: scale(1.04); box-shadow: 0 10px 15px -3px rgba(102, 77, 3, 0.6); }
-    }
-    .pulse-gold {
-      animation: customPulse 2.5s ease-in-out infinite;
-    }
-
-    @media (min-width: 768px) {
-      .legalitas-desktop-grid {
-        display: grid !important;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-        gap: 2rem !important;
-        text-align: center !important;
-      }
-      .legalitas-mobile-wrapper {
-        display: none !important;
-      }
-    }
-    @media (max-width: 767px) {
-      .legalitas-desktop-grid {
-        display: none !important;
-      }
-      .legalitas-mobile-wrapper {
-        display: block !important;
-      }
-    }
-    .leg-mob-row {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      gap: 6px !important;
-      width: 100% !important;
-    }
-    .leg-mob-btn {
-      flex: 1 1 0% !important;
-      min-width: 48px !important;
-      min-height: 48px !important;
-      padding: 8px 4px !important;
-      background-color: #ffffff !important;
-      color: #1e2d24 !important;
-      border: 1px solid #d1d5db !important;
-      border-radius: 12px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      cursor: pointer !important;
-      transition: all 0.3s ease !important;
-    }
-    .leg-mob-btn.active {
-      background-color: #1e2d24 !important;
-      color: #ffffff !important;
-      border-color: #1e2d24 !important;
-      box-shadow: 0 4px 8px -1px rgba(30, 45, 36, 0.3) !important;
-    }
-    .leg-mob-icon {
-      color: #664D03 !important;
-      margin-bottom: 2px !important;
-    }
-    .leg-mob-btn.active .leg-mob-icon {
-      color: #c5a880 !important;
-    }
-    .leg-mob-text {
-      font-size: 11px !important;
-      font-weight: 800 !important;
-      line-height: 1.1 !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      width: 100% !important;
-    }
-
-    @keyframes autoMarquee {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-50%); }
-    }
-    .marquee-wrapper-track {
-      display: flex !important;
-      width: max-content !important;
-      animation: autoMarquee 18s linear infinite !important;
-      will-change: transform;
-    }
-    .marquee-wrapper-track:hover {
-      animation-play-state: paused !important;
-    }
-    .sponsor-logo-box {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      height: 60px !important;
-      width: 120px !important;
-      flex-shrink: 0 !important;
-    }
-    .sponsor-logo-box img {
-      height: 40px !important;
-      max-height: 40px !important;
-      width: auto !important;
-      max-width: 110px !important;
-      object-fit: contain !important;
-      display: block !important;
-      transition: transform 0.3s ease !important;
-    }
-    .sponsor-logo-box:hover img {
-      transform: scale(1.15) !important;
-    }
-    @media (min-width: 640px) {
-      .sponsor-logo-box {
-        height: 70px !important;
-        width: 150px !important;
-      }
-      .sponsor-logo-box img {
-        height: 45px !important;
-        max-height: 45px !important;
-        max-width: 130px !important;
-      }
-    }
-  </style>
 </head>
-<body class="bg-brand-light text-brand-dark font-sans scroll-smooth antialiased" x-data="atheraApp()">
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
 
-<!-- Header / Navigation -->
-<header id="main-navbar" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 bg-[#16241b] shadow-lg border-b border-white/5">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
-      
-      <a href="./" class="flex items-center gap-2.5 sm:gap-3.5 shrink-0 group py-1" aria-label="Beranda Grand Athera">
-        <img src="assets/logo.webp" 
-             alt="Logo Grand Athera" 
-             class="h-[32px] sm:h-[36px] md:h-[36px] lg:h-[42px] w-auto object-contain shrink-0 drop-shadow-md">
+  <!-- 1. TOP RUNNING TICKER -->
+  <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
+    <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
+      <span class="mx-4">🌟 Memuat Kontributor DUTAMIK.ID...</span>
+    </div>
+  </div>
+
+  <!-- 2. NAVBAR -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-2">
         
-        <div class="inline-flex flex-col justify-between h-[32px] sm:h-[36px] md:h-[36px] lg:h-[42px] w-fit shrink-0">
-          <span class="text-lg sm:text-xl md:text-xl lg:text-2xl font-bold tracking-wider text-white uppercase leading-none block whitespace-nowrap" style="font-family: 'Souvenir', 'ITC Souvenir', serif;">
-              GRAND ATHERA
-          </span>
-          <span class="w-full text-[8.8px] sm:text-[9.8px] md:text-[9.8px] lg:text-[11.8px] font-bold text-[#c5a880] uppercase leading-none block tracking-[0.24em]" style="font-family: 'Souvenir', 'ITC Souvenir', serif; text-align-last: justify; text-align: justify;">
-              PT ATHERA PUTRA PRIMA
-          </span>
-        </div>
-      </a>
-
-      <!-- Desktop Nav Links -->
-      <nav class="hidden lg:flex items-center space-x-3 xl:space-x-6 shrink-0">
-        <a href="#hero" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Home</a>
-        <a href="#about" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Tentang Kami</a>
-        <a href="#products" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Produk Kami</a>
-        <a href="#sold-out" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Kisah Sukses</a>
-        <a href="#legalitas" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Legalitas</a>
-        <a href="#sponsors" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Mitra Kami</a>
-        <a href="#contact" class="text-gray-100 hover:text-[#c5a880] transition font-semibold text-xs xl:text-sm whitespace-nowrap">Kontak</a>
-        <button type="button" @click="consultationModalOpen = true" 
-           class="bg-[#664D03] text-white px-4 xl:px-5 py-2 rounded-full hover:bg-white hover:text-[#16241b] transition-all font-bold text-xs tracking-wider uppercase pulse-gold min-h-[40px] inline-flex items-center justify-center shadow-md whitespace-nowrap shrink-0 cursor-pointer">Konsultasi Gratis</button>
-      </nav>
-
-      <!-- Mobile Hamburger -->
-      <div class="lg:hidden flex items-center shrink-0">
-        <button @click="mobileMenuOpen = !mobileMenuOpen" 
-                type="button" 
-                class="text-white hover:text-[#c5a880] focus:outline-none p-2 rounded-lg" aria-label="Buka Menu Navigasi">
-          <svg class="h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-          </svg>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Mobile Dropdown Menu -->
-  <div x-cloak x-show="mobileMenuOpen" x-transition class="lg:hidden bg-[#16241b] border-t border-white/10 px-5 py-5 space-y-3">
-    <a @click="mobileMenuOpen = false" href="#hero" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Home</a>
-    <a @click="mobileMenuOpen = false" href="#about" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Tentang Kami</a>
-    <a @click="mobileMenuOpen = false" href="#products" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Produk Kami</a>
-    <a @click="mobileMenuOpen = false" href="#sold-out" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Kisah Sukses</a>
-    <a @click="mobileMenuOpen = false" href="#legalitas" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Legalitas</a>
-    <a @click="mobileMenuOpen = false" href="#sponsors" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Mitra Kami</a>
-    <a @click="mobileMenuOpen = false" href="#contact" class="block text-gray-200 hover:text-[#c5a880] transition py-2 text-base font-semibold">Kontak</a>
-    <button type="button" @click="mobileMenuOpen = false; consultationModalOpen = true" 
-       class="w-full bg-[#664D03] text-white text-center py-3 rounded-full hover:bg-white hover:text-[#16241b] transition font-bold text-sm min-h-[48px] flex items-center justify-center shadow-md cursor-pointer">Konsultasi Gratis</button>
-  </div>
-</header>
-
-  <!-- Hero Section -->
-  <section id="hero" class="relative min-h-screen flex items-center justify-center bg-[#16241b] text-white pt-20">
-    <div class="absolute inset-0 z-0">
-      <img src="assets/bg-home.webp" 
-           onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80'" 
-           alt="Proyek Komersil Grand Athera" 
-           width="1600" height="900"
-           fetchpriority="high" decoding="async"
-           class="w-full h-full object-cover opacity-30 filter brightness-90">
-      <div class="absolute inset-0 bg-gradient-to-t from-[#16241b] via-[#16241b]/60 to-transparent"></div>
-    </div>
-
-    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 sm:py-28 md:py-32">
-      <p class="text-[#c5a880] text-xs sm:text-sm font-display font-bold tracking-[0.2em] uppercase mb-3">
-        DEVELOPER PROPERTI TERPERCAYA INDONESIA
-      </p>
-      
-      <h1 class="text-3xl sm:text-5xl md:text-6xl font-display font-extrabold tracking-tight mb-5 leading-tight">
-        Wujudkan Hunian Impian <br><span class="text-[#c5a880]">Investasi Masa Depan Anda</span>
-      </h1>
-      
-      <p class="text-xs sm:text-base md:text-lg text-gray-200 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
-        Kami hadirkan ragam pilihan properti terbaik—Rumah Subsidi, Komersil, hingga Tanah Kavling siap bangun dengan kepastian hukum dan standar kualitas bangunan unggul.
-      </p>
-
-      <!-- Action Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto sm:max-w-none">
-        <a href="#products" class="w-full sm:w-auto bg-[#664D03] text-white px-8 py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wider uppercase hover:bg-white hover:text-[#16241b] transition-all duration-300 text-center shadow-lg min-h-[48px] flex items-center justify-center">
-          Lihat Katalog Properti
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2 flex-shrink-0 group">
+          <img src="assets/images/logo.svg" alt="DUTAMIK.ID Logo" class="h-9 sm:h-10 w-auto transform transition duration-300 group-hover:scale-105" />
         </a>
-        <button type="button" @click="consultationModalOpen = true" class="w-full sm:w-auto border border-white/30 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wider uppercase hover:bg-white hover:text-[#16241b] transition-all duration-300 text-center min-h-[48px] flex items-center justify-center cursor-pointer">
-          DOWNLOAD BROSUR
+
+        <!-- Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-1 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <a href="index.html" class="px-3.5 py-2 rounded-xl text-blue-600 dark:text-blue-400 font-bold bg-blue-50/90 dark:bg-blue-900/30 whitespace-nowrap">
+            Beranda
+          </a>
+          <a href="katalog.html" class="px-3.5 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
+            <i data-lucide="grid" class="w-3.5 h-3.5 text-blue-500"></i>
+            <span>Master Katalog</span>
+          </a>
+          <a href="tools/" class="px-3.5 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
+            Fitur Gratis
+          </a>
+          <a href="jasa/" class="px-3.5 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
+            Katalog Jasa
+          </a>
+          <a href="produk/" class="px-3.5 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
+            Produk Digital
+          </a>
+          <a href="donasi.html" class="px-3.5 py-2 rounded-xl hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/20 transition whitespace-nowrap">
+            Donasi QRIS
+          </a>
+        </nav>
+
+        <!-- Right Utilities Group -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="openSearchModal()" aria-label="Cari Fitur" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
+            <i data-lucide="search" class="w-4 h-4 text-blue-600"></i>
+            <span class="hidden md:inline">Cari...</span>
+            <kbd class="hidden xl:inline px-1.5 py-0.5 text-[10px] bg-slate-200 dark:bg-slate-800 rounded font-mono text-slate-500">Ctrl+K</kbd>
+          </button>
+
+          <button onclick="openModal('modal-share-site')" aria-label="Share DUTAMIK" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+          </button>
+
+          <button onclick="toggleTheme()" aria-label="Toggle Theme" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <span class="theme-toggle-icon"><i data-lucide="moon" class="w-4 h-4"></i></span>
+          </button>
+
+          <button onclick="openModal('modal-order-service')" class="hidden sm:inline-flex items-center gap-2 gradient-brand text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md hover:opacity-95 transition transform active:scale-95 whitespace-nowrap">
+            <i data-lucide="message-square-heart" class="w-3.5 h-3.5"></i>
+            <span>Konsultasi Gratis</span>
+          </button>
+
+          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-6 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
+      <div class="flex flex-col gap-1.5 pt-2 text-sm font-medium">
+        <a href="index.html" class="px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-900/20">Beranda</a>
+        <a href="katalog.html" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+          <i data-lucide="grid" class="w-4 h-4 text-blue-500"></i>
+          <span>Master Katalog Lengkap</span>
+        </a>
+        <a href="tools/" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Fitur &amp; Tools Gratis</a>
+        <a href="jasa/" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Katalog Jasa &amp; Konsultasi</a>
+        <a href="produk/" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Produk Digital &amp; PaySheet</a>
+        <a href="donasi.html" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Donasi QRIS &amp; Kontributor</a>
+        <button onclick="toggleMobileMenu(); openModal('modal-order-service');" class="mt-2 w-full gradient-brand text-white font-bold py-2.5 rounded-xl text-center shadow text-xs">
+          Konsultasi &amp; Order Jasa
         </button>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- Developer Profile Section -->
-  <section id="about" class="py-24 bg-white relative overflow-hidden">
+  <!-- 3. HERO SECTION -->
+  <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 lg:w-[600px] lg:h-[600px] bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute top-1/3 right-10 w-72 h-72 bg-purple-500/10 dark:bg-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div class="space-y-8">
-          <div>
-            <span class="text-amber-800 font-display font-bold text-xs uppercase tracking-widest block mb-2">Profil Developer</span>
-            <h2 class="text-3xl sm:text-4xl font-display font-bold text-brand-dark">Grand Athera</h2>
-          </div>
-          <p class="text-gray-800 leading-relaxed text-base font-normal">
-            Dikelola oleh <strong>PT Athera Putra Prima</strong>, Grand Athera membawa keahlian dan pengalaman 10+ tahun dari <strong>Anugerah Land</strong> ke dalam segmen perumahan subsidi. Kami hadir mematahkan stigma dengan menghadirkan hunian subsidi berstandar kualitas komersil yang nyaman dan bernilai investasi tinggi.
-          </p>
-          <p class="text-gray-800 leading-relaxed text-base font-normal">
-            Prioritas utama kami adalah kepastian legalitas dan keunggulan struktur bangunan. Didesain dengan fondasi presisi, lingkungan bebas banjir berdrainase tertutup, serta jaminan sertifikat resmi terpecah per kavling, kami memastikan hunian Anda siap ditempati tanpa rasa cemas.
-          </p>
-
-          <div class="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200">
-            <div>
-              <p class="text-3xl sm:text-4xl font-display font-extrabold text-brand-gold">100+</p>
-              <p class="text-xs text-gray-800 uppercase tracking-wider font-bold mt-1">Unit Terbangun</p>
-            </div>
-            <div>
-              <p class="text-3xl sm:text-4xl font-display font-extrabold text-brand-gold">98%</p>
-              <p class="text-xs text-gray-800 uppercase tracking-wider font-bold mt-1">Kepuasan Konsumen</p>
-            </div>
-            <div>
-              <p class="text-3xl sm:text-4xl font-display font-extrabold text-brand-gold">10+</p>
-              <p class="text-xs text-gray-800 uppercase tracking-wider font-bold mt-1">TAHUN PENGALAMAN</p>
-            </div>
-          </div>
+      <div class="text-center max-w-3xl mx-auto">
+        
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-800/80 bg-blue-50/90 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-6 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>Duta Media Informasi berKarya &bull; Sahabat Digital Anda</span>
         </div>
 
-        <div class="relative">
-          <div class="absolute -inset-4 bg-brand-gold/10 rounded-2xl -rotate-2 z-0"></div>
-          <div class="relative z-10 rounded-xl overflow-hidden shadow-2xl">
-            <img src="assets/home.webp" 
-                 alt="Perumahan Subsidi Graha Athera Jogonalan" 
-                 width="800" height="600"
-                 loading="lazy" decoding="async"
-                 class="w-full h-auto object-cover aspect-[4/3] filter brightness-95">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+          Teman Bertumbuh untuk Memajukan <span class="text-gradient">Setiap Ide &amp; Usaha Anda</span>
+        </h1>
 
-  <!-- Product Categories Section -->
-  <section id="products" class="py-16 sm:py-24 bg-brand-light">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-4">
-        <span class="text-amber-800 font-display font-bold text-xs uppercase tracking-widest block">Kategori Proyek</span>
-        <h2 class="text-3xl sm:text-4xl font-display font-bold text-brand-dark">Pilih Jenis Properti Terbaik</h2>
-        <p class="text-gray-800 font-normal">Klik kartu kategori di bawah ini untuk mengeksplorasi daftar proyek siap huni dan tanah kavling kami.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- CATEGORY 1: RUMAH SUBSIDI -->
-        <div @click="openCategory('subsidi')" 
-             class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 border border-gray-200 flex flex-col h-full cursor-pointer transform hover:-translate-y-1">
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img src="assets/graha-athera-jogonalan-tipe-30.webp" 
-                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80'" 
-                 alt="Rumah Subsidi" 
-                 width="800" height="600"
-                 loading="lazy" decoding="async"
-                 class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-            <div class="absolute top-4 left-4 bg-brand-dark/90 text-white text-xs px-3.5 py-1.5 rounded-full font-extrabold uppercase tracking-wider">Mulai Rp 160 Jt</div>
-            <div class="absolute top-4 right-4 bg-amber-100 text-amber-950 px-3 py-1 rounded-full shadow-md text-xs font-extrabold border border-amber-300 flex items-center gap-1">
-              🔥 2 Proyek Tersedia
-            </div>
-          </div>
-          <div class="p-6 sm:p-8 flex flex-col flex-grow space-y-4">
-            <h3 class="text-xl font-display font-bold text-brand-dark group-hover:text-amber-800 transition">Rumah Subsidi FLPP</h3>
-            <p class="text-gray-800 font-normal text-sm flex-grow">
-              Hunian nyaman subsidi pemerintah di Jogonalan &amp; Bayat dengan fasilitas premium, one-gate system, dan cicilan tetap flat ringan 1 jutaan per bulan.
-            </p>
-            <div class="inline-flex items-center text-brand-gold font-extrabold text-sm tracking-wider uppercase group-hover:text-brand-dark transition duration-300 pt-2 min-h-[48px]">
-              Lihat 2 Proyek 
-              <svg class="w-4 h-4 ml-2 fill-current group-hover:translate-x-1 transition" viewBox="0 0 24 24"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- CATEGORY 2: RUMAH KOMERSIL -->
-        <div @click="openCategory('komersil')" 
-             class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 border border-gray-200 flex flex-col h-full cursor-pointer transform hover:-translate-y-1">
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img src="assets/graha-athera-jogonalan-tipe-30.webp" 
-                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'" 
-                 alt="Rumah Komersil" 
-                 width="800" height="600"
-                 loading="lazy" decoding="async"
-                 class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-            <div class="absolute top-4 left-4 bg-brand-dark/90 text-white text-xs px-3.5 py-1.5 rounded-full font-extrabold uppercase tracking-wider">Mulai Rp 350 Jt</div>
-            <div class="absolute top-4 right-4 bg-emerald-100 text-emerald-950 px-3 py-1 rounded-full shadow-md text-xs font-extrabold border border-emerald-300">
-              1 Proyek
-            </div>
-          </div>
-          <div class="p-6 sm:p-8 flex flex-col flex-grow space-y-4">
-            <h3 class="text-xl font-display font-bold text-brand-dark group-hover:text-amber-800 transition">Rumah Komersil</h3>
-            <p class="text-gray-800 font-normal text-sm flex-grow">
-              Hunian mewah modern tropical dengan spesifikasi material berkualitas tinggi, lingkungan aman, dan lokasi strategis.
-            </p>
-            <div class="inline-flex items-center text-brand-gold font-extrabold text-sm tracking-wider uppercase group-hover:text-brand-dark transition duration-300 pt-2 min-h-[48px]">
-              Lihat Proyek 
-              <svg class="w-4 h-4 ml-2 fill-current group-hover:translate-x-1 transition" viewBox="0 0 24 24"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- CATEGORY 3: TANAH KAVLING -->
-        <div @click="openCategory('kavling')" 
-             class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 border border-gray-200 flex flex-col h-full cursor-pointer transform hover:-translate-y-1">
-          <div class="relative overflow-hidden aspect-[4/3]">
-            <img src="assets/graha-athera-jogonalan-tipe-30.webp" 
-                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80'" 
-                 alt="Tanah Kavling" 
-                 width="800" height="600"
-                 loading="lazy" decoding="async"
-                 class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-            <div class="absolute top-4 left-4 bg-brand-dark/90 text-white text-xs px-3.5 py-1.5 rounded-full font-extrabold uppercase tracking-wider">Mulai Rp 1.5 Jt / m²</div>
-            <div class="absolute top-4 right-4 bg-emerald-100 text-emerald-950 px-3 py-1 rounded-full shadow-md text-xs font-extrabold border border-emerald-300">
-              1 Proyek
-            </div>
-          </div>
-          <div class="p-6 sm:p-8 flex flex-col flex-grow space-y-4">
-            <h3 class="text-xl font-display font-bold text-brand-dark group-hover:text-amber-800 transition">Tanah Kavling</h3>
-            <p class="text-gray-800 font-normal text-sm flex-grow">
-              Tanah kavling matang siap bangun dengan infrastruktur lengkap seperti jalan beton, jaringan air bersih, dan sertifikat SHM.
-            </p>
-            <div class="inline-flex items-center text-brand-gold font-extrabold text-sm tracking-wider uppercase group-hover:text-brand-dark transition duration-300 pt-2 min-h-[48px]">
-              Lihat Proyek 
-              <svg class="w-4 h-4 ml-2 fill-current group-hover:translate-x-1 transition" viewBox="0 0 24 24"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- KISAH SUKSES -->
-  <section id="sold-out" 
-           class="py-24 bg-brand-dark text-white relative overflow-hidden"
-           @mouseenter="stopSoldOutSlide()" 
-           @mouseleave="startSoldOutSlide()">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 items-center">
-        <div class="space-y-6 lg:col-span-1">
-          <span class="text-amber-500 font-display font-bold text-xs uppercase tracking-widest block">Kisah Sukses Proyek</span>
-          <h2 class="text-3xl sm:text-4xl font-display font-bold text-white leading-tight">Investasi Aman dengan Hasil yang Terbukti</h2>
-          <p class="text-gray-300 font-normal text-sm leading-relaxed">
-            Kepercayaan konsumen adalah aset terbesar kami. Proyek-proyek sebelumnya selalu habis terjual berkat jaminan standar konstruksi terbaik, legalitas aman, dan penyelesaian proyek sesuai jadwal.
-          </p>
-
-          <div class="flex items-center gap-4 pt-2">
-            <button type="button" 
-                    @click="prevSoldOut(); startSoldOutSlide();" 
-                    aria-label="Proyek Selesai Sebelumnya"
-                    class="w-12 h-12 rounded-full bg-white/10 hover:bg-brand-gold text-white border border-white/20 transition flex items-center justify-center min-w-[48px] min-h-[48px]">
-              <svg class="w-5 h-5 fill-none stroke-current" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            
-            <button type="button" 
-                    @click="nextSoldOut(); startSoldOutSlide();" 
-                    aria-label="Proyek Selesai Selanjutnya"
-                    class="w-12 h-12 rounded-full bg-white/10 hover:bg-brand-gold text-white border border-white/20 transition flex items-center justify-center min-w-[48px] min-h-[48px]">
-              <svg class="w-5 h-5 fill-none stroke-current" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-
-            <span class="text-xs font-bold text-brand-gold-light bg-white/5 px-3.5 py-2 rounded-full border border-white/10">
-              <span x-text="soldOutProjects.length > 0 ? soldOutIndex + 1 : 0"></span> / <span x-text="soldOutProjects.length"></span> Proyek
-            </span>
-          </div>
-        </div>
-
-        <div class="lg:col-span-2">
-          <div class="block sm:hidden">
-            <template x-for="(proj, idx) in soldOutProjects" :key="proj.title || idx">
-              <div x-show="soldOutIndex === idx" 
-                   x-transition:enter="transition ease-out duration-400 transform"
-                   x-transition:enter-start="opacity-0 scale-95"
-                   x-transition:enter-end="opacity-100 scale-100"
-                   class="relative group rounded-2xl overflow-hidden shadow-xl aspect-[4/3] border border-white/10">
-                <img :src="proj.image" 
-                     @error="$el.src=proj.fallback" 
-                     :alt="proj.title" 
-                     width="800" height="600"
-                     loading="lazy" decoding="async"
-                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent"></div>
-                <div class="absolute bottom-6 left-6 right-6 space-y-1">
-                  <span class="bg-red-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded inline-block shadow-md">100% SOLD OUT</span>
-                  <h3 class="text-xl font-display font-bold text-white" x-text="proj.title"></h3>
-                  <p class="text-xs text-gray-200 font-medium" x-text="proj.units"></p>
-                </div>
-              </div>
-            </template>
-          </div>
-
-          <div class="hidden sm:grid sm:grid-cols-2 gap-6">
-            <template x-for="(proj, idx) in getDesktopSoldOutProjects()" :key="proj.title || idx">
-              <div class="relative group rounded-2xl overflow-hidden shadow-xl aspect-[4/3] border border-white/10 transition-all duration-500">
-                <img :src="proj.image" 
-                     @error="$el.src=proj.fallback" 
-                     :alt="proj.title" 
-                     width="800" height="600"
-                     loading="lazy" decoding="async"
-                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent"></div>
-                <div class="absolute bottom-6 left-6 right-6 space-y-1">
-                  <span class="bg-red-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded inline-block shadow-md">100% SOLD OUT</span>
-                  <h3 class="text-lg font-display font-bold text-white" x-text="proj.title"></h3>
-                  <p class="text-xs text-gray-200 font-medium" x-text="proj.units"></p>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Legalitas Section -->
-  <section id="legalitas" class="py-16 sm:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-16 space-y-2 sm:space-y-4">
-        <span class="text-amber-800 font-display font-bold text-xs uppercase tracking-widest block">TRANSPARANSI LEGALITAS</span>
-        <h2 class="text-2xl sm:text-4xl font-display font-bold text-brand-dark">Investasi Tenang Bersama Kami</h2>
-        <p class="text-gray-800 font-normal text-xs sm:text-base">Kami memastikan seluruh dokumen hukum clear and clean demi keamanan investasi properti masa depan Anda.</p>
-      </div>
-
-      <div class="legalitas-desktop-grid">
-        <div class="p-6 bg-brand-light rounded-2xl border border-gray-200">
-          <div class="w-16 h-16 bg-brand-dark/10 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-gold">
-            <svg class="w-8 h-8 fill-brand-gold" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-lg text-brand-dark mb-1">Sertifikat Terjamin</h3>
-          <p class="text-xs text-gray-800 font-normal">Sertifikat Hak Milik (SHM) dan Sertifikat Hak Guna Bangunan (SHGB) sudah terpecah per kavling dan siap langsung diproses balik nama ke atas nama Anda.</p>
-        </div>
-
-        <div class="p-6 bg-brand-light rounded-2xl border border-gray-200">
-          <div class="w-16 h-16 bg-brand-dark/10 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-gold">
-            <svg class="w-8 h-8 fill-brand-gold" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-lg text-brand-dark mb-1">Izin Bangunan Resmi (PBG/IMB)</h3>
-          <p class="text-xs text-gray-800 font-normal">Setiap unit terbangun telah mengantongi Persetujuan Bangunan Gedung (PBG/IMB) resmi sesuai regulasi pemerintah.</p>
-        </div>
-
-        <div class="p-6 bg-brand-light rounded-2xl border border-gray-200">
-          <div class="w-16 h-16 bg-brand-dark/10 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-gold">
-            <svg class="w-8 h-8 fill-brand-gold" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-lg text-brand-dark mb-1">Bebas PPN</h3>
-          <p class="text-xs text-gray-800 font-normal">Khusus pembelian program rumah subsidi, Anda dibebaskan 100% dari biaya Pajak Pertambahan Nilai (PPN).</p>
-        </div>
-
-        <div class="p-6 bg-brand-light rounded-2xl border border-gray-200">
-          <div class="w-16 h-16 bg-brand-dark/10 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-gold">
-            <svg class="w-8 h-8 fill-brand-gold" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-lg text-brand-dark mb-1">Asosiasi Resmi</h3>
-          <p class="text-xs text-gray-800 font-normal">Pengembang resmi yang terdaftar dan diawasi oleh Asosiasi Pengembang Rumah Sederhana Sehat Nasional..</p>
-        </div>
-      </div>
-
-      <div class="legalitas-mobile-wrapper space-y-4">
-        <div class="leg-mob-row">
-          <button id="leg-btn-0" type="button" onclick="manualSelectLegalitas(0)" class="leg-mob-btn active" aria-label="Lihat info SHM">
-            <div class="leg-mob-icon"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
-            <span class="leg-mob-text">SHM</span>
-          </button>
-          <button id="leg-btn-1" type="button" onclick="manualSelectLegalitas(1)" class="leg-mob-btn" aria-label="Lihat info PBG/IMB">
-            <div class="leg-mob-icon"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
-            <span class="leg-mob-text">PBG/IMB</span>
-          </button>
-          <button id="leg-btn-2" type="button" onclick="manualSelectLegalitas(2)" class="leg-mob-btn" aria-label="Lihat info Bebas PPN">
-            <div class="leg-mob-icon"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg></div>
-            <span class="leg-mob-text">Bebas PPN</span>
-          </button>
-          <button id="leg-btn-3" type="button" onclick="manualSelectLegalitas(3)" class="leg-mob-btn" aria-label="Lihat info Asosiasi">
-            <div class="leg-mob-icon"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
-            <span class="leg-mob-text">Asosiasi</span>
-          </button>
-        </div>
-        <div class="pt-2 px-2 text-center">
-          <h3 id="leg-detail-title" class="font-display font-bold text-base sm:text-lg text-brand-dark mb-1">SHM Terjamin</h3>
-          <p id="leg-detail-desc" class="text-xs text-gray-800 font-normal leading-relaxed">Sertifikat Hak Milik (SHM) sudah pecah per kavling dan siap balik nama.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Seksi Sponsor & Partner -->
-  <section id="sponsors" class="mt-16 sm:mt-24 pt-20 sm:pt-28 pb-20 bg-brand-light border-t border-b border-gray-300 overflow-hidden relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-14 space-y-4">
-        <span class="text-amber-800 font-display font-bold text-xs uppercase tracking-widest block">Mitra &amp; EKOSISTEM PENDUKUNG</span>
-        <h2 class="text-3xl sm:text-4xl font-display font-bold text-brand-dark">Legalitas Aman, KPR Lancar &amp; Layanan Cepat</h2>
-        <p class="text-gray-800 font-normal text-sm sm:text-base">
-          Didukung Instansi Resmi Kabupaten Klaten, Mitra Perbankan &amp; serta ekosistem Digital terdepan.
+        <p class="mt-6 text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
+          Kami hadir memberikan solusi nyata yang ramah, cepat, dan transparan: nikmati <strong class="text-slate-800 dark:text-slate-100 font-bold">akses tool online premium gratis</strong> tanpa batasan, <strong class="text-slate-800 dark:text-slate-100 font-bold">pendampingan legalitas &amp; rancang bangun profesional</strong>, hingga sistem digital mandiri yang dirancang untuk mendukung setiap langkah sukses Anda.
         </p>
-      </div>
 
-      <div class="relative w-full overflow-hidden py-4">
-        <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-20 sm:w-32 z-10 bg-gradient-to-r from-[#f7f6f2] via-[#f7f6f2]/80 to-transparent"></div>
-        <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-20 sm:w-32 z-10 bg-gradient-to-l from-[#f7f6f2] via-[#f7f6f2]/80 to-transparent"></div>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button onclick="openModal('modal-order-service')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xl transition transform hover:-translate-y-0.5">
+            <i data-lucide="message-square-heart" class="w-4 h-4"></i>
+            <span>Konsultasi Kebutuhan Gratis</span>
+          </button>
+          <a href="katalog.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-xs shadow-md hover:bg-slate-800 dark:hover:bg-slate-100 transition transform hover:-translate-y-0.5">
+            <i data-lucide="grid" class="w-4 h-4 text-blue-400 dark:text-blue-600"></i>
+            <span>Buka Master Katalog</span>
+          </a>
+          <a href="donasi.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 font-bold text-xs transition">
+            <i data-lucide="heart" class="w-4 h-4 fill-rose-500"></i>
+            <span>Traktir Kopi</span>
+          </a>
+        </div>
 
-        <div class="marquee-wrapper-track">
-          <div class="flex items-center space-x-10 sm:space-x-16 pr-10 sm:pr-16 shrink-0">
-            <div class="sponsor-logo-box"><img src="assets/sponsor/anugerah-land.webp" width="120" height="40" loading="lazy" decoding="async" alt="Anugerah Land Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/disperakim-klaten.webp" width="120" height="40" loading="lazy" decoding="async" alt="Disperakim Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/atrbpn-klaten.webp" width="120" height="40" loading="lazy" decoding="async" alt="ATR BPN Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-btn.svg" width="120" height="40" loading="lazy" decoding="async" alt="Bank BTN Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-bri.webp" width="120" height="40" loading="lazy" decoding="async" alt="Bank BRI Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-bsi.webp" width="120" height="40" loading="lazy" decoding="async" alt="Bank BSI Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-bni.svg" width="120" height="40" loading="lazy" decoding="async" alt="Bank BNI Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-mandiri.webp" width="120" height="40" loading="lazy" decoding="async" alt="Bank Mandiri Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/duta-digital-agensi.webp" width="120" height="40" loading="lazy" decoding="async" alt="Duta Digital Agensi"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/github.svg" width="120" height="40" loading="lazy" decoding="async" alt="Github Page"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/Google.svg" width="120" height="40" loading="lazy" decoding="async" alt="Google Services"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/meta-ads.webp" width="120" height="40" loading="lazy" decoding="async" alt="Meta Ads"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/idwebhost.webp" width="120" height="40" loading="lazy" decoding="async" alt="IDwebhost"></div>
+        <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-slate-500 dark:text-slate-400 text-xs">
+          <div class="flex items-center justify-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+            <span>100% Privasi Terlindungi</span>
           </div>
-
-          <div class="flex items-center space-x-10 sm:space-x-16 pr-10 sm:pr-16 shrink-0" aria-hidden="true">
-            <div class="sponsor-logo-box"><img src="assets/sponsor/anugerah-land.webp" width="120" height="40" loading="lazy" decoding="async" alt="Anugerah Land Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/disperakim-klaten.webp" width="120" height="40" loading="lazy" decoding="async" alt="Disperakim Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/atrbpn-klaten.webp" width="120" height="40" loading="lazy" decoding="async" alt="ATR BPN Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-btn.svg" width="120" height="40" loading="lazy" decoding="async" alt="Bank BTN Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-bri.webp" width="120" height="40" loading="lazy" decoding="async" alt="Bank BRI Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-bsi.webp" width="120" height="40" loading="lazy" decoding="async" alt="Bank BSI Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-bni.svg" width="120" height="40" loading="lazy" decoding="async" alt="Bank BNI Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/bank-mandiri.webp" width="120" height="40" loading="lazy" decoding="async" alt="Bank Mandiri Klaten"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/duta-digital-agensi.webp" width="120" height="40" loading="lazy" decoding="async" alt="Duta Digital Agensi"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/github.svg" width="120" height="40" loading="lazy" decoding="async" alt="Github Page"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/Google.svg" width="120" height="40" loading="lazy" decoding="async" alt="Google Services"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/meta-ads.webp" width="120" height="40" loading="lazy" decoding="async" alt="Meta Ads"></div>
-            <div class="sponsor-logo-box"><img src="assets/sponsor/idwebhost.webp" width="120" height="40" loading="lazy" decoding="async" alt="IDwebhost"></div>
+          <div class="flex items-center justify-center gap-2">
+            <i data-lucide="users" class="w-4 h-4 text-blue-500"></i>
+            <span>Pendampingan Ramah &amp; Solutif</span>
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+            <span>Akses Mudah Tanpa Beban</span>
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <i data-lucide="heart" class="w-4 h-4 text-rose-500"></i>
+            <span>Dedikasi Kemajuan UMKM</span>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Hubungi Kami / Kontak Sales (Halaman Utama) -->
-  <section id="contact" class="py-24 bg-brand-light">
+  <!-- 4. HIGHLIGHT SECTION: FITUR & TOOLS GRATIS (AUTO-SCROLL & SWIPE SLIDER) -->
+  <section class="py-16 bg-white dark:bg-slate-900/50 border-y border-slate-200/80 dark:border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        <div class="space-y-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
+            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+            <span>Fitur &amp; Utilitas Gratis</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            Tool Kerja Praktis Langsung di Browser
+          </h2>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
+            Seluruh alat dirancang untuk memudahkan tugas harian Anda. 100% aman di perangkat sendiri tanpa perlu unggah data.
+          </p>
+        </div>
+        
+        <!-- Prominent Category Access Button (No Broken Arrows) -->
+        <div class="mt-4 md:mt-0 flex items-center">
+          <a href="tools/" class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 font-extrabold text-xs transition-all shadow-sm">
+            <span>Buka Katalog Tool Gratis</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Click & Drag Horizontal Scroll Slider (Zero Auto-Shift) -->
+      <div id="tools-carousel" class="dutamik-slider-container flex overflow-x-auto gap-4 sm:gap-6 pb-4 no-scrollbar -mx-4 px-4 select-none">
+        
+        <!-- 1. QR Generator -->
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-blue-500/30 hover:border-blue-500">
           <div>
-            <span class="text-amber-800 font-display font-bold text-xs uppercase tracking-widest block mb-2">Hubungi Kami</span>
-            <h2 class="text-3xl sm:text-4xl font-display font-bold text-brand-dark">Kunjungi Kantor Pemasaran</h2>
-            <p class="text-gray-800 font-normal mt-2">Kami menyambut kedatangan Anda untuk berkonsultasi secara langsung, melihat legalitas perumahan, dan berkendara untuk survei lokasi bersama tim pemasaran kami.</p>
+            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
+              <i data-lucide="qr-code" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Custom QR Code Generator</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Buat QR code untuk URL, teks, kontak, atau WiFi dengan kustomisasi warna &amp; download format PNG jernih.
+            </p>
           </div>
-
-          <div class="space-y-4">
-            <div class="flex items-start space-x-4">
-              <div class="text-brand-gold mt-1 shrink-0">
-                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              </div>
-              <div>
-                <h3 class="font-display font-bold text-brand-dark">Alamat Kantor</h3>
-                <p class="text-sm text-gray-800 font-medium">Jalan Perintis Kemerdekaan No. 28 Klaten Utara, Klaten, Jawa Tengah 57438</p>
-              </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Akses</span><div class="font-extrabold text-base text-blue-600">100% Gratis</div></div>
+              <span class="text-[10px] bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">In-Browser Safe</span>
             </div>
-
-            <div class="flex items-start space-x-4">
-              <div class="text-brand-gold mt-1 shrink-0">
-                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.18 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              </div>
-              <div>
-                <h3 class="font-display font-bold text-brand-dark">WhatsApp Athera Properti Klaten</h3>
-                <p class="text-sm text-gray-800 font-medium">+62 851-2466-5145</p>
-              </div>
-            </div>
-
-            <div class="flex items-start space-x-4">
-              <div class="text-brand-gold mt-1 shrink-0">
-                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-              </div>
-              <div>
-                <h3 class="font-display font-bold text-brand-dark">Email Resmi</h3>
-                <p class="text-sm text-gray-800 font-medium">atheradeveloper@gmail.com</p>
-              </div>
-            </div>
+            <a href="tools/qr-generator.html" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+              <span>Buka Generator</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
           </div>
+        </div>
 
-          <!-- MAP FACADE CONTAINER -->
-          <div class="rounded-xl overflow-hidden shadow-lg border border-gray-300">
-            <div id="map-facade-box" class="h-[220px] bg-gray-800 relative flex items-center justify-center cursor-pointer group" onclick="loadMapIframeNow()">
-              <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80" 
-                   width="800" height="220" loading="lazy" decoding="async" alt="Preview Lokasi Kantor" 
-                   class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition">
-              <div class="absolute bg-brand-dark text-white px-5 py-3 rounded-full font-bold text-xs uppercase shadow-xl flex items-center gap-2 group-hover:scale-105 transition">
-                <svg class="w-5 h-5 fill-brand-gold" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                Klik Untuk Memuat Peta Kantor
-              </div>
+        <!-- 2. WhatsApp Link -->
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-emerald-500/30 hover:border-emerald-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
             </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Direct WhatsApp Link Maker</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Generate tautan chat WhatsApp instan dengan template pesan terformat tanpa perlu menyimpan nomor ke kontak.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Akses</span><div class="font-extrabold text-base text-emerald-600">100% Gratis</div></div>
+              <span class="text-[10px] bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">Instan &amp; Cepat</span>
+            </div>
+            <a href="tools/wa-link-generator.html" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+              <span>Buat Link WA</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
 
-            <div class="bg-brand-dark p-4 flex items-center justify-between text-white">
-              <span class="text-xs font-normal">Kantor Athera Properti Klaten</span>
-              <a href="https://maps.google.com/?q=-7.688212,110.630962" target="_blank" rel="noopener noreferrer" class="bg-brand-gold text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-white hover:text-brand-dark transition min-h-[44px] flex items-center justify-center">
-                Petunjuk Arah Google Maps
-              </a>
+        <!-- 3. Image Compressor -->
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-indigo-500/30 hover:border-indigo-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
+              <i data-lucide="image-down" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Image Compressor &amp; WebP</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Perkecil ukuran foto/gambar hingga 85% langsung di memori browser tanpa upload ke server luar.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Akses</span><div class="font-extrabold text-base text-indigo-600">100% Gratis</div></div>
+              <span class="text-[10px] bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">Hemat 85%</span>
+            </div>
+            <a href="tools/image-compressor.html" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+              <span>Kompres Gambar</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- 4. Password Hash -->
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-purple-500/30 hover:border-purple-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3">
+              <i data-lucide="key" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Password &amp; Crypto Hash</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Hasilkan kata sandi acak CSPRNG kuat dan enkripsi hash MD5, SHA-1, SHA-256, hingga SHA-512 secara akurat.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Akses</span><div class="font-extrabold text-base text-purple-600">100% Gratis</div></div>
+              <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 px-2 py-0.5 rounded-full font-semibold">Keamanan Tinggi</span>
+            </div>
+            <a href="tools/password-hash-generator.html" class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+              <span>Generate Password</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- 5. Text Case -->
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-amber-500/30 hover:border-amber-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+              <i data-lucide="type" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Text &amp; Case Converter</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Hitung jumlah kata, karakter, waktu baca, dan ubah huruf kapital (UPPERCASE, Title Case, Slug URL) instan.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Akses</span><div class="font-extrabold text-base text-amber-500">100% Gratis</div></div>
+              <span class="text-[10px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 px-2 py-0.5 rounded-full font-semibold">Utilitas Praktis</span>
+            </div>
+            <a href="tools/text-case-converter.html" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+              <span>Buka Text Tools</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- 6. Invoice Maker -->
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-rose-500/30 hover:border-rose-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-3">
+              <i data-lucide="receipt" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Invoice &amp; Kwitansi Instan</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Buat faktur penagihan atau tanda terima profesional dengan kalkulasi otomatis dan langsung cetak ke PDF.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Akses</span><div class="font-extrabold text-base text-rose-600">100% Gratis</div></div>
+              <span class="text-[10px] bg-rose-50 dark:bg-rose-900/40 text-rose-600 px-2 py-0.5 rounded-full font-semibold">Siap Cetak PDF</span>
+            </div>
+            <a href="tools/invoice-maker.html" class="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+              <span>Buat Invoice</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. HIGHLIGHT SECTION: JASA UNGGULAN (AUTO-SCROLL & SWIPE SLIDER) -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2">
+            <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+            <span>Layanan Profesional</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            Pendampingan Teknis &amp; Legalitas Terpercaya
+          </h2>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
+            Dikerjakan oleh praktisi berpengalaman dengan komunikasi transparan, hasil rapi, dan garansi sampai tuntas.
+          </p>
+        </div>
+
+        <!-- Prominent Category Access Button (No Broken Arrows) -->
+        <div class="mt-4 md:mt-0 flex items-center">
+          <a href="jasa/" class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/50 font-extrabold text-xs transition-all shadow-sm">
+            <span>Buka Katalog Jasa Lengkap</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Click & Drag Horizontal Scroll Slider (Zero Auto-Shift) -->
+      <div id="services-carousel" class="dutamik-slider-container flex overflow-x-auto gap-4 sm:gap-6 pb-4 no-scrollbar -mx-4 px-4 select-none">
+        
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 snap-start glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-blue-500/30 hover:border-blue-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
+              <i data-lucide="monitor" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Optimasi Laptop &amp; PC Remote</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Percepat kinerja laptop lambat, bersihkan virus/malware, fix registry error, dan pasang software esensial secara remote.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Tarif</span><div class="font-extrabold text-lg text-blue-600">Rp 50.000</div></div>
+              <span class="text-[10px] bg-blue-50 dark:bg-blue-900/40 text-blue-600 px-2 py-0.5 rounded-full font-semibold">1 Jam Selesai</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="jasa/remote-pc.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openServiceOrderWithName('Jasa Optimasi Laptop & PC Remote')" class="py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition">Pesan</button>
             </div>
           </div>
         </div>
 
-        <!-- FORM UTAMA -->
-        <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 space-y-6">
-          <h2 class="text-2xl font-display font-bold text-brand-dark">Dapatkan Brosur Gratis</h2>
-          <p class="text-xs text-gray-800 font-medium">Dapatkan e-brosur dan daftar harga terbaru secara gratis. Gunakan formulir ini juga untuk berkonsultasi mengenai rencana lokasi proyek kami ke depan, atau beri tahu kami lokasi rumah impian Anda.</p>
-          
-          <form id="wa-contact-form" class="space-y-4">
-            <div>
-              <label for="form-nama" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Nama Panggilan</label>
-              <input type="text" id="form-nama" required class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark min-h-[48px]" placeholder="Masukkan nama Anda...">
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 snap-start glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-purple-500/30 hover:border-purple-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3">
+              <i data-lucide="box" class="w-5 h-5"></i>
             </div>
-
-            <div>
-              <label for="form-wa" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Nomor WhatsApp</label>
-              <input type="tel" 
-                     id="form-wa" 
-                     name="wa" 
-                     required 
-                     minlength="11"
-                     maxlength="15"
-                     pattern="^08[0-9]{9,}$"
-                     title="Nomor WhatsApp harus diawali '08' dan minimal 11 digit angka (Contoh: 08123456789)"
-                     class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark min-h-[48px]" 
-                     placeholder="Contoh: 08123456789...">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">3D Modeling Bangunan &amp; Render</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Visualisasi 3D arsitektur fotorealistik Ultra HD fasad eksterior dan interior rumah, ruko, cafe, serta file SketchUp.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Mulai</span><div class="font-extrabold text-lg text-purple-600">Rp 150.000</div></div>
+              <span class="text-[10px] bg-purple-50 dark:bg-purple-900/40 text-purple-600 px-2 py-0.5 rounded-full font-semibold">Render 4K</span>
             </div>
-
-            <div>
-              <label for="form-kategori" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Daftar Brosur Perumahan</label>
-              <select id="form-kategori" class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark min-h-[48px]">
-                <option value="Graha Athera Jogonalan">Graha Athera Jogonalan</option>
-                <option value="Graha Athera Bayat">Graha Athera Bayat</option>
-                <option value="Graha Athera Nangsri">Graha Athera Nangsri</option>
-              </select>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="jasa/3d-modeling.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openServiceOrderWithName('Jasa 3D Modeling Bangunan & Render')" class="py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition">Pesan</button>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <label for="form-pesan" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Pertanyaan & Saran (Opsional)</label>
-              <textarea id="form-pesan" rows="4" class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark" placeholder="Contoh: Info brosur, simulasi angsuran, atau jadwal survei lokasi..."></textarea>
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 snap-start glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-emerald-500/30 hover:border-emerald-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+              <i data-lucide="pencil-ruler" class="w-5 h-5"></i>
             </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Gambar 2D Bangunan PBG</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Gambar kerja teknis arsitektur, struktur pondasi/balok, dan sanitasi/MEP format AutoCAD &amp; PDF standar SIMBG PUPR.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Mulai</span><div class="font-extrabold text-lg text-emerald-600">Rp 15.000 <span class="text-[10px] text-slate-400 font-normal">/m²</span></div></div>
+              <span class="text-[10px] bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">SIMBG Siap</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="jasa/gambar-pbg.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openServiceOrderWithName('Jasa Gambar 2D Bangunan PBG')" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition">Pesan</button>
+            </div>
+          </div>
+        </div>
 
-            <button type="submit" class="w-full bg-brand-dark text-white hover:bg-brand-gold hover:text-white py-4 rounded-lg font-bold text-sm tracking-wider uppercase transition-all duration-300 shadow-md flex items-center justify-center gap-2 min-h-[48px]">
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24.00 24.00" fill="currentColor" xmlns="http://www.w3.org/2000/svg" stroke="#000000">
-                <path d="M17 17H17.01M17.4 14H18C18.9319 14 19.3978 14 19.7654 14.1522C20.2554 14.3552 20.6448 14.7446 20.8478 15.2346C21 15.6022 21 16.0681 21 17C21 17.9319 21 18.3978 20.8478 18.7654C20.6448 19.2554 20.2554 19.6448 19.7654 19.8478C19.3978 20 18.9319 20 18 20H6C5.06812 20 4.60218 20 4.23463 19.8478C3.74458 19.6448 3.35523 19.2554 3.15224 18.7654C3 18.3978 3 17.9319 3 17C3 16.0681 3 15.6022 3.15224 15.2346C3.35523 14.7446 3.74458 14.3552 4.23463 14.1522C4.60218 14 5.06812 14 6 14H6.6M12 15V4M12 15L9 12M12 15L15 12" stroke="#fff" stroke-width="1.92" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Download Brosur
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 snap-start glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-cyan-500/30 hover:border-cyan-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-3">
+              <i data-lucide="map" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Peta SHP / ZIP (OSS &amp; AMDALNET)</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Peta poligon batas lahan format ESRI Shapefile ZIP (.shp, .shx, .dbf, .prj) WGS 84 bergaransi 100% lolos KKPR OSS RBA.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Tarif</span><div class="font-extrabold text-lg text-cyan-600">Rp 75.000</div></div>
+              <span class="text-[10px] bg-cyan-50 dark:bg-cyan-900/40 text-cyan-600 px-2 py-0.5 rounded-full font-semibold">1 Jam Selesai</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="jasa/peta-shp-oss.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openServiceOrderWithName('Jasa Peta SHP & ZIP ESRI OSS/AMDALNET')" class="py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition">Pesan</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 snap-start glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-amber-500/30 hover:border-amber-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+              <i data-lucide="award" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Pembuatan NIB Usaha Mikro OSS</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Pendaftaran Nomor Induk Berusaha (NIB) resmi BKPM RI untuk usaha mikro. Syarat pinjaman KUR Bank dan sertifikasi Halal.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Tarif</span><div class="font-extrabold text-lg text-amber-500">Rp 75.000</div></div>
+              <span class="text-[10px] bg-amber-50 dark:bg-amber-900/40 text-amber-600 px-2 py-0.5 rounded-full font-semibold">1 Hari Terbit</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="jasa/nib-oss.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openServiceOrderWithName('Jasa Pembuatan NIB Usaha Mikro')" class="py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition">Pesan</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mobile-slide-card sm:w-[320px] md:w-[340px] flex-shrink-0 snap-start glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border border-indigo-500/30 hover:border-indigo-500">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
+              <i data-lucide="globe" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Website UMKM &amp; Landing Page</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Pembuatan website profil usaha responsif, form order Google Sheet, WhatsApp floating chat, tanpa biaya sewa server bulanan.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex justify-between items-end mb-3">
+              <div><span class="text-[10px] text-slate-400">Mulai</span><div class="font-extrabold text-lg text-indigo-600">Rp 299.000</div></div>
+              <span class="text-[10px] bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 px-2 py-0.5 rounded-full font-semibold">Free Hosting</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="jasa/web-umkm.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openServiceOrderWithName('Jasa Website UMKM & Landing Page')" class="py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition">Pesan</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. HIGHLIGHT SECTION: PRODUK DIGITAL & SOLUSI MANDIRI (AUTO-SCROLL & SWIPE SLIDER) -->
+  <section class="py-16 bg-slate-100/70 dark:bg-slate-900/40 border-y border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-2">
+            <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+            <span>PaySheet QRIS Digital Store</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            Aset &amp; Solusi Mandiri Siap Unduh Instan
+          </h2>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2 max-w-xl">
+            Paket rancangan rumah, source code landing page, dan sistem mandiri dengan sistem pembayaran QRIS langsung aktif.
+          </p>
+        </div>
+
+        <!-- Prominent Category Access Button (No Broken Arrows) -->
+        <div class="mt-4 md:mt-0 flex items-center">
+          <a href="produk/" class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 font-extrabold text-xs transition-all shadow-sm">
+            <span>Buka Toko Produk Digital</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Click & Drag Horizontal Scroll Slider (Zero Auto-Shift) -->
+      <div id="products-carousel" class="dutamik-slider-container flex overflow-x-auto gap-4 sm:gap-6 pb-4 no-scrollbar -mx-4 px-4 select-none">
+        
+        <div class="mobile-slide-card sm:w-[320px] md:w-[360px] flex-shrink-0 snap-start glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-extrabold bg-emerald-500/10 text-emerald-600 px-2.5 py-1 rounded-full uppercase">Paket DED Rumah</span>
+              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.9</span>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Gambar 2D Rumah Lengkap + 3D Fasad</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Paket komplit gambar kerja arsitektur, denah, tampak, potongan, struktur pondasi, RAB Excel, dan 3 view render fasad 3D HD.
+            </p>
+          </div>
+          <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-[11px] text-slate-400 line-through">Rp 250.000</div>
+                <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 75.000</div>
+              </div>
+              <span class="text-[10px] bg-emerald-500/10 text-emerald-600 font-bold px-2 py-0.5 rounded-full">Hemat 70%</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="produk/rumah-2d3d.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openProductCheckoutModal('PROD-RUMAH-2D3D', 'Gambar 2D Rumah Lengkap + 3D Fasad Siap Bangun', 75000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <span>Beli QRIS</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mobile-slide-card sm:w-[320px] md:w-[360px] flex-shrink-0 snap-start glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Template Website</span>
+              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 5.0</span>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Template Website UMKM &amp; Landing Page</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Source code website responsif modern terintegrasi form order Google Sheet, dark mode, floating WhatsApp, dan siap deploy ke GitHub Pages.
+            </p>
+          </div>
+          <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-[11px] text-slate-400 line-through">Rp 150.000</div>
+                <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 49.000</div>
+              </div>
+              <span class="text-[10px] bg-blue-500/10 text-blue-600 font-bold px-2 py-0.5 rounded-full">Source Code</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="produk/template-web.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openProductCheckoutModal('PROD-TEMPLATE-WEB', 'Template Website UMKM & Landing Page Modern', 49000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <span>Beli QRIS</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mobile-slide-card sm:w-[320px] md:w-[360px] flex-shrink-0 snap-start glass-panel rounded-3xl overflow-hidden glow-card flex flex-col justify-between">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-extrabold bg-purple-500/10 text-purple-600 px-2.5 py-1 rounded-full uppercase">Sistem Otomasi Usaha</span>
+              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.9</span>
+            </div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Aplikasi Kasir POS &amp; Stok Google Sheet</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+              Sistem pencatatan transaksi otomatis cetak struk belanja thermal/PDF, kelola stok barang, dan rekap laba rugi bulanan tanpa biaya software langganan.
+            </p>
+          </div>
+          <div class="p-6 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-[11px] text-slate-400 line-through">Rp 120.000</div>
+                <div class="font-extrabold text-lg text-slate-900 dark:text-white">Rp 39.000</div>
+              </div>
+              <span class="text-[10px] bg-purple-500/10 text-purple-600 font-bold px-2 py-0.5 rounded-full">Lifetime</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="produk/pos-sheet.html" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
+              <button onclick="openProductCheckoutModal('PROD-POS-SHEET', 'Aplikasi Kasir POS & Stok Google Sheet', 39000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <span>Beli QRIS</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. PROPORTIONAL DONASI & WALL OF KONTRIBUTOR (SANTAI & CATCHY PRESETS) -->
+  <section class="py-20 relative overflow-hidden" id="donasi-section">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <div class="lg:col-span-5 glass-panel p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center font-bold">
+                <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Support Perkembangan</h3>
+                <span class="text-[10px] text-slate-500">DUTAMIK.ID Digital</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600">Active</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Pilih Jenis Traktiran:</label>
+            <div class="grid grid-cols-2 gap-2">
+              
+              <button type="button" data-amount="10000" onclick="selectDonationPreset(10000, 'Ngopi Santai')" class="preset-card-donasi p-2.5 rounded-2xl border border-blue-600 bg-blue-50/80 dark:bg-blue-900/30 text-left transition flex items-center gap-2 ring-2 ring-blue-500/50">
+                <div class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-600 flex items-center justify-center flex-shrink-0 text-base">☕</div>
+                <div>
+                  <div class="text-xs font-bold text-slate-900 dark:text-white">Ngopi Santai</div>
+                  <div class="text-[11px] font-extrabold text-blue-600 dark:text-blue-400">Rp 10.000</div>
+                </div>
+              </button>
+
+              <button type="button" data-amount="25000" onclick="selectDonationPreset(25000, 'Mukbang Kenyang')" class="preset-card-donasi p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-left transition flex items-center gap-2 hover:border-blue-400">
+                <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center flex-shrink-0 text-base">🍱</div>
+                <div>
+                  <div class="text-xs font-bold text-slate-900 dark:text-white">Mukbang Kenyang</div>
+                  <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">Rp 25.000</div>
+                </div>
+              </button>
+
+              <button type="button" data-amount="50000" onclick="selectDonationPreset(50000, 'Req Tool Baru')" class="preset-card-donasi p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-left transition flex items-center gap-2 hover:border-blue-400">
+                <div class="w-8 h-8 rounded-xl bg-purple-500/15 text-purple-600 flex items-center justify-center flex-shrink-0 text-base">💡</div>
+                <div>
+                  <div class="text-xs font-bold text-slate-900 dark:text-white">Req Tool Baru</div>
+                  <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">Rp 50.000</div>
+                </div>
+              </button>
+
+              <button type="button" data-amount="100000" onclick="selectDonationPreset(100000, 'Healing Total')" class="preset-card-donasi p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-left transition flex items-center gap-2 hover:border-blue-400">
+                <div class="w-8 h-8 rounded-xl bg-rose-500/15 text-rose-600 flex items-center justify-center flex-shrink-0 text-base">🌴</div>
+                <div>
+                  <div class="text-xs font-bold text-slate-900 dark:text-white">Healing Total</div>
+                  <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">Rp 100.000</div>
+                </div>
+              </button>
+
+            </div>
+          </div>
+
+          <div id="donasi-qris-box" class="my-1"></div>
+
+          <form onsubmit="handleDonationSubmit(event)" class="space-y-2.5 pt-3 border-t border-slate-200 dark:border-slate-800">
+            <input type="hidden" id="donasi-custom-amount" name="donorAmount" value="10000" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Nama: *</label>
+                <input type="text" name="donorName" placeholder="Nama Anda" class="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-1 focus:ring-rose-500 focus:outline-none" required />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Pesan:</label>
+                <input type="text" name="donorMessage" placeholder="Ucapan santai / semangat..." class="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-1 focus:ring-rose-500 focus:outline-none" />
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="checkbox" id="donorAnonHome" name="donorAnon" class="rounded text-rose-600 focus:ring-0" />
+              <label for="donorAnonHome" class="text-[11px] text-slate-500 cursor-pointer">Tampilkan sebagai Hamba Allah</label>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i>
+              <span>Konfirmasi &amp; Masuk Wall of Kontributor</span>
             </button>
           </form>
+
         </div>
+
+        <div class="lg:col-span-7 space-y-6">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <div class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">
+                <i data-lucide="award" class="w-4 h-4"></i>
+                <span>Wall of Kontributor</span>
+              </div>
+              <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+                Daftar Kontributor Pengembangan Website
+              </h3>
+            </div>
+            <a href="donasi.html" class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
+              Lihat Semua
+            </a>
+          </div>
+
+          <div id="supporter-wall-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1">
+            <!-- Rendered by gas-client.js -->
+          </div>
+
+          <!-- TRANSPARENCY CARD -->
+          <div class="p-4 sm:p-5 rounded-3xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/60 text-xs">
+            <div class="flex items-center gap-2 font-bold text-blue-700 dark:text-blue-300 mb-2">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <span>Transparansi Penggunaan Kontribusi Komunitas:</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-slate-600 dark:text-slate-400 mt-2">
+              <div class="p-3 bg-white/80 dark:bg-slate-900 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                <strong class="text-slate-800 dark:text-slate-200 block mb-1">🌐 Sistem &amp; Domain</strong>
+                <span class="text-[11px] leading-tight block">Optimasi website, pemeliharaan sistem mandiri &amp; upgrade perangkat.</span>
+              </div>
+              <div class="p-3 bg-white/80 dark:bg-slate-900 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                <strong class="text-slate-800 dark:text-slate-200 block mb-1">🛠️ Riset &amp; Rilis Tool Baru</strong>
+                <span class="text-[11px] leading-tight block">Pengembangan akses tool online premium gratis baru.</span>
+              </div>
+              <div class="p-3 bg-white/80 dark:bg-slate-900 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                <strong class="text-slate-800 dark:text-slate-200 block mb-1">🤝 Pendampingan Digital</strong>
+                <span class="text-[11px] leading-tight block">Sesi konsultasi teknis &amp; legalitas membantu kemajuan UMKM.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
+
     </div>
   </section>
 
-  <!-- INTERACTIVE CATEGORY EXPANSION MODAL -->
-  <div x-cloak x-show="activeCategoryModal" class="fixed inset-0 z-50 bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div @click.away="activeCategoryModal = null" class="bg-brand-light rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-200 transition-all transform">
-      <div class="bg-brand-dark p-6 text-white flex justify-between items-center sticky top-0 z-20">
+  <!-- 8. FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-sm mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        
+        <div class="space-y-4">
+          <a href="index.html" class="inline-block">
+            <img src="assets/images/logo.svg" alt="DUTAMIK.ID" class="h-9 w-auto brightness-200" />
+          </a>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            <strong class="text-slate-200 font-bold">Duta Media Informasi berKarya</strong> hadir sebagai mitra terpercaya dalam mendampingi digitalisasi usaha, rancang bangun arsitektur, pendampingan legalitas, dan akses tool online gratis yang mudah diakses untuk semua.
+          </p>
+
+          <!-- Social Media Channels (FB, Instagram, TikTok, X, YouTube) -->
+          <div class="pt-2">
+            <h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-300 mb-2.5">Media Sosial Resmi:</h5>
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <!-- Facebook -->
+              <a href="https://facebook.com" target="_blank" rel="noopener nofollow" title="Facebook DUTAMIK.ID" aria-label="Facebook DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-[#1877F2] hover:border-[#1877F2] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <!-- Instagram -->
+              <a href="https://instagram.com" target="_blank" rel="noopener nofollow" title="Instagram @dutamik.id" aria-label="Instagram DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:border-transparent flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <!-- TikTok -->
+              <a href="https://tiktok.com" target="_blank" rel="noopener nofollow" title="TikTok @dutamik.id" aria-label="TikTok DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-[#25F4EE] hover:bg-black hover:border-[#FE2C55] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
+              </a>
+              <!-- X (Twitter) -->
+              <a href="https://x.com" target="_blank" rel="noopener nofollow" title="X (Twitter) @dutamik_id" aria-label="X (Twitter) DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-black hover:border-slate-500 flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <!-- YouTube -->
+              <a href="https://youtube.com" target="_blank" rel="noopener nofollow" title="YouTube DUTAMIK.ID" aria-label="YouTube DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-[#FF0000] hover:border-[#FF0000] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div>
-          <span class="text-xs text-yellow-400 font-extrabold uppercase tracking-wider block">DAFTAR PROYEK SIAP HUNI</span>
-          <h3 class="text-2xl font-display font-bold text-white" x-text="getCategoryModalTitle()"></h3>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Halaman Informasi</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="about.html" class="hover:text-white transition">Tentang Kami &amp; Nilai Inti</a></li>
+            <li><a href="contact.html" class="hover:text-white transition">Hubungi &amp; Konsultasi</a></li>
+            <li><a href="privacy-policy.html" class="hover:text-white transition">Kebijakan Privasi (AdSense)</a></li>
+            <li><a href="terms-of-service.html" class="hover:text-white transition">Syarat &amp; Ketentuan Layanan</a></li>
+            <li><a href="disclaimer.html" class="hover:text-white transition">Disclaimer &amp; Keterbukaan Afiliasi</a></li>
+          </ul>
         </div>
-        <button @click="activeCategoryModal = null" aria-label="Tutup Pop-up Kategori" class="text-gray-300 hover:text-white text-2xl font-bold p-3 min-w-[48px] min-h-[48px] flex items-center justify-center">✕</button>
-      </div>
 
-      <div class="p-6 sm:p-8 space-y-6">
-        <template x-if="activeCategoryModal === 'subsidi'">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-md flex flex-col justify-between">
-              <div>
-                <div class="relative aspect-[4/3] overflow-hidden">
-                  <img src="assets/graha-athera-jogonalan-tipe-30.webp" 
-                       onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80'" 
-                       alt="Graha Athera Jogonalan" 
-                       width="600" height="450"
-                       class="w-full h-full object-cover">
-                  <div class="absolute top-3 left-3 bg-brand-dark/90 text-white text-xs px-3 py-1 rounded-full font-extrabold">Mulai Rp 166 Jt</div>
-                  <div class="absolute top-3 right-3 bg-emerald-100 text-emerald-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full">Ready Stock</div>
-                </div>
-                <div class="p-5 space-y-2">
-                  <h4 class="text-lg font-display font-bold text-brand-dark">Graha Athera Jogonalan</h4>
-                  <p class="text-xs text-gray-800 leading-relaxed">
-                    Perumahan subsidi FLPP tipe 30/60 &amp; 30/77. Berlokasi di Jogonalan Klaten, 10 menit dari Stasiun Kereta, bebas banjir &amp; SHM ready.
-                  </p>
-                  <div class="pt-2 flex flex-wrap gap-2 text-[10px] font-bold text-brand-dark">
-                    <span class="bg-gray-100 px-2.5 py-1 rounded-md">✓ SHM Pecah</span>
-                    <span class="bg-gray-100 px-2.5 py-1 rounded-md">✓ Flat 5%/Thn</span>
-                    <span class="bg-gray-100 px-2.5 py-1 rounded-md">✓ Jalan 6.5M</span>
-                  </div>
-                </div>
-              </div>
-              <div class="p-5 bg-gray-50 border-t border-gray-200 flex gap-2">
-                <a href="tess.html" class="w-1/2 bg-brand-dark text-white hover:bg-brand-gold text-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition min-h-[48px] flex items-center justify-center">
-                  Siteplan &amp; KPR
-                </a>
-                <a href="https://wa.me/6285124665145?text=Halo%20Sales%20Athera%20Properti%2C%20saya%20tertarik%20dengan%20Graha%20Athera%20Jogonalan." target="_blank" rel="noopener noreferrer" class="w-1/2 bg-emerald-700 hover:bg-emerald-800 text-white text-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition min-h-[48px] flex items-center justify-center gap-1">
-                  Chat Sales
-                </a>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-md flex flex-col justify-between">
-              <div>
-                <div class="relative aspect-[4/3] overflow-hidden">
-                  <img src="assets/graha-athera-jogonalan-tipe-30.webp" 
-                       onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80'" 
-                       alt="Graha Athera Bayat" 
-                       width="600" height="450"
-                       class="w-full h-full object-cover">
-                  <div class="absolute top-3 left-3 bg-brand-dark/90 text-white text-xs px-3 py-1 rounded-full font-extrabold">Mulai Rp 160 Jt</div>
-                  <div class="absolute top-3 right-3 bg-amber-100 text-amber-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full">Indent Development</div>
-                </div>
-                <div class="p-5 space-y-2">
-                  <h4 class="text-lg font-display font-bold text-brand-dark">Graha Athera Bayat</h4>
-                  <p class="text-xs text-gray-800 leading-relaxed">
-                    Kawasan hunian subsidi asri di Bayat, Klaten. Lingkungan berkembang pesat, dekat pusat pelayanan publik, sekolah, dan area komersial.
-                  </p>
-                  <div class="pt-2 flex flex-wrap gap-2 text-[10px] font-bold text-brand-dark">
-                    <span class="bg-gray-100 px-2.5 py-1 rounded-md">✓ Akses Mudah</span>
-                    <span class="bg-gray-100 px-2.5 py-1 rounded-md">✓ Angsuran 1 Jt-an</span>
-                    <span class="bg-gray-100 px-2.5 py-1 rounded-md">✓ Bebas PPN</span>
-                  </div>
-                </div>
-              </div>
-              <div class="p-5 bg-gray-50 border-t border-gray-200 flex gap-2">
-                <a href="https://wa.me/6285124665145?text=Halo%20Sales%20Athera%20Properti%2C%20saya%20mau%20tanya%20brosur%20Graha%20Athera%20Bayat." target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition min-h-[48px] flex items-center justify-center gap-1">
-                  Konsultasi &amp; Brosur Bayat
-                </a>
-              </div>
-            </div>
-          </div>
-        </template>
-
-        <template x-if="activeCategoryModal === 'komersil'">
-          <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-md flex flex-col md:flex-row">
-            <div class="md:w-1/2 aspect-[4/3] relative">
-              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Rumah Komersil Klaten" class="w-full h-full object-cover">
-              <div class="absolute top-3 left-3 bg-brand-dark/90 text-white text-xs px-3 py-1 rounded-full font-extrabold">Mulai Rp 350 Jt</div>
-            </div>
-            <div class="md:w-1/2 p-6 flex flex-col justify-between space-y-4">
-              <div>
-                <h4 class="text-xl font-display font-bold text-brand-dark">Athera Commercial Residence</h4>
-                <p class="text-xs text-gray-800 leading-relaxed mt-2">
-                  Hunian eksklusif dengan arsitektur Modern Tropical. Tata ruang luas, plafon tinggi, smart home system, dan material mutu utama di lokasi paling strategis.
-                </p>
-              </div>
-              <a href="https://wa.me/6285124665145?text=Halo%20Sales%20Athera%20Properti%2C%20saya%20tertarik%20dengan%20Rumah%20Komersil." target="_blank" rel="noopener noreferrer" class="bg-emerald-700 hover:bg-emerald-800 text-white text-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition min-h-[48px] flex items-center justify-center">
-                Hubungi Sales Komersil
-              </a>
-            </div>
-          </div>
-        </template>
-
-        <template x-if="activeCategoryModal === 'kavling'">
-          <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-md flex flex-col md:flex-row">
-            <div class="md:w-1/2 aspect-[4/3] relative">
-              <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80" alt="Tanah Kavling Klaten" class="w-full h-full object-cover">
-              <div class="absolute top-3 left-3 bg-brand-dark/90 text-white text-xs px-3 py-1 rounded-full font-extrabold">Mulai Rp 1.5 Jt / m²</div>
-            </div>
-            <div class="md:w-1/2 p-6 flex flex-col justify-between space-y-4">
-              <div>
-                <h4 class="text-xl font-display font-bold text-brand-dark">Kavling Matang Siap Bangun</h4>
-                <p class="text-xs text-gray-800 leading-relaxed mt-2">
-                  Tanah kavling pilihan dengan batas patok presisi, jalan lingkungan paving/beton, saluran air terintegrasi, serta jaminan SHM sudah siap balik nama.
-                </p>
-              </div>
-              <a href="https://wa.me/6285124665145?text=Halo%20Sales%20Athera%20Properti%2C%20saya%20tertarik%20dengan%20Tanah%20Kavling." target="_blank" rel="noopener noreferrer" class="bg-emerald-700 hover:bg-emerald-800 text-white text-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition min-h-[48px] flex items-center justify-center">
-                Cek Lokasi Kavling
-              </a>
-            </div>
-          </div>
-        </template>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-brand-dark text-white pt-16 pb-32 sm:pb-36 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 mb-12">
-      <div class="space-y-4">
-        <a href="./" class="flex items-center gap-2.5 shrink-0 group py-1" aria-label="Beranda Grand Athera">
-          <img src="assets/logo.webp" alt="Logo Grand Athera" class="h-8 w-auto object-contain shrink-0 drop-shadow-md">
-          <div class="inline-flex flex-col justify-between h-8 w-fit shrink-0">
-            <span class="text-base font-bold tracking-wider text-white uppercase leading-none block whitespace-nowrap" style="font-family: 'Souvenir', 'ITC Souvenir', serif;">
-                GRAND ATHERA
-            </span>
-            <span class="w-full text-[7.5px] font-bold text-[#c5a880] uppercase leading-none block tracking-[0.24em]" style="font-family: 'Souvenir', 'ITC Souvenir', serif; text-align-last: justify; text-align: justify;">
-                PT ATHERA PUTRA PRIMA
-            </span>
-          </div>
-        </a>
-        <p class="text-xs text-gray-300 font-normal leading-relaxed">
-          Developer perumahan terpercaya di Klaten & Jawa Tengah. Berkomitmen menghadirkan hunian subsidi dan komersil berkualitas, bebas banjir, serta berlegalitas 100% aman terjamin.
-        </p>
-
-        <div class="pt-2">
-          <div class="flex items-center space-x-2.5">
-            <a href="https://www.instagram.com/anugerahland" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-gold text-gray-300 hover:text-white border border-white/10 transition-all flex items-center justify-center" aria-label="Instagram Grand Athera">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/anugerahpropertyklaten" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-gold text-gray-300 hover:text-white border border-white/10 transition-all flex items-center justify-center" aria-label="Facebook Grand Athera">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-4.993-12-11.999-12s-11.999 5.373-11.999 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.048V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@anugerahland" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-gold text-gray-300 hover:text-white border border-white/10 transition-all flex items-center justify-center" aria-label="TikTok Grand Athera">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.96-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.57-1.31 1.58-1.25 2.58.05.88.58 1.71 1.34 2.14.86.49 1.93.52 2.81.12.82-.36 1.41-1.16 1.55-2.05.08-1.89.04-3.79.05-5.68V.02z"/></svg>
-            </a>
-          </div>
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Klasifikasi Layanan</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="katalog.html" class="hover:text-white transition font-semibold text-blue-400">Master Katalog Terpadu</a></li>
+            <li><a href="tools/" class="hover:text-white transition">Kategori Tool Online Gratis</a></li>
+            <li><a href="jasa/" class="hover:text-white transition">Kategori Desain &amp; Arsitektur</a></li>
+            <li><a href="jasa/" class="hover:text-white transition">Kategori Legalitas &amp; Geospasial</a></li>
+            <li><a href="jasa/" class="hover:text-white transition">Kategori IT &amp; Pemeliharaan Sistem</a></li>
+            <li><a href="produk/" class="hover:text-white transition">Kategori Solusi Digital Mandiri</a></li>
+          </ul>
         </div>
+
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Dukungan Komunitas</h4>
+          <p class="text-xs text-slate-400 mb-3 leading-relaxed">
+            Dukung kami untuk terus melakukan optimasi website, pemeliharaan sistem mandiri, dan merilis tool baru melalui kontribusi QRIS:
+          </p>
+          <a href="donasi.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-xl text-xs font-bold transition shadow-lg">
+            <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i>
+            <span>Wall of Kontributor (QRIS)</span>
+          </a>
+        </div>
+
       </div>
 
-      <div class="space-y-4">
-        <h3 class="font-display font-bold text-sm text-brand-gold-light uppercase tracking-wider">Proyek Perumahan Subsidi</h3>
-        <ul class="space-y-2 text-xs text-gray-300 font-normal">
-          <li><a href="https://wa.me/6285124665145?text=Halo%20saya%20mau%20tanya%20Graha%20Athera%20Jogonalan" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold-light transition">Graha Athera Jogonalan</a></li>
-          <li><a href="https://wa.me/6285124665145?text=Halo%20saya%20mau%20tanya%20Graha%20Athera%20Bayat" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold-light transition">Graha Athera Bayat</a></li>
-          <li><a href="https://wa.me/6285124665145?text=Halo%20saya%20mau%20tanya%20Graha%20Athera%20Nangsri" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold-light transition">Graha Athera Nangsri</a></li>
-        </ul>
-      </div>
-
-      <div class="space-y-4">
-        <h3 class="font-display font-bold text-sm text-brand-gold-light uppercase tracking-wider">Tautan Bantuan</h3>
-        <ul class="space-y-2 text-xs text-gray-300 font-normal">
-          <li><a href="#about" class="hover:text-brand-gold-light transition">Tentang Kami &amp; Profil Developer</a></li>
-          <li><a href="#legalitas" class="hover:text-brand-gold-light transition">Jaminan Hukum &amp; Legalitas</a></li>
-        </ul>
-      </div>
-
-      <div class="space-y-4">
-        <h3 class="font-display font-bold text-sm text-brand-gold-light uppercase tracking-wider">Jam Operasional</h3>
-        <p class="text-xs text-gray-300 font-normal leading-relaxed">
-		      📍Senin - Sabtu: 08.00 - 16.00 WIB<br>
-          (Tetap melayani survei lokasi pada hari libur nasional)
-        </p>
-      </div>
-    </div>
-
-    <div class="max-w-4xl mx-auto px-4 border-t border-white/10 pt-8 text-xs text-gray-400 font-normal flex flex-col items-center justify-center text-center gap-3">
-      <p class="text-center leading-relaxed">
-        © 2026 PT Athera Putra Prima (Grand Athera). All Rights Reserved.<br class="hidden sm:inline"> Hak Cipta Dilindungi Undang-Undang.
-      </p>
-      <div class="flex items-center justify-center space-x-6 pt-1">
-        <a href="#legalitas" class="hover:text-brand-gold-light transition whitespace-nowrap">Syarat &amp; Ketentuan</a>
-        <span class="text-gray-600">•</span>
-        <a href="#legalitas" class="hover:text-brand-gold-light transition whitespace-nowrap">Kebijakan Privasi</a>
+      <div class="mt-10 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <p>&copy; 2026 <a href="https://dutamik.id" class="text-blue-400 font-bold hover:underline">Duta Media Informasi berKarya</a> (DUTAMIK.ID). Seluruh Hak Cipta Dilindungi.</p>
+        <p class="text-[11px] text-slate-500">Mendampingi Langkah Sukses Anda dengan Hati</p>
       </div>
     </div>
   </footer>
 
-  <!-- WHATSAPP FLOATING WIDGET -->
-  <div x-data="waWidget()" 
-       x-init="initWidget()" 
-       @scroll.window.passive="autoHideOnScroll()"
-       class="fixed bottom-20 right-0 z-50 transition-transform duration-300 ease-out will-change-transform select-none"
-       :class="isOpen ? 'translate-x-0' : 'translate-x-[calc(100%-2.25rem)]'">
-
-    <div class="flex items-center bg-[#16241b] text-white rounded-l-2xl border-y border-l border-emerald-500/40 shadow-2xl overflow-hidden">
-      <button type="button"
-              @click="toggleWidget()"
-              @touchstart="handleTouchStart($event)"
-              @touchend="handleTouchEnd($event)"
-              class="w-9 h-11 flex items-center justify-center text-emerald-400 hover:text-white bg-black/20 hover:bg-black/40 transition-colors shrink-0 cursor-pointer focus:outline-none"
-              aria-label="Toggle WhatsApp Chat">
-        <svg class="w-4 h-4 transition-transform duration-300 transform"
-             :class="isOpen ? 'rotate-180' : 'rotate-0'"
-             fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-
-      <div class="flex items-center gap-3 py-2.5 pl-2 pr-3 shrink-0">
-        <a href="https://wa.me/6285124665145?text=Halo%20Grand%20Athera%2C%20saya%20tertarik%20untuk%20bertanya%20mengenai%20proyek%20perumahan." 
-           target="_blank" rel="noopener noreferrer"
-           class="flex items-center gap-2.5 group">
-          <div class="w-8 h-8 rounded-full bg-emerald-600 group-hover:bg-emerald-500 transition-colors flex items-center justify-center text-white shadow shrink-0">
-            <svg class="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.115-2.908-6.995-1.878-1.88-4.357-2.914-6.997-2.915-5.442 0-9.867 4.42-9.871 9.866-.001 1.7.453 3.361 1.314 4.816L1.93 22.146l4.717-1.238zM17.43 14.86c-.296-.149-1.755-.867-2.027-.966-.271-.1-.469-.149-.667.149-.198.297-.768.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.667-1.61-.915-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.568-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-            </svg>
+  <!-- 9. FLOATING HELP SHORTCUT DOCK (ELEGANT DYNAMIC SLIDE WIDGET) -->
+    <!-- FLOATING ACTION DOCK (SHARE & WHATSAPP) -->
+  <div id="floating-help-dock" class="fixed bottom-8 right-5 sm:bottom-10 sm:right-8 z-50 flex flex-col items-end gap-3 select-none">
+    
+    <!-- Popover Chat Form -->
+    <div id="wa-widget-popover" class="hidden mb-1 w-[310px] sm:w-[340px] glass-panel rounded-3xl p-5 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
           </div>
-          <div class="whitespace-nowrap">
-            <span class="text-xs font-bold text-white block group-hover:text-emerald-400 transition-colors leading-tight">Konsultasi WA</span>
-            <span class="text-[10px] text-emerald-400 font-semibold block">Respon Cepat 24/7</span>
+          <div>
+            <h4 class="font-bold text-sm">Konsultasi Ramah</h4>
+            <span class="flex items-center gap-1.5 text-[11px] text-emerald-500 font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Online (Siap Membantu)
+            </span>
           </div>
-        </a>
-
-        <button @click="closeWidget()" 
-                type="button" 
-                class="text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors ml-1 focus:outline-none"
-                aria-label="Tutup Menu WhatsApp">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
+        </div>
+        <button onclick="toggleWaWidget()" aria-label="Tutup" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
+        Halo! Ada kebutuhan teknis, perizinan usaha, atau pertanyaan seputar layanan kami yang bisa dibantu?
+      </p>
+      <div class="space-y-2">
+        <input type="text" id="wa-client-name" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+        <textarea id="wa-client-msg" rows="2" placeholder="Ceritakan kebutuhan atau kendala Anda..." class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
+        <button onclick="sendFloatingWaMessage()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          <span>Konsultasi Lewat WhatsApp</span>
         </button>
       </div>
     </div>
-  </div>
 
-  <!-- SCRIPT WA WIDGET -->
-  <script>
-    function waWidget() {
-      return {
-        isOpen: false,
-        idleTimer: null,
-        touchStartX: 0,
-        touchEndX: 0,
-
-        initWidget() { this.isOpen = false; },
-        toggleWidget() { this.isOpen ? this.closeWidget() : this.openWidget(); },
-        openWidget() { this.isOpen = true; this.startIdleTimer(); },
-        closeWidget() { this.isOpen = false; this.clearIdleTimer(); },
-        autoHideOnScroll() { if (this.isOpen) this.closeWidget(); },
-        startIdleTimer() {
-          this.clearIdleTimer();
-          this.idleTimer = setTimeout(() => { this.closeWidget(); }, 3000);
-        },
-        clearIdleTimer() { if (this.idleTimer) { clearTimeout(this.idleTimer); this.idleTimer = null; } },
-        handleTouchStart(e) { this.touchStartX = e.changedTouches[0].screenX; },
-        handleTouchEnd(e) {
-          this.touchEndX = e.changedTouches[0].screenX;
-          if (this.touchStartX - this.touchEndX > 20) this.openWidget();
-        }
-      }
-    }
-  </script>
-
-  <!-- POP-UP MODAL FORMULIR DOWNLOAD BROSUR -->
-  <div x-cloak 
-       x-show="consultationModalOpen" 
-       x-transition:enter="transition ease-out duration-300"
-       x-transition:enter-start="opacity-0 scale-95"
-       x-transition:enter-end="opacity-100 scale-100"
-       x-transition:leave="transition ease-in duration-200"
-       x-transition:leave-start="opacity-100 scale-100"
-       x-transition:leave-end="opacity-0 scale-95"
-       class="fixed inset-0 z-50 bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-    
-    <div @click.away="consultationModalOpen = false" 
-         class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-gray-200 relative my-8 transform transition-all">
-      
-      <button @click="consultationModalOpen = false" 
-              type="button" 
-              aria-label="Tutup Pop-up"
-              class="absolute top-4 right-4 text-gray-400 hover:text-brand-dark text-xl font-bold w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition focus:outline-none">
-        ✕
+    <!-- Trigger Capsule Action Group -->
+    <div class="flex items-center gap-2">
+      <!-- Quick Floating Share Button -->
+      <button onclick="openModal('modal-share-site')" aria-label="Bagikan Halaman Ini" class="group p-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center">
+        <i data-lucide="share-2" class="w-4.5 h-4.5"></i>
       </button>
 
-      <h2 class="text-2xl font-display font-bold text-brand-dark">Dapatkan Brosur Gratis</h2>
-      <p class="text-xs text-gray-800 font-medium mt-1 mb-6">Dapatkan e-brosur dan daftar harga terbaru secara gratis. Gunakan formulir ini juga untuk berkonsultasi mengenai rencana hunian impian Anda.</p>
-      
-      <form id="modal-wa-contact-form" class="space-y-4">
-        <div>
-          <label for="modal-form-nama" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Nama Panggilan</label>
-          <input type="text" id="modal-form-nama" required class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark min-h-[48px]" placeholder="Masukkan nama Anda...">
+      <!-- Floating WA Help Button -->
+      <button onclick="toggleWaWidget()" id="floating-wa-btn" aria-label="Bantuan & Konsultasi" class="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-xl shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+        <div class="relative flex items-center justify-center">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700 animate-ping"></span>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700"></span>
         </div>
+        <span class="tracking-wide">Bantuan &amp; Konsultasi</span>
+      </button>
+    </div>
 
+  </div>
+
+  <div id="modal-global-search" class="modal-backdrop fixed inset-0 z-50 hidden items-start justify-center p-4 pt-16">
+    <div class="modal-content glass-panel w-full max-w-xl rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+        <i data-lucide="search" class="w-5 h-5 text-blue-600"></i>
+        <input type="text" id="search-input-field" placeholder="Ketik apa saja (tools, jasa, solusi, atau kata kunci)..." oninput="performSearch(this.value)" class="w-full bg-transparent border-none text-sm font-semibold focus:outline-none text-slate-900 dark:text-white" />
+        <button onclick="closeSearchModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="search-backdoor-container" class="hidden"></div>
+      <div id="search-results-container" class="overflow-y-auto flex-1 pr-1 space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- 11. MODAL: ORDER JASA UNGGULAN -->
+  <div id="modal-order-service" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-content glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <label for="modal-form-wa" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Nomor WhatsApp</label>
-          <input type="tel" 
-                 id="modal-form-wa" 
-                 required 
-                 minlength="11" 
-                 maxlength="15" 
-                 pattern="^08[0-9]{9,}$" 
-                 title="Nomor WhatsApp harus diawali '08' dan minimal 11 digit angka"
-                 class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark min-h-[48px]" 
-                 placeholder="Contoh: 08123456789...">
+          <h3 class="font-extrabold text-xl text-slate-900 dark:text-white">Konsultasi &amp; Pemesanan Layanan</h3>
+          <p class="text-xs text-slate-500">Diskusikan kebutuhan proyek Anda langsung dengan tim ahli kami</p>
         </div>
+        <button onclick="closeModal('modal-order-service')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
 
+      <form onsubmit="handleServiceOrderSubmit(event)" class="space-y-4">
         <div>
-          <label for="modal-form-kategori" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Daftar Brosur Perumahan</label>
-          <select id="modal-form-kategori" class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark min-h-[48px]">
-            <option value="Graha Athera Jogonalan">Graha Athera Jogonalan</option>
-            <option value="Graha Athera Bayat">Graha Athera Bayat</option>
-            <option value="Graha Athera Nangsri">Graha Athera Nangsri</option>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Pilih Layanan yang Diinginkan:</label>
+          <select id="order-service-type" name="serviceType" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <option value="Jasa Optimasi Laptop & PC Remote">Jasa Optimasi Laptop &amp; PC Remote</option>
+            <option value="Jasa 3D Modeling Bangunan & Render">Jasa 3D Modeling Bangunan &amp; Render</option>
+            <option value="Jasa Gambar 2D Bangunan PBG">Jasa Gambar 2D Bangunan Izin PBG (SIMBG)</option>
+            <option value="Jasa Peta SHP & ZIP ESRI OSS/AMDALNET">Jasa Peta SHP / ZIP ESRI (OSS &amp; AMDALNET)</option>
+            <option value="Jasa Pembuatan NIB Usaha Mikro">Jasa Pembuatan NIB Usaha Mikro OSS RBA</option>
+            <option value="Jasa Website UMKM & Landing Page">Jasa Pembuatan Website UMKM &amp; Landing Page</option>
+            <option value="Konsultasi Kustom Lainnya">Konsultasi Kustom Lainnya</option>
           </select>
         </div>
 
-        <div>
-          <label for="modal-form-pesan" class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">Pertanyaan & Saran (Opsional)</label>
-          <textarea id="modal-form-pesan" rows="3" class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-400 focus:outline-none focus:border-brand-gold text-sm text-brand-dark" placeholder="Contoh: Info brosur, simulasi angsuran, atau jadwal survei lokasi..."></textarea>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap / Usaha: *</label>
+            <input type="text" name="clientName" placeholder="Nama Anda atau Usaha" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp Aktif: *</label>
+            <input type="tel" name="clientWhatsapp" placeholder="081234567890" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
         </div>
 
-        <button type="submit" class="w-full bg-brand-dark text-white hover:bg-brand-gold hover:text-white py-4 rounded-lg font-bold text-sm tracking-wider uppercase transition-all duration-300 shadow-md flex items-center justify-center gap-2 min-h-[48px]">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24.00 24.00" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 17H17.01M17.4 14H18C18.9319 14 19.3978 14 19.7654 14.1522C20.2554 14.3552 20.6448 14.7446 20.8478 15.2346C21 15.6022 21 16.0681 21 17C21 17.9319 21 18.3978 20.8478 18.7654C20.6448 19.2554 20.2554 19.6448 19.7654 19.8478C19.3978 20 18.9319 20 18 20H6C5.06812 20 4.60218 20 4.23463 19.8478C3.74458 19.6448 3.35523 19.2554 3.15224 18.7654C3 18.3978 3 17.9319 3 17C3 16.0681 3 15.6022 3.15224 15.2346C3.35523 14.7446 3.74458 14.3552 4.23463 14.1522C4.60218 14 5.06812 14 6 14H6.6M12 15V4M12 15L9 12M12 15L15 12" stroke="#fff" stroke-width="1.92" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Download Brosur
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Email Anda (Untuk Salinan Resume):</label>
+          <input type="email" name="clientEmail" placeholder="emailanda@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ceritakan Rencana / Kebutuhan Proyek Anda: *</label>
+          <textarea name="projectDetails" rows="3" placeholder="Jelaskan kebutuhan, tenggat waktu, atau pertanyaan yang ingin Anda konsultasikan..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none" required></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 gradient-brand text-white font-bold text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Kirim Konsultasi / Pesanan Sekarang</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- SCRIPT UTAMA WEBSITE & FORM HANDLING -->
+  <!-- 12. MODAL: PAYSHEET QRIS DIGITAL CHECKOUT -->
+  <div id="modal-checkout-product" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[95vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 flex items-center justify-center"><i data-lucide="qr-code" class="w-4 h-4"></i></div>
+          <div><h3 class="font-extrabold text-base text-slate-900 dark:text-white">PaySheet QRIS Checkout</h3><span class="text-[10px] text-slate-500">Verifikasi Pembayaran Otomatis</span></div>
+        </div>
+        <button onclick="closeModal('modal-checkout-product')" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div id="checkout-step-pay" class="space-y-4">
+        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+          <div class="flex justify-between mb-1"><span class="text-slate-500">Solusi:</span><strong id="checkout-product-name" class="text-slate-800 dark:text-slate-200 text-right"></strong></div>
+          <div class="flex justify-between mb-1"><span class="text-slate-500">Harga Standar:</span><span id="checkout-base-price" class="text-slate-600 dark:text-slate-400"></span></div>
+          <div class="flex justify-between mb-1 text-emerald-600 font-semibold"><span>Kode Unik:</span><span id="checkout-unique-code"></span></div>
+          <div class="flex justify-between pt-2 border-t border-slate-200 dark:border-slate-800 font-bold text-sm"><span>Total Tagihan:</span><span id="checkout-total-price" class="text-blue-600 dark:text-blue-400 font-extrabold"></span></div>
+          <div class="mt-2 text-[10px] text-slate-400 font-mono">ID Trx: <span id="checkout-trx-id"></span></div>
+        </div>
+
+        <div id="checkout-qris-container"></div>
+
+        <div class="space-y-2">
+          <input type="text" id="checkout-buyer-name" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900" />
+          <input type="email" id="checkout-buyer-email" placeholder="Email (untuk salinan link unduhan)" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900" />
+        </div>
+
+        <button id="btn-verify-paysheet" onclick="verifyPaySheetPayment()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Saya Sudah Bayar (Verifikasi &amp; Unduh)</span>
+        </button>
+      </div>
+
+      <div id="checkout-step-success" class="hidden text-center py-4 space-y-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto"><i data-lucide="download-cloud" class="w-7 h-7"></i></div>
+        <h4 class="text-xl font-bold text-slate-900 dark:text-white">Pembayaran Berhasil!</h4>
+        <p class="text-xs text-slate-500">File aset Anda siap diunduh sekarang.</p>
+        <a id="checkout-download-btn" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Unduh File Aset (.ZIP)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. MODAL: SOCIAL SHARE -->
+  <div id="modal-share-site" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2.5 text-left">
+          <div class="w-9 h-9 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          </div>
+          <div>
+            <h4 class="font-extrabold text-base text-slate-900 dark:text-white">Bagikan DUTAMIK.ID</h4>
+            <span class="text-[10px] text-slate-400">Sebarkan akses tool gratis &amp; solusi kreatif</span>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-share-site')" aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed text-left">
+        Ajak rekan, mitra usaha, dan komunitas Anda menikmati puluhan tool online gratis dan solusi pendampingan terpercaya dari kami.
+      </p>
+
+      <!-- Dynamic Share Buttons with Crisp Inline SVGs -->
+      <div class="grid grid-cols-4 gap-2.5 sm:gap-3">
+        <!-- WhatsApp -->
+        <button onclick="shareTo('whatsapp')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-slate-700 dark:text-slate-200 hover:text-white border border-emerald-500/20 hover:border-emerald-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">WhatsApp</span>
+        </button>
+
+        <!-- Telegram -->
+        <button onclick="shareTo('telegram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-sky-500/10 hover:bg-sky-500 text-slate-700 dark:text-slate-200 hover:text-white border border-sky-500/20 hover:border-sky-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Telegram</span>
+        </button>
+
+        <!-- Facebook -->
+        <button onclick="shareTo('facebook')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-600/10 hover:bg-[#1877F2] text-slate-700 dark:text-slate-200 hover:text-white border border-blue-600/20 hover:border-[#1877F2] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-[#1877F2] text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Facebook</span>
+        </button>
+
+        <!-- X (Twitter) -->
+        <button onclick="shareTo('x')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-white border border-slate-300 dark:border-slate-700 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">X (Twitter)</span>
+        </button>
+
+        <!-- Instagram -->
+        <button onclick="shareTo('instagram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-pink-500/10 hover:bg-pink-600 text-slate-700 dark:text-slate-200 hover:text-white border border-pink-500/20 hover:border-pink-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Instagram</span>
+        </button>
+
+        <!-- TikTok -->
+        <button onclick="shareTo('tiktok')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-cyan-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-[#25F4EE] border border-cyan-500/20 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">TikTok</span>
+        </button>
+
+        <!-- YouTube -->
+        <button onclick="shareTo('youtube')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-rose-500/10 hover:bg-[#FF0000] text-slate-700 dark:text-slate-200 hover:text-white border border-rose-500/20 hover:border-[#FF0000] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-[#FF0000] text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">YouTube</span>
+        </button>
+
+        <!-- Salin Cepat -->
+        <button onclick="shareTo('copy')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-500/10 hover:bg-blue-600 text-slate-700 dark:text-slate-200 hover:text-white border border-blue-500/20 hover:border-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-none stroke-currentColor stroke-width-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Salin URL</span>
+        </button>
+      </div>
+
+      <!-- Quick Copy Link Box -->
+      <div class="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 pl-2 overflow-hidden text-xs text-slate-500 font-mono truncate">
+          <i data-lucide="link" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+          <span class="truncate">https://dutamik.id</span>
+        </div>
+        <button onclick="shareTo('copy')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow flex-shrink-0 cursor-pointer">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Salin Tautan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/analytics.js"></script>
+  <script src="assets/js/slider-engine.js"></script>
+  <script src="assets/js/qris-generator.js"></script>
+  <script src="assets/js/search-engine.js"></script>
+  <script src="assets/js/gas-client.js"></script>
   <script>
-    function atheraApp() {
-      return {
-        mobileMenuOpen: false,
-        activeCategoryModal: null,
-        consultationModalOpen: false,
-
-        soldOutProjects: [],
-        soldOutIndex: 0,
-        soldOutTimer: null,
-        loadingSoldOut: true,
-
-        async init() {
-          await this.fetchSoldOutProjects();
-          if (this.soldOutProjects.length > 0) {
-            this.startSoldOutSlide();
+    lucide.createIcons();
+    function openServiceOrderWithName(serviceName) {
+      const select = document.getElementById('order-service-type');
+      if (select) {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].text.includes(serviceName) || select.options[i].value.includes(serviceName)) {
+            select.selectedIndex = i;
+            break;
           }
-        },
-
-        async fetchSoldOutProjects() {
-          try {
-            const response = await fetch('proyek-selesai.json');
-            if (!response.ok) throw new Error('Gagal mengambil data proyek');
-            const data = await response.json();
-            if (Array.isArray(data) && data.length > 0) {
-              this.soldOutProjects = data;
-            }
-          } catch (error) {
-            console.error('Error fetching proyek-selesai.json:', error);
-          } finally {
-            this.loadingSoldOut = false;
-          }
-        },
-
-        startSoldOutSlide() {
-          this.stopSoldOutSlide();
-          if (this.soldOutProjects.length <= 1) return;
-          this.soldOutTimer = setInterval(() => {
-            this.nextSoldOut();
-          }, 4000);
-        },
-
-        stopSoldOutSlide() {
-          if (this.soldOutTimer) {
-            clearInterval(this.soldOutTimer);
-            this.soldOutTimer = null;
-          }
-        },
-
-        nextSoldOut() {
-          if (this.soldOutProjects.length === 0) return;
-          this.soldOutIndex = (this.soldOutIndex + 1) % this.soldOutProjects.length;
-        },
-
-        prevSoldOut() {
-          if (this.soldOutProjects.length === 0) return;
-          this.soldOutIndex = (this.soldOutIndex - 1 + this.soldOutProjects.length) % this.soldOutProjects.length;
-        },
-
-        getDesktopSoldOutProjects() {
-          if (this.soldOutProjects.length === 0) return [];
-          if (this.soldOutProjects.length === 1) return [this.soldOutProjects[0]];
-          
-          const first = this.soldOutProjects[this.soldOutIndex];
-          const secondIndex = (this.soldOutIndex + 1) % this.soldOutProjects.length;
-          const second = this.soldOutProjects[secondIndex];
-          
-          return [first, second];
-        },
-
-        openCategory(cat) {
-          this.activeCategoryModal = cat;
-        },
-
-        getCategoryModalTitle() {
-          if (this.activeCategoryModal === 'subsidi') return 'Perumahan Subsidi FLPP';
-          if (this.activeCategoryModal === 'komersil') return 'Perumahan Komersil Mewah';
-          if (this.activeCategoryModal === 'kavling') return 'Tanah Kavling Siap Bangun';
-          return 'Daftar Proyek';
         }
       }
+      openModal('modal-order-service');
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      // 1. Navbar Scroll Effect
-      const navbar = document.getElementById('main-navbar');
-      if (navbar) {
-        window.addEventListener('scroll', () => {
-          if (window.scrollY > 20) {
-            navbar.classList.add('shadow-xl', 'bg-brand-dark');
-          } else {
-            navbar.classList.remove('shadow-xl');
-          }
-        }, { passive: true });
-      }
-
-      // 2. Google Script URL & Brosur Map
-      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpbElKevNn_A99QIzKIOMy1oSLLrtVAvwfw2_EtZjLWHWvsOHEtEYY0hFvktXPIJTU/exec"; 
-
-      const BROSUR_MAP = {
-        "Graha Athera Jogonalan": "assets/brosur/brosur-graha-athera-jogonalan.pdf",
-        "Graha Athera Bayat": "assets/brosur/brosur-graha-athera-bayat.pdf",
-        "Graha Athera Nangsri": "assets/brosur/brosur-graha-athera-nangsri.pdf"
-      };
-
-      // 3. REUSABLE FORM SUBMISSION HANDLER (UNTUK HASIL MAKSIMAL KEDUA FORM)
-      function attachFormHandler(formId, isModal = false) {
-        const form = document.getElementById(formId);
-        if (!form) return;
-
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-
-          const prefix = isModal ? 'modal-form-' : 'form-';
-          const submitBtn = form.querySelector('button[type="submit"]');
-          const originalBtnText = submitBtn.innerHTML;
-
-          const namaInput = document.getElementById(prefix + 'nama');
-          const waInput = document.getElementById(prefix + 'wa');
-          const kategoriInput = document.getElementById(prefix + 'kategori');
-          const pesanInput = document.getElementById(prefix + 'pesan');
-
-          if (!namaInput || !waInput || !kategoriInput) return;
-
-          const namaVal = namaInput.value.trim();
-          const waVal = waInput.value.trim().replace(/\D/g, ''); // Membersihkan selain angka
-          const kategoriVal = kategoriInput.value;
-          const pesanVal = pesanInput ? pesanInput.value.trim() : '';
-
-          // VALIDASI NOMOR WHATSAPP (08 & MINIMAL 11 DIGIT)
-          if (!waVal.startsWith('08')) {
-            alert('Nomor WhatsApp wajib diawali angka "08" (Contoh: 08123456789).');
-            waInput.focus();
-            return;
-          }
-
-          if (waVal.length < 11) {
-            alert(`Nomor WhatsApp kurang dari 11 digit (Jumlah saat ini: ${waVal.length} digit). Mohon masukkan nomor yang valid.`);
-            waInput.focus();
-            return;
-          }
-
-          // Indikator Loading
-          submitBtn.disabled = true;
-          submitBtn.innerHTML = "Memproses & Menyimpan Data...";
-
-          const params = new URLSearchParams();
-          params.append('nama', namaVal);
-          params.append('wa', waVal);
-          params.append('kategori', kategoriVal);
-          params.append('pesan', pesanVal);
-
-          // Kirim Data via Fetch POST
-          fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params.toString()
-          })
-          .then(() => {
-            // 1. Download Brosur PDF
-            const pdfUrl = BROSUR_MAP[kategoriVal] || "assets/brosur/brosur-graha-athera-jogonalan.pdf";
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.href = pdfUrl;
-            downloadAnchor.download = `Brosur-${kategoriVal.replace(/\s+/g, '-')}.pdf`;
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-
-            // 2. Buka WhatsApp Sales
-            const salesWA = "6285124665145";
-            const textWA = `Halo Athera Properti Klaten,\nSaya *${namaVal}* (${waVal}).\nSaya telah mengunduh brosur: *${kategoriVal}*.\nCatatan: ${pesanVal || '-'}`;
-            
-            setTimeout(() => {
-              window.open(`https://wa.me/${salesWA}?text=${encodeURIComponent(textWA)}`, '_blank', 'noopener,noreferrer');
-            }, 800);
-
-            form.reset();
-
-            // Jika dari modal, otomatis tutup modalnya
-            if (isModal && window.Alpine) {
-              const rootEl = document.querySelector('[x-data]');
-              if (rootEl && rootEl._x_dataStack && rootEl._x_dataStack[0]) {
-                rootEl._x_dataStack[0].consultationModalOpen = false;
-              }
-            }
-
-            alert('Terima kasih! Data Anda telah tercatat di Google Sheet dan brosur sedang diunduh.');
-          })
-          .catch((err) => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan koneksi. Silakan coba lagi.');
-          })
-          .finally(() => {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-          });
-        });
-      }
-
-      // Hubungkan Handler ke Form Halaman Utama & Form Pop-up Modal
-      attachFormHandler('wa-contact-form', false);
-      attachFormHandler('modal-wa-contact-form', true);
-
-      // 4. Inisialisasi Mobile Legalitas Tab Auto Timer
-      startLegAutoTimer();
+    document.addEventListener('DOMContentLoaded', () => {
+      selectDonationPreset(10000, 'Ngopi Santai');
     });
-
-    // Google Maps Dynamic Facade Loader
-    function loadMapIframeNow() {
-      const box = document.getElementById('map-facade-box');
-      if (box) {
-        box.innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.569389253457!2d110.630962!3d-7.688212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwNDInMTkuMiJTIDExMMKwMzcnNTEuNSJF!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid" width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy" title="Lokasi Kantor Athera Properti Klaten"></iframe>`;
-      }
-    }
-
-    // Legalitas Mobile Tab Script
-    let legCurrentIndex = 0;
-    let legAutoTimer = null;
-
-    const legData = [
-      { title: 'SHM Terjamin', desc: 'Sertifikat Hak Milik (SHM) sudah pecah per kavling dan siap balik nama.' },
-      { title: 'PBG/IMB Lengkap', desc: 'Persetujuan Bangunan Gedung (PBG) resmi telah dikantongi di setiap unit.' },
-      { title: 'Bebas PPN', desc: 'Khusus program rumah subsidi dibebaskan dari biaya Pajak Pertambahan Nilai.' },
-      { title: 'Asosiasi Resmi', desc: 'Kami terdaftar sebagai anggota resmi APERNAS (Asosiasi Pengembang Rumah Sederhana Sehat Nasional).' }
-    ];
-
-    function selectLegalitasTab(index) {
-      legCurrentIndex = index;
-      for (let i = 0; i < 4; i++) {
-        const btn = document.getElementById('leg-btn-' + i);
-        if (btn) {
-          if (i === index) btn.classList.add('active');
-          else btn.classList.remove('active');
-        }
-      }
-      const titleEl = document.getElementById('leg-detail-title');
-      const descEl = document.getElementById('leg-detail-desc');
-      if (titleEl) titleEl.innerText = legData[index].title;
-      if (descEl) descEl.innerText = legData[index].desc;
-    }
-
-    function manualSelectLegalitas(index) {
-      selectLegalitasTab(index);
-      startLegAutoTimer();
-    }
-
-    function startLegAutoTimer() {
-      if (legAutoTimer) clearInterval(legAutoTimer);
-      legAutoTimer = setInterval(() => {
-        const nextIndex = (legCurrentIndex + 1) % 4;
-        selectLegalitasTab(nextIndex);
-      }, 3500);
-    }
   </script>
 </body>
 </html>

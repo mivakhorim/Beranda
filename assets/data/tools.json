@@ -1,0 +1,68 @@
+[
+  {
+    "id": "tool-qr-generator",
+    "name": "Custom QR Code Generator",
+    "slug": "qr-generator",
+    "url": "tools/qr-generator.html",
+    "icon": "qr-code",
+    "category": "Generator",
+    "badge": "Popular",
+    "description": "Buat kode QR kustom untuk URL, teks, nomor WhatsApp, kontak vCard, dan WiFi dengan palet warna bebas dan unduh format PNG HD.",
+    "tags": ["qr", "generator", "wifi", "vcard", "whatsapp", "barcode"]
+  },
+  {
+    "id": "tool-wa-link",
+    "name": "Direct WhatsApp Link Maker",
+    "slug": "wa-link-generator",
+    "url": "tools/wa-link-generator.html",
+    "icon": "message-circle",
+    "category": "Marketing",
+    "badge": "Instant",
+    "description": "Generate tautan chat WhatsApp instan dengan template pesan otomatis tanpa perlu menyimpan nomor kontak ke buku telepon.",
+    "tags": ["whatsapp", "link", "chat", "marketing", "wa.me"]
+  },
+  {
+    "id": "tool-image-compressor",
+    "name": "In-Browser Image Compressor & WebP",
+    "slug": "image-compressor",
+    "url": "tools/image-compressor.html",
+    "icon": "image-down",
+    "category": "Media",
+    "badge": "Privacy Safe",
+    "description": "Perkecil ukuran file JPG dan PNG hingga 85% lebih ringan dan konversi ke WebP langsung di memori browser tanpa upload ke server.",
+    "tags": ["image", "compress", "webp", "photo", "optimize"]
+  },
+  {
+    "id": "tool-password-hash",
+    "name": "Password & Crypto Hash Generator",
+    "slug": "password-hash-generator",
+    "url": "tools/password-hash-generator.html",
+    "icon": "key",
+    "category": "Security",
+    "badge": "CSPRNG",
+    "description": "Hasilkan kata sandi acak super kuat berbasis CSPRNG dan enkripsi hash MD5, SHA-1, SHA-256, SHA-512 secara akurat.",
+    "tags": ["password", "crypto", "hash", "sha256", "security"]
+  },
+  {
+    "id": "tool-text-converter",
+    "name": "Text Case Converter & Word Counter",
+    "slug": "text-case-converter",
+    "url": "tools/text-case-converter.html",
+    "icon": "type",
+    "category": "Productivity",
+    "badge": "Fast",
+    "description": "Hitung jumlah kata, karakter, paragraf, estimasi durasi baca, dan ubah format kapitalisasi (UPPERCASE, Title Case, URL slug).",
+    "tags": ["text", "word counter", "uppercase", "slug", "converter"]
+  },
+  {
+    "id": "tool-invoice-maker",
+    "name": "Simple Invoice & Kwitansi Maker",
+    "slug": "invoice-maker",
+    "url": "tools/invoice-maker.html",
+    "icon": "receipt",
+    "category": "Business",
+    "badge": "Print Ready",
+    "description": "Buat faktur penagihan pembayaran dan kwitansi profesional dengan kalkulasi otomatis dan langsung cetak atau simpan ke PDF.",
+    "tags": ["invoice", "faktur", "kwitansi", "nota", "pdf", "bisnis"]
+  }
+]

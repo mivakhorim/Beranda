@@ -1,0 +1,335 @@
+/**
+ * DUTAMIK.ID - Master Catalog & Ecosystem Database
+ * Duta Media Informasi berKarya
+ * 
+ * Works 100% locally (file:// protocol) and on production web servers without CORS restrictions.
+ */
+
+const DUTAMIK_TOOLS_DATA = [
+  {
+    id: "tool_qr_generator",
+    name: "Custom QR Code Generator",
+    slug: "qr-generator",
+    url: "qr-generator.html",
+    rootUrl: "tools/qr-generator.html",
+    category: "generator",
+    categoryLabel: "Generator",
+    badge: "100% Gratis",
+    badgeColor: "emerald",
+    icon: "qr-code",
+    iconColor: "blue",
+    description: "Buat kode QR kustom untuk URL website, teks bebas, kontak vCard, atau koneksi Wi-Fi instan dengan pilihan warna dan download PNG jernih.",
+    features: ["Kustomisasi Warna Hex", "Download Resolusi Tinggi PNG", "100% Private In-Browser"]
+  },
+  {
+    id: "tool_wa_link",
+    name: "Direct WhatsApp Link Maker",
+    slug: "wa-link-generator",
+    url: "wa-link-generator.html",
+    rootUrl: "tools/wa-link-generator.html",
+    category: "business",
+    categoryLabel: "Bisnis & Teks",
+    badge: "Populer",
+    badgeColor: "blue",
+    icon: "message-circle",
+    iconColor: "emerald",
+    description: "Generate tautan chat WhatsApp instan dengan template pesan terformat tanpa perlu menyimpan nomor tujuan ke kontak handphone.",
+    features: ["Format Teks Bold/Italic", "Validasi Nomor Otomatis", "Tombol Copy & Test Link"]
+  },
+  {
+    id: "tool_img_compressor",
+    name: "Image Compressor & WebP Converter",
+    slug: "image-compressor",
+    url: "image-compressor.html",
+    rootUrl: "tools/image-compressor.html",
+    category: "media",
+    categoryLabel: "Gambar & Media",
+    badge: "Hemat 80%",
+    badgeColor: "emerald",
+    icon: "image",
+    iconColor: "purple",
+    description: "Kompres ukuran foto/gambar secara instan dan konversi format ke WebP modern tanpa mengurangi ketajaman visual gambar.",
+    features: ["Kompresi Batch Cepat", "Konversi Format WebP", "Zero Server Upload"]
+  },
+  {
+    id: "tool_pwd_hash",
+    name: "Password Hash & Crypto Key Generator",
+    slug: "password-hash-generator",
+    url: "password-hash-generator.html",
+    rootUrl: "tools/password-hash-generator.html",
+    category: "security",
+    categoryLabel: "Keamanan",
+    badge: "Keamanan Tinggi",
+    badgeColor: "blue",
+    icon: "shield-check",
+    iconColor: "cyan",
+    description: "Hasilkan kata sandi acak dengan standar kriptografi militer serta kalkulasi nilai hash SHA-256 dan MD5 langsung di browser.",
+    features: ["Kriptografi WebCrypto API", "Hash SHA-256 Real-time", "Tanpa Rekam Jejak"]
+  },
+  {
+    id: "tool_invoice_maker",
+    name: "Auto Invoice & Kwitansi Maker",
+    slug: "invoice-maker",
+    url: "invoice-maker.html",
+    rootUrl: "tools/invoice-maker.html",
+    category: "business",
+    categoryLabel: "Bisnis & Teks",
+    badge: "Siap Cetak PDF",
+    badgeColor: "purple",
+    icon: "file-text",
+    iconColor: "amber",
+    description: "Buat faktur tagihan, invoice profesional, dan kwitansi pembayaran lengkap dengan kalkulasi pajak dan cetak PDF langsung.",
+    features: ["Kalkulasi Otomatis", "Template Cetak Standar", "Simpan Template Lokal"]
+  },
+  {
+    id: "tool_text_case",
+    name: "Text Case & Character Counter",
+    slug: "text-case-converter",
+    url: "text-case-converter.html",
+    rootUrl: "tools/text-case-converter.html",
+    category: "business",
+    categoryLabel: "Bisnis & Teks",
+    badge: "Utilitas Praktis",
+    badgeColor: "blue",
+    icon: "type",
+    iconColor: "indigo",
+    description: "Ubah format teks ke UPPERCASE, lowercase, Title Case, camelCase, slug URL, serta hitung jumlah karakter dan perkiraan waktu baca.",
+    features: ["6 Mode Konversi Teks", "Hitung Kata & Karakter", "One-Click Copy"]
+  }
+];
+
+const DUTAMIK_SERVICES_DATA = [
+  {
+    id: "svc_remote_pc",
+    name: "Optimasi Laptop & PC Remote",
+    slug: "remote-pc",
+    url: "remote-pc.html",
+    rootUrl: "jasa/remote-pc.html",
+    category: "it",
+    categoryLabel: "IT & Sistem",
+    price: 50000,
+    priceFormatted: "Rp 50.000",
+    unit: "1 Jam Selesai",
+    badge: "Garansi Lancar",
+    badgeColor: "blue",
+    icon: "laptop",
+    iconColor: "blue",
+    description: "Percepat kinerja laptop/PC lambat, pembersihan virus & malware mendalam, perbaikan error registry, dan pemasangan software esensial via UltraViewer/AnyDesk.",
+    highlights: ["Pembersihan Junk & Virus", "Optimasi Startup & RAM", "Garansi Sampai Normal"]
+  },
+  {
+    id: "svc_3d_modeling",
+    name: "3D Modeling Bangunan & Rumah",
+    slug: "3d-modeling",
+    url: "3d-modeling.html",
+    rootUrl: "jasa/3d-modeling.html",
+    category: "architecture",
+    categoryLabel: "Desain & Arsitektur",
+    price: 150000,
+    priceFormatted: "Rp 150.000",
+    unit: "Mulai dari",
+    badge: "Ultra HD Render",
+    badgeColor: "purple",
+    icon: "box",
+    iconColor: "purple",
+    description: "Visualisasi 3D arsitektur fotorealistik tampak fasad eksterior dan interior ruangan detail format SketchUp + render resolusi tinggi siap presentasi.",
+    highlights: ["3 View Render Resolusi HD", "File Master .SKP Lengkap", "Revisi Proporsional"]
+  },
+  {
+    id: "svc_gambar_pbg",
+    name: "Gambar PBG SIMBG PUPR Lengkap",
+    slug: "gambar-pbg",
+    url: "gambar-pbg.html",
+    rootUrl: "jasa/gambar-pbg.html",
+    category: "architecture",
+    categoryLabel: "Desain & Arsitektur",
+    price: 350000,
+    priceFormatted: "Rp 350.000",
+    unit: "Paket DED Komplit",
+    badge: "Standar PUPR",
+    badgeColor: "emerald",
+    icon: "drafting-compass",
+    iconColor: "emerald",
+    description: "Penyusunan gambar kerja arsitektur 2D DED lengkap (Denah, Tampak, Potongan, Detail Struktur & MEP) berstandar verifikasi sistem SIMBG PUPR.",
+    highlights: ["Format PDF & DWG Siap Upload", "Format Surat Pernyataan", "Garansi Lolos Verifikasi"]
+  },
+  {
+    id: "svc_peta_shp",
+    name: "Peta SHP / ZIP Kesesuaian Ruang OSS",
+    slug: "peta-shp-oss",
+    url: "peta-shp-oss.html",
+    rootUrl: "jasa/peta-shp-oss.html",
+    category: "legality",
+    categoryLabel: "Legalitas & GIS",
+    price: 100000,
+    priceFormatted: "Rp 100.000",
+    unit: "Format ESRI Polygon",
+    badge: "Valid Sistem OSS",
+    badgeColor: "cyan",
+    icon: "map-pin",
+    iconColor: "cyan",
+    description: "Pembuatan shapefile geospasial poligon berkoordinat WGS 84 / UTM format ZIP resmi untuk verifikasi KKPR / PKKPR di portal OSS RBA dan AMDALNET.",
+    highlights: ["Sistem Koordinat Presisi WGS84", "Lengkap SHP, SHX, DBF, PRJ", "Langsung Lolos Validasi OSS"]
+  },
+  {
+    id: "svc_nib_oss",
+    name: "Pendampingan NIB Usaha Mikro OSS",
+    slug: "nib-oss",
+    url: "nib-oss.html",
+    rootUrl: "jasa/nib-oss.html",
+    category: "legality",
+    categoryLabel: "Legalitas & GIS",
+    price: 75000,
+    priceFormatted: "Rp 75.000",
+    unit: "Terbit Resmi BKPM",
+    badge: "Resmi Pemerintah",
+    badgeColor: "amber",
+    icon: "file-check-2",
+    iconColor: "amber",
+    description: "Pendampingan pembuatan Nomor Induk Berusaha (NIB) berbasis risiko BKPM RI resmi untuk UMKM lengkap dengan pemilihan KBLI yang tepat dan izin dasar.",
+    highlights: ["KBLI Sesuai Bidang Usaha", "File NIB Resmi & Barcode BKPM", "Edukasi Izin Lanjutan"]
+  },
+  {
+    id: "svc_web_umkm",
+    name: "Pembuatan Website UMKM & Portofolio",
+    slug: "web-umkm",
+    url: "web-umkm.html",
+    rootUrl: "jasa/web-umkm.html",
+    category: "it",
+    categoryLabel: "IT & Sistem",
+    price: 250000,
+    priceFormatted: "Rp 250.000",
+    unit: "Tanpa Sewa Server",
+    badge: "Serverless Gratis",
+    badgeColor: "rose",
+    icon: "globe",
+    iconColor: "rose",
+    description: "Pembuatan landing page profesional berkecepatan tinggi, responsif di HP, terintegrasi form order Google Sheet, tombol chat WhatsApp, dan tanpa biaya sewa server tahunan.",
+    highlights: ["Hosting Gratis Selamanya", "Form Masuk Google Sheet", "Domain Kustom & SSL Aktif"]
+  }
+];
+
+const DUTAMIK_PRODUCTS_DATA = [
+  {
+    id: "prod_pos_sheet",
+    name: "Aplikasi Kasir POS Google Sheet Otomatis",
+    slug: "pos-sheet",
+    url: "pos-sheet.html",
+    rootUrl: "produk/pos-sheet.html",
+    category: "software",
+    categoryLabel: "Software & Template",
+    price: 75000,
+    originalPrice: 250000,
+    discountBadge: "Hemat 70%",
+    rating: "4.9",
+    icon: "layout-grid",
+    description: "Template kasir digital berbasis spreadsheet terotomasi. Pencatatan transaksi kilat, cetak nota struk thermal, laporan laba rugi otomatis tanpa biaya langganan bulanan.",
+    features: ["Cetak Struk Thermal Bluetooth", "Manajemen Stok Real-time", "Akses Multi-Device"],
+    badge: "Best Seller"
+  },
+  {
+    id: "prod_rumah_2d3d",
+    name: "Paket Gambar 2D Rumah Lengkap + 3D Fasad",
+    slug: "rumah-2d3d",
+    url: "rumah-2d3d.html",
+    rootUrl: "produk/rumah-2d3d.html",
+    category: "architecture",
+    categoryLabel: "Desain Rumah 2D/3D",
+    price: 75000,
+    originalPrice: 250000,
+    discountBadge: "Hemat 70%",
+    rating: "4.9",
+    icon: "home",
+    description: "Paket komplit gambar kerja arsitektur, denah tata ruang, tampak bangunan, potongan melintang, rencana struktur pondasi, RAB Excel, dan 3 view render fasad 3D HD.",
+    features: ["File Master DWG & PDF Siap Bangun", "Estimasi Rencana Anggaran Biaya (RAB)", "Bisa Langsung Diberikan ke Tukang"],
+    badge: "Paket Favorit"
+  },
+  {
+    id: "prod_template_web",
+    name: "Template Website UMKM & Landing Page",
+    slug: "template-web",
+    url: "template-web.html",
+    rootUrl: "produk/template-web.html",
+    category: "software",
+    categoryLabel: "Software & Template",
+    price: 49000,
+    originalPrice: 150000,
+    discountBadge: "Hemat 67%",
+    rating: "4.8",
+    icon: "layout-template",
+    description: "Source code website modern responsif HTML5 + Tailwind CSS, terintegrasi form order Google Sheet, dark mode otomatis, widget WhatsApp, dan siap deploy gratis ke GitHub Pages.",
+    features: ["Skor Google PageSpeed 98+", "Integrasi Form Google Sheet", "Bisa Custom Teks & Warna"],
+    badge: "Siap Online"
+  },
+  {
+    id: "prod_paysheet_engine",
+    name: "PaySheet Dynamic QRIS Payment Engine",
+    slug: "paysheet-engine",
+    url: "paysheet-engine.html",
+    rootUrl: "produk/paysheet-engine.html",
+    category: "software",
+    categoryLabel: "Software & Template",
+    price: 99000,
+    originalPrice: 350000,
+    discountBadge: "Hemat 72%",
+    rating: "5.0",
+    icon: "qr-code",
+    description: "Modul JavaScript + Google Apps Script untuk generate dynamic QRIS dengan CRC16 checksum dan verifikasi transaksi digital otomatis tanpa fee bulanan payment gateway.",
+    features: ["CRC16 Checksum Standar BI (QRIS)", "Notifikasi Real-time WhatsApp", "Zero Biaya Bulanan Gateway"],
+    badge: "Teknologi Cerdas"
+  },
+  {
+    id: "prod_ebook_gas",
+    name: "E-Book Mastering Google Apps Script & Otomasi",
+    slug: "ebook-gas",
+    url: "ebook-gas.html",
+    rootUrl: "produk/ebook-gas.html",
+    category: "software",
+    categoryLabel: "Software & Template",
+    price: 39000,
+    originalPrice: 120000,
+    discountBadge: "Hemat 68%",
+    rating: "4.8",
+    icon: "book-open",
+    description: "Panduan praktis Google Apps Script bahasa Indonesia. Dilengkapi 20+ contoh skrip automasi spreadsheet, web app tanpa server, dan bot notifikasi WhatsApp.",
+    features: ["Format PDF 180+ Halaman", "20+ Template Script Siap Pakai", "Grup Tanya Jawab Pemula"],
+    badge: "Panduan Lengkap"
+  }
+];
+
+const DUTAMIK_AFFILIATE_DATA = [
+  {
+    id: "aff_thermal_printer",
+    name: "Printer Kasir Thermal Bluetooth 58mm",
+    category: "affiliate",
+    type: "affiliate",
+    affiliateBadge: "Hardware Rekomendasi",
+    rating: "4.9",
+    description: "Printer thermal nirkabel kompatibel dengan aplikasi kasir POS Sheet DUTAMIK.ID dan smartphone Android/PC.",
+    originalPrice: 220000,
+    price: 145000,
+    discountBadge: "Diskon 34%",
+    platform: "Shopee",
+    url: "https://shopee.co.id"
+  },
+  {
+    id: "aff_barcode_scanner",
+    name: "Barcode Scanner Wireless 1D/2D QR",
+    category: "affiliate",
+    type: "affiliate",
+    affiliateBadge: "Hardware Rekomendasi",
+    rating: "4.8",
+    description: "Pemindai barcode nirkabel plug-and-play untuk input produk kilat ke spreadsheet dan POS kasir.",
+    originalPrice: 280000,
+    price: 189000,
+    discountBadge: "Diskon 32%",
+    platform: "Shopee",
+    url: "https://shopee.co.id"
+  }
+];
+
+// Combine all for global search & master catalog
+window.DUTAMIK_TOOLS_DATA = DUTAMIK_TOOLS_DATA;
+window.DUTAMIK_SERVICES_DATA = DUTAMIK_SERVICES_DATA;
+window.DUTAMIK_PRODUCTS_DATA = DUTAMIK_PRODUCTS_DATA;
+window.DUTAMIK_AFFILIATE_DATA = DUTAMIK_AFFILIATE_DATA;

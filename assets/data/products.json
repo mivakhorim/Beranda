@@ -1,0 +1,167 @@
+[
+  {
+    "id": "PROD-RUMAH-2D3D",
+    "type": "product",
+    "name": "Gambar 2D Rumah Lengkap + 3D Fasad Siap Bangun",
+    "slug": "rumah-2d3d",
+    "url": "produk/rumah-2d3d.html",
+    "category": "arsitektur",
+    "categoryLabel": "Paket DED Rumah",
+    "rating": "4.9",
+    "reviewsCount": 54,
+    "originalPrice": 250000,
+    "price": 75000,
+    "discountBadge": "Hemat 70%",
+    "description": "Paket komplit gambar kerja Detail Engineering Design (DED) rumah siap bangun: Denah Arsitektur, Tampak, Potongan, Rencana Pondasi, Sanitasi, dan 3 Render Fasad 3D HD.",
+    "features": [
+      "File Master AutoCAD (.DWG) + PDF A3",
+      "3 View Gambar Render 3D Fasad Depan",
+      "Rencana Anggaran Biaya (RAB) Excel"
+    ],
+    "downloadUrl": "https://dutamik.id/downloads/sample-ded-rumah.zip",
+    "tags": ["desain rumah", "gambar kerja", "dwg", "rab excel", "render 3d"]
+  },
+  {
+    "id": "PROD-TEMPLATE-WEB",
+    "type": "product",
+    "name": "Template Website UMKM & Landing Page Modern",
+    "slug": "template-web",
+    "url": "produk/template-web.html",
+    "category": "source-code",
+    "categoryLabel": "Source Code Web",
+    "rating": "5.0",
+    "reviewsCount": 38,
+    "originalPrice": 150000,
+    "price": 49000,
+    "discountBadge": "Source Code",
+    "description": "Source code website profil usaha responsif berbasis Tailwind CSS. Sudah dilengkapi form order terhubung Google Sheet, dark mode, floating WhatsApp, dan tombol share.",
+    "features": [
+      "Siap Deploy 1-Klik ke GitHub Pages",
+      "Backend Google Apps Script Webhook",
+      "Full Dokumentasi & Video Tutorial"
+    ],
+    "downloadUrl": "https://dutamik.id/downloads/sample-web-template.zip",
+    "tags": ["template website", "source code", "landing page", "tailwind css", "github pages"]
+  },
+  {
+    "id": "AFF-SHOPEE-THERMAL-PRINTER",
+    "type": "affiliate",
+    "platform": "Shopee",
+    "name": "Printer Kasir Thermal Bluetooth 58mm POS USB",
+    "slug": "printer-kasir-thermal",
+    "url": "https://shopee.co.id",
+    "category": "aplikasi",
+    "categoryLabel": "Rekomendasi Hardware",
+    "rating": "4.9",
+    "reviewsCount": 120,
+    "originalPrice": 220000,
+    "price": 139000,
+    "discountBadge": "Rekomendasi Shopee",
+    "affiliateBadge": "Shopee Partner",
+    "description": "Printer thermal bluetooth kompatibel langsung dengan Aplikasi Kasir Google Sheet DUTAMIK. Cetak struk belanja cepat via Android dan Laptop.",
+    "features": [
+      "Koneksi Bluetooth 4.0 & USB",
+      "Kertas Thermal Lebar 58mm",
+      "Baterai Tahan Lama & Ringan"
+    ],
+    "tags": ["printer thermal", "printer kasir", "shopee affiliate", "pos hardware"]
+  },
+  {
+    "id": "PROD-POS-SHEET",
+    "type": "product",
+    "name": "Aplikasi Kasir POS & Stok Google Sheet",
+    "slug": "pos-sheet",
+    "url": "produk/pos-sheet.html",
+    "category": "aplikasi",
+    "categoryLabel": "Aplikasi Spreadsheet",
+    "rating": "4.9",
+    "reviewsCount": 61,
+    "originalPrice": 120000,
+    "price": 39000,
+    "discountBadge": "Lifetime",
+    "description": "Sistem aplikasi kasir toko berbasis spreadsheet otomatis. Cetak struk belanja thermal/faktur PDF, kelola stok barang real-time, dan laporan laba rugi otomatis.",
+    "features": [
+      "Scan Barcode & Cetak Struk Instan",
+      "Tanpa Biaya Langganan Bulanan",
+      "Bisa Diakses di Laptop & HP"
+    ],
+    "downloadUrl": "https://dutamik.id/downloads/sample-pos-sheet.zip",
+    "tags": ["aplikasi kasir", "pos spreadsheet", "google sheet", "stok barang", "excel pos"]
+  },
+  {
+    "id": "AD-SLOT-STORE-1",
+    "type": "ad_slot",
+    "adClient": "ca-pub-XXXXXXXXXXXXXXXX",
+    "adSlot": "1234567890",
+    "adFormat": "auto",
+    "title": "Ruang Iklan Sponsor Google AdSense",
+    "description": "Slot penempatan iklan resmi Google AdSense teroptimasi CTR dan responsive di semua perangkat."
+  },
+  {
+    "id": "PROD-PAYSHEET-ENGINE",
+    "type": "product",
+    "name": "PaySheet QRIS Dynamic Engine & API",
+    "slug": "paysheet-engine",
+    "url": "produk/paysheet-engine.html",
+    "category": "source-code",
+    "categoryLabel": "PaySheet Engine",
+    "rating": "5.0",
+    "reviewsCount": 47,
+    "originalPrice": 175000,
+    "price": 55000,
+    "discountBadge": "Developer Kit",
+    "description": "Modul sistem verifikasi pembayaran QRIS otomatis berbasis kalkulasi CRC16 EMVCo nasional, notifikasi email pengiriman link unduhan produk, dan pencatatan spreadsheet.",
+    "features": [
+      "Script JS Generator QRIS Dinamis",
+      "Full Code.gs Backend Google Apps Script",
+      "Modal Checkout Pop-Up Siap Pasang"
+    ],
+    "downloadUrl": "https://dutamik.id/downloads/sample-paysheet-engine.zip",
+    "tags": ["paysheet", "qris dynamic", "emvco", "crc16", "payment gateway"]
+  },
+  {
+    "id": "AFF-TIKTOK-BARCODE-SCANNER",
+    "type": "affiliate",
+    "platform": "TikTok Shop",
+    "name": "Barcode Scanner 1D/2D QR USB Wireless Stand",
+    "slug": "barcode-scanner-wireless",
+    "url": "https://www.tiktok.com",
+    "category": "aplikasi",
+    "categoryLabel": "Rekomendasi Hardware",
+    "rating": "4.8",
+    "reviewsCount": 89,
+    "originalPrice": 180000,
+    "price": 95000,
+    "discountBadge": "Rekomendasi TikTok",
+    "affiliateBadge": "TikTok Creator",
+    "description": "Scanner barcode cepat dan akurat untuk kasir toko minimarket, membaca barcode produk dan QR Code dengan plug and play tanpa driver.",
+    "features": [
+      "Plug & Play USB Wireless",
+      "Scan Barcode 1D & QR Code 2D",
+      "Bodi Kokoh Anti Jatuh"
+    ],
+    "tags": ["barcode scanner", "tiktok shop", "affiliate", "kasir toko"]
+  },
+  {
+    "id": "PROD-EBOOK-GAS",
+    "type": "product",
+    "name": "Mastering Google Apps Script & Otomasi Bisnis",
+    "slug": "ebook-gas",
+    "url": "produk/ebook-gas.html",
+    "category": "ebook",
+    "categoryLabel": "E-Book Praktis",
+    "rating": "4.8",
+    "reviewsCount": 39,
+    "originalPrice": 80000,
+    "price": 25000,
+    "discountBadge": "E-Book PDF",
+    "description": "Panduan praktis langkah demi langkah membuat automasi spreadsheet, web app tanpa server, dan bot WhatsApp notifikasi untuk bisnis dan kantor.",
+    "features": [
+      "Format PDF Bahasa Indonesia Ringkas",
+      "Disertai 20+ Template Script Siap Copy",
+      "Update Materi & Konsultasi Gratis"
+    ],
+    "downloadUrl": "https://dutamik.id/downloads/sample-ebook-gas.zip",
+    "tags": ["ebook apps script", "belajar coding", "otomasi excel", "bot whatsapp", "pdf guide"]
+  }
+]
