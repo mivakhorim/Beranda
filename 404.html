@@ -22,7 +22,7 @@
       }
     }
   </script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
@@ -30,8 +30,37 @@
   <!-- TOP RUNNING TICKER -->
   <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
     <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
-      <span class="mx-4">🌟 Memuat Kontributor DUTAMIK.ID...</span>
-    </div>
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Bpk. Hendra S.</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Jasa Remote Laptop lancar & aman!"</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Ibu Rina Kartika</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 100.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Gambar Kerja PBG lolos verifikasi SIMBG."</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Mas Dimas Pratama</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 75.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Aplikasi POS Kasir Sheet sangat membantu toko!"</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">CV Berkah Mandiri</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 150.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Peta SHP valid langsung lolos OSS RBA."</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Kedai Kopi Bahagia</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"PaySheet QRIS mantap tanpa potongan bulanan!"</span>
+  </span>
+</div>
   </div>
 
   <!-- NAVBAR -->
@@ -45,7 +74,7 @@
         <nav class="hidden lg:flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
           <a href="./" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Beranda</a>
           <a href="katalog/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
-            <i data-lucide="grid" class="w-3.5 h-3.5 text-blue-500"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Master Katalog</span>
           </a>
           <a href="tools/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">Fitur Gratis</a>
@@ -56,12 +85,15 @@
 
         <div class="flex items-center gap-2 flex-shrink-0">
           <button onclick="openSearchModal()" aria-label="Cari" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
-            <i data-lucide="search" class="w-4 h-4 text-blue-600"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <span class="hidden md:inline">Cari...</span>
           </button>
-          <button onclick="toggleTheme()" aria-label="Toggle Theme" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-            <span class="theme-toggle-icon"><i data-lucide="moon" class="w-4 h-4"></i></span>
-          </button>
+          <button onclick="toggleTheme()" id="btn-theme-toggle" aria-label="Toggle Theme" title="Ganti Mode Gelap / Terang" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer flex items-center justify-center">
+  <span class="theme-toggle-icon flex items-center justify-center">
+    <svg class="w-4 h-4 text-amber-400 hidden dark:inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    <svg class="w-4 h-4 text-slate-700 dark:hidden inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+  </span>
+</button>
           <button onclick="openConsultationModal()" class="hidden sm:inline-flex items-center gap-2 gradient-brand text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md hover:opacity-95 transition">
             <span>Konsultasi Gratis</span>
           </button>
@@ -95,15 +127,15 @@
       <!-- Action Buttons -->
       <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
         <a href="./" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-          <i data-lucide="home" class="w-4 h-4"></i>
+          <svg class="w-5 h-5 text-purple-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span>Kembali ke Beranda</span>
         </a>
         <a href="katalog/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs shadow-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-          <i data-lucide="grid" class="w-4 h-4 text-blue-500"></i>
+          <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span>Jelajahi Master Katalog</span>
         </a>
         <button onclick="openSearchModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-          <i data-lucide="search" class="w-4 h-4"></i>
+          <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <span>Cari Layanan</span>
         </button>
       </div>

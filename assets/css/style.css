@@ -1,54 +1,76 @@
 /* ==========================================================================
-   DUTAMIK.ID - Premium Stylesheet
+   DUTAMIK.ID - Master Premium Stylesheet
    Duta Media Informasi berKarya
-   Soft UI, Responsive Glassmorphism, Theme Variables & Universal Smooth Slider
+   Soft UI, Bulletproof Light/Dark Theme Engine & Universal Motion
    ========================================================================== */
 
-/* Custom Color Tokens & Typography */
+/* Theme Variables & Tokens */
 :root {
   --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --bg-light: #f8fafc;
   --bg-dark: #030712;
-  --card-light: rgba(255, 255, 255, 0.85);
-  --card-dark: rgba(15, 23, 42, 0.75);
-  --border-light: rgba(226, 232, 240, 0.8);
-  --border-dark: rgba(51, 65, 85, 0.4);
+  --card-light: #ffffff;
+  --card-dark: #0f172a;
+  --border-light: #e2e8f0;
+  --border-dark: #1e293b;
+  --text-light: #0f172a;
+  --text-dark: #f8fafc;
   --primary-blue: #2563eb;
   --primary-indigo: #4f46e5;
+  --primary-cyan: #00d2ff;
+}
+
+html {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+}
+
+html.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
 }
 
 body {
   font-family: var(--font-main);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html.dark body {
+  background-color: var(--bg-dark) !important;
+  color: var(--text-dark) !important;
 }
 
 /* Glassmorphism Navigation & Panels */
 .glass-nav {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: #e2e8f0 !important;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
-.dark .glass-nav {
-  background: rgba(3, 7, 18, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+html.dark .glass-nav {
+  background: rgba(3, 7, 18, 0.96) !important;
+  border-color: #1e293b !important;
 }
 
 .glass-panel {
-  background: var(--card-light);
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-light);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.dark .glass-panel {
-  background: var(--card-dark);
-  border: 1px solid var(--border-dark);
+html.dark .glass-panel {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
 }
 
 /* Gradients */
 .gradient-brand {
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%) !important;
 }
 
 .text-gradient {
@@ -56,7 +78,7 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.dark .text-gradient {
+html.dark .text-gradient {
   background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 40%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -67,39 +89,39 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 14px 30px -10px rgba(37, 99, 235, 0.15);
 }
-.dark .glow-card:hover {
+html.dark .glow-card:hover {
   box-shadow: 0 14px 30px -10px rgba(96, 165, 250, 0.12);
 }
 
 /* Running Ticker Bar */
 .ticker-bar {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-  color: #475569;
+  display: flex !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
 }
-.dark .ticker-bar {
-  background: #0b1120;
-  border-color: #1e293b;
-  color: #94a3b8;
-}
-
-.ticker-wrapper {
-  white-space: nowrap;
-  position: relative;
+html.dark .ticker-bar {
+  background: #0b1120 !important;
+  border-color: #1e293b !important;
+  color: #94a3b8 !important;
 }
 
 .ticker-content {
-  display: inline-block;
-  white-space: nowrap;
-  animation: ticker-animation 32s linear infinite;
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  animation: continuous-ticker 30s linear infinite !important;
 }
 .ticker-content:hover {
-  animation-play-state: paused;
+  animation-play-state: paused !important;
 }
 
-@keyframes ticker-animation {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+@keyframes continuous-ticker {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Toast Notifications */
@@ -153,40 +175,9 @@ body {
 
 /* Modals */
 .modal-backdrop {
-  background-color: rgba(3, 7, 18, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* Floating Help Shortcut Dock & Dynamic Smooth Slide Widget */
-#floating-help-dock {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
-}
-
-#floating-help-dock.dock-hidden {
-  transform: translateY(120%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-#wa-widget-popover {
-  transform-origin: bottom right;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
-}
-
-#wa-widget-popover.popover-hidden {
-  opacity: 0;
-  transform: scale(0.92) translateY(12px);
-  pointer-events: none;
-}
-
-.wa-floating-btn {
-  box-shadow: 0 8px 24px 0 rgba(16, 185, 129, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.wa-floating-btn:hover {
-  transform: scale(1.06);
-  box-shadow: 0 12px 30px 0 rgba(16, 185, 129, 0.55);
+  background-color: rgba(3, 7, 18, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 /* Scrollbar Remover */
@@ -199,100 +190,49 @@ body {
 }
 
 /* ==========================================================================
-   PURE CLICK & DRAG HORIZONTAL SCROLL ENGINE (NO AUTO-SLIDE, NO SNAP JUMP)
+   BORDERLESS FLOATING ROBOT ASSISTANT (CLEAN AVATAR - NO BOX / NO BORDER)
    ========================================================================== */
-.dutamik-slider-container {
+
+#peeking-robot-dock {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 22% !important;
+  z-index: 50 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+#robot-peek-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  outline: none !important;
   display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  overflow-x: auto !important;
-  overflow-y: visible !important;
-  gap: 1.25rem !important;
-  scroll-behavior: auto !important;
-  scroll-snap-type: none !important;
-  -webkit-overflow-scrolling: touch;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  cursor: grab;
-  padding-top: 1rem !important;
-  padding-bottom: 1.5rem !important;
-  margin-top: -0.5rem !important;
-  margin-bottom: -0.5rem !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.dutamik-slider-container.is-dragging {
-  scroll-behavior: auto !important;
-  scroll-snap-type: none !important;
-  cursor: grabbing !important;
-}
-
-.dutamik-slider-container * {
-  -webkit-user-drag: none;
-  user-drag: none;
-}
-
-.mobile-slide-card {
-  width: 84vw !important;
-  max-width: 320px !important;
-  flex-shrink: 0 !important;
-  scroll-snap-align: none !important;
-  user-select: none;
-  -webkit-user-select: none;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
-}
-
-@media (min-width: 640px) {
-  .mobile-slide-card {
-    width: 330px !important;
-    max-width: 330px !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .mobile-slide-card {
-    width: 350px !important;
-    max-width: 350px !important;
-  }
-}
-
-/* ==========================================================================
-   COMPACT FLYING ROBOT DRONE HEAD (SMOOTH GLIDE, NOD & BLINK ANIMATIONS)
-   ========================================================================== */
-
-/* 1. Aerodynamic Gliding & Hovering (Penerbangan Melayang Halus) */
+/* Aerodynamic Hovering Animation */
 @keyframes robotAirplaneHover {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-4px) rotate(-2deg);
-  }
-  50% {
-    transform: translateY(-1px) rotate(1.5deg);
-  }
-  75% {
-    transform: translateY(-5px) rotate(-1deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-2deg); }
+  50% { transform: translateY(-1px) rotate(1.5deg); }
+  75% { transform: translateY(-5px) rotate(-1deg); }
 }
 
 .robot-flight-idle {
   animation: robotAirplaneHover 3.6s ease-in-out infinite !important;
 }
 
-/* 2. LED Eye Stripes Blinking (Berkedip Bergaris Digital) */
 @keyframes robotLedEyeBlink {
-  0%, 86%, 94%, 100% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-  90%, 92% {
-    transform: scaleY(0.08);
-    opacity: 0.8;
-  }
+  0%, 86%, 94%, 100% { transform: scaleY(1); opacity: 1; }
+  90%, 92% { transform: scaleY(0.08); opacity: 0.8; }
 }
 
 .robot-led-eyes {
@@ -300,16 +240,9 @@ body {
   transform-origin: 110px 88px;
 }
 
-/* 3. Jet Thruster Glow Pulsing */
 @keyframes thrusterPulse {
-  0%, 100% {
-    opacity: 0.5;
-    transform: scale(0.95);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.1);
-  }
+  0%, 100% { opacity: 0.5; transform: scale(0.95); }
+  50% { opacity: 0.9; transform: scale(1.1); }
 }
 
 .robot-thruster-glow {
@@ -317,102 +250,83 @@ body {
   transform-origin: center;
 }
 
-/* 4. Airplane Takeoff & Smooth Glide Landing (Lepas Landas & Mendarat Perlahan di Atas Dropdown) */
 @keyframes robotAirplaneLandingGlide {
-  0% {
-    transform: translate(220px, 110px) rotate(-18deg) scale(0.4);
-    opacity: 0;
-  }
-  35% {
-    /* Climb & Bank curve across screen */
-    transform: translate(45px, -35px) rotate(-12deg) scale(1.15);
-    opacity: 1;
-  }
-  65% {
-    /* Smooth glide descent */
-    transform: translate(-10px, -12px) rotate(3deg) scale(1.04);
-    opacity: 1;
-  }
-  85% {
-    /* Flare pitch up slightly */
-    transform: translate(3px, -4px) rotate(-2deg) scale(1.01);
-  }
-  100% {
-    /* Soft Touchdown */
-    transform: translate(0px, 0px) rotate(0deg) scale(1);
-    opacity: 1;
-  }
+  0% { transform: translate(220px, 110px) rotate(-18deg) scale(0.4); opacity: 0; }
+  35% { transform: translate(45px, -35px) rotate(-12deg) scale(1.15); opacity: 1; }
+  65% { transform: translate(-10px, -12px) rotate(3deg) scale(1.04); opacity: 1; }
+  85% { transform: translate(3px, -4px) rotate(-2deg) scale(1.01); }
+  100% { transform: translate(0px, 0px) rotate(0deg) scale(1); opacity: 1; }
 }
 
 .robot-airplane-landing-active {
   animation: robotAirplaneLandingGlide 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
 }
 
-/* 5. Airplane Takeoff & Return Flight (Lepas Landas Pulang) */
 @keyframes robotAirplaneReturnTakeoff {
-  0% {
-    transform: translate(0px, 0px) rotate(0deg) scale(1);
-    opacity: 1;
-  }
-  25% {
-    transform: translate(-8px, -15px) rotate(-10deg) scale(1.06);
-    opacity: 1;
-  }
-  55% {
-    transform: translate(60px, -25px) rotate(14deg) scale(1.1);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translate(240px, 60px) rotate(20deg) scale(0.3);
-    opacity: 0;
-  }
+  0% { transform: translate(0px, 0px) rotate(0deg) scale(1); opacity: 1; }
+  25% { transform: translate(-8px, -15px) rotate(-10deg) scale(1.06); opacity: 1; }
+  55% { transform: translate(60px, -25px) rotate(14deg) scale(1.1); opacity: 0.9; }
+  100% { transform: translate(240px, 60px) rotate(20deg) scale(0.3); opacity: 0; }
 }
 
 .robot-airplane-return-active {
   animation: robotAirplaneReturnTakeoff 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
 }
 
-/* 6. Inquisitive Drone Tilt on Dropdown Focus (Gaya Penasaran Halus) */
 .robot-drone-curious {
   transform: translateY(-5px) rotate(-10deg) scale(1.08) !important;
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   filter: drop-shadow(0 8px 18px rgba(0, 210, 255, 0.6)) !important;
 }
 
-/* 7. Smooth Gentle Nodding & Blinking upon Option Selection (Mengangguk Halus & Kedip) */
 @keyframes robotSmoothNodAndBlink {
-  0% {
-    transform: translateY(0px) rotate(0deg) scale(1);
-  }
-  25% {
-    transform: translateY(5px) rotate(6deg) scale(1.05);
-  }
-  50% {
-    transform: translateY(-2px) rotate(-3deg) scale(1.02);
-  }
-  75% {
-    transform: translateY(3px) rotate(4deg) scale(1.03);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg) scale(1);
-  }
+  0% { transform: translateY(0px) rotate(0deg) scale(1); }
+  25% { transform: translateY(5px) rotate(6deg) scale(1.05); }
+  50% { transform: translateY(-2px) rotate(-3deg) scale(1.02); }
+  75% { transform: translateY(3px) rotate(4deg) scale(1.03); }
+  100% { transform: translateY(0px) rotate(0deg) scale(1); }
 }
 
 .robot-smooth-nod {
   animation: robotSmoothNodAndBlink 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
-/* 8. Pure Unboxed Flying Robot Dock (Kanan Tengah Agak ke Bawah) */
-#peeking-robot-dock {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+/* ==========================================================================
+   ULTRA-SMOOTH AUTO SLIDER & MOMENTUM DRAG ENGINE
+   ========================================================================== */
+
+.snap-x,
+.horizontal-drag-slider,
+[data-drag-scroll] {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-#robot-peek-btn {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-  padding: 0 !important;
+.snap-x.is-dragging,
+.horizontal-drag-slider.is-dragging,
+[data-drag-scroll].is-dragging {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+  cursor: grabbing !important;
+}
+
+@media (max-width: 767px) {
+  .mobile-slide-card {
+    flex: 0 0 280px !important;
+    min-width: 280px !important;
+    max-width: 80vw !important;
+    scroll-snap-align: start !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .contributor-slide-card {
+    flex: 0 0 280px !important;
+    min-width: 280px !important;
+    max-width: 80vw !important;
+    scroll-snap-align: start !important;
+  }
 }

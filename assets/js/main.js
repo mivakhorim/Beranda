@@ -1,10 +1,8 @@
 /**
- * DUTAMIK.ID - Main Script
+ * DUTAMIK.ID - Main Application Engine & Theme Manager
  * Duta Media Informasi berKarya
- * Handles Theme, Navigation, Dynamic Config, Modals, Toasts, WhatsApp Widget & Social Sharing
  */
 
-// Global Configuration (Loads saved overrides from Admin Dashboard if available)
 const DUTAMIK_CONFIG = {
   adminWhatsApp: localStorage.getItem('dutamik_cfg_wa') || '6281234567890',
   gasApiUrl: localStorage.getItem('dutamik_cfg_gas_url') || 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
@@ -13,37 +11,42 @@ const DUTAMIK_CONFIG = {
   siteTitle: 'DUTAMIK.ID - Duta Media Informasi berKarya'
 };
 
-// 1. Dark Mode / Light Mode Management
+const SUN_SVG = `<svg class="w-4 h-4 text-amber-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
+const MOON_SVG = `<svg class="w-4 h-4 text-slate-700 dark:text-slate-300 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+// 1. BULLETPROOF THEME SWITCHER (DIRECT ROOT + ICON SYNC)
 function initTheme() {
-  const savedTheme = localStorage.getItem('dutamik_theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const saved = localStorage.getItem('dutamik_theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = saved === 'dark' || (!saved && prefersDark);
   
-  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+  if (isDark) {
     document.documentElement.classList.add('dark');
   } else {
     document.documentElement.classList.remove('dark');
   }
-  updateThemeIcon();
+  updateThemeIcons(isDark);
 }
 
 function toggleTheme() {
   const isDark = document.documentElement.classList.toggle('dark');
   localStorage.setItem('dutamik_theme', isDark ? 'dark' : 'light');
-  updateThemeIcon();
-  showToast(isDark ? 'Mode Gelap diaktifkan' : 'Mode Terang diaktifkan', 'info');
+  updateThemeIcons(isDark);
+  if (typeof showToast === 'function') {
+    showToast(isDark ? 'Mode Gelap diaktifkan' : 'Mode Terang diaktifkan', 'info');
+  }
 }
 
-function updateThemeIcon() {
-  const isDark = document.documentElement.classList.contains('dark');
+function updateThemeIcons(isDark) {
   const icons = document.querySelectorAll('.theme-toggle-icon');
   icons.forEach(icon => {
-    if (isDark) {
-      icon.innerHTML = `<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
-    } else {
-      icon.innerHTML = `<svg class="w-4 h-4 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
-    }
+    icon.innerHTML = isDark ? SUN_SVG : MOON_SVG;
   });
 }
+
+window.toggleTheme = toggleTheme;
+window.initTheme = initTheme;
 
 // 2. Toast Notification System
 function showToast(message, type = 'info', duration = 3500) {
@@ -85,7 +88,6 @@ function openModal(modalId) {
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
 
-    // If opening share modal, dynamically sync current page url & title
     if (modalId === 'modal-share-site') {
       const urlDisplays = modal.querySelectorAll('.font-mono.truncate, [data-share-url]');
       urlDisplays.forEach(el => {
@@ -104,18 +106,7 @@ function closeModal(modalId) {
   }
 }
 
-// Global modal backdrop close listener
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.modal-backdrop').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeModal(modal.id);
-      }
-    });
-  });
-});
-
-// 4. Social Share & Copy Link Function
+// 4. Social Sharing System
 function shareTo(platform, customUrl = '', customText = '') {
   const targetUrl = customUrl || window.location.href;
   const pageTitle = document.title || 'DUTAMIK.ID - Duta Media Informasi berKarya';
@@ -141,29 +132,8 @@ function shareTo(platform, customUrl = '', customText = '') {
       shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
       break;
     case 'instagram':
-      navigator.clipboard.writeText(targetUrl)
-        .then(() => {
-          showToast('Tautan disalin! Buka Instagram untuk membagikan ke Story / DM.', 'success');
-          window.open('https://instagram.com', '_blank', 'noopener,noreferrer');
-        })
-        .catch(() => showToast('Gagal menyalin tautan', 'error'));
-      return;
     case 'tiktok':
-      navigator.clipboard.writeText(targetUrl)
-        .then(() => {
-          showToast('Tautan disalin! Buka TikTok untuk membagikan video / bio.', 'success');
-          window.open('https://tiktok.com', '_blank', 'noopener,noreferrer');
-        })
-        .catch(() => showToast('Gagal menyalin tautan', 'error'));
-      return;
     case 'youtube':
-      navigator.clipboard.writeText(targetUrl)
-        .then(() => {
-          showToast('Tautan disalin! Buka YouTube untuk membagikan di deskripsi / komentar.', 'success');
-          window.open('https://youtube.com', '_blank', 'noopener,noreferrer');
-        })
-        .catch(() => showToast('Gagal menyalin tautan', 'error'));
-      return;
     case 'copy':
       navigator.clipboard.writeText(targetUrl)
         .then(() => showToast('Tautan berhasil disalin ke clipboard!', 'success'))
@@ -176,8 +146,13 @@ function shareTo(platform, customUrl = '', customText = '') {
   }
 }
 
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  if (menu) {
+    menu.classList.toggle('hidden');
+  }
+}
 
-// 5. Interactive Peeking Robot Assistant (Swipe & Click Gesture Controller)
 function toggleRobotAssistant() {
   if (typeof openConsultationModal === 'function') {
     openConsultationModal();
@@ -186,43 +161,110 @@ function toggleRobotAssistant() {
   }
 }
 
-function openRobotAssistant() {
-  toggleRobotAssistant();
-}
+// 5. ULTRA-SMOOTH AUTO-SLIDE & DIRECT DRAG-TO-SCROLL ENGINE
+function initSliderEngine() {
+  const sliders = document.querySelectorAll('.snap-x, .horizontal-drag-slider, [data-drag-scroll]');
+  
+  sliders.forEach(slider => {
+    if (slider.dataset.sliderReady) return;
+    slider.dataset.sliderReady = 'true';
 
-function closeRobotAssistant() {
-  if (typeof closeConsultationModal === 'function') {
-    closeConsultationModal();
-  } else {
-    closeModal('modal-consultation-service');
-  }
-}
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+    let isDragging = false;
+    let autoTimer = null;
 
-// Global Touch / Gesture Listener for Peeking Robot (Swipe Left to Open, Swipe Right to Close)
-document.addEventListener('DOMContentLoaded', () => {
-  const dock = document.getElementById('peeking-robot-dock');
-  if (!dock) return;
+    // A. MOUSE DRAG TO SCROLL
+    slider.addEventListener('mousedown', (e) => {
+      if (['INPUT', 'BUTTON', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      isDown = true;
+      isDragging = false;
+      startX = e.pageX - slider.offsetLeft;
+      scrollStart = slider.scrollLeft;
+      stopAuto();
+    });
 
-  let touchStartX = 0;
-  let touchStartY = 0;
+    const endDrag = () => {
+      if (!isDown) return;
+      isDown = false;
+      slider.classList.remove('is-dragging');
+      setTimeout(startAuto, 2500);
+    };
 
-  dock.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
+    slider.addEventListener('mouseleave', endDrag);
+    slider.addEventListener('mouseup', endDrag);
 
-  dock.addEventListener('touchend', (e) => {
-    const touchEndX = e.changedTouches[0].screenX;
-    const touchEndY = e.changedTouches[0].screenY;
-    const diffX = touchEndX - touchStartX;
-    const diffY = touchEndY - touchStartY;
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX);
+      
+      if (Math.abs(walk) > 5) {
+        if (!isDragging) {
+          isDragging = true;
+          slider.classList.add('is-dragging');
+        }
+        slider.scrollLeft = scrollStart - (walk * 1.5);
+      }
+    });
 
-    // Detect horizontal swipe if larger than vertical movement (Cubit / Geser ke kiri)
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
-      if (diffX < 0) {
-        // Swiped Left -> Open Consultation Modal with Sitting Robot
-        toggleRobotAssistant();
+    slider.addEventListener('click', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
+    // B. SMOOTH STEP AUTO-SLIDE
+    function startAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        if (isDown || isDragging) return;
+        if (slider.scrollWidth > slider.clientWidth + 10) {
+          const firstCard = slider.querySelector('.mobile-slide-card, .contributor-slide-card, div, a');
+          const step = firstCard ? (firstCard.offsetWidth + 16) : 296;
+          const maxLeft = slider.scrollWidth - slider.clientWidth;
+
+          slider.style.scrollBehavior = 'smooth';
+          if (slider.scrollLeft >= maxLeft - 20) {
+            slider.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            slider.scrollBy({ left: step, behavior: 'smooth' });
+          }
+        }
+      }, 3800);
+    }
+
+    function stopAuto() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
       }
     }
-  }, { passive: true });
+
+    slider.addEventListener('mouseenter', stopAuto);
+    slider.addEventListener('touchstart', stopAuto, { passive: true });
+    slider.addEventListener('touchend', () => setTimeout(startAuto, 2500), { passive: true });
+
+    startAuto();
+  });
+}
+
+window.initSliderEngine = initSliderEngine;
+window.initDragToScroll = initSliderEngine;
+
+// Immediate Theme & Event Bindings
+initTheme();
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initSliderEngine();
+  document.querySelectorAll('.modal-backdrop').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal(modal.id);
+      }
+    });
+  });
 });

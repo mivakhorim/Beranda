@@ -52,7 +52,7 @@
       }
     }
   </script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <!-- Custom Stylesheet -->
@@ -101,7 +101,7 @@
           "Fitur & Tools Gratis",
           "Katalog Layanan Jasa",
           "Produk Digital PaySheet",
-          "Donasi & Wall of Kontributor",
+          "Donasi & Wall of Contributor",
           "Tentang Kami",
           "Hubungi Kami"
         ],
@@ -124,8 +124,37 @@
   <!-- 1. TOP RUNNING TICKER -->
   <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
     <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
-      <span class="mx-4">🌟 Memuat Kontributor DUTAMIK.ID...</span>
-    </div>
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Bpk. Hendra S.</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Jasa Remote Laptop lancar & aman!"</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Ibu Rina Kartika</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 100.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Gambar Kerja PBG lolos verifikasi SIMBG."</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Mas Dimas Pratama</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 75.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Aplikasi POS Kasir Sheet sangat membantu toko!"</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">CV Berkah Mandiri</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 150.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Peta SHP valid langsung lolos OSS RBA."</span>
+  </span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+    <strong class="text-slate-900 dark:text-white font-bold">Kedai Kopi Bahagia</strong> 
+    <span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
+    <span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"PaySheet QRIS mantap tanpa potongan bulanan!"</span>
+  </span>
+</div>
   </div>
 
   <!-- 2. REDESIGNED SLEEK NAVBAR -->
@@ -144,7 +173,7 @@
             Beranda
           </a>
           <a href="katalog/" class="px-3.5 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
-            <i data-lucide="grid" class="w-3.5 h-3.5 text-blue-500"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Master Katalog</span>
           </a>
           <a href="tools/" class="px-3.5 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
@@ -164,26 +193,29 @@
         <!-- Right Utilities Group -->
         <div class="flex items-center gap-2 flex-shrink-0">
           <button onclick="openSearchModal()" aria-label="Cari Fitur" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
-            <i data-lucide="search" class="w-4 h-4 text-blue-600"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <span class="hidden md:inline">Cari...</span>
             <kbd class="hidden xl:inline px-1.5 py-0.5 text-[10px] bg-slate-200 dark:bg-slate-800 rounded font-mono text-slate-500">Ctrl+K</kbd>
           </button>
 
           <button onclick="openModal('modal-share-site')" aria-label="Share DUTAMIK" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 text-slate-600 dark:text-slate-300 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
           </button>
 
-          <button onclick="toggleTheme()" aria-label="Toggle Theme" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-            <span class="theme-toggle-icon"><i data-lucide="moon" class="w-4 h-4"></i></span>
-          </button>
+          <button onclick="toggleTheme()" id="btn-theme-toggle" aria-label="Toggle Theme" title="Ganti Mode Gelap / Terang" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer flex items-center justify-center">
+  <span class="theme-toggle-icon flex items-center justify-center">
+    <svg class="w-4 h-4 text-amber-400 hidden dark:inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    <svg class="w-4 h-4 text-slate-700 dark:hidden inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+  </span>
+</button>
 
           <button onclick="openModal('modal-order-service')" class="hidden sm:inline-flex items-center gap-2 gradient-brand text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md hover:opacity-95 transition transform active:scale-95 whitespace-nowrap">
-            <i data-lucide="message-square-heart" class="w-3.5 h-3.5"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             <span>Konsultasi Gratis</span>
           </button>
 
           <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-            <i data-lucide="menu" class="w-5 h-5"></i>
+            <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </button>
         </div>
 
@@ -195,7 +227,7 @@
       <div class="flex flex-col gap-1.5 pt-2 text-sm font-medium">
         <a href="./" class="px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-900/20">Beranda</a>
         <a href="katalog/" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
-          <i data-lucide="grid" class="w-4 h-4 text-blue-500"></i>
+          <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span>Master Katalog Lengkap</span>
         </a>
         <a href="tools/" class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Fitur &amp; Tools Gratis</a>
@@ -232,34 +264,34 @@
 
         <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button onclick="openModal('modal-order-service')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xl transition transform hover:-translate-y-0.5">
-            <i data-lucide="message-square-heart" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             <span>Konsultasi Kebutuhan Gratis</span>
           </button>
           <a href="katalog/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-xs shadow-md hover:bg-slate-800 dark:hover:bg-slate-100 transition transform hover:-translate-y-0.5">
-            <i data-lucide="grid" class="w-4 h-4 text-blue-400 dark:text-blue-600"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Buka Master Katalog</span>
           </a>
           <a href="donasi/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 font-bold text-xs transition">
-            <i data-lucide="heart" class="w-4 h-4 fill-rose-500"></i>
+            <svg class="w-4 h-4 text-rose-500 fill-rose-500 inline-block flex-shrink-0" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span>Traktir Kopi</span>
           </a>
         </div>
 
         <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-slate-500 dark:text-slate-400 text-xs">
           <div class="flex items-center justify-center gap-2">
-            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+            <svg class="w-4 h-4 text-emerald-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
             <span>100% Privasi Terlindungi</span>
           </div>
           <div class="flex items-center justify-center gap-2">
-            <i data-lucide="users" class="w-4 h-4 text-blue-500"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             <span>Pendampingan Ramah &amp; Tuntas</span>
           </div>
           <div class="flex items-center justify-center gap-2">
-            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+            <svg class="w-4 h-4 text-amber-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.885L19.798 9.5l-4.73 4.254 1.34 6.246L12 16.8l-4.408 3.2 1.34-6.246L4.202 9.5l5.886-.615L12 3z"></path></svg>
             <span>Akses Mudah Tanpa Beban</span>
           </div>
           <div class="flex items-center justify-center gap-2">
-            <i data-lucide="heart" class="w-4 h-4 text-rose-500"></i>
+            <svg class="w-4 h-4 text-rose-500 fill-rose-500 inline-block flex-shrink-0" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span>Dedikasi Kemajuan UMKM</span>
           </div>
         </div>
@@ -268,14 +300,14 @@
     </div>
   </section>
 
-  <!-- 4. HIGHLIGHT SECTION: FITUR & TOOLS GRATIS (MOBILE SLIDE CAROUSEL) -->
+    <!-- 4. HIGHLIGHT SECTION: FITUR & TOOLS GRATIS (MATCHING JASA SLIDER DESIGN) -->
   <section class="py-16 bg-white dark:bg-slate-900/50 border-y border-slate-200/80 dark:border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12">
         <div>
           <div class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="15" x2="23" y2="15"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="15" x2="4" y2="15"></line></svg>
             <span>Fitur &amp; Utilitas Gratis</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
@@ -287,7 +319,7 @@
         </div>
         <div class="mt-4 md:mt-0 flex items-center justify-between">
           <span class="md:hidden text-[11px] text-blue-600 dark:text-blue-400 font-semibold flex items-center gap-1">
-            <i data-lucide="chevrons-right" class="w-3.5 h-3.5 animate-pulse"></i> Geser ke samping
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg> Geser ke samping
           </span>
           <a href="tools/" class="inline-flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 hover:gap-3 transition-all ml-auto md:ml-0">
             <span>Lihat Semua Tools &rarr;</span>
@@ -295,116 +327,110 @@
         </div>
       </div>
 
-      <!-- Horizontal Snap Carousel on Mobile, Grid on Desktop -->
+      <!-- Horizontal Snap Carousel on Mobile, Grid on Desktop (Matching Jasa Structure) -->
       <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible">
         
-        <a href="tools/qr-generator/" class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card group block flex flex-col justify-between">
+        <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-blue-600">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-              <i data-lucide="qr-code" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-blue-600 transition">
-              Custom QR Code Generator
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Custom QR Code Generator</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
               Buat QR code untuk URL, teks, kontak, atau WiFi dengan kustomisasi warna &amp; download format PNG jernih.
             </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span>Buka Generator</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="tools/qr-generator/" class="w-full py-2.5 block text-center rounded-xl bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-600 hover:text-white text-blue-600 dark:text-blue-400 text-xs font-bold transition">
+              Buka Generator &rarr;
+            </a>
           </div>
-        </a>
+        </div>
 
-        <a href="tools/wa-link-generator/" class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card group block flex flex-col justify-between">
+        <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-emerald-600">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-              <i data-lucide="message-circle" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-emerald-600 transition">
-              Direct WhatsApp Link Maker
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Direct WhatsApp Link Maker</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
               Generate tautan chat WhatsApp instan dengan template pesan terformat tanpa perlu menyimpan nomor ke kontak.
             </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-            <span>Buat Link WA</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="tools/wa-link-generator/" class="w-full py-2.5 block text-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-bold transition">
+              Buat Link WA &rarr;
+            </a>
           </div>
-        </a>
+        </div>
 
-        <a href="tools/image-compressor/" class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card group block flex flex-col justify-between">
+        <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-indigo-600">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-              <i data-lucide="image-down" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 text-purple-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-indigo-600 transition">
-              Image Compressor &amp; WebP
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Image Compressor &amp; WebP</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
               Perkecil ukuran foto/gambar hingga 85% langsung di memori browser tanpa upload ke server luar.
             </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
-            <span>Kompres Gambar</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="tools/image-compressor/" class="w-full py-2.5 block text-center rounded-xl bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-600 hover:text-white text-indigo-600 dark:text-indigo-400 text-xs font-bold transition">
+              Kompres Gambar &rarr;
+            </a>
           </div>
-        </a>
+        </div>
 
-        <a href="tools/password-hash-generator/" class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card group block flex flex-col justify-between">
+        <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-purple-600">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-              <i data-lucide="key" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5m0 0 2 2m-2-2 2-2"></path></svg>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-purple-600 transition">
-              Password &amp; Crypto Hash
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Password &amp; Crypto Hash</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
               Hasilkan kata sandi acak CSPRNG kuat dan enkripsi hash MD5, SHA-1, SHA-256, hingga SHA-512 secara akurat.
             </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400">
-            <span>Generate Password</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="tools/password-hash-generator/" class="w-full py-2.5 block text-center rounded-xl bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-600 hover:text-white text-purple-600 dark:text-purple-400 text-xs font-bold transition">
+              Generate Password &rarr;
+            </a>
           </div>
-        </a>
+        </div>
 
-        <a href="tools/text-case-converter/" class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card group block flex flex-col justify-between">
+        <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-amber-600">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-              <i data-lucide="type" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-amber-600 transition">
-              Text &amp; Case Converter
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Text &amp; Case Converter</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
               Hitung jumlah kata, karakter, waktu baca, dan ubah huruf kapital (UPPERCASE, Title Case, Slug URL) instan.
             </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
-            <span>Buka Text Tools</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="tools/text-case-converter/" class="w-full py-2.5 block text-center rounded-xl bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-600 hover:text-white text-amber-600 dark:text-amber-400 text-xs font-bold transition">
+              Buka Text Tools &rarr;
+            </a>
           </div>
-        </a>
+        </div>
 
-        <a href="tools/invoice-maker/" class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card group block flex flex-col justify-between">
+        <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-rose-600">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-              <i data-lucide="receipt" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
             </div>
-            <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-rose-600 transition">
-              Invoice &amp; Kwitansi Instan
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Invoice &amp; Kwitansi Instan</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
               Buat faktur penagihan atau tanda terima profesional dengan kalkulasi otomatis dan langsung cetak ke PDF.
             </p>
           </div>
-          <div class="mt-6 pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400">
-            <span>Buat Invoice</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <a href="tools/invoice-maker/" class="w-full py-2.5 block text-center rounded-xl bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-600 hover:text-white text-rose-600 dark:text-rose-400 text-xs font-bold transition">
+              Buat Invoice &rarr;
+            </a>
           </div>
-        </a>
+        </div>
 
       </div>
 
@@ -418,7 +444,7 @@
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12">
         <div>
           <div class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2">
-            <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
             <span>Layanan Profesional</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
@@ -430,7 +456,7 @@
         </div>
         <div class="mt-4 md:mt-0 flex items-center justify-between">
           <span class="md:hidden text-[11px] text-purple-600 dark:text-purple-400 font-semibold flex items-center gap-1">
-            <i data-lucide="chevrons-right" class="w-3.5 h-3.5 animate-pulse"></i> Geser layanan
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg> Geser layanan
           </span>
           <a href="jasa/" class="inline-flex items-center gap-2 text-xs font-bold text-purple-600 dark:text-purple-400 hover:gap-3 transition-all ml-auto md:ml-0">
             <span>Buka Semua Jasa &rarr;</span>
@@ -444,7 +470,7 @@
         <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-blue-600">
           <div>
             <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
-              <i data-lucide="monitor" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Optimasi Laptop &amp; PC Remote</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -466,7 +492,7 @@
         <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-purple-600">
           <div>
             <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3">
-              <i data-lucide="box" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 text-purple-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">3D Modeling Bangunan &amp; Render</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -488,7 +514,7 @@
         <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-emerald-600">
           <div>
             <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
-              <i data-lucide="pencil-ruler" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5 4 4"></path><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"></path><path d="m8 6 2-2"></path><path d="m2 18 3-3"></path><path d="m11 9 3-3"></path><path d="m16 4 2 2"></path><path d="m18 10 4 4"></path><path d="m14 14 3 3"></path></svg>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Gambar 2D Bangunan PBG</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -510,7 +536,7 @@
         <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-cyan-600">
           <div>
             <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-3">
-              <i data-lucide="map" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Peta SHP / ZIP (OSS &amp; AMDALNET)</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -532,7 +558,7 @@
         <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-amber-500">
           <div>
             <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
-              <i data-lucide="award" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Pembuatan NIB Usaha Mikro OSS</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -554,7 +580,7 @@
         <div class="mobile-slide-card glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-indigo-600">
           <div>
             <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
-              <i data-lucide="globe" class="w-5 h-5"></i>
+              <svg class="w-5 h-5 text-rose-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Website UMKM &amp; Landing Page</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -585,7 +611,7 @@
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10">
         <div>
           <div class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-2">
-            <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
             <span>PaySheet QRIS Digital Store</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
@@ -597,7 +623,7 @@
         </div>
         <div class="mt-4 md:mt-0 flex items-center justify-between">
           <span class="md:hidden text-[11px] text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1">
-            <i data-lucide="chevrons-right" class="w-3.5 h-3.5 animate-pulse"></i> Geser produk
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg> Geser produk
           </span>
           <a href="produk/" class="inline-flex items-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:gap-3 transition-all ml-auto md:ml-0">
             <span>Buka Katalog Store &rarr;</span>
@@ -612,7 +638,7 @@
           <div class="p-6">
             <div class="flex items-center justify-between mb-3">
               <span class="text-[10px] font-extrabold bg-emerald-500/10 text-emerald-600 px-2.5 py-1 rounded-full uppercase">Paket DED Rumah</span>
-              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.9</span>
+              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-amber-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 4.9</span>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Gambar 2D Rumah Lengkap + 3D Fasad</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -630,7 +656,7 @@
             <div class="grid grid-cols-2 gap-2">
               <a href="produk/rumah-2d3d/" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
               <button onclick="openProductCheckoutModal('PROD-RUMAH-2D3D', 'Gambar 2D Rumah Lengkap + 3D Fasad Siap Bangun', 75000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1">
-                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <svg class="w-5 h-5 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 <span>Beli QRIS</span>
               </button>
             </div>
@@ -641,7 +667,7 @@
           <div class="p-6">
             <div class="flex items-center justify-between mb-3">
               <span class="text-[10px] font-extrabold bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-full uppercase">Template Website</span>
-              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 5.0</span>
+              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-amber-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 5.0</span>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Template Website UMKM &amp; Landing Page</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -659,7 +685,7 @@
             <div class="grid grid-cols-2 gap-2">
               <a href="produk/template-web/" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
               <button onclick="openProductCheckoutModal('PROD-TEMPLATE-WEB', 'Template Website UMKM & Landing Page Modern', 49000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1">
-                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <svg class="w-5 h-5 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 <span>Beli QRIS</span>
               </button>
             </div>
@@ -670,7 +696,7 @@
           <div class="p-6">
             <div class="flex items-center justify-between mb-3">
               <span class="text-[10px] font-extrabold bg-purple-500/10 text-purple-600 px-2.5 py-1 rounded-full uppercase">Aplikasi Kasir POS</span>
-              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-500"></i> 4.9</span>
+              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><svg class="w-3.5 h-3.5 fill-amber-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 4.9</span>
             </div>
             <h3 class="font-bold text-base text-slate-900 dark:text-white">Aplikasi Kasir POS &amp; Stok Google Sheet</h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -688,7 +714,7 @@
             <div class="grid grid-cols-2 gap-2">
               <a href="produk/pos-sheet/" class="py-2 text-center rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Detail</a>
               <button onclick="openProductCheckoutModal('PROD-POS-SHEET', 'Aplikasi Kasir POS & Stok Google Sheet', 39000)" class="py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-1">
-                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <svg class="w-5 h-5 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 <span>Beli QRIS</span>
               </button>
             </div>
@@ -710,7 +736,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center font-bold">
-                <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08v0c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"></path></svg>
               </div>
               <div>
                 <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Support Perkembangan</h3>
@@ -778,8 +804,8 @@
               <label for="donorAnonHome" class="text-[11px] text-slate-500 cursor-pointer">Tampilkan sebagai Hamba Allah</label>
             </div>
             <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
-              <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i>
-              <span>Konfirmasi &amp; Masuk Wall of Kontributor</span>
+              <svg class="w-4 h-4 text-rose-500 fill-rose-500 inline-block flex-shrink-0" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              <span>Konfirmasi &amp; Masuk Wall of Contributor</span>
             </button>
           </form>
 
@@ -789,8 +815,8 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <div>
               <div class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">
-                <i data-lucide="award" class="w-4 h-4"></i>
-                <span>Wall of Kontributor</span>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                <span>Wall of Contributor</span>
               </div>
               <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">
                 Daftar Kontributor Pengembangan Website
@@ -801,14 +827,14 @@
             </a>
           </div>
 
-          <div id="supporter-wall-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1">
+          <div id="supporter-wall-list" class="flex overflow-x-auto snap-x snap-mandatory gap-3.5 pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 sm:overflow-y-auto sm:max-h-[500px] sm:pb-0" data-drag-scroll="true">
             <!-- Rendered by gas-client.js -->
           </div>
 
           <!-- TRANSPARENCY CARD (CONCISE & PROPORTIONAL) -->
           <div class="p-4 sm:p-5 rounded-3xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/60 text-xs">
             <div class="flex items-center gap-2 font-bold text-blue-700 dark:text-blue-300 mb-2">
-              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <svg class="w-4 h-4 text-emerald-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
               <span>Transparansi Penggunaan Kontribusi Komunitas:</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-slate-600 dark:text-slate-400 mt-2">
@@ -899,7 +925,7 @@
           <p class="text-xs text-slate-400 mb-3 leading-relaxed">Dukung optimasi sistem &amp; pengembangan tool baru lewat kontribusi QRIS:</p>
           <a href="./donasi/" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-xl text-xs font-bold transition shadow-lg">
             <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i>
-            <span>Wall of Kontributor</span>
+            <span>Wall of Contributor</span>
           </a>
         </div>
 
@@ -1014,60 +1040,43 @@
       <div id="search-results-container" class="overflow-y-auto flex-1 pr-1 space-y-2"></div>
     </div>
   </div>
-  <!-- FLYING ROBOT DRONE (COMPACT, PURE FLOATING AT RIGHT-CENTER-LOWER) -->
-  <div id="peeking-robot-dock" class="fixed right-0 bottom-[26%] sm:bottom-[28%] z-50 select-none transition-all duration-500 ease-out translate-x-[calc(100%-38px)] hover:translate-x-[calc(100%-54px)] sm:translate-x-[calc(100%-44px)] flex items-end pointer-events-auto" data-state="peek">
-    
-    <!-- Pure Flying Robot Trigger (Tanpa Box / Border / Container Gelap / Text) -->
-    <button onclick="toggleRobotAssistant()" id="robot-peek-btn" aria-label="Konsultasi" class="relative group bg-transparent border-0 p-0 m-0 cursor-pointer focus:outline-none select-none transition-transform duration-300 hover:scale-110 active:scale-95 filter drop-shadow-[0_8px_16px_rgba(0,210,255,0.45)]">
-      
-      <!-- Compact 3D Flying Robot Head -->
-      <div class="relative w-12 h-10 sm:w-14 sm:h-12 flex items-center justify-center flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%" class="w-full h-full drop-shadow-xl select-none" fill="none" style="max-height: 68px; max-width: 82px;">
+  <!-- BORDERLESS CLEAN FLOATING ROBOT ASSISTANT -->
+  <div id="peeking-robot-dock" class="fixed right-3 sm:right-6 bottom-20 sm:bottom-24 z-50 select-none pointer-events-auto" data-state="peek">
+    <button onclick="openConsultationModal()" id="robot-peek-btn" aria-label="Konsultasi Robot Asisten" title="Klik untuk konsultasi cepat" class="p-0 bg-transparent border-none outline-none focus:outline-none cursor-pointer flex items-center justify-center group transition-transform hover:scale-110 active:scale-95">
+      <div class="relative w-14 h-12 sm:w-16 sm:h-14 flex items-center justify-center filter drop-shadow-[0_8px_18px_rgba(0,210,255,0.55)]">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%" class="w-full h-full drop-shadow-xl select-none" fill="none" style="max-height: 52px; max-width: 62px;">
   <defs>
-    <!-- White Glossy Outer Helmet Shell Gradient -->
     <radialGradient id="helmetShellGrad" cx="50%" cy="20%" r="80%">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="45%" stop-color="#f1f5f9"/>
       <stop offset="85%" stop-color="#cbd5e1"/>
       <stop offset="100%" stop-color="#94a3b8"/>
     </radialGradient>
-
-    <!-- Ear Thruster Pods Gradient -->
     <linearGradient id="thrusterPodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="60%" stop-color="#e2e8f0"/>
       <stop offset="100%" stop-color="#94a3b8"/>
     </linearGradient>
-
-    <!-- Cyan Bezel Ring Gradient -->
     <linearGradient id="cyanBezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8"/>
       <stop offset="50%" stop-color="#00d2ff"/>
       <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
-
-    <!-- Dark Visor Screen Gradient -->
     <radialGradient id="screenGlassGrad" cx="50%" cy="30%" r="70%">
       <stop offset="0%" stop-color="#1e293b"/>
       <stop offset="50%" stop-color="#0f172a"/>
       <stop offset="90%" stop-color="#020617"/>
       <stop offset="100%" stop-color="#000000"/>
     </radialGradient>
-
-    <!-- Cyan Digital Striped Glow Gradient -->
     <linearGradient id="cyanStripeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#67e8f9"/>
       <stop offset="50%" stop-color="#00f0ff"/>
       <stop offset="100%" stop-color="#06b6d4"/>
     </linearGradient>
-
-    <!-- High-Tech CRT Scanlines Pattern for Eyes and Smile -->
     <pattern id="crtScanlines" width="100" height="4" patternUnits="userSpaceOnUse">
       <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.45"/>
       <line x1="0" y1="2" x2="100" y2="2" stroke="#00f0ff" stroke-width="2" opacity="0.95"/>
     </pattern>
-
-    <!-- Neon Glow Filter -->
     <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="3.5" result="blur1"/>
       <feGaussianBlur stdDeviation="7" result="blur2"/>
@@ -1080,87 +1089,55 @@
   </defs>
 
   <g class="robot-flight-idle">
-    
-    <!-- 1. Bottom Ion Jet Thruster Flight Glow -->
     <ellipse cx="120" cy="180" rx="34" ry="9" fill="url(#cyanStripeGlow)" opacity="0.6" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     <ellipse cx="120" cy="180" rx="16" ry="4" fill="#ffffff" opacity="0.9"/>
-
-    <!-- 2. Left Ear Thruster Pod (Side Drone Turbine) -->
     <g transform="translate(8, 62)">
       <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
       <rect x="18" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
       <ellipse cx="10" cy="33" rx="5" ry="14" fill="#0f172a"/>
       <ellipse cx="10" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     </g>
-
-    <!-- 3. Right Ear Thruster Pod (Side Drone Turbine) -->
     <g transform="translate(198, 62)">
       <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
       <rect x="6" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
       <ellipse cx="24" cy="33" rx="5" ry="14" fill="#0f172a"/>
       <ellipse cx="24" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     </g>
-
-    <!-- 4. Main White Glossy Head Helmet Shell -->
     <rect x="36" y="18" width="168" height="154" rx="66" fill="url(#helmetShellGrad)" stroke="#cbd5e1" stroke-width="2"/>
-    
-    <!-- Helmet Top Antennas / Ridge Bump Details -->
     <path d="M84 18 C84 12, 94 12, 94 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
     <path d="M146 18 C146 12, 156 12, 156 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
-
-    <!-- Helmet Top Gloss Shine Highlight -->
     <ellipse cx="120" cy="32" rx="48" ry="8" fill="#ffffff" opacity="0.85"/>
-
-    <!-- 5. Cyan Outer Rubberized Bezel Frame Ring -->
     <rect x="48" y="32" width="144" height="126" rx="52" fill="none" stroke="url(#cyanBezelGrad)" stroke-width="8" filter="drop-shadow(0 2px 6px rgba(0,210,255,0.4))"/>
-
-    <!-- 6. Dark Curved CRT Visor Screen -->
     <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#screenGlassGrad)"/>
     <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#crtScanlines)" opacity="0.35"/>
-
-    <!-- 7. Screen Curved Glass Glare Highlight (Top Left) -->
     <path d="M58 56 Q120 38 182 56 Q160 42 120 42 Q78 42 58 56 Z" fill="#ffffff" opacity="0.3"/>
     <ellipse cx="76" cy="56" rx="14" ry="5" fill="#ffffff" opacity="0.45" transform="rotate(-15 76 56)"/>
-
-    <!-- 8. Interactive Cyan Striped LED Eyes (Striped Digital Pill Capsule Eyes) -->
     <g class="robot-led-eyes" filter="url(#neonGlow)">
-      
-      <!-- Left Pill Capsule Eye -->
       <g>
         <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
         <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
-        <!-- Inner Core Highlight -->
         <ellipse cx="93" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
       </g>
-
-      <!-- Right Pill Capsule Eye -->
       <g>
         <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
         <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
-        <!-- Inner Core Highlight -->
         <ellipse cx="147" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
       </g>
-
     </g>
-
-    <!-- 9. Cheerful Glowing Cyan Striped LED Smile -->
     <g filter="url(#neonGlow)">
       <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#cyanStripeGlow)"/>
       <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#crtScanlines)"/>
       <path d="M97 126 Q120 142 143 126" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
     </g>
-
   </g>
 </svg>
-        <!-- Navigation Beacon Blinker -->
-        <span class="absolute top-0.5 left-1 w-2 h-2 rounded-full bg-cyan-400 border border-white shadow-sm animate-ping pointer-events-none"></span>
-        <span class="absolute top-0.5 left-1 w-2 h-2 rounded-full bg-cyan-400 border border-white shadow-sm pointer-events-none"></span>
+        <span class="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping pointer-events-none"></span>
+        <span class="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white pointer-events-none"></span>
       </div>
     </button>
   </div>
-  <!-- MODAL: KONSULTASI & PEMESANAN LAYANAN (DENGAN ROBOT MENDARAT DI ATAS DROPDOWN) -->
+  <!-- MODAL: KONSULTASI & PEMESANAN LAYANAN -->
   <div id="modal-consultation-service" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4 pt-8 sm:pt-12">
-    
     <div class="relative modal-content glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto space-y-4">
       
       <!-- Header Modal -->
@@ -1180,55 +1157,41 @@
         <!-- DROPDOWN CONTAINER DENGAN ROBOT MENDARAT DI ATASNYA -->
         <div class="relative pt-6">
           
-          <!-- ROBOT HEAD DRONE MENDARAT DI ATAS DROPDOWN (COMPACT, PURE ANIMATION) -->
-          <div id="modal-robot-sitting" class="absolute -top-5 sm:-top-6 right-2 sm:right-4 w-16 h-12 sm:w-18 sm:h-14 z-20 pointer-events-none transition-all duration-300">
-            <div id="robot-sitting-avatar" class="w-full h-full transform transition-all duration-300 filter drop-shadow-[0_6px_14px_rgba(0,210,255,0.4)]">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%" class="w-full h-full drop-shadow-xl select-none" fill="none" style="max-height: 68px; max-width: 82px;">
+          <div id="modal-robot-sitting" class="absolute -top-5 sm:-top-6 right-2 sm:right-4 w-14 h-11 sm:w-16 sm:h-12 z-20 pointer-events-none transition-all duration-300">
+            <div id="robot-sitting-avatar" class="w-full h-full transform transition-all duration-300 filter drop-shadow-[0_6px_14px_rgba(0,210,255,0.45)]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%" class="w-full h-full drop-shadow-xl select-none" fill="none" style="max-height: 52px; max-width: 62px;">
   <defs>
-    <!-- White Glossy Outer Helmet Shell Gradient -->
     <radialGradient id="helmetShellGrad" cx="50%" cy="20%" r="80%">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="45%" stop-color="#f1f5f9"/>
       <stop offset="85%" stop-color="#cbd5e1"/>
       <stop offset="100%" stop-color="#94a3b8"/>
     </radialGradient>
-
-    <!-- Ear Thruster Pods Gradient -->
     <linearGradient id="thrusterPodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
       <stop offset="60%" stop-color="#e2e8f0"/>
       <stop offset="100%" stop-color="#94a3b8"/>
     </linearGradient>
-
-    <!-- Cyan Bezel Ring Gradient -->
     <linearGradient id="cyanBezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8"/>
       <stop offset="50%" stop-color="#00d2ff"/>
       <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
-
-    <!-- Dark Visor Screen Gradient -->
     <radialGradient id="screenGlassGrad" cx="50%" cy="30%" r="70%">
       <stop offset="0%" stop-color="#1e293b"/>
       <stop offset="50%" stop-color="#0f172a"/>
       <stop offset="90%" stop-color="#020617"/>
       <stop offset="100%" stop-color="#000000"/>
     </radialGradient>
-
-    <!-- Cyan Digital Striped Glow Gradient -->
     <linearGradient id="cyanStripeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#67e8f9"/>
       <stop offset="50%" stop-color="#00f0ff"/>
       <stop offset="100%" stop-color="#06b6d4"/>
     </linearGradient>
-
-    <!-- High-Tech CRT Scanlines Pattern for Eyes and Smile -->
     <pattern id="crtScanlines" width="100" height="4" patternUnits="userSpaceOnUse">
       <line x1="0" y1="0" x2="100" y2="0" stroke="#000000" stroke-width="1.2" opacity="0.45"/>
       <line x1="0" y1="2" x2="100" y2="2" stroke="#00f0ff" stroke-width="2" opacity="0.95"/>
     </pattern>
-
-    <!-- Neon Glow Filter -->
     <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="3.5" result="blur1"/>
       <feGaussianBlur stdDeviation="7" result="blur2"/>
@@ -1241,76 +1204,46 @@
   </defs>
 
   <g class="robot-flight-idle">
-    
-    <!-- 1. Bottom Ion Jet Thruster Flight Glow -->
     <ellipse cx="120" cy="180" rx="34" ry="9" fill="url(#cyanStripeGlow)" opacity="0.6" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     <ellipse cx="120" cy="180" rx="16" ry="4" fill="#ffffff" opacity="0.9"/>
-
-    <!-- 2. Left Ear Thruster Pod (Side Drone Turbine) -->
     <g transform="translate(8, 62)">
       <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
       <rect x="18" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
       <ellipse cx="10" cy="33" rx="5" ry="14" fill="#0f172a"/>
       <ellipse cx="10" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     </g>
-
-    <!-- 3. Right Ear Thruster Pod (Side Drone Turbine) -->
     <g transform="translate(198, 62)">
       <rect x="0" y="0" width="34" height="66" rx="17" fill="url(#thrusterPodGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
       <rect x="6" y="10" width="10" height="46" rx="5" fill="url(#cyanBezelGrad)"/>
       <ellipse cx="24" cy="33" rx="5" ry="14" fill="#0f172a"/>
       <ellipse cx="24" cy="33" rx="2.5" ry="8" fill="#00f0ff" filter="url(#neonGlow)" class="robot-thruster-glow"/>
     </g>
-
-    <!-- 4. Main White Glossy Head Helmet Shell -->
     <rect x="36" y="18" width="168" height="154" rx="66" fill="url(#helmetShellGrad)" stroke="#cbd5e1" stroke-width="2"/>
-    
-    <!-- Helmet Top Antennas / Ridge Bump Details -->
     <path d="M84 18 C84 12, 94 12, 94 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
     <path d="M146 18 C146 12, 156 12, 156 18 Z" fill="#94a3b8" stroke="#cbd5e1"/>
-
-    <!-- Helmet Top Gloss Shine Highlight -->
     <ellipse cx="120" cy="32" rx="48" ry="8" fill="#ffffff" opacity="0.85"/>
-
-    <!-- 5. Cyan Outer Rubberized Bezel Frame Ring -->
     <rect x="48" y="32" width="144" height="126" rx="52" fill="none" stroke="url(#cyanBezelGrad)" stroke-width="8" filter="drop-shadow(0 2px 6px rgba(0,210,255,0.4))"/>
-
-    <!-- 6. Dark Curved CRT Visor Screen -->
     <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#screenGlassGrad)"/>
     <rect x="52" y="36" width="136" height="118" rx="46" fill="url(#crtScanlines)" opacity="0.35"/>
-
-    <!-- 7. Screen Curved Glass Glare Highlight (Top Left) -->
     <path d="M58 56 Q120 38 182 56 Q160 42 120 42 Q78 42 58 56 Z" fill="#ffffff" opacity="0.3"/>
     <ellipse cx="76" cy="56" rx="14" ry="5" fill="#ffffff" opacity="0.45" transform="rotate(-15 76 56)"/>
-
-    <!-- 8. Interactive Cyan Striped LED Eyes (Striped Digital Pill Capsule Eyes) -->
     <g class="robot-led-eyes" filter="url(#neonGlow)">
-      
-      <!-- Left Pill Capsule Eye -->
       <g>
         <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
         <rect x="80" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
-        <!-- Inner Core Highlight -->
         <ellipse cx="93" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
       </g>
-
-      <!-- Right Pill Capsule Eye -->
       <g>
         <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#cyanStripeGlow)"/>
         <rect x="134" y="62" width="26" height="50" rx="13" fill="url(#crtScanlines)"/>
-        <!-- Inner Core Highlight -->
         <ellipse cx="147" cy="74" rx="4" ry="3" fill="#ffffff" opacity="0.9"/>
       </g>
-
     </g>
-
-    <!-- 9. Cheerful Glowing Cyan Striped LED Smile -->
     <g filter="url(#neonGlow)">
       <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#cyanStripeGlow)"/>
       <path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#crtScanlines)"/>
       <path d="M97 126 Q120 142 143 126" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
     </g>
-
   </g>
 </svg>
             </div>
@@ -1320,24 +1253,24 @@
             Pilih Layanan yang Diinginkan:
           </label>
           
-          <select id="consult-service-select" name="serviceType" onfocus="handleDropdownFocus()" onblur="handleDropdownBlur()" onchange="handleDropdownChange(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none transition-all cursor-pointer">
+          <select id="consult-service-select" name="serviceType" onfocus="handleDropdownFocus()" onblur="handleDropdownBlur()" onchange="handleDropdownChange(this)" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-all cursor-pointer">
             <optgroup label="Layanan Jasa &amp; Arsitektur">
-              <option value="Jasa Optimasi Laptop &amp; PC Remote">💻 Jasa Optimasi Laptop &amp; PC Remote</option>
+              <option value="Jasa Optimasi Laptop &amp; PC Remote">💻 Optimasi Laptop &amp; PC Remote</option>
               <option value="3D Modeling Bangunan &amp; Rumah">🏢 3D Modeling Bangunan &amp; Rumah</option>
-              <option value="Gambar Kerja &amp; PBG Bangunan">📐 Gambar Kerja &amp; PBG Bangunan</option>
-              <option value="Peta Format SHP &amp; Validasi OSS">🗺️ Peta Format SHP &amp; Validasi OSS</option>
-              <option value="Penerbitan NIB Usaha OSS RBA">📜 Penerbitan NIB Usaha OSS RBA</option>
-              <option value="Pembuatan Web Serverless &amp; Profil UMKM">🌐 Pembuatan Web Serverless &amp; Profil UMKM</option>
+              <option value="Gambar Kerja &amp; PBG Bangunan">📐 Gambar Kerja PBG SIMBG</option>
+              <option value="Peta Format SHP &amp; Validasi OSS">🗺️ Peta SHP Validasi OSS</option>
+              <option value="Penerbitan NIB Usaha OSS RBA">📜 Penerbitan NIB Usaha OSS</option>
+              <option value="Pembuatan Web Serverless &amp; Profil UMKM">🌐 Pembuatan Web UMKM</option>
             </optgroup>
             <optgroup label="Produk Digital &amp; Kasir">
-              <option value="Aplikasi Kasir POS Google Sheets">📦 Aplikasi Kasir POS Google Sheets</option>
-              <option value="Paket Desain Rumah 2D/3D Lengkap">🏠 Paket Desain Rumah 2D/3D Lengkap</option>
-              <option value="Template Website Modern Siap Pakai">💻 Template Website Modern Siap Pakai</option>
-              <option value="E-Book Google Apps Script Master">📘 E-Book Google Apps Script Master</option>
-              <option value="PaySheet QRIS Payment Engine">⚡ PaySheet QRIS Payment Engine</option>
+              <option value="Aplikasi Kasir POS Google Sheets">📦 Kasir POS Google Sheets</option>
+              <option value="Paket Desain Rumah 2D/3D Lengkap">🏠 Paket Gambar Rumah 2D/3D</option>
+              <option value="Template Website Modern Siap Pakai">💻 Template Web Siap Pakai</option>
+              <option value="E-Book Google Apps Script Master">📘 E-Book Google Apps Script</option>
+              <option value="PaySheet QRIS Payment Engine">⚡ PaySheet QRIS Engine</option>
             </optgroup>
             <optgroup label="Pertanyaan Lain">
-              <option value="Konsultasi Kustom / Tanya Fitur Gratis">🛠️ Konsultasi Kustom / Tanya Fitur Gratis</option>
+              <option value="Konsultasi Kustom / Tanya Fitur Gratis">🛠️ Konsultasi Kustom / Lainnya</option>
             </optgroup>
           </select>
         </div>

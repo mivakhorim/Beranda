@@ -22,7 +22,7 @@
       }
     }
   </script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <link rel="stylesheet" href="../assets/css/style.css" />
   <style>
     /* Custom Scrollbar & SaaS UI Elements */
@@ -48,7 +48,7 @@
   <div id="admin-auth-overlay" class="fixed inset-0 z-50 bg-dark-950/95 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="glass-admin w-full max-w-md rounded-3xl p-8 shadow-2xl border border-slate-800/80 text-center space-y-6">
       <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center mx-auto text-2xl font-bold shadow-lg">
-        <i data-lucide="shield-check" class="w-8 h-8"></i>
+        <svg class="w-4 h-4 text-emerald-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
       </div>
       <div>
         <h2 class="text-2xl font-black text-white tracking-tight">DUTAMIK Enterprise Hub</h2>
@@ -56,7 +56,7 @@
       </div>
       <form onsubmit="verifyAdminLogin(event)" class="space-y-4">
         <div class="relative">
-          <i data-lucide="key" class="w-4 h-4 absolute left-4 top-3.5 text-slate-500"></i>
+          <svg class="w-4 h-4 absolute left-4 top-3.5 text-slate-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5m0 0 2 2m-2-2 2-2"></path></svg>
           <input type="password" id="admin-pin-input" placeholder="Masukkan Kunci Akses..." class="w-full pl-11 pr-4 py-3 rounded-2xl bg-dark-900 border border-slate-700/80 text-center text-sm font-mono font-bold tracking-widest text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
         </div>
         <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs rounded-2xl shadow-xl transition transform active:scale-98">
@@ -90,15 +90,15 @@
         <!-- Live Clock & Quick Actions -->
         <div class="flex items-center gap-2 sm:gap-3">
           <div class="hidden md:flex items-center gap-2 text-xs text-slate-400 font-mono">
-            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500"></i>
+            <svg class="w-3.5 h-3.5 text-slate-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             <span id="admin-live-clock">--:--:--</span>
           </div>
           <button onclick="openModal('modal-share-site')" aria-label="Bagikan" class="text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-xl bg-dark-800 hover:bg-dark-700 transition flex items-center gap-1.5 border border-slate-700 cursor-pointer">
-            <i data-lucide="share-2" class="w-3.5 h-3.5 text-blue-400"></i>
+            <svg class="w-4 h-4 text-slate-600 dark:text-slate-300 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
             <span class="hidden sm:inline">Bagikan</span>
           </button>
           <a href="../katalog/" target="_blank" class="text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-xl bg-dark-800 hover:bg-dark-700 transition flex items-center gap-1.5 border border-slate-700">
-            <i data-lucide="external-link" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <svg class="w-3.5 h-3.5 text-emerald-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             <span class="hidden sm:inline">Katalog Live</span>
           </a>
           <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 text-xs font-bold transition">
@@ -119,18 +119,18 @@
       <div class="glass-admin p-4 sm:p-5 rounded-3xl border border-slate-800/80 flex flex-col justify-between">
         <div class="flex justify-between items-center text-slate-400 text-xs font-semibold">
           <span>Kunjungan (Views)</span>
-          <i data-lucide="eye" class="w-4 h-4 text-blue-400"></i>
+          <svg class="w-4 h-4 text-blue-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
         </div>
         <div id="stat-analytics-views" class="text-2xl sm:text-3xl font-black text-white mt-2">0</div>
         <div class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1 mt-1">
-          <i data-lucide="trending-up" class="w-3 h-3"></i> Real-time Client Tracker
+          <svg class="w-3 h-3 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Real-time Client Tracker
         </div>
       </div>
 
       <div class="glass-admin p-4 sm:p-5 rounded-3xl border border-slate-800/80 flex flex-col justify-between">
         <div class="flex justify-between items-center text-slate-400 text-xs font-semibold">
           <span>Penggunaan Tools</span>
-          <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
+          <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="15" x2="23" y2="15"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="15" x2="4" y2="15"></line></svg>
         </div>
         <div id="stat-analytics-tools" class="text-2xl sm:text-3xl font-black text-white mt-2">0</div>
         <div class="text-[10px] text-slate-400 mt-1">Eksekusi Fitur Gratis</div>
@@ -139,7 +139,7 @@
       <div class="glass-admin p-4 sm:p-5 rounded-3xl border border-slate-800/80 flex flex-col justify-between">
         <div class="flex justify-between items-center text-slate-400 text-xs font-semibold">
           <span>Pesanan Jasa</span>
-          <i data-lucide="inbox" class="w-4 h-4 text-purple-400"></i>
+          <svg class="w-4 h-4 text-purple-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
         </div>
         <div id="stat-count-services" class="text-2xl sm:text-3xl font-black text-white mt-2">0</div>
         <div class="text-[10px] text-slate-400 mt-1">Form Google Sheets</div>
@@ -148,7 +148,7 @@
       <div class="glass-admin p-4 sm:p-5 rounded-3xl border border-slate-800/80 flex flex-col justify-between">
         <div class="flex justify-between items-center text-slate-400 text-xs font-semibold">
           <span>PaySheet QRIS</span>
-          <i data-lucide="qr-code" class="w-4 h-4 text-rose-400"></i>
+          <svg class="w-5 h-5 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         </div>
         <div id="stat-count-products" class="text-2xl sm:text-3xl font-black text-white mt-2">0</div>
         <div class="text-[10px] text-slate-400 mt-1">Transaksi Produk Digital</div>
@@ -157,7 +157,7 @@
       <div class="col-span-2 lg:col-span-1 glass-admin p-4 sm:p-5 rounded-3xl border border-slate-800/80 flex flex-col justify-between">
         <div class="flex justify-between items-center text-slate-400 text-xs font-semibold">
           <span>Git Sync Status</span>
-          <i data-lucide="git-branch" class="w-4 h-4 text-amber-400"></i>
+          <svg class="w-4 h-4 text-amber-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
         </div>
         <div id="stat-git-sync-status" class="text-2xl sm:text-3xl font-black text-slate-400 mt-2">Siap</div>
         <div class="text-[10px] text-slate-400 mt-1">GitHub REST API v3</div>
@@ -169,42 +169,42 @@
     <div class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-dark-900 border border-slate-800">
       
       <button onclick="switchAdminTab('tab-analytics')" class="admin-nav-btn active-nav-tab px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
-        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+        <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
         <span>1. Pelacakan Aktivitas &amp; Analytics</span>
       </button>
 
       <button onclick="switchAdminTab('tab-github-products')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-dark-800 transition flex items-center gap-2">
-        <i data-lucide="package" class="w-4 h-4"></i>
+        <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
         <span>2. Produk Digital &amp; Git Sync</span>
       </button>
 
       <button onclick="switchAdminTab('tab-github-services')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-dark-800 transition flex items-center gap-2">
-        <i data-lucide="briefcase" class="w-4 h-4"></i>
+        <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
         <span>3. Layanan Jasa &amp; Tarif</span>
       </button>
 
       <button onclick="switchAdminTab('tab-adsense-affiliate')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-dark-800 transition flex items-center gap-2">
-        <i data-lucide="megaphone" class="w-4 h-4"></i>
+        <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
         <span>4. Manajemen AdSense &amp; Afiliasi</span>
       </button>
 
       <button onclick="switchAdminTab('tab-orders-log')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-dark-800 transition flex items-center gap-2">
-        <i data-lucide="receipt" class="w-4 h-4"></i>
+        <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
         <span>5. Log Pesanan &amp; PaySheet</span>
       </button>
 
       <button onclick="switchAdminTab('tab-gas-config')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-dark-800 transition flex items-center gap-2">
-        <i data-lucide="sheet" class="w-4 h-4"></i>
+        <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="3" x2="21" y1="15" y2="15"></line><line x1="9" x2="9" y1="9" y2="21"></line><line x1="15" x2="15" y1="9" y2="21"></line></svg>
         <span>6. Pengaturan Google Sheets &amp; Script</span>
       </button>
 
       <button onclick="switchAdminTab('tab-settings-sec')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-dark-800 transition flex items-center gap-2">
-        <i data-lucide="key-round" class="w-4 h-4"></i>
+        <svg class="w-5 h-5 text-cyan-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5m0 0l2 2m-2-2l2-2"></path></svg>
         <span>7. Kunci Akses &amp; GitHub Token</span>
       </button>
 
       <button onclick="switchAdminTab('tab-post-generator')" class="admin-nav-btn px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-400 hover:bg-dark-800 transition flex items-center gap-2 border border-emerald-500/30">
-        <i data-lucide="layout-template" class="w-4 h-4 text-emerald-400"></i>
+        <svg class="w-5 h-5 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
         <span>8. Visual Post &amp; Layout Generator</span>
       </button>
 
@@ -221,7 +221,7 @@
         <div class="glass-admin p-6 rounded-3xl border border-slate-800/80 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Tools Paling Sering Digunakan</h4>
-            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+            <svg class="w-4 h-4 text-amber-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
           </div>
           <div id="analytics-tools-breakdown" class="space-y-3 text-xs">
             <!-- Rendered by JS -->
@@ -232,7 +232,7 @@
         <div class="glass-admin p-6 rounded-3xl border border-slate-800/80 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Halaman Paling Banyak Dikunjungi</h4>
-            <i data-lucide="globe" class="w-4 h-4 text-blue-400"></i>
+            <svg class="w-5 h-5 text-rose-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           </div>
           <div id="analytics-pages-breakdown" class="space-y-3 text-xs">
             <!-- Rendered by JS -->
@@ -243,7 +243,7 @@
         <div class="glass-admin p-6 rounded-3xl border border-slate-800/80 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Pencarian &amp; Perangkat</h4>
-            <i data-lucide="search" class="w-4 h-4 text-purple-400"></i>
+            <svg class="w-4 h-4 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </div>
           <div class="space-y-3 text-xs">
             <div>
@@ -275,7 +275,7 @@
             <p class="text-[11px] text-slate-400 mt-0.5">Memantau event, klik tombol, pembukaan fitur, dan pencarian secara real-time.</p>
           </div>
           <button onclick="refreshAnalyticsDashboard()" class="px-3 py-1.5 bg-dark-800 hover:bg-dark-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 border border-slate-700">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
             <span>Refresh Analytics</span>
           </button>
         </div>
@@ -316,15 +316,15 @@
         </div>
         <div class="flex items-center gap-2">
           <button onclick="pullFileFromGithub('products')" class="px-3.5 py-2 bg-dark-800 hover:bg-dark-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-700 shadow">
-            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-blue-400"></i>
+            <svg class="w-3.5 h-3.5 text-blue-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
             <span>Pull dari GitHub</span>
           </button>
           <button onclick="openAddProductModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
             <span>Tambah Item</span>
           </button>
           <button onclick="commitAndPushFileToGithub('products')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg">
-            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
             <span>Commit &amp; Push ke GitHub</span>
           </button>
         </div>
@@ -332,7 +332,7 @@
 
       <div id="git-commit-result-banner" class="hidden p-4 rounded-2xl bg-emerald-950/50 border border-emerald-500/50 text-emerald-300 text-xs flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+          <svg class="w-5 h-5 text-emerald-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
           <span id="git-commit-result-text">Commit berhasil dikirim ke repositori GitHub!</span>
         </div>
         <a id="git-commit-result-link" href="#" target="_blank" class="font-bold underline text-emerald-400 hover:text-emerald-200">Lihat Commit &rarr;</a>
@@ -375,11 +375,11 @@
         </div>
         <div class="flex items-center gap-2">
           <button onclick="pullFileFromGithub('services')" class="px-3.5 py-2 bg-dark-800 hover:bg-dark-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-700 shadow">
-            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-purple-400"></i>
+            <svg class="w-3.5 h-3.5 text-purple-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
             <span>Pull dari GitHub</span>
           </button>
           <button onclick="commitAndPushFileToGithub('services')" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg">
-            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
             <span>Commit &amp; Push ke GitHub</span>
           </button>
         </div>
@@ -419,7 +419,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
               </div>
               <div>
                 <h3 class="font-bold text-sm text-white">Pengaturan Google AdSense</h3>
@@ -461,7 +461,7 @@
         <div class="glass-admin p-6 rounded-3xl border border-slate-800/80 space-y-4">
           <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
             <div class="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold">
-              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
             </div>
             <div>
               <h3 class="font-bold text-sm text-white">Generator Konten Afiliasi (Shopee / TikTok)</h3>
@@ -497,7 +497,7 @@
               <input type="url" id="aff-gen-url" placeholder="https://shope.ee/..." class="w-full px-3 py-2 rounded-xl bg-dark-900 border border-slate-700 text-white" />
             </div>
             <button onclick="addAffiliateDirectToProducts()" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl transition shadow flex items-center justify-center gap-2">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
               <span>Tambahkan Langsung ke Daftar Produk &amp; Git</span>
             </button>
           </div>
@@ -514,7 +514,7 @@
       
       <div class="glass-admin rounded-3xl border border-slate-800/80 p-6 space-y-4">
         <h3 class="font-bold text-sm text-white flex items-center gap-2">
-          <i data-lucide="inbox" class="w-4 h-4 text-blue-400"></i>
+          <svg class="w-4 h-4 text-blue-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
           <span>Log Pesanan Jasa Masuk (Google Sheets Cache)</span>
         </h3>
         <div class="overflow-x-auto">
@@ -538,7 +538,7 @@
 
       <div class="glass-admin rounded-3xl border border-slate-800/80 p-6 space-y-4">
         <h3 class="font-bold text-sm text-white flex items-center gap-2">
-          <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i>
+          <svg class="w-4 h-4 text-emerald-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
           <span>Log Transaksi PaySheet QRIS Produk Digital</span>
         </h3>
         <div class="overflow-x-auto">
@@ -574,7 +574,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
-                <i data-lucide="sheet" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="3" x2="21" y1="15" y2="15"></line><line x1="9" x2="9" y1="9" y2="21"></line><line x1="15" x2="15" y1="9" y2="21"></line></svg>
               </div>
               <div>
                 <h3 class="font-bold text-sm text-white">Konfigurasi Google Apps Script &amp; Sheet</h3>
@@ -605,16 +605,16 @@
               <strong class="text-slate-300 block">Daftar Sheet Tab Standar:</strong>
               <p>&bull; <code>Pesanan_Jasa</code> (Mencatat formulir konsultasi &amp; pesanan)</p>
               <p>&bull; <code>Transaksi_Produk</code> (Mencatat verifikasi QRIS PaySheet)</p>
-              <p>&bull; <code>Donatur</code> (Mencatat Wall of Kontributor)</p>
+              <p>&bull; <code>Donatur</code> (Mencatat Wall of Contributor)</p>
             </div>
 
             <div class="flex items-center gap-2 pt-2">
               <button onclick="testGasWebhookConnection()" class="px-4 py-2.5 bg-dark-800 hover:bg-dark-700 text-slate-200 font-bold rounded-xl transition border border-slate-700 flex items-center gap-1.5 cursor-pointer">
-                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                <svg class="w-4 h-4 text-emerald-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
                 <span>Test Ping Webhook</span>
               </button>
               <button onclick="saveGasSettings()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                <i data-lucide="check" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 <span>Simpan Pengaturan</span>
               </button>
             </div>
@@ -626,7 +626,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-                <i data-lucide="mail" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
               </div>
               <div>
                 <h3 class="font-bold text-sm text-white">Pengaturan Notifikasi Email Admin</h3>
@@ -649,17 +649,17 @@
             </div>
 
             <div class="p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/20 space-y-1.5 text-[11px] text-slate-300">
-              <strong class="text-blue-400 flex items-center gap-1"><i data-lucide="info" class="w-3.5 h-3.5"></i> Cara Kerja Notifikasi Email:</strong>
+              <strong class="text-blue-400 flex items-center gap-1"><svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Cara Kerja Notifikasi Email:</strong>
               <p class="text-slate-400 leading-relaxed">Setiap pengunjung mengklik tombol kirim di formulir konsultasi atau pemesanan jasa, sistem Google Apps Script secara otomatis mengeksekusi <code>MailApp.sendEmail()</code> tanpa membebani server hosting.</p>
             </div>
 
             <div class="flex items-center gap-2 pt-2">
               <button onclick="testSendAdminNotificationEmail()" class="px-4 py-2.5 bg-dark-800 hover:bg-dark-700 text-slate-200 font-bold rounded-xl transition border border-slate-700 flex items-center gap-1.5 cursor-pointer">
-                <i data-lucide="send" class="w-4 h-4 text-blue-400"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 <span>Test Kirim Email Uji Coba</span>
               </button>
               <button onclick="saveAdminEmailSettings()" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                <i data-lucide="check" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 <span>Simpan Email Notifikasi</span>
               </button>
             </div>
@@ -682,7 +682,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold">
-                <i data-lucide="github" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
               </div>
               <div>
                 <h3 class="font-bold text-sm text-white">GitHub API Personal Access Token (PAT)</h3>
@@ -717,7 +717,7 @@
 
             <div class="pt-2 flex items-center gap-2">
               <button onclick="testAndSaveGithubConnection()" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition flex items-center justify-center gap-1.5 shadow">
-                <i data-lucide="check" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 <span>Verifikasi &amp; Simpan Token</span>
               </button>
               <button onclick="disconnectGithub()" class="px-3.5 py-2.5 bg-dark-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 font-bold rounded-xl transition">
@@ -740,7 +740,7 @@
         <div class="glass-admin p-6 rounded-3xl border border-slate-800/80 space-y-4">
           <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
             <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-              <i data-lucide="key" class="w-4 h-4"></i>
+              <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-1.5 1.5L14 9a5 5 0 1 0 3 3l3.5-3.5m0 0 2 2m-2-2 2-2"></path></svg>
             </div>
             <div>
               <h3 class="font-bold text-sm text-white">Ganti Kunci Akses Administrator</h3>
@@ -774,7 +774,7 @@
         <div>
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
-              <i data-lucide="layout-template" class="w-4 h-4"></i>
+              <svg class="w-5 h-5 text-blue-500 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
             </div>
             <h2 class="text-lg font-black text-white">Visual Post &amp; Freeform Layout Generator</h2>
           </div>
@@ -791,22 +791,22 @@
           </div>
 
           <button onclick="saveDraftTemplate()" title="Simpan Draft ke Browser" class="px-3 py-2 rounded-xl bg-dark-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1">
-            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span class="hidden sm:inline">Simpan Draft</span>
           </button>
 
           <button onclick="loadDraftTemplate()" title="Muat Draft Terakhir" class="px-3 py-2 rounded-xl bg-dark-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1">
-            <i data-lucide="folder-open" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span class="hidden sm:inline">Muat Draft</span>
           </button>
 
           <button onclick="copyGeneratedHtml()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             <span>Salin Kode HTML</span>
           </button>
 
           <button onclick="downloadGeneratedHtmlFile()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 text-white text-xs font-extrabold rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             <span>Unduh .HTML</span>
           </button>
         </div>
@@ -822,7 +822,7 @@
           <div class="glass-admin p-5 rounded-3xl border border-slate-800 space-y-3">
             <div class="flex items-center justify-between pb-2 border-b border-slate-800">
               <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <i data-lucide="settings" class="w-4 h-4 text-blue-400"></i>
+                <svg class="w-4 h-4 text-blue-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
                 <span>Pengaturan Halaman &amp; SEO</span>
               </h3>
             </div>
@@ -892,7 +892,7 @@
           <div class="glass-admin p-5 rounded-3xl border border-slate-800 space-y-4">
             <div class="flex items-center justify-between pb-2 border-b border-slate-800">
               <h3 class="font-bold text-xs uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <i data-lucide="layers" class="w-4 h-4 text-emerald-400"></i>
+                <svg class="w-4 h-4 text-emerald-400 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                 <span>Susunan Blok Konten Bebas</span>
               </h3>
               <span class="text-[10px] text-slate-400 font-mono">Bebas Custom</span>
@@ -905,7 +905,7 @@
 
             <!-- Add Block Trigger Button -->
             <button onclick="openAddBlockModal()" class="w-full py-3 rounded-2xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 text-xs font-extrabold transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
               <span>Tambah Blok Konten Baru</span>
             </button>
           </div>
@@ -925,15 +925,15 @@
 
             <div class="flex items-center gap-1 p-1 bg-dark-900 border border-slate-700 rounded-xl text-xs">
               <button id="btn-prev-desk" onclick="switchPreviewDevice('desktop')" class="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold transition flex items-center gap-1 text-[11px] cursor-pointer">
-                <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+                <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
                 <span class="hidden sm:inline">Desktop</span>
               </button>
               <button id="btn-prev-tab" onclick="switchPreviewDevice('tablet')" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition flex items-center gap-1 text-[11px] cursor-pointer">
-                <i data-lucide="tablet" class="w-3.5 h-3.5"></i>
+                <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
                 <span class="hidden sm:inline">Tablet</span>
               </button>
               <button id="btn-prev-mob" onclick="switchPreviewDevice('mobile')" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition flex items-center gap-1 text-[11px] cursor-pointer">
-                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
                 <span class="hidden sm:inline">Mobile</span>
               </button>
             </div>
@@ -959,7 +959,7 @@
     <div class="modal-content glass-admin w-full max-w-lg rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-800 max-h-[90vh] overflow-y-auto space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="font-bold text-base text-white" id="modal-product-title">Tambah / Edit Produk</h3>
-        <button onclick="closeModal('modal-product-editor')" class="p-1 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+        <button onclick="closeModal('modal-product-editor')" class="p-1 rounded-lg text-slate-400 hover:text-white"><svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
 
       <form onsubmit="saveProductForm(event)" class="space-y-3 text-xs">
@@ -1008,14 +1008,14 @@
           <h3 class="font-bold text-base text-white">Pilih Jenis Blok Konten</h3>
           <p class="text-xs text-slate-400">Susun tata letak halaman sesuai kebutuhan tanpa batasan struktur.</p>
         </div>
-        <button onclick="closeModal('modal-add-block-picker')" class="p-1 rounded-lg text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+        <button onclick="closeModal('modal-add-block-picker')" class="p-1 rounded-lg text-slate-400 hover:text-white"><svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
         
         <button onclick="insertNewBlock('hero')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-blue-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-blue-400 font-bold">
-            <i data-lucide="layout-top" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span>Hero Header Banner</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Judul besar, subjudul persuasif, badge kategori, dan tombol aksi ganda.</p>
@@ -1023,7 +1023,7 @@
 
         <button onclick="insertNewBlock('image_grid_2')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-blue-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-indigo-400 font-bold">
-            <i data-lucide="columns-2" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span>2 Kolom Gambar / Mockup</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">2 baris gambar/foto berdampingan dengan bingkai dan caption.</p>
@@ -1031,7 +1031,7 @@
 
         <button onclick="insertNewBlock('image_grid_3')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-blue-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-purple-400 font-bold">
-            <i data-lucide="columns-3" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span>3 Kolom Gambar / Portofolio</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">3 baris gambar portofolio arsitektur, denah, atau kartu produk.</p>
@@ -1039,7 +1039,7 @@
 
         <button onclick="insertNewBlock('procedural_steps')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-emerald-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-emerald-400 font-bold">
-            <i data-lucide="git-commit" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span>Bagan Prosedur Step-by-Step</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Bagan alur kerja prosedural terstruktur (Step 1, 2, 3, 4) untuk layanan jasa.</p>
@@ -1047,7 +1047,7 @@
 
         <button onclick="insertNewBlock('full_width_card')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-amber-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-amber-400 font-bold">
-            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span>1 Jalur Penuh (Highlight Card)</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Kontainer selebar layar dengan gradien glassmorphism untuk pesan penting.</p>
@@ -1055,7 +1055,7 @@
 
         <button onclick="insertNewBlock('specs_checklist')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-teal-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-teal-400 font-bold">
-            <i data-lucide="check-check" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 7 17l-5-5"></path><path d="m22 10-7.5 7.5L13 16"></path></svg>
             <span>2-Kolom: Checklist &amp; Syarat</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Kolom rincian berkas diterima (kiri) dan syarat administrasi awal (kanan).</p>
@@ -1063,7 +1063,7 @@
 
         <button onclick="insertNewBlock('faq')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-rose-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-rose-400 font-bold">
-            <i data-lucide="help-circle" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             <span>FAQ Accordion (Tanya Jawab)</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Daftar pertanyaan dan jawaban interaktif seputar produk/layanan.</p>
@@ -1071,7 +1071,7 @@
 
         <button onclick="insertNewBlock('cta_pricing')" class="p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-emerald-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-emerald-400 font-bold">
-            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
             <span>Kotak Tarif &amp; Order CTA</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Harga promo, diskon badge, dan tombol chat WhatsApp / PaySheet QRIS.</p>
@@ -1079,7 +1079,7 @@
 
         <button onclick="insertNewBlock('custom_html')" class="sm:col-span-2 p-4 rounded-2xl bg-dark-900 hover:bg-dark-800 border border-slate-700/80 hover:border-cyan-500 text-left transition group space-y-1.5 cursor-pointer">
           <div class="flex items-center gap-2 text-cyan-400 font-bold">
-            <i data-lucide="code" class="w-4 h-4"></i>
+            <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
             <span>Custom HTML / Komponen Bebas</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">Sisipkan kode HTML, iframe, tabel, atau komponen bebas apa pun tanpa batasan.</p>
@@ -1103,7 +1103,7 @@
           </div>
         </div>
         <button onclick="closeModal('modal-share-site')" aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-dark-800 text-slate-400 hover:text-white transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
+          <svg class="w-4 h-4 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
 
@@ -1171,11 +1171,11 @@
 
       <div class="p-2.5 rounded-2xl bg-dark-900 border border-slate-800 flex items-center justify-between gap-2">
         <div class="flex items-center gap-2 pl-2 overflow-hidden text-xs text-slate-400 font-mono truncate">
-          <i data-lucide="link" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0"></i>
+          <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
           <span class="truncate" data-share-url>https://dutamik.id</span>
         </div>
         <button onclick="shareTo('copy')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow flex-shrink-0 cursor-pointer">
-          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <svg class="w-3.5 h-3.5 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           <span>Salin</span>
         </button>
       </div>
