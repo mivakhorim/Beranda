@@ -362,6 +362,117 @@ function saveLocalOrder(key, data) {
   localStorage.setItem(key, JSON.stringify(existing));
 }
 
+// 4. Consultation & Service Order Handler (Robot Pop-up Modal)
+async function handleConsultationSubmit(event) {
+  event.preventDefault();
+  const form = event.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+
+  const clientName = form.clientName?.value.trim() || '';
+  const clientWhatsapp = form.clientWhatsapp?.value.trim() || '';
+  const clientEmail = form.clientEmail?.value.trim() || '';
+  const serviceType = form.serviceType?.value || 'Konsultasi Layanan';
+  const projectDetails = form.projectDetails?.value.trim() || '';
+  const adminRecipientEmail = localStorage.getItem('dutamik_admin_email') || '';
+
+  if (!clientName || !clientWhatsapp || !projectDetails) {
+    showToast('Mohon lengkapi Nama, No. WhatsApp, dan Detail Kebutuhan Anda', 'error');
+    return;
+  }
+
+  const payload = {
+    action: "submit_consultation",
+    timestamp: new Date().toISOString(),
+    serviceType: serviceType,
+    clientName: clientName,
+    clientWhatsapp: clientWhatsapp,
+    clientEmail: clientEmail,
+    projectDetails: projectDetails,
+    adminRecipientEmail: adminRecipientEmail
+  };
+
+  // Loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
+    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg> Mengirim Permintaan...
+  `;
+
+  let isSuccess = false;
+  if (DUTAMIK_CONFIG.gasApiUrl && DUTAMIK_CONFIG.gasApiUrl.startsWith('https://script.google.com')) {
+    try {
+      const res = await fetch(DUTAMIK_CONFIG.gasApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (json.status === 'success') isSuccess = true;
+    } catch (err) {
+      console.warn('GAS Network Error:', err);
+    }
+  }
+
+  if (!isSuccess) {
+    saveLocalOrder('orders_jasa', payload);
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = originalBtnText;
+
+  // Prepare formatted WhatsApp message
+  const waText = `Halo Tim Ahli DUTAMIK.ID (Duta Media Informasi berKarya),\n\nSaya ingin berkonsultasi & mengajukan pemesanan layanan:\n*Layanan:* ${serviceType}\n*Nama/Usaha:* ${clientName}\n*No. WhatsApp:* ${clientWhatsapp}\n*Email:* ${clientEmail || '-'}\n*Detail Kebutuhan:* ${projectDetails}\n\nMohon informasi estimasi waktu dan tindak lanjutnya. Terima kasih!`;
+  const waUrl = `https://wa.me/${DUTAMIK_CONFIG.adminWhatsApp}?text=${encodeURIComponent(waText)}`;
+
+  closeConsultationModal();
+  form.reset();
+  showToast('Permintaan berhasil dicatat! Mengalihkan ke WhatsApp...', 'success');
+  window.open(waUrl, '_blank', 'noopener,noreferrer');
+}
+
+function openConsultationModal(preselectedService = '') {
+  const modal = document.getElementById('modal-consultation-service');
+  if (!modal) return;
+
+  const select = document.getElementById('consult-service-select');
+  if (select && preselectedService) {
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].text.toLowerCase().includes(preselectedService.toLowerCase()) || select.options[i].value.toLowerCase().includes(preselectedService.toLowerCase())) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  // Animate robot jumping to sitting position atop the modal
+  const sittingRobot = document.getElementById('modal-robot-sitting');
+  if (sittingRobot) {
+    sittingRobot.classList.remove('robot-jumping-back');
+    sittingRobot.classList.add('robot-sitting-active');
+  }
+
+  openModal('modal-consultation-service');
+}
+
+function closeConsultationModal() {
+  const sittingRobot = document.getElementById('modal-robot-sitting');
+  if (sittingRobot) {
+    sittingRobot.classList.remove('robot-sitting-active');
+    sittingRobot.classList.add('robot-jumping-back');
+  }
+
+  setTimeout(() => {
+    closeModal('modal-consultation-service');
+    // Ensure peeking robot is returned
+    const dock = document.getElementById('peeking-robot-dock');
+    if (dock) dock.setAttribute('data-state', 'peek');
+  }, 250);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initDonationSection();
 });
+

@@ -1,22 +1,26 @@
 # 🚀 DUTAMIK.ID - Production Build (Ready for GitHub Pages)
 Duta Media Informasi berKarya
 
-Subfolder ini berisikan seluruh berkas web yang **100% siap di-upload ke GitHub Pages** tanpa perlu konfigurasi build server yang rumit.
+Subfolder ini berisikan seluruh berkas web yang **100% siap di-upload ke GitHub Pages** dengan dukungan **Clean URLs (tanpa ekstensi .html dan tanpa index.html)**.
 
 ---
 
-## 📁 Struktur Berkas Siap Deploy
-- `index.html` : Halaman Utama Website
-- `katalog.html` : Master Katalog Ekosistem Terpadu
-- `donasi.html` : Halaman Donasi & Wall of Kontributor PaySheet QRIS
-- `about.html`, `contact.html`, `privacy-policy.html`, `terms-of-service.html`, `disclaimer.html` : Halaman Legal & Informasi
-- `tools/` : 6 Tool Online Gratis (QR Generator, WA Link, Image Compressor, Password Hash, Invoice Maker, Text Case)
-- `jasa/` : 6 Halaman Detail Layanan Jasa (3D Modeling, PBG PUPR, Peta SHP OSS, NIB OSS, Remote PC, Web Serverless)
-- `produk/` : 5 Halaman Detail Produk Digital (Kasir POS, Rumah 2D/3D, Template Web, E-Book GAS, PaySheet Engine)
-- `admin/` : Enterprise Hub Dashboard Admin & Visual Post Generator
-- `assets/` : File CSS Tailwind, JavaScript Vanilla, Logo SVG, dan Ikon
-- `dokumentasi-pdf/` : 5 Modul Buku Panduan PDF Lengkap
-- `.nojekyll` : Memastikan GitHub Pages menyajikan seluruh file dan aset statis secara langsung tanpa proses filtering Jekyll.
+## 🌐 Format URL Bersih (Clean URLs)
+Seluruh link dan rute telah terkonfigurasi dalam format direktori bersih yang modern dan SEO-friendly:
+- `https://dutamik.id/` (Beranda)
+- `https://dutamik.id/katalog/` (Master Katalog)
+- `https://dutamik.id/donasi/` (Wall of Kontributor)
+- `https://dutamik.id/about/`, `https://dutamik.id/contact/`, `https://dutamik.id/privacy-policy/`, `https://dutamik.id/terms-of-service/`, `https://dutamik.id/disclaimer/`
+- `https://dutamik.id/tools/` & sub-tools (`https://dutamik.id/tools/qr-generator/`, dll)
+- `https://dutamik.id/jasa/` & sub-jasa (`https://dutamik.id/jasa/3d-modeling/`, dll)
+- `https://dutamik.id/produk/` & sub-produk (`https://dutamik.id/produk/pos-sheet/`, dll)
+
+---
+
+## 🤖 Asisten Virtual Robot Mengintip (Peeking Robot)
+- Terpasang otomatis di sisi kanan layar di seluruh halaman.
+- Mengintip secara elegan di tepi layar dan dapat dibuka dengan **klik** atau **geser/cubit ke kiri** di layar sentuh ponsel.
+- Menyediakan formulir konsultasi cepat yang langsung tersambung ke WhatsApp Admin resmi.
 
 ---
 
@@ -26,7 +30,7 @@ Subfolder ini berisikan seluruh berkas web yang **100% siap di-upload ke GitHub 
 1. Buka repositori GitHub Anda (misal: `https://github.com/username/dutamik-id`).
 2. Klik tombol **Add file** -> **Upload files**.
 3. *Drag & drop* (seret) **seluruh isi folder `dist-github-pages/`** ke area upload GitHub.
-4. Tulis pesan commit (contoh: `Deploy DUTAMIK.ID ke GitHub Pages`) lalu klik **Commit changes**.
+4. Tulis pesan commit (contoh: `Deploy DUTAMIK.ID Clean URLs ke GitHub Pages`) lalu klik **Commit changes**.
 5. Masuk ke menu tab **Settings** di repositori GitHub Anda.
 6. Pada sidebar kiri, pilih menu **Pages**.
 7. Pada bagian **Build and deployment**:

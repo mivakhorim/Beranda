@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#10b981" opacity="0.15" filter="blur(30px)"/>
+  <!-- QR Code Frame -->
+  <rect x="130" y="50" width="140" height="140" rx="14" fill="#ffffff" stroke="#10b981" stroke-width="3"/>
+  <!-- QR Pattern Markers -->
+  <!-- Top-Left -->
+  <rect x="145" y="65" width="30" height="30" rx="4" fill="#0f172a"/>
+  <rect x="151" y="71" width="18" height="18" rx="2" fill="#ffffff"/>
+  <rect x="155" y="75" width="10" height="10" rx="1" fill="#0f172a"/>
+  <!-- Top-Right -->
+  <rect x="225" y="65" width="30" height="30" rx="4" fill="#0f172a"/>
+  <rect x="231" y="71" width="18" height="18" rx="2" fill="#ffffff"/>
+  <rect x="235" y="75" width="10" height="10" rx="1" fill="#0f172a"/>
+  <!-- Bottom-Left -->
+  <rect x="145" y="145" width="30" height="30" rx="4" fill="#0f172a"/>
+  <rect x="151" y="151" width="18" height="18" rx="2" fill="#ffffff"/>
+  <rect x="155" y="155" width="10" height="10" rx="1" fill="#0f172a"/>
+  <!-- Center Verified Shield -->
+  <circle cx="200" cy="120" r="16" fill="#10b981"/>
+  <path d="M193 120 L198 125 L208 115" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

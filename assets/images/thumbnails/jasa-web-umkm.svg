@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#2563eb" opacity="0.15" filter="blur(30px)"/>
+  <!-- Browser Window -->
+  <rect x="110" y="55" width="180" height="130" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <!-- Browser Title Bar -->
+  <rect x="110" y="55" width="180" height="22" rx="10" fill="#334155"/>
+  <circle cx="122" cy="66" r="3.5" fill="#ef4444"/>
+  <circle cx="132" cy="66" r="3.5" fill="#f59e0b"/>
+  <circle cx="142" cy="66" r="3.5" fill="#10b981"/>
+  <!-- Web Layout Elements -->
+  <rect x="122" y="85" width="70" height="40" rx="4" fill="#3b82f6" opacity="0.8"/>
+  <rect x="200" y="85" width="78" height="10" rx="3" fill="#64748b"/>
+  <rect x="200" y="100" width="60" height="8" rx="2" fill="#475569"/>
+  <rect x="200" y="113" width="75" height="12" rx="4" fill="#10b981"/>
+  <!-- 3 Product Cards below -->
+  <rect x="122" y="135" width="45" height="38" rx="4" fill="#334155"/>
+  <rect x="175" y="135" width="45" height="38" rx="4" fill="#334155"/>
+  <rect x="228" y="135" width="45" height="38" rx="4" fill="#334155"/>
+  <!-- Fast Lightning / Serverless Badge -->
+  <circle cx="275" cy="70" r="14" fill="#f59e0b"/>
+  <polygon points="277,60 269,72 276,72 273,80 281,68 274,68" fill="#ffffff"/>
+</svg>

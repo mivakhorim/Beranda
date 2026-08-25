@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#0284c7" opacity="0.15" filter="blur(30px)"/>
+  <!-- Blueprint Sheet -->
+  <rect x="110" y="50" width="180" height="140" rx="10" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/>
+  <!-- Blueprint Grid -->
+  <line x1="110" y1="85" x2="290" y2="85" stroke="#0284c7" stroke-width="1"/>
+  <line x1="110" y1="120" x2="290" y2="120" stroke="#0284c7" stroke-width="1"/>
+  <line x1="110" y1="155" x2="290" y2="155" stroke="#0284c7" stroke-width="1"/>
+  <line x1="155" y1="50" x2="155" y2="190" stroke="#0284c7" stroke-width="1"/>
+  <line x1="200" y1="50" x2="200" y2="190" stroke="#0284c7" stroke-width="1"/>
+  <line x1="245" y1="50" x2="245" y2="190" stroke="#0284c7" stroke-width="1"/>
+  <!-- CAD Floor Plan Lines -->
+  <rect x="135" y="75" width="130" height="90" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="180" y1="75" x2="180" y2="165" stroke="#ffffff" stroke-width="2"/>
+  <line x1="135" y1="120" x2="265" y2="120" stroke="#ffffff" stroke-width="2"/>
+  <!-- Compass / Divider Tool -->
+  <path d="M255 120 L275 165 M255 120 L245 165" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="255" cy="120" r="5" fill="#d97706"/>
+  <!-- PUPR Checkmark Seal -->
+  <circle cx="140" cy="170" r="15" fill="#10b981"/>
+  <path d="M133 170 L138 175 L147 165" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

@@ -176,106 +176,53 @@ function shareTo(platform, customUrl = '', customText = '') {
   }
 }
 
-// 5. WhatsApp Floating Help Widget (Smooth Animated Slide & Auto-Hide Dock)
-function toggleWaWidget() {
-  const popover = document.getElementById('wa-widget-popover');
-  if (!popover) return;
-  
-  if (popover.classList.contains('hidden')) {
-    popover.classList.remove('hidden');
-    popover.classList.add('popover-hidden');
-    // Force reflow for smooth transition
-    void popover.offsetWidth;
-    popover.classList.remove('popover-hidden');
+
+// 5. Interactive Peeking Robot Assistant (Swipe & Click Gesture Controller)
+function toggleRobotAssistant() {
+  if (typeof openConsultationModal === 'function') {
+    openConsultationModal();
   } else {
-    popover.classList.add('popover-hidden');
-    setTimeout(() => {
-      popover.classList.add('hidden');
-    }, 280);
+    openModal('modal-consultation-service');
   }
 }
 
-function sendFloatingWaMessage(serviceName = '') {
-  const nameInput = document.getElementById('wa-client-name');
-  const msgInput = document.getElementById('wa-client-msg');
-  
-  const name = nameInput ? nameInput.value.trim() : '';
-  const userMsg = msgInput ? msgInput.value.trim() : '';
-
-  let message = `Halo Admin DUTAMIK.ID (Duta Media Informasi berKarya), saya ingin berkonsultasi`;
-  if (serviceName) message += ` mengenai layanan: *${serviceName}*`;
-  if (name) message += `\n\nNama: ${name}`;
-  if (userMsg) message += `\nPesan: ${userMsg}`;
-  else message += `\nMohon info detail & penawarannya. Terima kasih.`;
-
-  const waLink = `https://api.whatsapp.com/send?phone=${DUTAMIK_CONFIG.adminWhatsApp}&text=${encodeURIComponent(message)}`;
-  window.open(waLink, '_blank');
+function openRobotAssistant() {
+  toggleRobotAssistant();
 }
 
-// 6. Mobile Navigation Menu Toggle
-function toggleMobileMenu() {
-  const menu = document.getElementById('mobile-menu');
-  if (menu) {
-    menu.classList.toggle('hidden');
+function closeRobotAssistant() {
+  if (typeof closeConsultationModal === 'function') {
+    closeConsultationModal();
+  } else {
+    closeModal('modal-consultation-service');
   }
 }
 
-// 7. Auto-Hide Floating Help Dock on Scroll Down / Reveal on Scroll Up
-let lastScrollPosition = 0;
-let scrollTimeout = null;
-
-function setupFloatingDockScroll() {
-  window.addEventListener('scroll', () => {
-    const dock = document.getElementById('floating-help-dock');
-    if (!dock) return;
-
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // If scrolled past 350px and moving downwards
-    if (currentScroll > lastScrollPosition && currentScroll > 350) {
-      dock.classList.add('dock-hidden');
-    } else {
-      dock.classList.remove('dock-hidden');
-    }
-    
-    lastScrollPosition = currentScroll <= 0 ? 0 : currentScroll;
-
-    // Auto-reveal when user stops scrolling
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      dock.classList.remove('dock-hidden');
-    }, 1500);
-  }, { passive: true });
-}
-
-// Initialize on DOM Loaded
+// Global Touch / Gesture Listener for Peeking Robot (Swipe Left to Open, Swipe Right to Close)
 document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  setupFloatingDockScroll();
+  const dock = document.getElementById('peeking-robot-dock');
+  if (!dock) return;
 
-  // Close modals on clicking backdrop
-  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-    backdrop.addEventListener('click', (e) => {
-      if (e.target === backdrop) {
-        backdrop.classList.add('hidden');
-        backdrop.classList.remove('flex');
-        document.body.style.overflow = '';
-      }
-    });
-  });
+  let touchStartX = 0;
+  let touchStartY = 0;
 
-  // ESC key to close modal & popovers
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-backdrop:not(.hidden)').forEach(modal => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      });
-      document.body.style.overflow = '';
-      const waPopover = document.getElementById('wa-widget-popover');
-      if (waPopover && !waPopover.classList.contains('hidden')) {
-        toggleWaWidget();
+  dock.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  dock.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    // Detect horizontal swipe if larger than vertical movement (Cubit / Geser ke kiri)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+      if (diffX < 0) {
+        // Swiped Left -> Open Consultation Modal with Sitting Robot
+        toggleRobotAssistant();
       }
     }
-  });
+  }, { passive: true });
 });

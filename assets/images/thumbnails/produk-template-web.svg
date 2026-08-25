@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#8b5cf6" opacity="0.15" filter="blur(30px)"/>
+  <!-- Multi-Device Web Mockup (Desktop + Phone) -->
+  <!-- Desktop Monitor -->
+  <rect x="95" y="55" width="160" height="105" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="2"/>
+  <rect x="102" y="62" width="146" height="85" rx="4" fill="#020617"/>
+  <rect x="155" y="160" width="40" height="20" fill="#334155"/>
+  <rect x="135" y="180" width="80" height="6" rx="3" fill="#475569"/>
+  <!-- Mobile Phone Front Left -->
+  <rect x="235" y="85" width="70" height="110" rx="12" fill="#0f172a" stroke="#ec4899" stroke-width="2.5"/>
+  <rect x="242" y="98" width="56" height="85" rx="4" fill="#1e293b"/>
+  <!-- Screen Layouts -->
+  <circle cx="270" cy="92" r="2" fill="#475569"/>
+  <rect x="248" y="105" width="44" height="20" rx="3" fill="#ec4899" opacity="0.8"/>
+  <rect x="248" y="130" width="20" height="20" rx="3" fill="#8b5cf6"/>
+  <rect x="272" y="130" width="20" height="20" rx="3" fill="#3b82f6"/>
+</svg>

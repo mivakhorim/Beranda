@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Katalog Layanan Jasa &amp; Form Pemesanan - DUTAMIK.ID</title>
+  <title>Layanan Jasa Profesional &amp; Arsitektur - DUTAMIK.ID</title>
+  <meta name="description" content="Layanan jasa terpercaya: optimasi PC remote, 3D modeling bangunan, gambar kerja PBG SIMBG PUPR, peta SHP OSS, legalitas NIB BKPM, dan website UMKM serverless." />
   
-  <meta name="description" content="Katalog layanan jasa profesional dari DUTAMIK.ID (Duta Media Informasi berKarya): Remote PC, 3D Rendering, Gambar PBG SIMBG PUPR, Peta SHP / ZIP OSS &amp; AMDALNET, Pembuatan NIB Usaha Mikro, dan Pembuatan Website UMKM." />
-  <meta name="keywords" content="katalog jasa, order jasa, optimasi laptop remote, 3d modeling bangunan, gambar pbg simbg, peta shp oss, nib usaha mikro, jasa web umkm" />
-  <meta name="author" content="DUTAMIK.ID - Duta Media Informasi berKarya" />
   <link rel="canonical" href="https://dutamik.id/jasa/" />
   
-  <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg" />
-
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -19,397 +16,398 @@
       theme: {
         extend: {
           colors: {
-            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0284c7', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f172a' }
+            brand: { 50: '#f0f7ff', 100: '#e0effe', 500: '#0284c7', 600: '#0369a1', 700: '#075985' },
+            dark: { 800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#020617' }
           }
         }
       }
     }
   </script>
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="../assets/css/style.css" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Katalog Layanan Jasa Profesional - DUTAMIK.ID",
-    "description": "Layanan jasa teknis & legalitas terpercaya dengan formulir order otomatis terhubung ke Google Sheets.",
-    "url": "https://dutamik.id/jasa/",
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://dutamik.id/" },
-        { "@type": "ListItem", "position": 2, "name": "Katalog Jasa", "item": "https://dutamik.id/jasa/" }
-      ]
-    }
-  }
-  </script>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 dark:bg-dark-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-300 antialiased selection:bg-blue-500 selection:text-white">
 
-  <!-- TOP RUNNING TICKER -->
-  <div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
-    <div id="donation-ticker-content" class="ticker-content font-mono flex items-center">
-      <span class="mx-4">🌟 Memuat Kontributor DUTAMIK.ID...</span>
-    </div>
-  </div>
+  <!-- TOP NAVBAR -->
+  <header class="sticky top-0 z-40 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="../" class="flex items-center gap-3 group focus:outline-none">
+        <img src="../assets/images/logo.svg" alt="DUTAMIK.ID Logo" class="h-9 w-auto transform transition duration-300 group-hover:scale-105" />
+      </a>
 
-  <!-- REDESIGNED NAVBAR -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-18 py-2">
-        <a href="../index.html" class="flex items-center gap-2 flex-shrink-0 group">
-          <img src="../assets/images/logo.svg" alt="DUTAMIK.ID Logo" class="h-9 sm:h-10 w-auto transform transition duration-300 group-hover:scale-105" />
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600 dark:text-slate-300">
+        <a href="../" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Beranda</a>
+        <a href="../tools/" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Tool Gratis</a>
+        <a href="../jasa/" class="text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 pb-1">Layanan Jasa</a>
+        <a href="../produk/" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Produk Digital</a>
+        <a href="../katalog/" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Master Katalog</a>
+        <a href="../donasi/" class="hover:text-rose-600 dark:hover:text-rose-400 transition flex items-center gap-1.5">
+          <i data-lucide="heart" class="w-4 h-4 text-rose-500 fill-rose-500/20"></i>
+          <span>Donasi</span>
         </a>
+      </nav>
 
-        <nav class="hidden lg:flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-          <a href="../index.html" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
-            Beranda
-          </a>
-          <a href="../katalog.html" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1">
-            <i data-lucide="grid" class="w-3.5 h-3.5 text-blue-500"></i>
-            <span>Master Katalog</span>
-          </a>
-          <a href="../tools/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
-            Fitur Gratis
-          </a>
-          <a href="index.html" class="px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 font-bold bg-blue-50/90 dark:bg-blue-900/30 whitespace-nowrap">
-            Katalog Jasa
-          </a>
-          <a href="../produk/" class="px-3 py-2 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap">
-            Produk Digital
-          </a>
-          <a href="../donasi.html" class="px-3 py-2 rounded-xl hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/20 transition whitespace-nowrap">
-            Donasi QRIS
-          </a>
-        </nav>
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="openSearchModal()" aria-label="Pencarian Global" class="p-2 rounded-xl bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition">
+          <i data-lucide="search" class="w-4 h-4"></i>
+        </button>
 
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <button onclick="openSearchModal()" aria-label="Cari" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5 text-xs font-semibold">
-            <i data-lucide="search" class="w-4 h-4 text-blue-600"></i>
-            <span class="hidden md:inline">Cari...</span>
-            <kbd class="hidden xl:inline px-1.5 py-0.5 text-[10px] bg-slate-200 dark:bg-slate-800 rounded font-mono text-slate-500">Ctrl+K</kbd>
-          </button>
-                    <button onclick="openModal('modal-share-site')" aria-label="Share" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-            <i data-lucide="share-2" class="w-4 h-4"></i>
-          </button>
-          <button onclick="toggleTheme()" aria-label="Theme" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-            <span class="theme-toggle-icon"><i data-lucide="moon" class="w-4 h-4"></i></span>
-          </button>
-          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-            <i data-lucide="menu" class="w-5 h-5"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+        <button onclick="openModal('modal-share-site')" aria-label="Bagikan Halaman" title="Bagikan Halaman Ini" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-600 text-blue-600 hover:text-white dark:text-blue-400 border border-blue-500/20 hover:border-blue-600 text-xs font-bold transition shadow-sm cursor-pointer">
+          <i data-lucide="share-2" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Bagikan</span>
+        </button>
 
-    <!-- Mobile Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
-      <div class="flex flex-col gap-1.5 pt-2 text-sm font-medium">
-        <a href="../index.html" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Beranda</a>
-        <a href="../katalog.html" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Master Katalog</a>
-        <a href="../tools/" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Fitur &amp; Tools Gratis</a>
-        <a href="index.html" class="px-3 py-2 rounded-xl text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30">Katalog Jasa &amp; Pemesanan</a>
-        <a href="../produk/" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Produk Digital</a>
-        <a href="../donasi.html" class="px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">Donasi QRIS</a>
+        <button onclick="toggleDarkMode()" aria-label="Ganti Tema" class="p-2 rounded-xl bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+        </button>
+
+        <button onclick="openConsultationModal()" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-lg transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Konsultasi Proyek</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- BREADCRUMB & HEADER -->
-  <section class="py-12 border-b border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40">
+  <!-- HERO SECTION -->
+  <section class="py-10 sm:py-12 border-b border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <nav class="flex justify-center items-center gap-2 text-xs text-slate-500 mb-3 font-medium">
-        <a href="../index.html" class="hover:text-blue-600">Beranda</a>
+        <a href="../" class="hover:text-blue-600">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-        <span class="text-slate-800 dark:text-slate-200 font-bold">Katalog Layanan Jasa</span>
+        <span class="text-slate-800 dark:text-slate-200 font-bold">Layanan Jasa &amp; Tarif</span>
       </nav>
+
       <div class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2">
         <i data-lucide="briefcase" class="w-4 h-4"></i>
-        <span>Layanan Teknis &amp; Legalitas Terpercaya</span>
+        <span>Profesional &bull; Bergaransi &bull; Terpercaya</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-        Katalog Layanan Jasa Profesional
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white">
+        Layanan Jasa &amp; Pendampingan Teknis
       </h1>
-      <p class="text-slate-600 dark:text-slate-400 text-sm mt-3 max-w-2xl mx-auto leading-relaxed">
-        Pilih layanan untuk membaca portofolio dan spesifikasi detail, atau ajukan konsultasi langsung dengan formulir order otomatis.
+      <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-3 max-w-2xl mx-auto leading-relaxed">
+        Solusi terpercaya untuk kebutuhan rancang bangun arsitektur, pengurusan izin usaha OSS RBA, pemeliharaan sistem IT komputer, hingga pembuatan website UMKM berkinerja tinggi.
       </p>
     </div>
   </section>
 
-  <!-- DYNAMIC SERVICES GRID (Pre-rendered for Instant Loading & SEO) -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-8">
-    
-    <!-- Category Tabs & Sort Bar -->
-    <div class="max-w-3xl mx-auto space-y-4">
-      <div class="flex flex-col sm:flex-row gap-3">
-        <div class="relative flex-1">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
-          <input type="text" id="services-search-input" placeholder="Cari layanan jasa (PBG, 3D, NIB, Remote PC, Web)..." oninput="handleServicesFilter()" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm" />
-        </div>
-        <select id="services-sort-select" onchange="handleServicesFilter()" class="px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none shadow-sm">
-          <option value="default">Urutkan: Rekomendasi</option>
-          <option value="name_asc">Nama: A ke Z</option>
-          <option value="price_low">Tarif: Termurah</option>
-          <option value="price_high">Tarif: Tertinggi</option>
-        </select>
-      </div>
-
-      <div class="flex flex-wrap justify-center gap-2" id="services-category-tabs">
-        <button onclick="setServicesCategory('all')" class="svc-tab-btn active px-4 py-1.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow">Semua Layanan (<span id="svc-count-all">0</span>)</button>
-        <button onclick="setServicesCategory('it')" class="svc-tab-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500">IT &amp; Pemeliharaan (<span id="svc-count-it">0</span>)</button>
-        <button onclick="setServicesCategory('architecture')" class="svc-tab-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-purple-500">Desain &amp; Arsitektur (<span id="svc-count-architecture">0</span>)</button>
-        <button onclick="setServicesCategory('legality')" class="svc-tab-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-amber-500">Legalitas &amp; GIS (<span id="svc-count-legality">0</span>)</button>
-      </div>
-    </div>
-
-    <div id="services-catalog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- SERVICES GRID -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 flex-1 w-full space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <!-- 1. Remote PC -->
-      <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-blue-600 transition-all hover:-translate-y-1">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
-              <i data-lucide="laptop" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600">Garansi Lancar</span>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">Optimasi Laptop &amp; PC Remote</h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Percepat kinerja laptop/PC lambat, pembersihan virus &amp; malware mendalam, perbaikan error registry, dan pemasangan software esensial via UltraViewer/AnyDesk.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Pembersihan Junk &amp; Virus</span>
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Optimasi Startup &amp; RAM</span>
-          </div>
+      <div class="glass-panel rounded-3xl glow-card flex flex-col justify-between border border-slate-200/80 dark:border-slate-800/80 transition-all hover:-translate-y-1.5 shadow-sm overflow-hidden group">
+        <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center">
+          <img src="../assets/images/thumbnails/jasa-remote-pc.svg" alt="Optimasi Laptop & PC Remote" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute top-3 right-3 text-[10px] bg-blue-600 text-white px-2.5 py-1 rounded-full font-bold shadow-md backdrop-blur-md">Garansi Lancar</span>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+        <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-            <div class="font-extrabold text-base text-blue-600 dark:text-blue-400">Rp 50.000 <span class="text-[10px] font-normal text-slate-400">/ 1 Jam</span></div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors">Optimasi Laptop & PC Remote</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">Percepat kinerja laptop/PC lambat, pembersihan virus & malware mendalam, perbaikan error registry, dan pemasangan software esensial via UltraViewer/AnyDesk.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5"><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Pembersihan Junk & Virus</span><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Optimasi Startup & RAM</span></div>
           </div>
-          <a href="remote-pc.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>Lihat Detail</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
+              <div class="font-extrabold text-sm text-purple-600 dark:text-purple-400">Rp 50.000 <span class="text-[10px] font-normal text-slate-400">/ 1 Jam Selesai</span></div>
+            </div>
+            <a href="remote-pc/" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+              <span>Lihat Detail</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
       </div>
-
-      <!-- 2. 3D Modeling -->
-      <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-purple-600 transition-all hover:-translate-y-1">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
-              <i data-lucide="box" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-600">Ultra HD Render</span>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">3D Modeling Bangunan &amp; Rumah</h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Visualisasi 3D arsitektur fotorealistik tampak fasad eksterior dan interior ruangan detail format SketchUp + render resolusi tinggi siap presentasi.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">3 View Render HD</span>
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">File SKP Lengkap</span>
-          </div>
+      <div class="glass-panel rounded-3xl glow-card flex flex-col justify-between border border-slate-200/80 dark:border-slate-800/80 transition-all hover:-translate-y-1.5 shadow-sm overflow-hidden group">
+        <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center">
+          <img src="../assets/images/thumbnails/jasa-3d-modeling.svg" alt="3D Modeling Bangunan & Rumah" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute top-3 right-3 text-[10px] bg-purple-600 text-white px-2.5 py-1 rounded-full font-bold shadow-md backdrop-blur-md">Ultra HD Render</span>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+        <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-            <div class="font-extrabold text-base text-purple-600 dark:text-purple-400">Rp 150.000 <span class="text-[10px] font-normal text-slate-400">Mulai</span></div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors">3D Modeling Bangunan & Rumah</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">Visualisasi 3D arsitektur fotorealistik tampak fasad eksterior dan interior ruangan detail format SketchUp + render resolusi tinggi siap presentasi.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5"><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">3 View Render HD</span><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">File SKP Lengkap</span></div>
           </div>
-          <a href="3d-modeling.html" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>Lihat Detail</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
+              <div class="font-extrabold text-sm text-purple-600 dark:text-purple-400">Rp 150.000 <span class="text-[10px] font-normal text-slate-400">Mulai dari</span></div>
+            </div>
+            <a href="3d-modeling/" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+              <span>Lihat Detail</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
       </div>
-
-      <!-- 3. Gambar PBG -->
-      <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-emerald-600 transition-all hover:-translate-y-1">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-              <i data-lucide="drafting-compass" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600">Standar PUPR</span>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">Gambar PBG SIMBG PUPR Lengkap</h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Penyusunan gambar kerja arsitektur 2D DED lengkap (Denah, Tampak, Potongan, Detail Struktur &amp; MEP) berstandar verifikasi sistem SIMBG PUPR.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Format DWG &amp; PDF</span>
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Garansi Verifikasi</span>
-          </div>
+      <div class="glass-panel rounded-3xl glow-card flex flex-col justify-between border border-slate-200/80 dark:border-slate-800/80 transition-all hover:-translate-y-1.5 shadow-sm overflow-hidden group">
+        <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center">
+          <img src="../assets/images/thumbnails/jasa-gambar-pbg.svg" alt="Gambar PBG SIMBG PUPR Lengkap" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute top-3 right-3 text-[10px] bg-emerald-600 text-white px-2.5 py-1 rounded-full font-bold shadow-md backdrop-blur-md">Standar PUPR</span>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+        <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-            <div class="font-extrabold text-base text-emerald-600 dark:text-emerald-400">Rp 350.000 <span class="text-[10px] font-normal text-slate-400">Paket DED</span></div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors">Gambar PBG SIMBG PUPR Lengkap</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">Penyusunan gambar kerja arsitektur 2D DED lengkap (Denah, Tampak, Potongan, Detail Struktur & MEP) berstandar verifikasi sistem SIMBG PUPR.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5"><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Format DWG & PDF</span><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Garansi Lolos Verifikasi</span></div>
           </div>
-          <a href="gambar-pbg.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>Lihat Detail</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
+              <div class="font-extrabold text-sm text-purple-600 dark:text-purple-400">Rp 300.000 <span class="text-[10px] font-normal text-slate-400">Siap Upload SIMBG</span></div>
+            </div>
+            <a href="gambar-pbg/" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+              <span>Lihat Detail</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
       </div>
-
-      <!-- 4. Peta SHP -->
-      <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-cyan-600 transition-all hover:-translate-y-1">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center font-bold">
-              <i data-lucide="map-pin" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600">Valid Sistem OSS</span>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">Peta SHP / ZIP Kesesuaian Ruang OSS</h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Pembuatan shapefile geospasial poligon berkoordinat WGS 84 / UTM format ZIP resmi untuk verifikasi KKPR / PKKPR di portal OSS RBA dan AMDALNET.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Koordinat WGS84</span>
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">SHP, SHX, DBF, PRJ</span>
-          </div>
+      <div class="glass-panel rounded-3xl glow-card flex flex-col justify-between border border-slate-200/80 dark:border-slate-800/80 transition-all hover:-translate-y-1.5 shadow-sm overflow-hidden group">
+        <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center">
+          <img src="../assets/images/thumbnails/jasa-peta-shp-oss.svg" alt="Peta Format SHP / ZIP Validasi OSS" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute top-3 right-3 text-[10px] bg-cyan-600 text-white px-2.5 py-1 rounded-full font-bold shadow-md backdrop-blur-md">Valid Sistem OSS</span>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+        <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-            <div class="font-extrabold text-base text-cyan-600 dark:text-cyan-400">Rp 100.000 <span class="text-[10px] font-normal text-slate-400">ESRI Polygon</span></div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors">Peta Format SHP / ZIP Validasi OSS</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">Pembuatan shapefile geospasial poligon berkoordinat WGS 84 / UTM format ZIP resmi untuk verifikasi KKPR / PKKPR di portal OSS RBA dan AMDALNET.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5"><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Sistem WGS84 Presisi</span><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Lolos Validasi OSS</span></div>
           </div>
-          <a href="peta-shp-oss.html" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>Lihat Detail</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
+              <div class="font-extrabold text-sm text-purple-600 dark:text-purple-400">Rp 100.000 <span class="text-[10px] font-normal text-slate-400">Format ESRI Polygon</span></div>
+            </div>
+            <a href="peta-shp-oss/" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+              <span>Lihat Detail</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
       </div>
-
-      <!-- 5. NIB OSS -->
-      <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-amber-600 transition-all hover:-translate-y-1">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
-              <i data-lucide="file-check-2" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600">Resmi Pemerintah</span>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">Pendampingan NIB Usaha Mikro OSS</h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Pendampingan pembuatan Nomor Induk Berusaha (NIB) berbasis risiko BKPM RI resmi untuk UMKM lengkap dengan pemilihan KBLI yang tepat dan izin dasar.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">KBLI Tepat</span>
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Barcode BKPM</span>
-          </div>
+      <div class="glass-panel rounded-3xl glow-card flex flex-col justify-between border border-slate-200/80 dark:border-slate-800/80 transition-all hover:-translate-y-1.5 shadow-sm overflow-hidden group">
+        <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center">
+          <img src="../assets/images/thumbnails/jasa-nib-oss.svg" alt="Pendampingan NIB Usaha Mikro OSS" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute top-3 right-3 text-[10px] bg-amber-600 text-white px-2.5 py-1 rounded-full font-bold shadow-md backdrop-blur-md">Resmi Pemerintah</span>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+        <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-            <div class="font-extrabold text-base text-amber-600 dark:text-amber-400">Rp 75.000 <span class="text-[10px] font-normal text-slate-400">Terbit Resmi</span></div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors">Pendampingan NIB Usaha Mikro OSS</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">Pendampingan pembuatan Nomor Induk Berusaha (NIB) berbasis risiko BKPM RI resmi untuk UMKM lengkap dengan pemilihan KBLI yang tepat dan izin dasar.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5"><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">KBLI Sesuai Usaha</span><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">NIB Resmi Ber-Barcode</span></div>
           </div>
-          <a href="nib-oss.html" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>Lihat Detail</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
+              <div class="font-extrabold text-sm text-purple-600 dark:text-purple-400">Rp 75.000 <span class="text-[10px] font-normal text-slate-400">Terbit Resmi BKPM</span></div>
+            </div>
+            <a href="nib-oss/" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+              <span>Lihat Detail</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
       </div>
-
-      <!-- 6. Web UMKM -->
-      <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 border-rose-600 transition-all hover:-translate-y-1">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">
-              <i data-lucide="globe" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-600">Serverless Gratis</span>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">Pembuatan Website UMKM &amp; Portofolio</h3>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Pembuatan landing page profesional berkecepatan tinggi, responsif di HP, terintegrasi form order Google Sheet, tombol chat WhatsApp, dan tanpa biaya sewa server tahunan.</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Hosting Gratis</span>
-            <span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Form Google Sheet</span>
-          </div>
+      <div class="glass-panel rounded-3xl glow-card flex flex-col justify-between border border-slate-200/80 dark:border-slate-800/80 transition-all hover:-translate-y-1.5 shadow-sm overflow-hidden group">
+        <div class="relative w-full h-36 sm:h-44 bg-slate-950 overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center">
+          <img src="../assets/images/thumbnails/jasa-web-umkm.svg" alt="Pembuatan Website UMKM & Portofolio" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute top-3 right-3 text-[10px] bg-rose-600 text-white px-2.5 py-1 rounded-full font-bold shadow-md backdrop-blur-md">Serverless Gratis</span>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+        <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-            <div class="font-extrabold text-base text-rose-600 dark:text-rose-400">Rp 250.000 <span class="text-[10px] font-normal text-slate-400">Tanpa Sewa Server</span></div>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors">Pembuatan Website UMKM & Portofolio</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">Pembuatan landing page profesional berkecepatan tinggi, responsif di HP, terintegrasi form order Google Sheet, tombol chat WhatsApp, dan tanpa biaya sewa server tahunan.</p>
+            <div class="mt-3 flex flex-wrap gap-1.5"><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Hosting Gratis Selamanya</span><span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">Form Masuk Google Sheet</span></div>
           </div>
-          <a href="web-umkm.html" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>Lihat Detail</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
+              <div class="font-extrabold text-sm text-purple-600 dark:text-purple-400">Rp 250.000 <span class="text-[10px] font-normal text-slate-400">Tanpa Sewa Server</span></div>
+            </div>
+            <a href="web-umkm/" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+              <span>Lihat Detail</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
       </div>
-
     </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (CLEAN EXTENSIONLESS URLS) -->
   <footer class="bg-slate-900 text-slate-400 text-sm mt-auto border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        
         <div class="space-y-4">
-          <a href="../index.html" class="inline-block">
+          <a href="../" class="inline-block">
             <img src="../assets/images/logo.svg" alt="DUTAMIK.ID" class="h-9 w-auto brightness-200" />
           </a>
           <p class="text-xs text-slate-400 leading-relaxed">
-            <strong class="text-slate-200 font-bold">Duta Media Informasi berKarya</strong> menghadirkan solusi teknologi digital terpadu, akses tool online gratis, dan layanan pendampingan profesional yang mudah diakses untuk mendukung kemajuan usaha Anda.
+            <strong class="text-slate-200 font-bold">Duta Media Informasi berKarya</strong> hadir sebagai mitra terpercaya dalam mendampingi digitalisasi usaha, rancang bangun arsitektur, pendampingan legalitas, dan akses tool online gratis yang mudah diakses untuk semua.
           </p>
 
-          <!-- Social Media Channels (FB, Instagram, TikTok, X, YouTube) -->
+          <!-- Social Media Channels -->
           <div class="pt-2">
             <h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-300 mb-2.5">Media Sosial Resmi:</h5>
             <div class="flex items-center gap-2.5 flex-wrap">
-              <!-- Facebook -->
               <a href="https://facebook.com" target="_blank" rel="noopener nofollow" title="Facebook DUTAMIK.ID" aria-label="Facebook DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-[#1877F2] hover:border-[#1877F2] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
                 <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
               </a>
-              <!-- Instagram -->
               <a href="https://instagram.com" target="_blank" rel="noopener nofollow" title="Instagram @dutamik.id" aria-label="Instagram DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:border-transparent flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
                 <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
               </a>
-              <!-- TikTok -->
               <a href="https://tiktok.com" target="_blank" rel="noopener nofollow" title="TikTok @dutamik.id" aria-label="TikTok DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-[#25F4EE] hover:bg-black hover:border-[#FE2C55] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
                 <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
               </a>
-              <!-- X (Twitter) -->
               <a href="https://x.com" target="_blank" rel="noopener nofollow" title="X (Twitter) @dutamik_id" aria-label="X (Twitter) DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-black hover:border-slate-500 flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
                 <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
               </a>
-              <!-- YouTube -->
               <a href="https://youtube.com" target="_blank" rel="noopener nofollow" title="YouTube DUTAMIK.ID" aria-label="YouTube DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-white hover:bg-[#FF0000] hover:border-[#FF0000] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow">
                 <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
               </a>
             </div>
           </div>
         </div>
+
         <div>
           <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Halaman Legal</h4>
           <ul class="space-y-2 text-xs">
-            <li><a href="../about.html" class="hover:text-white transition">Tentang Kami</a></li>
-            <li><a href="../contact.html" class="hover:text-white transition">Hubungi Kami</a></li>
-            <li><a href="../privacy-policy.html" class="hover:text-white transition">Kebijakan Privasi</a></li>
-            <li><a href="../terms-of-service.html" class="hover:text-white transition">Syarat &amp; Ketentuan</a></li>
-            <li><a href="../disclaimer.html" class="hover:text-white transition">Disclaimer</a></li>
+            <li><a href="../about/" class="hover:text-white transition">Tentang Kami</a></li>
+            <li><a href="../contact/" class="hover:text-white transition">Hubungi Kami</a></li>
+            <li><a href="../privacy-policy/" class="hover:text-white transition">Kebijakan Privasi</a></li>
+            <li><a href="../terms-of-service/" class="hover:text-white transition">Syarat &amp; Ketentuan</a></li>
+            <li><a href="../disclaimer/" class="hover:text-white transition">Disclaimer</a></li>
           </ul>
         </div>
+
         <div>
           <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Klasifikasi Layanan</h4>
           <ul class="space-y-2 text-xs">
-            <li><a href="../katalog.html" class="hover:text-white transition text-blue-400 font-semibold">Master Katalog</a></li>
+            <li><a href="../katalog/" class="hover:text-white transition text-blue-400 font-semibold">Master Katalog</a></li>
             <li><a href="../tools/" class="hover:text-white transition">Kategori Tool Online Gratis</a></li>
             <li><a href="../jasa/" class="hover:text-white transition">Kategori Desain &amp; Arsitektur</a></li>
             <li><a href="../jasa/" class="hover:text-white transition">Kategori Legalitas &amp; Geospasial</a></li>
             <li><a href="../produk/" class="hover:text-white transition">Kategori Solusi Digital Mandiri</a></li>
           </ul>
         </div>
+
         <div>
           <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5">Dukungan Komunitas</h4>
           <p class="text-xs text-slate-400 mb-3 leading-relaxed">Dukung optimasi sistem &amp; pengembangan tool baru lewat kontribusi QRIS:</p>
-          <a href="../donasi.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-xl text-xs font-bold transition shadow-lg">
+          <a href="../donasi/" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-xl text-xs font-bold transition shadow-lg">
             <i data-lucide="heart" class="w-3.5 h-3.5 fill-white"></i>
             <span>Wall of Kontributor</span>
           </a>
         </div>
+
       </div>
+
       <div class="mt-10 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
         <p>&copy; 2026 <a href="https://dutamik.id" class="text-blue-400 font-bold hover:underline">Duta Media Informasi berKarya</a> (DUTAMIK.ID). Seluruh Hak Cipta Dilindungi.</p>
       </div>
     </div>
   </footer>
+  <!-- MODAL: SOCIAL SHARE -->
+  <div id="modal-share-site" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2.5 text-left">
+          <div class="w-9 h-9 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          </div>
+          <div>
+            <h4 class="font-extrabold text-base text-slate-900 dark:text-white">Bagikan Halaman Ini</h4>
+            <span class="text-[10px] text-slate-400">Sebarkan manfaat &amp; solusi praktis</span>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-share-site')" aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
 
+      <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed text-left">
+        Ajak rekan, klien, dan komunitas Anda memanfaatkan solusi teknologi terpercaya dari DUTAMIK.ID.
+      </p>
+
+      <div class="grid grid-cols-4 gap-2.5 sm:gap-3">
+        <button onclick="shareTo('whatsapp')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-slate-700 dark:text-slate-200 hover:text-white border border-emerald-500/20 hover:border-emerald-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">WhatsApp</span>
+        </button>
+
+        <button onclick="shareTo('telegram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-sky-500/10 hover:bg-sky-500 text-slate-700 dark:text-slate-200 hover:text-white border border-sky-500/20 hover:border-sky-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Telegram</span>
+        </button>
+
+        <button onclick="shareTo('facebook')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-600/10 hover:bg-[#1877F2] text-slate-700 dark:text-slate-200 hover:text-white border border-blue-600/20 hover:border-[#1877F2] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-[#1877F2] text-white flex items-center justify-center shadow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Facebook</span>
+        </button>
+
+        <button onclick="shareTo('x')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-white border border-slate-300 dark:border-slate-700 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">X (Twitter)</span>
+        </button>
+
+        <button onclick="shareTo('instagram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-pink-500/10 hover:bg-pink-600 text-slate-700 dark:text-slate-200 hover:text-white border border-pink-500/20 hover:border-pink-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Instagram</span>
+        </button>
+
+        <button onclick="shareTo('tiktok')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-cyan-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-[#25F4EE] border border-cyan-500/20 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">TikTok</span>
+        </button>
+
+        <button onclick="shareTo('youtube')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-rose-500/10 hover:bg-[#FF0000] text-slate-700 dark:text-slate-200 hover:text-white border border-rose-500/20 hover:border-[#FF0000] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-[#FF0000] text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">YouTube</span>
+        </button>
+
+        <button onclick="shareTo('copy')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-500/10 hover:bg-blue-600 text-slate-700 dark:text-slate-200 hover:text-white border border-blue-500/20 hover:border-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow">
+            <svg class="w-4 h-4 fill-none stroke-currentColor stroke-width-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          </div>
+          <span class="text-[11px] font-bold">Salin URL</span>
+        </button>
+      </div>
+
+      <div class="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 pl-2 overflow-hidden text-xs text-slate-500 font-mono truncate">
+          <i data-lucide="link" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
+          <span class="truncate" data-share-url>https://dutamik.id</span>
+        </div>
+        <button onclick="shareTo('copy')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow flex-shrink-0 cursor-pointer">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Salin Tautan</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <!-- SEARCH MODAL -->
   <div id="modal-global-search" class="modal-backdrop fixed inset-0 z-50 hidden items-start justify-center p-4 pt-16">
     <div class="modal-content glass-panel w-full max-w-xl rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[85vh] flex flex-col">
@@ -422,286 +420,144 @@
       <div id="search-results-container" class="overflow-y-auto flex-1 pr-1 space-y-2"></div>
     </div>
   </div>
-
-  <script src="../assets/js/catalog-data.js"></script>
-  <script src="../assets/js/main.js"></script>
-  <script src="../assets/js/analytics.js"></script>
-  <script src="../assets/js/search-engine.js"></script>
-  <script src="../assets/js/gas-client.js"></script>
-    <!-- MODAL: SOCIAL SHARE -->
-  <div id="modal-share-site" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-5">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-        <div class="flex items-center gap-2.5 text-left">
-          <div class="w-9 h-9 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shadow-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-          </div>
-          <div>
-            <h4 class="font-extrabold text-base text-slate-900 dark:text-white">Bagikan DUTAMIK.ID</h4>
-            <span class="text-[10px] text-slate-400">Sebarkan akses tool gratis &amp; solusi kreatif</span>
-          </div>
-        </div>
-        <button onclick="closeModal('modal-share-site')" aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed text-left">
-        Ajak rekan, mitra usaha, dan komunitas Anda menikmati puluhan tool online gratis dan solusi pendampingan terpercaya dari kami.
-      </p>
-
-      <!-- Dynamic Share Buttons with Crisp Inline SVGs -->
-      <div class="grid grid-cols-4 gap-2.5 sm:gap-3">
-        <!-- WhatsApp -->
-        <button onclick="shareTo('whatsapp')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-slate-700 dark:text-slate-200 hover:text-white border border-emerald-500/20 hover:border-emerald-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">WhatsApp</span>
-        </button>
-
-        <!-- Telegram -->
-        <button onclick="shareTo('telegram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-sky-500/10 hover:bg-sky-500 text-slate-700 dark:text-slate-200 hover:text-white border border-sky-500/20 hover:border-sky-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">Telegram</span>
-        </button>
-
-        <!-- Facebook -->
-        <button onclick="shareTo('facebook')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-600/10 hover:bg-[#1877F2] text-slate-700 dark:text-slate-200 hover:text-white border border-blue-600/20 hover:border-[#1877F2] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-[#1877F2] text-white flex items-center justify-center shadow">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">Facebook</span>
-        </button>
-
-        <!-- X (Twitter) -->
-        <button onclick="shareTo('x')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-white border border-slate-300 dark:border-slate-700 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">X (Twitter)</span>
-        </button>
-
-        <!-- Instagram -->
-        <button onclick="shareTo('instagram')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-pink-500/10 hover:bg-pink-600 text-slate-700 dark:text-slate-200 hover:text-white border border-pink-500/20 hover:border-pink-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">Instagram</span>
-        </button>
-
-        <!-- TikTok -->
-        <button onclick="shareTo('tiktok')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-cyan-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-[#25F4EE] border border-cyan-500/20 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">TikTok</span>
-        </button>
-
-        <!-- YouTube -->
-        <button onclick="shareTo('youtube')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-rose-500/10 hover:bg-[#FF0000] text-slate-700 dark:text-slate-200 hover:text-white border border-rose-500/20 hover:border-[#FF0000] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-[#FF0000] text-white flex items-center justify-center shadow">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">YouTube</span>
-        </button>
-
-        <!-- Salin Cepat -->
-        <button onclick="shareTo('copy')" class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-500/10 hover:bg-blue-600 text-slate-700 dark:text-slate-200 hover:text-white border border-blue-500/20 hover:border-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer">
-          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow">
-            <svg class="w-4 h-4 fill-none stroke-currentColor stroke-width-2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-          </div>
-          <span class="text-[11px] font-bold">Salin URL</span>
-        </button>
-      </div>
-
-      <!-- Quick Copy Link Box -->
-      <div class="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2 pl-2 overflow-hidden text-xs text-slate-500 font-mono truncate">
-          <i data-lucide="link" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
-          <span class="truncate">https://dutamik.id</span>
-        </div>
-        <button onclick="shareTo('copy')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow flex-shrink-0 cursor-pointer">
-          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-          <span>Salin Tautan</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-    <!-- FLOATING ACTION DOCK (SHARE & WHATSAPP) -->
-  <div id="floating-help-dock" class="fixed bottom-8 right-5 sm:bottom-10 sm:right-8 z-50 flex flex-col items-end gap-3 select-none">
+    <!-- PEEKING ROBOT ASSISTANT (RIGHT EDGE DOCK - INTERACTIVE 3D VECTOR) -->
+  <div id="peeking-robot-dock" class="fixed right-0 bottom-20 sm:bottom-24 z-50 select-none transition-all duration-500 ease-out translate-x-[calc(100%-48px)] hover:translate-x-[calc(100%-58px)] sm:translate-x-[calc(100%-54px)] flex items-end" data-state="peek">
     
-    <!-- Popover Chat Form -->
-    <div id="wa-widget-popover" class="hidden mb-1 w-[310px] sm:w-[340px] glass-panel rounded-3xl p-5 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100">
-      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md">
-            <i data-lucide="message-circle" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm">Konsultasi Ramah</h4>
-            <span class="flex items-center gap-1.5 text-[11px] text-emerald-500 font-semibold">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Online (Siap Membantu)
-            </span>
-          </div>
-        </div>
-        <button onclick="toggleWaWidget()" aria-label="Tutup" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+    <!-- Robot Peeking Trigger Avatar (Sticks out on right edge) -->
+    <button onclick="toggleRobotAssistant()" id="robot-peek-btn" aria-label="Bantuan &amp; Konsultasi" class="relative group p-1.5 pr-3 bg-slate-900/95 dark:bg-slate-900/95 border-2 border-r-0 border-blue-500/60 hover:border-blue-400 rounded-l-3xl shadow-2xl backdrop-blur-xl flex items-center gap-2 cursor-pointer focus:outline-none transition-all duration-300">
+      
+      <!-- 3D Glossy Robot Vector (Waving & Blinking) -->
+      <div class="relative w-11 h-12 flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" class="w-full h-full drop-shadow-2xl select-none" fill="none">
+  <defs>
+    <radialGradient id="headGrad" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </radialGradient>
+    <radialGradient id="visorGrad" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="80%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="jointGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <g class="robot-float-anim">
+    <!-- Shadow -->
+    <ellipse cx="100" cy="232" rx="42" ry="6" fill="#000000" opacity="0.25" />
+
+    <!-- Feet -->
+    <ellipse cx="78" cy="226" rx="16" ry="7" fill="#1e293b"/>
+    <ellipse cx="78" cy="224" rx="14" ry="5" fill="#334155"/>
+    <ellipse cx="122" cy="226" rx="16" ry="7" fill="#1e293b"/>
+    <ellipse cx="122" cy="224" rx="14" ry="5" fill="#334155"/>
+
+    <!-- Legs -->
+    <path d="M70 178 Q66 200 70 220 L86 220 Q88 200 84 178 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+    <path d="M116 178 Q112 200 114 220 L130 220 Q134 200 130 178 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+    
+    <!-- Pelvis -->
+    <path d="M68 160 Q100 182 132 160 Q122 178 100 180 Q78 178 68 160 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+
+    <!-- Waist Joints -->
+    <ellipse cx="100" cy="154" rx="16" ry="5" fill="url(#jointGrad)"/>
+    <ellipse cx="100" cy="148" rx="17" ry="5" fill="url(#jointGrad)"/>
+    <ellipse cx="100" cy="142" rx="18" ry="5" fill="url(#jointGrad)"/>
+
+    <!-- Right Arm (Hanging) -->
+    <g>
+      <circle cx="56" cy="116" r="7" fill="url(#jointGrad)"/>
+      <ellipse cx="53" cy="125" rx="5" ry="3" fill="url(#jointGrad)"/>
+      <ellipse cx="50" cy="131" rx="5" ry="3" fill="url(#jointGrad)"/>
+      <path d="M44 136 Q38 162 42 182 Q50 184 54 180 Q52 160 52 136 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.2"/>
+      <ellipse cx="45" cy="186" rx="5" ry="6" fill="#1e293b"/>
+      <path d="M42 186 L38 200 L44 200 Z" fill="#0f172a"/>
+      <path d="M46 186 L44 202 L49 202 Z" fill="#0f172a"/>
+    </g>
+
+    <!-- Chest Torso -->
+    <path d="M64 100 Q100 90 136 100 Q142 144 100 148 Q58 144 64 100 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M72 104 Q100 96 128 104 Q132 136 100 138 Q68 136 72 104 Z" fill="#ffffff" opacity="0.6"/>
+    <ellipse cx="100" cy="94" rx="12" ry="4" fill="url(#jointGrad)"/>
+
+    <!-- Left Arm & Waving Hand -->
+    <g class="robot-waving-arm" style="transform-origin: 145px 105px;">
+      <circle cx="145" cy="105" r="8" fill="url(#jointGrad)"/>
+      <ellipse cx="152" cy="98" rx="6" ry="4" fill="url(#jointGrad)" transform="rotate(-30 152 98)"/>
+      <ellipse cx="158" cy="90" rx="6" ry="4" fill="url(#jointGrad)" transform="rotate(-35 158 90)"/>
+      <path d="M156 86 Q168 60 174 46 Q184 50 180 62 Q172 78 166 90 Z" fill="url(#bodyGrad)" stroke="#cbd5e1" stroke-width="1.2"/>
+      
+      <!-- Open Hand & Glowing Cyan Palm Disc -->
+      <circle cx="180" cy="42" r="14" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+      <circle cx="180" cy="42" r="7" fill="url(#cyanGlow)" filter="url(#glow)"/>
+      <circle cx="180" cy="42" r="3.5" fill="#ffffff"/>
+      <path d="M168 46 Q160 48 158 40 Q164 36 170 40 Z" fill="#0f172a"/>
+      <path d="M174 30 L172 12 Q177 10 180 12 L180 30 Z" fill="#0f172a"/>
+      <path d="M182 29 L184 8 Q189 8 191 10 L188 29 Z" fill="#0f172a"/>
+      <path d="M190 32 L196 14 Q200 15 201 18 L194 33 Z" fill="#0f172a"/>
+      <path d="M193 38 L202 26 Q205 28 204 31 L196 42 Z" fill="#0f172a"/>
+    </g>
+
+    <!-- Head -->
+    <ellipse cx="100" cy="56" rx="50" ry="46" fill="url(#headGrad)" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="88" cy="24" rx="20" ry="8" fill="#ffffff" opacity="0.75" transform="rotate(-15 88 24)"/>
+
+    <!-- Visor -->
+    <rect x="62" y="24" width="76" height="60" rx="24" fill="url(#visorGrad)" stroke="#334155" stroke-width="2"/>
+    <path d="M68 34 Q100 26 132 34 Q128 42 100 36 Q74 42 68 34 Z" fill="#ffffff" opacity="0.25"/>
+
+    <!-- Eyes (Friendly Left + Winking Right) -->
+    <g filter="url(#glow)">
+      <circle cx="82" cy="50" r="10" fill="url(#cyanGlow)"/>
+      <circle cx="82" cy="50" r="5.5" fill="#020617"/>
+      <circle cx="85" cy="47" r="2.5" fill="#ffffff"/>
+      <path d="M110 52 Q118 42 126 50 Q118 46 110 52 Z" fill="url(#cyanGlow)"/>
+      <path d="M109 52 L127 48" stroke="#00f0ff" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="126" cy="48" r="2" fill="#ffffff"/>
+    </g>
+
+    <!-- Smile -->
+    <g filter="url(#glow)">
+      <path d="M84 66 Q100 78 116 66 Q100 73 84 66 Z" fill="url(#cyanGlow)"/>
+      <path d="M84 66 Q100 78 116 66" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
+        <span class="absolute -top-1 -left-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900 animate-ping"></span>
+        <span class="absolute -top-1 -left-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
       </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
-        Halo! Ada kebutuhan teknis, perizinan usaha, atau pertanyaan seputar layanan kami yang bisa dibantu?
-      </p>
-      <div class="space-y-2">
-        <input type="text" id="wa-client-name" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-        <textarea id="wa-client-msg" rows="2" placeholder="Ceritakan kebutuhan atau kendala Anda..." class="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
-        <button onclick="sendFloatingWaMessage()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
-          <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          <span>Konsultasi Lewat WhatsApp</span>
-        </button>
+
+      <div class="hidden sm:flex flex-col text-left pr-1">
+        <span class="text-[11px] font-black text-white leading-tight whitespace-nowrap">Bantuan</span>
+        <span class="text-[9px] text-blue-400 font-bold font-mono whitespace-nowrap">Tanya Kami</span>
       </div>
-    </div>
-
-    <!-- Trigger Capsule Action Group -->
-    <div class="flex items-center gap-2">
-      <!-- Quick Floating Share Button -->
-      <button onclick="openModal('modal-share-site')" aria-label="Bagikan Halaman Ini" class="group p-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center">
-        <i data-lucide="share-2" class="w-4.5 h-4.5"></i>
-      </button>
-
-      <!-- Floating WA Help Button -->
-      <button onclick="toggleWaWidget()" id="floating-wa-btn" aria-label="Bantuan & Konsultasi" class="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-xl shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
-        <div class="relative flex items-center justify-center">
-          <i data-lucide="message-circle" class="w-5 h-5"></i>
-          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700 animate-ping"></span>
-          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-300 border-2 border-emerald-700"></span>
-        </div>
-        <span class="tracking-wide">Bantuan &amp; Konsultasi</span>
-      </button>
-    </div>
-
+    </button>
   </div>
 
-  <script>
-    let allServicesData = [];
-    let currentServicesCategory = 'all';
-
-    function initServices() {
-      allServicesData = window.DUTAMIK_SERVICES_DATA || [];
-      
-      const elAll = document.getElementById('svc-count-all');
-      if (elAll) elAll.textContent = allServicesData.length;
-      
-      const elIT = document.getElementById('svc-count-it');
-      if (elIT) elIT.textContent = allServicesData.filter(s => s.category === 'it').length;
-
-      const elArch = document.getElementById('svc-count-architecture');
-      if (elArch) elArch.textContent = allServicesData.filter(s => s.category === 'architecture').length;
-
-      const elLegal = document.getElementById('svc-count-legality');
-      if (elLegal) elLegal.textContent = allServicesData.filter(s => s.category === 'legality').length;
-    }
-
-    function setServicesCategory(category) {
-      currentServicesCategory = category;
-      document.querySelectorAll('#services-category-tabs .svc-tab-btn').forEach(btn => {
-        btn.classList.remove('bg-purple-600', 'text-white', 'shadow');
-        btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
-      });
-      if (window.event && window.event.currentTarget) {
-        window.event.currentTarget.classList.add('bg-purple-600', 'text-white', 'shadow');
-        window.event.currentTarget.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
-      }
-      handleServicesFilter();
-    }
-
-    function handleServicesFilter() {
-      const keyword = (document.getElementById('services-search-input')?.value || '').toLowerCase().trim();
-      const sortType = document.getElementById('services-sort-select')?.value || 'default';
-
-      let list = allServicesData.filter(s => {
-        if (currentServicesCategory !== 'all' && s.category !== currentServicesCategory) return false;
-        if (keyword) {
-          const matchName = (s.name || '').toLowerCase().includes(keyword);
-          const matchDesc = (s.description || '').toLowerCase().includes(keyword);
-          return matchName || matchDesc;
-        }
-        return true;
-      });
-
-      if (sortType === 'name_asc') {
-        list.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (sortType === 'price_low') {
-        list.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      } else if (sortType === 'price_high') {
-        list.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      }
-
-      renderServicesGrid(list);
-    }
-
-    function renderServicesGrid(services) {
-      const container = document.getElementById('services-catalog-container');
-      if (!container) return;
-
-      if (services.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-16 text-center text-slate-400">
-            <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
-            <p class="text-sm font-semibold">Tidak ada layanan yang sesuai dengan kategori atau pencarian.</p>
-          </div>
-        `;
-        if (window.lucide) lucide.createIcons();
-        return;
-      }
-
-      const categoryColors = {
-        'it': { border: 'border-blue-600', text: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10', btn: 'bg-blue-600 hover:bg-blue-700' },
-        'architecture': { border: 'border-purple-600', text: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10', btn: 'bg-purple-600 hover:bg-purple-700' },
-        'legality': { border: 'border-cyan-600', text: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10', btn: 'bg-cyan-600 hover:bg-cyan-700' }
-      };
-
-      container.innerHTML = services.map(s => {
-        const theme = categoryColors[s.category] || categoryColors['it'];
-        return `
-          <div class="glass-panel p-6 rounded-3xl glow-card flex flex-col justify-between border-t-4 ${theme.border} transition-all hover:-translate-y-1">
-            <div>
-              <div class="flex items-center justify-between mb-4">
-                <div class="w-12 h-12 rounded-2xl ${theme.bg} ${theme.text} flex items-center justify-center font-bold">
-                  <i data-lucide="${s.icon || 'briefcase'}" class="w-6 h-6"></i>
-                </div>
-                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full ${theme.bg} ${theme.text}">${s.badge || 'Layanan'}</span>
-              </div>
-              <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-snug">${s.name}</h3>
-              <p class="text-xs text-slate-500 mt-2 leading-relaxed">${s.description}</p>
-              <div class="mt-4 flex flex-wrap gap-1.5">
-                ${(s.highlights || []).map(h => `<span class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">${h}</span>`).join('')}
-              </div>
-            </div>
-            <div class="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
-              <div>
-                <span class="text-[10px] text-slate-400 uppercase font-semibold">Tarif</span>
-                <div class="font-extrabold text-base ${theme.text}">${s.priceFormatted || ('Rp ' + Number(s.price).toLocaleString('id-ID'))}</div>
-              </div>
-              <a href="${s.slug}.html" class="px-4 py-2 ${theme.btn} text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
-                <span>Lihat Detail</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      if (window.lucide) lucide.createIcons();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initServices();
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
+  <!-- Core Scripts -->
+  <script src="../assets/js/catalog-data.js"></script>
+  <script src="../assets/js/gas-client.js"></script>
+  <script src="../assets/js/search-engine.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script>if (window.lucide) lucide.createIcons();</script>
 </body>
 </html>

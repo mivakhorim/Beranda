@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#e11d48" opacity="0.15" filter="blur(30px)"/>
+  <!-- POS Cashier Tablet -->
+  <rect x="110" y="55" width="180" height="125" rx="12" fill="#1e293b" stroke="#f43f5e" stroke-width="2"/>
+  <rect x="118" y="63" width="164" height="109" rx="6" fill="#0f172a"/>
+  <!-- POS UI Layout (Menu Left, Bill Right) -->
+  <!-- Product Grid -->
+  <rect x="126" y="72" width="40" height="30" rx="4" fill="#334155"/>
+  <rect x="172" y="72" width="40" height="30" rx="4" fill="#334155"/>
+  <rect x="126" y="108" width="40" height="30" rx="4" fill="#334155"/>
+  <rect x="172" y="108" width="40" height="30" rx="4" fill="#334155"/>
+  <!-- Bill Receipt Column -->
+  <rect x="220" y="72" width="54" height="66" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <rect x="226" y="78" width="42" height="4" rx="1" fill="#cbd5e1"/>
+  <rect x="226" y="86" width="36" height="4" rx="1" fill="#94a3b8"/>
+  <rect x="226" y="94" width="40" height="4" rx="1" fill="#94a3b8"/>
+  <!-- Total Button -->
+  <rect x="224" y="112" width="46" height="18" rx="4" fill="#10b981"/>
+  <text x="234" y="125" fill="#ffffff" font-size="9" font-weight="bold">BAYAR</text>
+  <!-- Barcode Scanner Beam -->
+  <path d="M120 180 L280 180" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6 3"/>
+</svg>

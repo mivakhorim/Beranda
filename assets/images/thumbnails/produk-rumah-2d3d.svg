@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#3b82f6" opacity="0.15" filter="blur(30px)"/>
+  <!-- 3D Isometric Luxury Villa -->
+  <polygon points="130,110 200,150 200,200 130,160" fill="#334155" stroke="#60a5fa" stroke-width="2"/>
+  <polygon points="200,150 270,110 270,160 200,200" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+  <!-- Slanted Modern Flat Roof -->
+  <polygon points="120,95 200,140 280,95 200,50" fill="#2563eb" stroke="#93c5fd" stroke-width="2"/>
+  <!-- Balcony Glass Wall -->
+  <polygon points="145,135 185,158 185,178 145,155" fill="#38bdf8" opacity="0.7"/>
+  <!-- Warm Interior Glow -->
+  <polygon points="215,155 250,135 250,175 215,195" fill="#fbbf24" opacity="0.6"/>
+</svg>

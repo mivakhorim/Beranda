@@ -255,3 +255,81 @@ body {
     max-width: 350px !important;
   }
 }
+
+/* ==========================================================================
+   INTERACTIVE CUTE 3D ROBOT ASSISTANT ANIMATIONS
+   ========================================================================== */
+@keyframes robotArmWave {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(22deg) translateX(2px);
+  }
+  100% {
+    transform: rotate(-8deg) translateX(-1px);
+  }
+}
+
+@keyframes robotLevitate {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes robotSittingBounce {
+  0% {
+    transform: translateY(-30px) scale(0.7) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(6px) scale(1.08) rotate(3deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-3px) scale(0.98) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0px) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes robotJumpHide {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: translateY(-25px) scale(1.1) rotate(15deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(120px) translateY(40px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.robot-waving-arm {
+  animation: robotArmWave 1.4s ease-in-out infinite alternate !important;
+  transform-origin: 145px 105px;
+}
+
+.robot-float-anim {
+  animation: robotLevitate 3s ease-in-out infinite alternate !important;
+}
+
+.robot-sitting-active {
+  animation: robotSittingBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+.robot-jumping-back {
+  animation: robotJumpHide 0.4s ease-in forwards !important;
+}
+

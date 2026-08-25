@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <circle cx="200" cy="120" r="90" fill="#059669" opacity="0.15" filter="blur(30px)"/>
+  <!-- GIS Map Polygon Layer -->
+  <polygon points="120,80 200,60 280,90 270,160 190,180 130,150" fill="#065f46" stroke="#34d399" stroke-width="2.5"/>
+  <polygon points="150,95 195,80 245,100 235,145 185,155 145,135" fill="#047857" stroke="#6ee7b7" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <!-- Contour Iso-lines -->
+  <path d="M135 120 Q190 100 255 130" stroke="#a7f3d0" stroke-width="1.5" opacity="0.6"/>
+  <path d="M145 140 Q190 120 245 150" stroke="#a7f3d0" stroke-width="1.5" opacity="0.6"/>
+  <!-- Glowing Map Pin -->
+  <g transform="translate(185, 85)">
+    <path d="M15 0 C6.7 0 0 6.7 0 15 C0 26 15 40 15 40 C15 40 30 26 30 15 C30 6.7 23.3 0 15 0 Z" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
+    <circle cx="15" cy="13" r="5" fill="#ffffff"/>
+  </g>
+  <!-- Satellite Orbit Arc -->
+  <path d="M90 170 Q200 30 310 170" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 4"/>
+</svg>

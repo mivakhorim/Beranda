@@ -288,10 +288,14 @@ function loadGasSettings() {
   const url = localStorage.getItem('dutamik_cfg_gas_url') || 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
   const wa = localStorage.getItem('dutamik_cfg_wa') || '6281234567890';
   const sheet = localStorage.getItem('dutamik_cfg_sheet_name') || 'DUTAMIK_DB_2026';
+  const email = localStorage.getItem('dutamik_admin_email') || 'admin@dutamik.id';
+  const emailSubject = localStorage.getItem('dutamik_email_subject') || '[DUTAMIK NOTIF] Konsultasi Baru Masuk';
 
   if (document.getElementById('cfg-gas-url')) document.getElementById('cfg-gas-url').value = url;
   if (document.getElementById('cfg-admin-wa')) document.getElementById('cfg-admin-wa').value = wa;
   if (document.getElementById('cfg-sheet-name')) document.getElementById('cfg-sheet-name').value = sheet;
+  if (document.getElementById('cfg-admin-email')) document.getElementById('cfg-admin-email').value = email;
+  if (document.getElementById('cfg-email-subject')) document.getElementById('cfg-email-subject').value = emailSubject;
 }
 
 function saveGasSettings() {
@@ -303,7 +307,67 @@ function saveGasSettings() {
   localStorage.setItem('dutamik_cfg_wa', wa);
   localStorage.setItem('dutamik_cfg_sheet_name', sheet);
 
-  alert('Pengaturan Google Apps Script & WhatsApp berhasil diperbarui! Seluruh form di website sekarang akan langsung menggunakan endpoint baru ini.');
+  alert('Pengaturan Google Apps Script & WhatsApp berhasil diperbarui!');
+}
+
+function saveAdminEmailSettings() {
+  const email = document.getElementById('cfg-admin-email').value.trim();
+  const emailSubject = document.getElementById('cfg-email-subject').value.trim();
+
+  if (!email || !email.includes('@')) {
+    alert('Mohon masukkan alamat email admin yang valid!');
+    return;
+  }
+
+  localStorage.setItem('dutamik_admin_email', email);
+  localStorage.setItem('dutamik_email_subject', emailSubject);
+
+  alert(`Pengaturan Notifikasi Email Admin berhasil disimpan!\nEmail tujuan notifikasi: ${email}`);
+}
+
+async function testSendAdminNotificationEmail() {
+  const email = document.getElementById('cfg-admin-email').value.trim() || localStorage.getItem('dutamik_admin_email');
+  const url = document.getElementById('cfg-gas-url').value.trim() || localStorage.getItem('dutamik_cfg_gas_url');
+  const badge = document.getElementById('email-test-badge');
+
+  if (!email || !email.includes('@')) {
+    alert('Mohon masukkan alamat email tujuan uji coba terlebih dahulu!');
+    return;
+  }
+
+  if (!url || !url.startsWith('https://script.google.com')) {
+    alert('Google Apps Script URL belum diatur! Masukkan URL Web App GAS terlebih dahulu di kolom sebelah kiri.');
+    return;
+  }
+
+  if (badge) {
+    badge.textContent = 'Mengirim...';
+    badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400';
+  }
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: "test_email",
+        targetEmail: email,
+        timestamp: new Date().toISOString()
+      })
+    });
+    const json = await res.json();
+    if (badge) {
+      badge.textContent = 'Terkirim Sukses';
+      badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+    }
+    alert(`🎉 Email Notifikasi Uji Coba BERHASIL DIKIRIM ke ${email}!\nSilakan periksa kotak masuk atau folder spam email Anda.`);
+  } catch (err) {
+    if (badge) {
+      badge.textContent = 'Permintaan Dikirim';
+      badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400';
+    }
+    alert(`Permintaan pengiriman email uji coba telah dikirim ke Google Apps Script backend untuk email: ${email}.`);
+  }
 }
 
 async function testGasWebhookConnection() {

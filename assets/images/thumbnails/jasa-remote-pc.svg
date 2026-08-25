@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" rx="20" fill="#0f172a"/>
+  <!-- Glowing Background Pulse -->
+  <circle cx="200" cy="120" r="90" fill="#3b82f6" opacity="0.15" filter="blur(30px)"/>
+  <!-- Laptop Base -->
+  <path d="M120 170 L280 170 L295 185 L105 185 Z" fill="#334155" stroke="#475569" stroke-width="2"/>
+  <rect x="135" y="70" width="130" height="95" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="3"/>
+  <rect x="142" y="77" width="116" height="81" rx="4" fill="#020617"/>
+  <!-- Screen Elements -->
+  <circle cx="200" cy="115" r="24" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+  <path d="M200 98 L200 115 L212 115" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Speedometer / Boost Arc -->
+  <path d="M180 125 A 24 24 0 1 1 220 125" stroke="#10b981" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Shield Badge -->
+  <path d="M245 75 L260 82 L260 98 Q260 110 245 116 Q230 110 230 98 L230 82 Z" fill="#10b981" opacity="0.9"/>
+  <path d="M240 95 L244 99 L252 90" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Remote Signal Waves -->
+  <path d="M150 95 Q140 115 150 135" stroke="#60a5fa" stroke-width="2" stroke-dasharray="3 3"/>
+  <path d="M142 88 Q128 115 142 142" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4 4"/>
+</svg>
