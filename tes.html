@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DUTAMIK.ID - Duta Media Informasi berKarya | Sahabat Solusi Digital &amp; Layanan Profesional</title>
+<!-- SEO Primary Meta Tags -->
+<meta content="DUTAMIK.ID (Duta Media Informasi berKarya) adalah mitra terpercaya yang menyediakan kumpulan alat bantu kerja online gratis in-browser, pendampingan legalitas usaha OSS, gambar arsitektur PBG SIMBG, dan sistem digital mandiri." name="description"/>
+<meta content="dutamik, dutamik id, duta media informasi berkarya, solusi digital umkm, tools online gratis, konsultasi bisnis gratis, jasa remote pc, jasa 3d modeling, gambar pbg simbg, peta shp oss, nib oss rba, paysheet qris" name="keywords"/>
+<meta content="DUTAMIK.ID - Duta Media Informasi berKarya" name="author"/>
+<meta content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" name="robots"/>
+<link href="https://dutamik.id/" rel="canonical"/>
+<!-- OpenGraph / Facebook -->
+<meta content="website" property="og:type"/>
+<meta content="https://dutamik.id/" property="og:url"/>
+<meta content="DUTAMIK.ID - Duta Media Informasi berKarya" property="og:title"/>
+<meta content="Sahabat solusi digital terpercaya: perkakas kerja instan gratis, konsultasi ramah, dan layanan profesional untuk kemajuan usaha Anda." property="og:description"/>
+<meta content="https://dutamik.id/assets/images/logo.svg" property="og:image"/>
+<meta content="DUTAMIK.ID" property="og:site_name"/>
+<!-- Twitter Cards -->
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="DUTAMIK.ID - Duta Media Informasi berKarya" name="twitter:title"/>
+<meta content="Sahabat solusi digital terpercaya: perkakas kerja instan gratis, konsultasi ramah, dan layanan profesional untuk kemajuan usaha Anda." name="twitter:description"/>
+<meta content="https://dutamik.id/assets/images/logo.svg" name="twitter:image"/>
+<!-- Favicon & Manifest -->
+<link href="assets/images/logo.svg" rel="icon" type="image/svg+xml"/>
+<link href="site.webmanifest" rel="manifest"/>
+<!-- Tailwind CSS & Lucide Icons -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#0f172a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- Custom Stylesheet -->
+<link href="assets/css/style.css" rel="stylesheet"/>
+<!-- GOOGLE SITELINKS & SEARCHBOX SCHEMA (JSON-LD) -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://dutamik.id/#website",
+        "url": "https://dutamik.id/",
+        "name": "DUTAMIK.ID",
+        "alternateName": "Duta Media Informasi berKarya",
+        "description": "Sahabat Solusi Digital Terpadu, Tools Gratis In-Browser & Layanan Profesional",
+        "publisher": {
+          "@id": "https://dutamik.id/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://dutamik.id/tools/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://dutamik.id/#organization",
+        "name": "Duta Media Informasi berKarya",
+        "alternateName": "DUTAMIK",
+        "url": "https://dutamik.id/",
+        "logo": "https://dutamik.id/assets/images/logo.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+62-812-3456-7890",
+          "contactType": "customer service",
+          "areaServed": "ID",
+          "availableLanguage": "Indonesian"
+        }
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": [
+          "Master Katalog",
+          "Fitur & Tools Gratis",
+          "Katalog Layanan Jasa",
+          "Produk Digital PaySheet",
+          "Donasi & Wall of Contributor",
+          "Tentang Kami",
+          "Hubungi Kami"
+        ],
+        "url": [
+          "https://dutamik.id/katalog/",
+          "https://dutamik.id/tools/",
+          "https://dutamik.id/jasa/",
+          "https://dutamik.id/produk/",
+          "https://dutamik.id/donasi/",
+          "https://dutamik.id/about/",
+          "https://dutamik.id/contact/"
+        ]
+      }
+    ]
+  }
+  </script>
+<script src="https://unpkg.com/lucide@latest"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script><style>
+    /* DUTAMIK CORE ENGINE STYLES (Header, Footer, Popups, Ticker, Controls) */
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    .dark ::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.7); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: rgba(203, 213, 225, 0.9); border-radius: 9999px; }
+    
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+    }
+    .dark .glass-panel {
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: opacity 0.25s ease-in-out;
+    }
+    .modal-backdrop.hidden {
+      display: none !important;
+    }
+    .modal-backdrop:not(.hidden) {
+      display: flex !important;
+    }
+
+    .gradient-brand {
+      background: linear-gradient(135deg, #2563eb, #0284c7);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .checkered-bg {
+      background-color: #f8fafc;
+      background-image: 
+        linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+        linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+    .dark .checkered-bg {
+      background-color: #0b1120;
+      background-image: 
+        linear-gradient(45deg, #151f32 25%, transparent 25%), 
+        linear-gradient(-45deg, #151f32 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #151f32 75%), 
+        linear-gradient(-45deg, transparent 75%, #151f32 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      height: 6px;
+      border-radius: 9999px;
+      outline: none;
+    }
+    .dark input[type=range] { background: #334155; }
+    input[type=range] { background: #e2e8f0; }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+    .ticker-bar {
+      background-color: #f1f5f9;
+      border-color: #e2e8f0;
+    }
+    .dark .ticker-bar {
+      background-color: #0f172a;
+      border-color: #1e293b;
+    }
+    .ticker-wrapper {
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+    }
+    .ticker-content {
+      display: inline-flex;
+      animation: ticker-slide 35s linear infinite;
+    }
+    .ticker-content:hover {
+      animation-play-state: paused;
+    }
+    @keyframes ticker-slide {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+</style></head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+<!-- 1. TOP RUNNING TICKER -->
+<div class="ticker-bar py-2 border-b text-xs overflow-hidden ticker-wrapper select-none">
+<div class="ticker-content font-mono flex items-center" id="donation-ticker-content">
+<span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<strong class="text-slate-900 dark:text-white font-bold">Bpk. Hendra S.</strong>
+<span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
+<span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Jasa Remote Laptop lancar &amp; aman!"</span>
+</span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<strong class="text-slate-900 dark:text-white font-bold">Ibu Rina Kartika</strong>
+<span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 100.000</span>
+<span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Gambar Kerja PBG lolos verifikasi SIMBG."</span>
+</span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<strong class="text-slate-900 dark:text-white font-bold">Mas Dimas Pratama</strong>
+<span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 75.000</span>
+<span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Aplikasi POS Kasir Sheet sangat membantu toko!"</span>
+</span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<strong class="text-slate-900 dark:text-white font-bold">CV Berkah Mandiri</strong>
+<span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 150.000</span>
+<span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"Peta SHP valid langsung lolos OSS RBA."</span>
+</span> • 
+  <span class="inline-flex items-center gap-2 mx-5 text-xs font-medium text-slate-700 dark:text-slate-300 flex-shrink-0">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<strong class="text-slate-900 dark:text-white font-bold">Kedai Kopi Bahagia</strong>
+<span class="text-emerald-600 dark:text-emerald-400 font-black">Rp 50.000</span>
+<span class="text-slate-500 dark:text-slate-400 italic text-[11px]">"PaySheet QRIS mantap tanpa potongan bulanan!"</span>
+</span>
+</div>
+</div>
+<!-- 2. REDESIGNED SLEEK NAVBAR -->
+
+<header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 dark:border-slate-800/80 transition-colors w-full">
+<div class="max-w-7xl mx-auto px-2.5 sm:px-4 lg:px-8">
+<div class="flex items-center justify-between h-14 sm:h-16 lg:h-18 py-1 sm:py-2 gap-1 sm:gap-3">
+<a class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 group py-1" href="./" title="DUTAMIK.ID - Duta Media Informasi berKarya">
+<div class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-lg sm:rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-blue-500/20 transform transition duration-300 group-hover:scale-105 shrink-0">
+<svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewbox="0 0 24 24">
+<path d="M4 4h7a8 8 0 0 1 8 8 8 8 0 0 1-8 8H4V4zm4 4v8h3a4 4 0 0 0 4-4 4 4 0 0 0-4-4H8z"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-black text-xs sm:text-sm lg:text-base tracking-tight text-slate-900 dark:text-white leading-none">
+      DUTAMIK<span class="text-blue-600 dark:text-blue-400">.ID</span>
+</span>
+<span class="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-medium leading-tight hidden sm:block">
+      Media Informasi &amp; Karya
+    </span>
+</div>
+</a>
+<nav class="hidden lg:flex items-center gap-1 font-medium text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+<a class="px-2.5 py-1.5 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap flex items-center gap-1" href="katalog/"><span data-global-i18n="navKatalog">Master Katalog</span></a>
+<a class="px-2.5 py-1.5 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap" data-global-i18n="navFitur" href="tools/">Fitur Gratis</a>
+<a class="px-2.5 py-1.5 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap" data-global-i18n="navJasa" href="jasa/">Katalog Jasa</a>
+<a class="px-2.5 py-1.5 rounded-xl hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition whitespace-nowrap" data-global-i18n="navProduk" href="produk/">Produk Digital</a>
+<a class="px-2.5 py-1.5 rounded-xl hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/20 transition whitespace-nowrap" data-global-i18n="navDonasi" href="donasi/">Donasi QRIS</a>
+</nav>
+<div class="flex items-center gap-1 sm:gap-1.5 lg:gap-2 shrink-0">
+<button aria-label="Cari Fitur" class="h-8 w-8 sm:h-9 sm:w-9 xl:w-auto xl:px-3 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all duration-200 flex items-center justify-center xl:justify-start gap-1.5 text-xs font-semibold cursor-pointer shrink-0 shadow-sm" onclick="openSearchModal()"><svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg><span class="hidden xl:inline" data-global-i18n="searchBtnText">Cari...</span><kbd class="hidden 2xl:inline px-1.5 py-0.5 text-[10px] bg-slate-200 dark:bg-slate-800 rounded font-mono text-slate-500">Ctrl+K</kbd></button>
+<button aria-label="Bagikan Halaman Ini" class="h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0 shadow-sm" onclick="openShareModal()" title="Bagikan Halaman Ini"><svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600 dark:text-slate-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg></button>
+<button aria-label="Ganti Bahasa" class="h-8 px-2 sm:h-9 sm:px-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-[11px] sm:text-xs font-bold font-mono text-blue-600 dark:text-blue-400 transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 shadow-sm shrink-0" id="btn-lang-toggle" onclick="toggleLanguage()" title="Ganti Bahasa (ID / EN)"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shrink-0"></span><span id="lang-text-indicator">ID</span></button>
+<button aria-label="Ganti Mode Gelap / Terang" class="h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0 shadow-sm" id="btn-theme-toggle" onclick="toggleTheme()" title="Ganti Mode Gelap / Terang"><span class="theme-toggle-icon flex items-center justify-center"><svg class="theme-icon-sun w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 hidden dark:inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line><line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line><line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line></svg><svg class="theme-icon-moon w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700 dark:hidden inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span></button>
+<button class="hidden lg:inline-flex items-center gap-1.5 h-9 gradient-brand text-white font-bold text-xs px-3.5 rounded-xl shadow-md hover:opacity-95 transition transform active:scale-95 whitespace-nowrap cursor-pointer shrink-0" onclick="openConsultationModal()"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span data-global-i18n="consultBtnText">Konsultasi Gratis</span></button>
+<button aria-label="Menu Navigasi Mobile" class="lg:hidden h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all duration-200 cursor-pointer flex items-center justify-center shrink-0 shadow-sm" onclick="toggleMobileMenu()"><svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg></button>
+</div>
+</div>
+</div>
+<div class="hidden lg:hidden px-4 pt-2 pb-6 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md transition-all" id="mobile-menu">
+<div class="flex flex-col gap-1.5 pt-2 text-sm font-medium">
+<a class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2" href="katalog/"><span data-global-i18n="navKatalog">Master Katalog Lengkap</span></a>
+<a class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800" data-global-i18n="navFitur" href="tools/">Fitur &amp; Tools Gratis</a>
+<a class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800" data-global-i18n="navJasa" href="jasa/">Katalog Jasa &amp; Konsultasi</a>
+<a class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800" data-global-i18n="navProduk" href="produk/">Produk Digital &amp; PaySheet</a>
+<a class="px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800" data-global-i18n="navDonasi" href="donasi/">Donasi QRIS &amp; Kontributor</a>
+<button class="px-3 py-2 rounded-xl text-left font-medium text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer" id="btn-mobile-lang" onclick="toggleLanguage();"><span class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span>Bahasa / Language</span></span><span class="lang-text-indicator font-mono font-bold text-blue-600 dark:text-blue-400 text-xs px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 rounded-lg">ID</span></button>
+<button class="mt-2 w-full gradient-brand text-white font-bold py-2.5 rounded-xl text-center shadow text-xs cursor-pointer" data-global-i18n="orderMobileBtn" onclick="toggleMobileMenu(); openConsultationModal();">Konsultasi &amp; Order Jasa</button>
+</div>
+</div>
+</header>
+
+<!-- 3. HERO SECTION (REWRITTEN: WARM, HUMANIST, SOLUTIVE & PERSUASIVE) -->
+
+<!-- 4. HIGHLIGHT SECTION: FITUR & TOOLS GRATIS (MATCHING JASA SLIDER DESIGN) -->
+
+<!-- 5. HIGHLIGHT SECTION: JASA UNGGULAN NYATA (MOBILE SLIDE CAROUSEL) -->
+
+<!-- 6. HIGHLIGHT SECTION: PRODUK DIGITAL & SOLUSI SIAP PAKAI (MOBILE SLIDE CAROUSEL) -->
+
+<!-- 7. PROPORTIONAL DONASI & WALL OF KONTRIBUTOR -->
+
+<!-- 8. FOOTER -->
+<!-- FOOTER (CLEAN EXTENSIONLESS URLS) -->
+
+<!-- ======================================================================= -->
+<!-- 8. FOOTER (FULL RESPONSIVE & DUAL THEME + FULL I18N SUPPORT)            -->
+<!-- ======================================================================= -->
+
+<!-- [DUTAMIK_CONTENT_SLOT_START] -->
+<main class="flex-1 w-full relative z-10 transition-colors" id="main-content">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-800/80 bg-blue-50/90 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-4 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+<span>Slot Konten Siap Pakai</span>
+</div>
+<h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">Template Bagan Header, Footer &amp; Pop Up</h1>
+<p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">Kerangka HTML bersih yang siap diintegrasikan dengan materi konten menggunakan protokol <code class="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-mono text-xs">/dutacopot</code>.</p>
+</div>
+</main>
+<!-- [DUTAMIK_CONTENT_SLOT_END] -->
+<footer class="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-sm mt-auto border-t border-slate-200 dark:border-slate-800 transition-colors duration-300 w-full">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Column 1: Brand Info & Socials -->
+<div class="space-y-4">
+<a class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 group py-1" href="./" title="DUTAMIK.ID">
+<div class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-lg sm:rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-blue-500/20 transform transition duration-300 group-hover:scale-105 shrink-0">
+<svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewbox="0 0 24 24">
+<path d="M4 4h7a8 8 0 0 1 8 8 8 8 0 0 1-8 8H4V4zm4 4v8h3a4 4 0 0 0 4-4 4 4 0 0 0-4-4H8z"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-black text-xs sm:text-sm lg:text-base tracking-tight text-slate-900 dark:text-white leading-none">
+                DUTAMIK<span class="text-blue-600 dark:text-blue-400">.ID</span>
+</span>
+<span class="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-medium leading-tight hidden sm:block">
+                Media Informasi &amp; Karya
+              </span>
+</div>
+</a>
+<p class="text-xs leading-relaxed text-slate-600 dark:text-slate-400" data-global-i18n="footerBrandDesc">
+            Duta Media Informasi berKarya hadir sebagai mitra terpercaya dalam mendampingi digitalisasi usaha, rancang bangun arsitektur, pendampingan legalitas, dan akses tool online gratis yang mudah diakses untuk semua.
+          </p>
+<!-- Social Media Channels -->
+<div class="pt-2">
+<h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-300 mb-2.5" data-global-i18n="footerMediaSocial">
+              Media Sosial Resmi:
+            </h5>
+<div class="flex items-center gap-2.5 flex-wrap">
+<a aria-label="Facebook DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-white hover:bg-[#1877F2] hover:border-[#1877F2] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm" href="https://facebook.com" rel="noopener nofollow" target="_blank" title="Facebook DUTAMIK.ID">
+<svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</a>
+<a aria-label="Instagram DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:border-transparent flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm" href="https://instagram.com" rel="noopener nofollow" target="_blank" title="Instagram @dutamik.id">
+<svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+<a aria-label="TikTok DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#25F4EE] hover:bg-black hover:border-[#FE2C55] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm" href="https://tiktok.com" rel="noopener nofollow" target="_blank" title="TikTok @dutamik.id">
+<svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.3 6.3 0 0 0 1.95-4.51V8.04a8.18 8.18 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.95-.47z"></path></svg>
+</a>
+<a aria-label="X (Twitter) DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-white hover:bg-black hover:border-slate-500 flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm" href="https://x.com" rel="noopener nofollow" target="_blank" title="X (Twitter) @dutamik_id">
+<svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+</a>
+<a aria-label="YouTube DUTAMIK.ID" class="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-white hover:bg-[#FF0000] hover:border-[#FF0000] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm" href="https://youtube.com" rel="noopener nofollow" target="_blank" title="YouTube DUTAMIK.ID">
+<svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<!-- Column 2: Legal Pages -->
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider mb-3.5" data-global-i18n="footerLegalTitle">Halaman Legal</h4>
+<ul class="space-y-2 text-xs">
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerAboutLink" href="./about/">Tentang Kami</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerContactLink" href="./contact/">Hubungi Kami</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerPrivacyLink" href="./privacy-policy/">Kebijakan Privasi</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerTermsLink" href="./terms-of-service/">Syarat &amp; Ketentuan</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerDisclaimerLink" href="./disclaimer/">Disclaimer</a></li>
+</ul>
+</div>
+<!-- Column 3: Service Classifications -->
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider mb-3.5" data-global-i18n="footerServicesTitle">Klasifikasi Layanan</h4>
+<ul class="space-y-2 text-xs">
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition text-blue-600 dark:text-blue-400 font-semibold" data-global-i18n="footerMasterCatalogLink" href="./katalog/">Master Katalog</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerToolsLink" href="./tools/">Kategori Tool Online Gratis</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerDesignLink" href="./jasa/">Kategori Desain &amp; Arsitektur</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerLegalityLink" href="./jasa/">Kategori Legalitas &amp; Geospasial</a></li>
+<li><a class="hover:text-blue-600 dark:hover:text-blue-400 transition" data-global-i18n="footerDigitalLink" href="./produk/">Kategori Solusi Digital Mandiri</a></li>
+</ul>
+</div>
+<!-- Column 4: Community Support & QRIS -->
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-xs uppercase tracking-wider mb-3.5" data-global-i18n="footerCommunityTitle">Dukungan Komunitas</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed" data-global-i18n="footerCommunityDesc">Dukung optimasi sistem &amp; pengembangan tool baru lewat kontribusi QRIS:</p>
+<a class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-xl text-xs font-bold transition shadow-lg" href="./donasi/">
+<svg class="w-3.5 h-3.5 fill-white" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<span data-global-i18n="footerContributorLink">Wall of Contributor</span>
+</a>
+</div>
+</div>
+<!-- Copyright Bar -->
+<div class="mt-10 pt-6 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
+<p>© 2026 <a class="text-blue-600 dark:text-blue-400 font-bold hover:underline" href="https://dutamik.id">Duta Media Informasi berKarya</a> (DUTAMIK.ID). <span data-global-i18n="footerCopyright">Seluruh Hak Cipta Dilindungi.</span></p>
+<span class="text-[11px] text-slate-400">v3.7 Modular Framework</span>
+</div>
+</div>
+</footer>
+
+<!-- MODAL: SOCIAL SHARE -->
+
+<!-- MODAL: SOCIAL SHARE (DYNAMIC WEB URL) -->
+<div class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4" id="modal-share-site">
+<div class="modal-content glass-panel w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-5">
+<div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-2.5 text-left">
+<div class="w-9 h-9 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shadow-sm shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div>
+<h4 class="font-extrabold text-base text-slate-900 dark:text-white" data-global-i18n="shareModalTitle">Bagikan Halaman Ini</h4>
+<span class="text-[10px] text-slate-400" data-global-i18n="shareModalSubtitle">Sebarkan tautan halaman ini ke rekan &amp; tim Anda</span>
+</div>
+</div>
+<button aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer shrink-0" onclick="closeModal('modal-share-site')">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</button>
+</div>
+<!-- Current Dynamic URL Box with Copy Button -->
+<div class="space-y-1.5 text-left">
+<label class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" data-global-i18n="shareUrlLabel">Tautan Halaman Aktif:</label>
+<div class="flex items-center gap-2">
+<input class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 font-mono focus:outline-none select-all" id="share-current-url" readonly="" type="text"/>
+<button class="px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition flex items-center gap-1 shrink-0 cursor-pointer" onclick="shareTo('copy')">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+<span data-global-i18n="copyLinkBtn">Salin</span>
+</button>
+</div>
+</div>
+<!-- Social Media Share Grid -->
+<div class="grid grid-cols-4 gap-2.5 sm:gap-3">
+<button class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-slate-700 dark:text-slate-200 hover:text-white border border-emerald-500/20 hover:border-emerald-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer" onclick="shareTo('whatsapp')">
+<div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path></svg>
+</div>
+<span class="text-[11px] font-bold">WhatsApp</span>
+</button>
+<button class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-sky-500/10 hover:bg-sky-500 text-slate-700 dark:text-slate-200 hover:text-white border border-sky-500/20 hover:border-sky-500 transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer" onclick="shareTo('telegram')">
+<div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg>
+</div>
+<span class="text-[11px] font-bold">Telegram</span>
+</button>
+<button class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-blue-600/10 hover:bg-[#1877F2] text-slate-700 dark:text-slate-200 hover:text-white border border-blue-600/20 hover:border-[#1877F2] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer" onclick="shareTo('facebook')">
+<div class="w-10 h-10 rounded-xl bg-[#1877F2] text-white flex items-center justify-center shadow">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</div>
+<span class="text-[11px] font-bold">Facebook</span>
+</button>
+<button class="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-500/10 hover:bg-black text-slate-700 dark:text-slate-200 hover:text-white border border-slate-500/20 hover:border-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer" onclick="shareTo('x')">
+<div class="w-10 h-10 rounded-xl bg-slate-900 dark:bg-black text-white flex items-center justify-center shadow">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+</div>
+<span class="text-[11px] font-bold">X (Twitter)</span>
+</button>
+</div>
+</div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div class="modal-backdrop fixed inset-0 z-50 hidden items-start justify-center p-4 pt-16" id="modal-global-search">
+<div class="modal-content glass-panel w-full max-w-xl rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[85vh] flex flex-col">
+<div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+<i class="w-5 h-5 text-blue-600" data-lucide="search"></i>
+<input class="w-full bg-transparent border-none text-sm font-semibold focus:outline-none text-slate-900 dark:text-white" id="search-input-field" oninput="performSearch(this.value)" placeholder="Ketik apa saja (tools, jasa, produk, atau kata kunci)..." type="text"/>
+<button class="p-1 rounded-lg text-slate-400 hover:text-slate-600" onclick="closeSearchModal()"><i class="w-5 h-5" data-lucide="x"></i></button>
+</div>
+<div class="hidden" id="search-backdoor-container"></div>
+<div class="overflow-y-auto flex-1 pr-1 space-y-2" id="search-results-container"></div>
+</div>
+</div>
+<!-- BORDERLESS CLEAN FLOATING ROBOT ASSISTANT -->
+<div class="fixed right-3 sm:right-6 bottom-20 sm:bottom-24 z-50 select-none pointer-events-auto" data-state="peek" id="peeking-robot-dock">
+<button aria-label="Konsultasi Robot Asisten" class="p-0 bg-transparent border-none outline-none focus:outline-none cursor-pointer flex items-center justify-center group transition-transform hover:scale-110 active:scale-95" id="robot-peek-btn" onclick="openConsultationModal()" title="Klik untuk konsultasi cepat">
+<div class="relative w-14 h-12 sm:w-16 sm:h-14 flex items-center justify-center filter drop-shadow-[0_8px_18px_rgba(0,210,255,0.55)]">
+<svg class="w-full h-full drop-shadow-xl select-none" fill="none" height="100%" style="max-height: 52px; max-width: 62px;" viewbox="0 0 240 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialgradient cx="50%" cy="20%" id="helmetShellGrad" r="80%">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop offset="45%" stop-color="#f1f5f9"></stop>
+<stop offset="85%" stop-color="#cbd5e1"></stop>
+<stop offset="100%" stop-color="#94a3b8"></stop>
+</radialgradient>
+<lineargradient id="thrusterPodGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop offset="60%" stop-color="#e2e8f0"></stop>
+<stop offset="100%" stop-color="#94a3b8"></stop>
+</lineargradient>
+<lineargradient id="cyanBezelGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#38bdf8"></stop>
+<stop offset="50%" stop-color="#00d2ff"></stop>
+<stop offset="100%" stop-color="#0284c7"></stop>
+</lineargradient>
+<radialgradient cx="50%" cy="30%" id="screenGlassGrad" r="70%">
+<stop offset="0%" stop-color="#1e293b"></stop>
+<stop offset="50%" stop-color="#0f172a"></stop>
+<stop offset="90%" stop-color="#020617"></stop>
+<stop offset="100%" stop-color="#000000"></stop>
+</radialgradient>
+<lineargradient id="cyanStripeGlow" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#67e8f9"></stop>
+<stop offset="50%" stop-color="#00f0ff"></stop>
+<stop offset="100%" stop-color="#06b6d4"></stop>
+</lineargradient>
+<pattern height="4" id="crtScanlines" patternunits="userSpaceOnUse" width="100">
+<line opacity="0.45" stroke="#000000" stroke-width="1.2" x1="0" x2="100" y1="0" y2="0"></line>
+<line opacity="0.95" stroke="#00f0ff" stroke-width="2" x1="0" x2="100" y1="2" y2="2"></line>
+</pattern>
+<filter height="160%" id="neonGlow" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur1" stddeviation="3.5"></fegaussianblur>
+<fegaussianblur result="blur2" stddeviation="7"></fegaussianblur>
+<femerge>
+<femergenode in="blur2"></femergenode>
+<femergenode in="blur1"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<g class="robot-flight-idle">
+<ellipse class="robot-thruster-glow" cx="120" cy="180" fill="url(#cyanStripeGlow)" filter="url(#neonGlow)" opacity="0.6" rx="34" ry="9"></ellipse>
+<ellipse cx="120" cy="180" fill="#ffffff" opacity="0.9" rx="16" ry="4"></ellipse>
+<g transform="translate(8, 62)">
+<rect fill="url(#thrusterPodGrad)" height="66" rx="17" stroke="#cbd5e1" stroke-width="1.5" width="34" x="0" y="0"></rect>
+<rect fill="url(#cyanBezelGrad)" height="46" rx="5" width="10" x="18" y="10"></rect>
+<ellipse cx="10" cy="33" fill="#0f172a" rx="5" ry="14"></ellipse>
+<ellipse class="robot-thruster-glow" cx="10" cy="33" fill="#00f0ff" filter="url(#neonGlow)" rx="2.5" ry="8"></ellipse>
+</g>
+<g transform="translate(198, 62)">
+<rect fill="url(#thrusterPodGrad)" height="66" rx="17" stroke="#cbd5e1" stroke-width="1.5" width="34" x="0" y="0"></rect>
+<rect fill="url(#cyanBezelGrad)" height="46" rx="5" width="10" x="6" y="10"></rect>
+<ellipse cx="24" cy="33" fill="#0f172a" rx="5" ry="14"></ellipse>
+<ellipse class="robot-thruster-glow" cx="24" cy="33" fill="#00f0ff" filter="url(#neonGlow)" rx="2.5" ry="8"></ellipse>
+</g>
+<rect fill="url(#helmetShellGrad)" height="154" rx="66" stroke="#cbd5e1" stroke-width="2" width="168" x="36" y="18"></rect>
+<path d="M84 18 C84 12, 94 12, 94 18 Z" fill="#94a3b8" stroke="#cbd5e1"></path>
+<path d="M146 18 C146 12, 156 12, 156 18 Z" fill="#94a3b8" stroke="#cbd5e1"></path>
+<ellipse cx="120" cy="32" fill="#ffffff" opacity="0.85" rx="48" ry="8"></ellipse>
+<rect fill="none" filter="drop-shadow(0 2px 6px rgba(0,210,255,0.4))" height="126" rx="52" stroke="url(#cyanBezelGrad)" stroke-width="8" width="144" x="48" y="32"></rect>
+<rect fill="url(#screenGlassGrad)" height="118" rx="46" width="136" x="52" y="36"></rect>
+<rect fill="url(#crtScanlines)" height="118" opacity="0.35" rx="46" width="136" x="52" y="36"></rect>
+<path d="M58 56 Q120 38 182 56 Q160 42 120 42 Q78 42 58 56 Z" fill="#ffffff" opacity="0.3"></path>
+<ellipse cx="76" cy="56" fill="#ffffff" opacity="0.45" rx="14" ry="5" transform="rotate(-15 76 56)"></ellipse>
+<g class="robot-led-eyes" filter="url(#neonGlow)">
+<g>
+<rect fill="url(#cyanStripeGlow)" height="50" rx="13" width="26" x="80" y="62"></rect>
+<rect fill="url(#crtScanlines)" height="50" rx="13" width="26" x="80" y="62"></rect>
+<ellipse cx="93" cy="74" fill="#ffffff" opacity="0.9" rx="4" ry="3"></ellipse>
+</g>
+<g>
+<rect fill="url(#cyanStripeGlow)" height="50" rx="13" width="26" x="134" y="62"></rect>
+<rect fill="url(#crtScanlines)" height="50" rx="13" width="26" x="134" y="62"></rect>
+<ellipse cx="147" cy="74" fill="#ffffff" opacity="0.9" rx="4" ry="3"></ellipse>
+</g>
+</g>
+<g filter="url(#neonGlow)">
+<path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#cyanStripeGlow)"></path>
+<path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#crtScanlines)"></path>
+<path d="M97 126 Q120 142 143 126" opacity="0.9" stroke="#ffffff" stroke-linecap="round" stroke-width="1.8"></path>
+</g>
+</g>
+</svg>
+<span class="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping pointer-events-none"></span>
+<span class="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white pointer-events-none"></span>
+</div>
+</button>
+</div>
+<!-- MODAL: KONSULTASI & PEMESANAN LAYANAN -->
+<div class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4 pt-8 sm:pt-12" id="modal-consultation-service">
+<div class="relative modal-content glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto space-y-4">
+<!-- Header Modal -->
+<div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+<div>
+<h3 class="font-extrabold text-lg sm:text-xl text-slate-900 dark:text-white">Konsultasi &amp; Pemesanan Layanan</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Diskusikan kebutuhan proyek Anda langsung dengan tim ahli kami</p>
+</div>
+<button aria-label="Tutup Modal" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer" onclick="closeConsultationModal()">
+<i class="w-5 h-5" data-lucide="x"></i>
+</button>
+</div>
+<!-- Form -->
+<form class="space-y-3.5 text-xs text-left" onsubmit="handleConsultationSubmit(event)">
+<!-- DROPDOWN CONTAINER DENGAN ROBOT MENDARAT DI ATASNYA -->
+<div class="relative pt-6">
+<div class="absolute -top-5 sm:-top-6 right-2 sm:right-4 w-14 h-11 sm:w-16 sm:h-12 z-20 pointer-events-none transition-all duration-300" id="modal-robot-sitting">
+<div class="w-full h-full transform transition-all duration-300 filter drop-shadow-[0_6px_14px_rgba(0,210,255,0.45)]" id="robot-sitting-avatar">
+<svg class="w-full h-full drop-shadow-xl select-none" fill="none" height="100%" style="max-height: 52px; max-width: 62px;" viewbox="0 0 240 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialgradient cx="50%" cy="20%" id="helmetShellGrad" r="80%">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop offset="45%" stop-color="#f1f5f9"></stop>
+<stop offset="85%" stop-color="#cbd5e1"></stop>
+<stop offset="100%" stop-color="#94a3b8"></stop>
+</radialgradient>
+<lineargradient id="thrusterPodGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop offset="60%" stop-color="#e2e8f0"></stop>
+<stop offset="100%" stop-color="#94a3b8"></stop>
+</lineargradient>
+<lineargradient id="cyanBezelGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#38bdf8"></stop>
+<stop offset="50%" stop-color="#00d2ff"></stop>
+<stop offset="100%" stop-color="#0284c7"></stop>
+</lineargradient>
+<radialgradient cx="50%" cy="30%" id="screenGlassGrad" r="70%">
+<stop offset="0%" stop-color="#1e293b"></stop>
+<stop offset="50%" stop-color="#0f172a"></stop>
+<stop offset="90%" stop-color="#020617"></stop>
+<stop offset="100%" stop-color="#000000"></stop>
+</radialgradient>
+<lineargradient id="cyanStripeGlow" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#67e8f9"></stop>
+<stop offset="50%" stop-color="#00f0ff"></stop>
+<stop offset="100%" stop-color="#06b6d4"></stop>
+</lineargradient>
+<pattern height="4" id="crtScanlines" patternunits="userSpaceOnUse" width="100">
+<line opacity="0.45" stroke="#000000" stroke-width="1.2" x1="0" x2="100" y1="0" y2="0"></line>
+<line opacity="0.95" stroke="#00f0ff" stroke-width="2" x1="0" x2="100" y1="2" y2="2"></line>
+</pattern>
+<filter height="160%" id="neonGlow" width="160%" x="-30%" y="-30%">
+<fegaussianblur result="blur1" stddeviation="3.5"></fegaussianblur>
+<fegaussianblur result="blur2" stddeviation="7"></fegaussianblur>
+<femerge>
+<femergenode in="blur2"></femergenode>
+<femergenode in="blur1"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<g class="robot-flight-idle">
+<ellipse class="robot-thruster-glow" cx="120" cy="180" fill="url(#cyanStripeGlow)" filter="url(#neonGlow)" opacity="0.6" rx="34" ry="9"></ellipse>
+<ellipse cx="120" cy="180" fill="#ffffff" opacity="0.9" rx="16" ry="4"></ellipse>
+<g transform="translate(8, 62)">
+<rect fill="url(#thrusterPodGrad)" height="66" rx="17" stroke="#cbd5e1" stroke-width="1.5" width="34" x="0" y="0"></rect>
+<rect fill="url(#cyanBezelGrad)" height="46" rx="5" width="10" x="18" y="10"></rect>
+<ellipse cx="10" cy="33" fill="#0f172a" rx="5" ry="14"></ellipse>
+<ellipse class="robot-thruster-glow" cx="10" cy="33" fill="#00f0ff" filter="url(#neonGlow)" rx="2.5" ry="8"></ellipse>
+</g>
+<g transform="translate(198, 62)">
+<rect fill="url(#thrusterPodGrad)" height="66" rx="17" stroke="#cbd5e1" stroke-width="1.5" width="34" x="0" y="0"></rect>
+<rect fill="url(#cyanBezelGrad)" height="46" rx="5" width="10" x="6" y="10"></rect>
+<ellipse cx="24" cy="33" fill="#0f172a" rx="5" ry="14"></ellipse>
+<ellipse class="robot-thruster-glow" cx="24" cy="33" fill="#00f0ff" filter="url(#neonGlow)" rx="2.5" ry="8"></ellipse>
+</g>
+<rect fill="url(#helmetShellGrad)" height="154" rx="66" stroke="#cbd5e1" stroke-width="2" width="168" x="36" y="18"></rect>
+<path d="M84 18 C84 12, 94 12, 94 18 Z" fill="#94a3b8" stroke="#cbd5e1"></path>
+<path d="M146 18 C146 12, 156 12, 156 18 Z" fill="#94a3b8" stroke="#cbd5e1"></path>
+<ellipse cx="120" cy="32" fill="#ffffff" opacity="0.85" rx="48" ry="8"></ellipse>
+<rect fill="none" filter="drop-shadow(0 2px 6px rgba(0,210,255,0.4))" height="126" rx="52" stroke="url(#cyanBezelGrad)" stroke-width="8" width="144" x="48" y="32"></rect>
+<rect fill="url(#screenGlassGrad)" height="118" rx="46" width="136" x="52" y="36"></rect>
+<rect fill="url(#crtScanlines)" height="118" opacity="0.35" rx="46" width="136" x="52" y="36"></rect>
+<path d="M58 56 Q120 38 182 56 Q160 42 120 42 Q78 42 58 56 Z" fill="#ffffff" opacity="0.3"></path>
+<ellipse cx="76" cy="56" fill="#ffffff" opacity="0.45" rx="14" ry="5" transform="rotate(-15 76 56)"></ellipse>
+<g class="robot-led-eyes" filter="url(#neonGlow)">
+<g>
+<rect fill="url(#cyanStripeGlow)" height="50" rx="13" width="26" x="80" y="62"></rect>
+<rect fill="url(#crtScanlines)" height="50" rx="13" width="26" x="80" y="62"></rect>
+<ellipse cx="93" cy="74" fill="#ffffff" opacity="0.9" rx="4" ry="3"></ellipse>
+</g>
+<g>
+<rect fill="url(#cyanStripeGlow)" height="50" rx="13" width="26" x="134" y="62"></rect>
+<rect fill="url(#crtScanlines)" height="50" rx="13" width="26" x="134" y="62"></rect>
+<ellipse cx="147" cy="74" fill="#ffffff" opacity="0.9" rx="4" ry="3"></ellipse>
+</g>
+</g>
+<g filter="url(#neonGlow)">
+<path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#cyanStripeGlow)"></path>
+<path d="M96 126 Q120 144 144 126 Q138 140 120 140 Q102 140 96 126 Z" fill="url(#crtScanlines)"></path>
+<path d="M97 126 Q120 142 143 126" opacity="0.9" stroke="#ffffff" stroke-linecap="round" stroke-width="1.8"></path>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+            Pilih Layanan yang Diinginkan:
+          </label>
+<select class="w-full px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition-all cursor-pointer" id="consult-service-select" name="serviceType" onblur="handleDropdownBlur()" onchange="handleDropdownChange(this)" onfocus="handleDropdownFocus()">
+<optgroup label="Layanan Jasa &amp; Arsitektur">
+<option value="Jasa Optimasi Laptop &amp; PC Remote">💻 Optimasi Laptop/PC</option>
+<option value="3D Modeling Bangunan &amp; Render">🏢 3D Model &amp; Render</option>
+<option value="Gambar Kerja &amp; PBG Bangunan">📐 Gambar Kerja PBG</option>
+<option value="Peta Format SHP &amp; Validasi OSS">🗺️ Peta SHP OSS</option>
+<option value="Penerbitan NIB Usaha OSS RBA">📜 NIB Usaha OSS</option>
+<option value="Pembuatan Web Serverless &amp; Profil UMKM">🌐 Web Profil UMKM</option>
+</optgroup>
+<optgroup label="Produk Digital &amp; Kasir">
+<option value="Aplikasi Kasir POS Google Sheets">📦 Kasir POS Sheets</option>
+<option value="Paket Desain Rumah 2D/3D Lengkap">🏠 Desain Rumah 2D/3D</option>
+<option value="Template Website Modern Siap Pakai">💻 Template Website</option>
+<option value="E-Book Google Apps Script Master">📘 E-Book Script Master</option>
+<option value="PaySheet QRIS Payment Engine">⚡ PaySheet QRIS Engine</option>
+</optgroup>
+<optgroup label="Pertanyaan Lain">
+<option value="Konsultasi Kustom / Tanya Fitur Gratis">🛠️ Konsultasi Kustom</option>
+</optgroup>
+</select>
+</div>
+<div>
+<label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap / Usaha: *</label>
+<input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" name="clientName" placeholder="Nama Anda atau Nama Usaha" required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp Aktif: *</label>
+<input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" name="clientWhatsapp" placeholder="081234567890" required="" type="tel"/>
+</div>
+<div>
+<label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Email Anda (Untuk Salinan Resume):</label>
+<input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" name="clientEmail" placeholder="emailanda@gmail.com" type="email"/>
+</div>
+<div>
+<label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Ceritakan Rencana / Kebutuhan Proyek Anda: *</label>
+<textarea class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500 focus:outline-none" name="projectDetails" placeholder="Jelaskan kebutuhan, tenggat waktu, atau pertanyaan yang ingin Anda konsultasikan..." required="" rows="3"></textarea>
+</div>
+<button class="w-full py-3.5 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer" type="submit">
+<i class="w-4 h-4" data-lucide="send"></i>
+<span>Kirim Konsultasi / Pesanan Sekarang</span>
+</button>
+</form>
+</div>
+</div>
+<!-- Core Scripts -->
+<script src="./assets/js/catalog-data.js"></script>
+<script src="./assets/js/gas-client.js"></script>
+<script src="./assets/js/search-engine.js"></script>
+<script src="./assets/js/main.js"></script>
+
+<!-- ======================================================================= -->
+<!-- 🚀 DUTAMIK MASTER CLIENT ENGINE (Header, Footer, Popups, i18n, Theme)   -->
+<!-- ======================================================================= -->
+<script>
+    // --- 1. GLOBAL STATE & REGISTRY ---
+    window.DUTAMIK_APP = {
+      lang: localStorage.getItem('lang') || 'id',
+      theme: localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+      activeModal: null,
+      toolTranslations: {}
+    };
+
+    // --- 2. GLOBAL I18N DICTIONARY (HEADER, MODALS & FULL FOOTER) ---
+    const GLOBAL_I18N = {
+      id: {
+        navBeranda: "Beranda",
+        navKatalog: "Master Katalog",
+        navFitur: "Fitur Gratis",
+        navJasa: "Katalog Jasa",
+        navProduk: "Produk Digital",
+        navDonasi: "Donasi QRIS",
+        searchBtnText: "Cari...",
+        consultBtnText: "Konsultasi Gratis",
+        orderMobileBtn: "Konsultasi & Order Jasa",
+        shareModalTitle: "Bagikan Halaman Ini",
+        shareModalSubtitle: "Sebarkan tautan halaman ini ke rekan & tim Anda",
+        shareUrlLabel: "Tautan Halaman Aktif:",
+        copyLinkBtn: "Salin Link",
+        searchModalTitle: "Pencarian Cepat Sitelink & Fitur",
+        searchPlaceholder: "Ketik kata kunci layanan, tools, atau materi...",
+        searchEmptyText: "Mulai mengetik untuk mencari layanan, perkakas, atau materi...",
+        consultModalTitle: "Konsultasi Kebutuhan & Order",
+        consultModalSubtitle: "Ceritakan proyek Anda dan tim kami segera merespons via WhatsApp resmi.",
+        footerBrandDesc: "Duta Media Informasi berKarya hadir sebagai mitra terpercaya dalam mendampingi digitalisasi usaha, rancang bangun arsitektur, pendampingan legalitas, dan akses tool online gratis yang mudah diakses untuk semua.",
+        footerMediaSocial: "Media Sosial Resmi:",
+        footerLegalTitle: "Halaman Legal",
+        footerAboutLink: "Tentang Kami",
+        footerContactLink: "Hubungi Kami",
+        footerPrivacyLink: "Kebijakan Privasi",
+        footerTermsLink: "Syarat & Ketentuan",
+        footerDisclaimerLink: "Disclaimer",
+        footerServicesTitle: "Klasifikasi Layanan",
+        footerMasterCatalogLink: "Master Katalog Lengkap",
+        footerToolsLink: "Kategori Tool Online Gratis",
+        footerDesignLink: "Kategori Desain & Arsitektur",
+        footerLegalityLink: "Kategori Legalitas & Geospasial",
+        footerDigitalLink: "Kategori Solusi Digital Mandiri",
+        footerCommunityTitle: "Dukungan Komunitas",
+        footerCommunityDesc: "Dukung optimasi sistem & pengembangan tool baru lewat kontribusi QRIS:",
+        footerContributorLink: "Wall of Contributor",
+        footerCopyright: "Seluruh Hak Cipta Dilindungi.",
+        copyToastSuccess: "Tautan halaman berhasil disalin ke clipboard!"
+      },
+      en: {
+        navBeranda: "Home",
+        navKatalog: "Master Catalog",
+        navFitur: "Free Tools",
+        navJasa: "Services",
+        navProduk: "Digital Products",
+        navDonasi: "Donation QRIS",
+        searchBtnText: "Search...",
+        consultBtnText: "Free Consult",
+        orderMobileBtn: "Consult & Order Service",
+        shareModalTitle: "Share This Page",
+        shareModalSubtitle: "Share this active page URL with your colleagues & network",
+        shareUrlLabel: "Active Page URL:",
+        copyLinkBtn: "Copy Link",
+        searchModalTitle: "Quick Sitelink & Feature Search",
+        searchPlaceholder: "Type keywords for services, tools, or articles...",
+        searchEmptyText: "Start typing to search catalog items, tools, or services...",
+        consultModalTitle: "Consultation & Service Order",
+        consultModalSubtitle: "Tell us about your project and our team will get in touch via WhatsApp.",
+        footerBrandDesc: "Duta Media Informasi berKarya is your trusted partner for business digitization, architectural planning, business legality, and free in-browser online tools for everyone.",
+        footerMediaSocial: "Official Social Media:",
+        footerLegalTitle: "Legal Pages",
+        footerAboutLink: "About Us",
+        footerContactLink: "Contact Us",
+        footerPrivacyLink: "Privacy Policy",
+        footerTermsLink: "Terms of Service",
+        footerDisclaimerLink: "Disclaimer",
+        footerServicesTitle: "Service Categories",
+        footerMasterCatalogLink: "Full Master Catalog",
+        footerToolsLink: "Free Online Tools Category",
+        footerDesignLink: "Design & Architecture Category",
+        footerLegalityLink: "Legality & Geospatial Category",
+        footerDigitalLink: "Digital Solutions Category",
+        footerCommunityTitle: "Community Support",
+        footerCommunityDesc: "Support system optimization & new tool development via QRIS donation:",
+        footerContributorLink: "Wall of Contributors",
+        footerCopyright: "All Rights Reserved.",
+        copyToastSuccess: "Page link successfully copied to clipboard!"
+      }
+    };
+
+    // --- 3. MODAL CONTROLLER ---
+    function openModal(modalId) {
+      let targetId = modalId;
+      if (targetId === 'modal-order-service') targetId = 'modal-consultation-service';
+      const modal = document.getElementById(targetId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        window.DUTAMIK_APP.activeModal = targetId;
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal(modalId) {
+      const targetId = modalId || window.DUTAMIK_APP.activeModal;
+      if (targetId) {
+        const modal = document.getElementById(targetId);
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden', 'true');
+          window.DUTAMIK_APP.activeModal = null;
+          document.body.style.overflow = '';
+        }
+      }
+    }
+
+    function openSearchModal() { 
+      openModal('modal-global-search'); 
+      const input = document.getElementById('search-input-field'); 
+      if (input) setTimeout(() => input.focus(), 80); 
+    }
+    function closeSearchModal() { closeModal('modal-global-search'); }
+    
+    function openConsultationModal() { openModal('modal-consultation-service'); }
+    function closeConsultationModal() { closeModal('modal-consultation-service'); }
+
+    function openShareModal() {
+      const shareUrlInput = document.getElementById('share-current-url');
+      if (shareUrlInput) {
+        shareUrlInput.value = window.location.href;
+      }
+      openModal('modal-share-site');
+    }
+
+    // Modal backdrop click & ESC key
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('modal-backdrop')) {
+        closeModal(e.target.id);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && window.DUTAMIK_APP.activeModal) {
+        closeModal(window.DUTAMIK_APP.activeModal);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        openSearchModal();
+      }
+    });
+
+    // --- 4. DYNAMIC SHARE CONTROLLER (Mengikuti Alamat Web Halaman Aktif) ---
+    function shareTo(platform) {
+      const canonical = document.querySelector('link[rel="canonical"]');
+      const currentUrl = (canonical && canonical.href) ? canonical.href : window.location.href;
+      const currentTitle = document.title || 'DUTAMIK.ID';
+
+      const encUrl = encodeURIComponent(currentUrl);
+      const encTitle = encodeURIComponent(currentTitle);
+
+      let shareUrl = '';
+      if (platform === 'whatsapp') {
+        shareUrl = `https://api.whatsapp.com/send?text=${encTitle}%20-%20${encUrl}`;
+      } else if (platform === 'telegram') {
+        shareUrl = `https://t.me/share/url?url=${encUrl}&text=${encTitle}`;
+      } else if (platform === 'facebook') {
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+      } else if (platform === 'x' || platform === 'twitter') {
+        shareUrl = `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
+      } else if (platform === 'linkedin') {
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
+      } else if (platform === 'copy') {
+        navigator.clipboard.writeText(currentUrl).then(() => {
+          showToast(window.DUTAMIK_APP.lang === 'id' ? GLOBAL_I18N.id.copyToastSuccess : GLOBAL_I18N.en.copyToastSuccess);
+        }).catch(() => {
+          const input = document.getElementById('share-current-url');
+          if (input) {
+            input.select();
+            document.execCommand('copy');
+            showToast(window.DUTAMIK_APP.lang === 'id' ? GLOBAL_I18N.id.copyToastSuccess : GLOBAL_I18N.en.copyToastSuccess);
+          }
+        });
+        closeModal('modal-share-site');
+        return;
+      }
+
+      if (shareUrl) {
+        window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=520');
+        closeModal('modal-share-site');
+      }
+    }
+
+    // --- 5. THEME SWITCHER CONTROLLER (Dark / Light - Instant Effect to Header, Content & Footer) ---
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('theme', theme);
+      window.DUTAMIK_APP.theme = theme;
+      updateThemeIcons(theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      const nextTheme = current === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+    }
+
+    function updateThemeIcons(theme) {
+      const sunIcons = document.querySelectorAll('.theme-icon-sun');
+      const moonIcons = document.querySelectorAll('.theme-icon-moon');
+      if (theme === 'dark') {
+        sunIcons.forEach(el => { el.classList.remove('hidden'); el.classList.add('inline-block'); });
+        moonIcons.forEach(el => { el.classList.add('hidden'); el.classList.remove('inline-block'); });
+      } else {
+        sunIcons.forEach(el => { el.classList.add('hidden'); el.classList.remove('inline-block'); });
+        moonIcons.forEach(el => { el.classList.remove('hidden'); el.classList.add('inline-block'); });
+      }
+    }
+
+    // --- 6. SINGLE HEADER LANGUAGE SWITCHER CONTROLLER (ID / EN - Syncs Header, Modals, Tools & Full Footer) ---
+    function applyLanguage(lang) {
+      window.DUTAMIK_APP.lang = lang;
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang;
+
+      const indicators = document.querySelectorAll('#lang-text-indicator, .lang-text-indicator');
+      indicators.forEach(ind => {
+        ind.innerText = lang.toUpperCase();
+      });
+
+      const globalDict = GLOBAL_I18N[lang] || GLOBAL_I18N['id'];
+      document.querySelectorAll('[data-global-i18n]').forEach(el => {
+        const key = el.getAttribute('data-global-i18n');
+        if (globalDict[key]) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = globalDict[key];
+          } else {
+            el.innerText = globalDict[key];
+          }
+        }
+      });
+
+      const toolDict = window.DUTAMIK_APP.toolTranslations[lang] || window.DUTAMIK_APP.toolTranslations['id'] || {};
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (toolDict[key]) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = toolDict[key];
+          } else {
+            el.innerText = toolDict[key];
+          }
+        }
+      });
+
+      window.dispatchEvent(new CustomEvent('dutamik:languageChange', { detail: { lang: lang } }));
+    }
+
+    function toggleLanguage() {
+      const current = localStorage.getItem('lang') || 'id';
+      const nextLang = current === 'id' ? 'en' : 'id';
+      applyLanguage(nextLang);
+    }
+
+    window.DUTAMIK_APP.registerTranslations = function(dict) {
+      window.DUTAMIK_APP.toolTranslations = dict || {};
+      applyLanguage(window.DUTAMIK_APP.lang);
+    };
+
+    // --- 7. MOBILE DRAWER MENU CONTROLLER ---
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) {
+        menu.classList.toggle('hidden');
+      }
+    }
+
+    // --- 8. FLOATING TOAST NOTIFICATION ---
+    function showToast(msg) {
+      let toast = document.getElementById('dutamik-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'dutamik-toast';
+        toast.className = 'fixed bottom-5 right-5 z-50 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2.5 rounded-2xl text-xs font-bold shadow-2xl transition-all duration-300 transform translate-y-12 opacity-0 pointer-events-none flex items-center gap-2';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<svg class="w-4 h-4 text-emerald-400 dark:text-emerald-600 inline-block flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${msg}</span>`;
+      toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    // --- 9. INITIALIZE ON DOM READY ---
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTheme(window.DUTAMIK_APP.theme);
+      applyLanguage(window.DUTAMIK_APP.lang);
+      
+      const shareUrlInput = document.getElementById('share-current-url');
+      if (shareUrlInput) {
+        shareUrlInput.value = window.location.href;
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
