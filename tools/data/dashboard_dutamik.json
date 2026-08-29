@@ -1,0 +1,39 @@
+{
+  "initial_app_data": {
+    "system": {
+      "appName": "Dutamik Pro Exploder",
+      "version": "1.0.0",
+      "environment": "production"
+    },
+    "modules": [
+      {
+        "id": "MOD-001",
+        "name": "dashboard_dutamik.html",
+        "type": "HTML Skeleton",
+        "path": "/",
+        "status": "active"
+      },
+      {
+        "id": "MOD-002",
+        "name": "dashboard_dutamik.css",
+        "type": "CSS Stylesheet",
+        "path": "/css/",
+        "status": "active"
+      },
+      {
+        "id": "MOD-003",
+        "name": "dashboard_dutamik.js",
+        "type": "JavaScript Engine",
+        "path": "/js/",
+        "status": "active"
+      },
+      {
+        "id": "MOD-004",
+        "name": "dashboard_dutamik.json",
+        "type": "JSON Dataset",
+        "path": "/data/",
+        "status": "active"
+      }
+    ]
+  }
+}

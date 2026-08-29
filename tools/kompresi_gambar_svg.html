@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html class="dark h-full" lang="id">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>
+   Kompresi Gambar &amp; SVG - Duta Digital Agensi (dutamik.id)
+  </title>
+  <!-- Schema.org Search Engine Metadata (JSON-LD) -->
+  <!-- Tailwind CSS, Lucide Icons & JSZip -->
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <script src="https://unpkg.com/lucide@latest">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+  </script>
+  <link href="css/kompresi_gambar_svg.css" rel="stylesheet"/>
+ </head>
+ <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-full font-sans antialiased transition-colors duration-200 selection:bg-brand-500 selection:text-white">
+  <!-- Container Utama Aplikasi (Embeddable Content dutamik.id) -->
+  <div class="w-full max-w-[1680px] mx-auto p-2 sm:p-4 lg:p-6 flex flex-col gap-3 sm:gap-4 min-h-screen" id="app-root">
+   <!-- Top Control Bar -->
+   <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm dark:shadow-2xl">
+    <!-- Title & Main Purpose -->
+    <div class="flex items-center gap-2.5 sm:gap-3">
+     <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-md shadow-brand-500/20 text-white dark:text-slate-950 shrink-0">
+      <i class="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" data-lucide="image">
+      </i>
+     </div>
+     <div>
+      <h1 class="text-sm sm:text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5" data-i18n="appTitle">
+       Kompresi Gambar &amp; SVG
+      </h1>
+      <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400" data-i18n="appSubtitle">
+       Kompresi Gambar &amp; Optimasi SVG Instan Tanpa Upload ke Server
+      </p>
+     </div>
+    </div>
+    <!-- Actions, Mode Tabs, Language & Theme Switchers -->
+    <div class="flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto justify-between sm:justify-end">
+     <!-- Mode Tabs -->
+     <div class="bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-1">
+      <button class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-brand-500 text-white dark:text-slate-950 shadow-sm" id="tab-studio-btn">
+       <i class="w-3.5 h-3.5" data-lucide="split">
+       </i>
+       <span data-i18n="studio">
+        Studio
+       </span>
+      </button>
+      <button class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800" id="tab-batch-btn">
+       <i class="w-3.5 h-3.5" data-lucide="layers">
+       </i>
+       <span data-i18n="batch">
+        Batch
+       </span>
+      </button>
+     </div>
+     <div class="flex items-center gap-1.5">
+      <!-- Preset Demo Buttons -->
+      <button class="px-2.5 py-1.5 rounded-xl border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-[11px] sm:text-xs font-medium text-indigo-700 dark:text-indigo-300 transition flex items-center gap-1" id="btn-demo-svg">
+       <i class="w-3.5 h-3.5 text-indigo-500" data-lucide="shapes">
+       </i>
+       <span data-i18n="demoSvg">
+        Contoh SVG
+       </span>
+      </button>
+      <button class="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-[11px] sm:text-xs font-medium text-slate-700 dark:text-slate-300 transition flex items-center gap-1" id="btn-demo-img">
+       <i class="w-3.5 h-3.5 text-amber-500" data-lucide="sparkles">
+       </i>
+       <span data-i18n="demoRaster">
+        Contoh Raster
+       </span>
+      </button>
+      <!-- 2-Language Switcher (ID / EN) -->
+      <button class="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-[11px] sm:text-xs font-bold font-mono text-brand-600 dark:text-brand-400 transition" id="btn-lang-toggle" title="Ganti Bahasa / Switch Language">
+       ID
+      </button>
+      <!-- Theme Switcher (Dark / Light) -->
+      <button class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition" id="btn-theme-toggle" title="Ganti Mode Terang/Gelap">
+       <i class="w-4 h-4 hidden dark:block text-amber-400" data-lucide="sun">
+       </i>
+       <i class="w-4 h-4 block dark:hidden text-slate-700" data-lucide="moon">
+       </i>
+      </button>
+      <!-- Reset -->
+      <button class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:bg-red-50 dark:hover:bg-red-500/20 hover:border-red-300 dark:hover:border-red-500/40 text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition" id="btn-reset" title="Reset">
+       <i class="w-4 h-4" data-lucide="rotate-ccw">
+       </i>
+      </button>
+     </div>
+    </div>
+   </div>
+   <!-- VIEW 1: STUDIO MODE -->
+   <div class="grid grid-cols-1 xl:grid-cols-12 gap-3 sm:gap-4 flex-1" id="studio-view">
+    <!-- Visual Split Canvas Area -->
+    <div class="xl:col-span-8 flex flex-col gap-2.5 sm:gap-3">
+     <div class="relative checkered-bg rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex-1 min-h-[340px] sm:min-h-[460px] lg:min-h-[580px] flex items-center justify-center select-none shadow-inner group" id="viewport-box">
+      <!-- Dropzone -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 text-center z-10 cursor-pointer transition-all hover:bg-slate-500/5" id="dropzone">
+       <input accept="image/*,.svg" class="hidden" id="file-input" type="file"/>
+       <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white dark:bg-slate-900/90 border-2 border-dashed border-slate-300 dark:border-slate-700 group-hover:border-brand-500 flex items-center justify-center mb-3 sm:mb-4 transition-all group-hover:scale-105 shadow-md">
+        <i class="w-8 h-8 sm:w-10 sm:h-10 text-brand-500" data-lucide="upload-cloud">
+        </i>
+       </div>
+       <h3 class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white mb-1" data-i18n="dropTitle">
+        Tarik &amp; Lepas Gambar / Berkas SVG
+       </h3>
+       <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mb-3" data-i18n="dropSubtitle">
+        Mendukung SVG (Vector), WebP, AVIF, PNG, JPEG. 100% langsung di perangkat Anda.
+       </p>
+       <div class="flex flex-wrap items-center justify-center gap-2">
+        <span class="hidden sm:inline-block px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-mono text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700" data-i18n="pasteHint">
+         Ctrl + V untuk Paste
+        </span>
+        <button class="px-3.5 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white dark:text-slate-950 text-xs font-semibold shadow-sm transition" data-i18n="chooseFile" type="button">
+         Pilih Berkas
+        </button>
+       </div>
+      </div>
+      <!-- Canvas Engine -->
+      <div class="absolute inset-0 hidden overflow-hidden cursor-grab active:cursor-grabbing touch-none" id="canvas-wrapper">
+       <canvas class="absolute transform-gpu" id="canvas-compressed">
+       </canvas>
+       <div class="absolute inset-0 overflow-hidden pointer-events-none" id="clip-overlay">
+        <canvas class="absolute transform-gpu" id="canvas-original">
+        </canvas>
+       </div>
+       <canvas class="absolute transform-gpu pointer-events-none hidden" id="canvas-diff">
+       </canvas>
+       <div class="absolute top-0 bottom-0 w-1 bg-brand-500 cursor-ew-resize z-20 pointer-events-auto shadow-[0_0_12px_rgba(16,185,129,0.7)]" id="split-handle">
+        <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500 flex items-center justify-center shadow-lg text-brand-600 dark:text-brand-400">
+         <i class="w-4 h-4" data-lucide="chevrons-left-right">
+         </i>
+        </div>
+       </div>
+       <div class="absolute top-3 left-3 pointer-events-none z-10 px-2 py-1 rounded-lg bg-white/90 dark:bg-slate-950/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 text-[10px] sm:text-[11px] font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1 shadow-sm">
+        <span data-i18n="labelOriginal">
+         Asli
+        </span>
+        <span class="px-1 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-[9px] font-mono text-slate-500" id="label-orig-type">
+        </span>
+        <span class="text-slate-400 font-mono hidden xs:inline" id="label-orig-res">
+        </span>
+       </div>
+       <div class="absolute top-3 right-3 pointer-events-none z-10 px-2 py-1 rounded-lg bg-emerald-50/90 dark:bg-brand-950/80 backdrop-blur-md border border-brand-200 dark:border-brand-500/30 text-[10px] sm:text-[11px] font-semibold text-brand-700 dark:text-brand-300 shadow-sm">
+        <span data-i18n="labelCompressed">
+         Hasil
+        </span>
+        <span class="text-brand-600 dark:text-brand-400 ml-1" id="label-comp-format">
+        </span>
+       </div>
+      </div>
+      <!-- Spinner -->
+      <div class="absolute inset-0 bg-white/60 dark:bg-slate-950/70 backdrop-blur-sm z-30 flex flex-col items-center justify-center gap-2 hidden" id="processing-loader">
+       <div class="w-8 h-8 sm:w-10 sm:h-10 border-3 sm:border-4 border-slate-300 dark:border-slate-700 border-t-brand-500 rounded-full animate-spin">
+       </div>
+       <p class="text-[11px] font-mono text-brand-600 dark:text-brand-400 font-semibold tracking-wider" data-i18n="processing">
+        MEMPROSES...
+       </p>
+      </div>
+     </div>
+     <!-- Floating Controls Toolbar -->
+     <div class="glass-panel rounded-xl px-3 py-2 flex flex-wrap items-center justify-between gap-2 hidden shadow-sm" id="viewport-toolbar">
+      <div class="flex items-center gap-1 sm:gap-1.5">
+       <button class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition" id="btn-zoom-out">
+        <i class="w-3.5 h-3.5" data-lucide="zoom-out">
+        </i>
+       </button>
+       <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400 w-10 text-center" id="zoom-level-text">
+        100%
+       </span>
+       <button class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition" id="btn-zoom-in">
+        <i class="w-3.5 h-3.5" data-lucide="zoom-in">
+        </i>
+       </button>
+       <button class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[11px] text-slate-700 dark:text-slate-300 transition font-medium" id="btn-zoom-fit">
+        Fit
+       </button>
+       <button class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[11px] text-slate-700 dark:text-slate-300 transition font-medium" id="btn-zoom-100">
+        1:1
+       </button>
+      </div>
+      <div class="flex items-center gap-1.5 flex-wrap">
+       <button class="px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-500/40 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-[11px] font-medium text-indigo-700 dark:text-indigo-300 flex items-center gap-1 transition hidden" id="btn-view-svg-code">
+        <i class="w-3 h-3" data-lucide="code">
+        </i>
+        <span data-i18n="svgCode">
+         Kode SVG
+        </span>
+       </button>
+       <button class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-[11px] font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1 transition" id="btn-toggle-diff">
+        <i class="w-3 h-3 text-pink-500" data-lucide="activity">
+        </i>
+        <span data-i18n="delta">
+         Delta
+        </span>
+       </button>
+       <button class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-[11px] font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1 transition" id="btn-toggle-histogram">
+        <i class="w-3 h-3 text-cyan-500" data-lucide="bar-chart-2">
+        </i>
+        <span data-i18n="histogram">
+         Histogram
+        </span>
+       </button>
+      </div>
+     </div>
+     <div class="glass-panel rounded-xl p-2.5 sm:p-3 hidden flex flex-col gap-1 shadow-sm" id="histogram-container">
+      <div class="flex justify-between items-center text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">
+       <span class="font-semibold flex items-center gap-1">
+        <i class="w-3 h-3 text-cyan-500" data-lucide="activity">
+        </i>
+        <span data-i18n="rgbSpectrum">
+         Spektrum RGB Keluaran
+        </span>
+       </span>
+       <span class="font-mono text-[9px]" data-i18n="bins">
+        256 Bins
+       </span>
+      </div>
+      <canvas class="w-full h-14 sm:h-16 rounded bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800" id="histogram-canvas">
+      </canvas>
+     </div>
+    </div>
+    <!-- Studio Right: Settings Panel -->
+    <div class="xl:col-span-4 flex flex-col gap-3 sm:gap-4">
+     <!-- Score Card -->
+     <div class="glass-panel rounded-2xl p-3.5 sm:p-4 flex flex-col gap-2.5 sm:gap-3 shadow-sm dark:shadow-xl">
+      <div class="flex items-center justify-between">
+       <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" data-i18n="sizeEfficiency">
+        Efisiensi Ukuran
+       </span>
+       <span class="px-2 py-0.5 rounded-full text-xs font-bold font-mono bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30" id="savings-badge">
+        -0%
+       </span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 sm:gap-3 bg-slate-100/80 dark:bg-slate-900/90 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
+       <div>
+        <p class="text-[10px] sm:text-[11px] text-slate-500" data-i18n="originalSize">
+         Ukuran Asli
+        </p>
+        <p class="text-xs sm:text-sm font-bold font-mono text-slate-800 dark:text-slate-200" id="stat-orig-size">
+         0 KB
+        </p>
+       </div>
+       <div class="border-l border-slate-200 dark:border-slate-800 pl-2.5 sm:pl-3">
+        <p class="text-[10px] sm:text-[11px] text-brand-600 dark:text-brand-400" data-i18n="compressedSize">
+         Ukuran Hasil
+        </p>
+        <p class="text-xs sm:text-sm font-bold font-mono text-brand-600 dark:text-brand-400" id="stat-comp-size">
+         0 KB
+        </p>
+       </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 mt-0.5">
+       <button class="w-full py-2.5 px-2 rounded-xl bg-brand-500 hover:bg-brand-600 active:scale-[0.98] text-white dark:text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-md shadow-brand-500/20 disabled:opacity-40 disabled:pointer-events-none" id="btn-download">
+        <i class="w-4 h-4 stroke-[2.5]" data-lucide="download">
+        </i>
+        <span data-i18n="download">
+         Download
+        </span>
+       </button>
+       <button class="w-full py-2.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-[0.98] text-slate-700 dark:text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700 transition disabled:opacity-40 disabled:pointer-events-none" id="btn-copy-clipboard">
+        <i class="w-4 h-4" data-lucide="clipboard-copy">
+        </i>
+        <span data-i18n="copyData">
+         Salin Data
+        </span>
+       </button>
+      </div>
+     </div>
+     <!-- Tuning Panel -->
+     <div class="glass-panel rounded-2xl p-3.5 sm:p-4 flex-1 flex flex-col gap-3.5 overflow-y-auto max-h-[calc(100vh-260px)] shadow-sm">
+      <div>
+       <label class="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1.5" data-i18n="targetFormat">
+        Format Output Sasaran
+       </label>
+       <div class="grid grid-cols-5 gap-1 bg-slate-100 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] sm:text-xs font-semibold text-center">
+        <button class="format-pill py-1.5 rounded-lg transition-all bg-brand-500 text-white dark:text-slate-950 shadow-sm" data-format="image/webp" type="button">
+         WebP
+        </button>
+        <button class="format-pill py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" data-format="image/avif" type="button">
+         AVIF
+        </button>
+        <button class="format-pill py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" data-format="image/jpeg" type="button">
+         JPEG
+        </button>
+        <button class="format-pill py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" data-format="image/png" type="button">
+         PNG
+        </button>
+        <button class="format-pill py-1.5 rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-0.5" data-format="image/svg+xml" type="button">
+         SVG
+        </button>
+       </div>
+      </div>
+      <!-- SVG Options -->
+      <div class="hidden flex flex-col gap-2.5 p-3 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-500/30 rounded-xl" id="svg-optimizer-block">
+       <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-1.5">
+         <i class="w-3.5 h-3.5" data-lucide="sparkles">
+         </i>
+         <span data-i18n="svgOptimizer">
+          Optimasi Vektor SVG
+         </span>
+        </span>
+        <span class="text-[10px] font-mono text-indigo-600 dark:text-indigo-300" id="svg-prec-val-badge">
+         2 Desimal
+        </span>
+       </div>
+       <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-400">
+         <span data-i18n="coordPrecision">
+          Presisi Desimal Koordinat
+         </span>
+         <span class="text-[9px] text-slate-400 font-mono" data-i18n="coordHint">
+          (Makin kecil = Makin hemat)
+         </span>
+        </div>
+        <input class="w-full" id="param-svg-precision" max="4" min="0" type="range" value="2"/>
+       </div>
+       <div class="flex flex-col gap-1.5 pt-1 border-t border-indigo-200 dark:border-indigo-500/20 text-[11px]">
+        <label class="flex items-center gap-2 cursor-pointer text-slate-700 dark:text-slate-300">
+         <input checked="" class="w-3.5 h-3.5 accent-brand-500 rounded" id="param-svg-strip-meta" type="checkbox"/>
+         <span data-i18n="stripMetadata">
+          Bersihkan Metadata Editor (Inkscape/Illustrator)
+         </span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer text-slate-700 dark:text-slate-300">
+         <input checked="" class="w-3.5 h-3.5 accent-brand-500 rounded" id="param-svg-shorten-colors" type="checkbox"/>
+         <span data-i18n="shortenColors">
+          Ringkas Kode Warna (#ffffff → #fff)
+         </span>
+        </label>
+       </div>
+      </div>
+      <!-- Quality -->
+      <div class="flex flex-col gap-1.5" id="quality-control-block">
+       <div class="flex justify-between items-center text-xs">
+        <span class="font-semibold text-slate-700 dark:text-slate-300" data-i18n="compressionQuality">
+         Kualitas Kompresi
+        </span>
+        <span class="font-mono text-brand-600 dark:text-brand-400 font-bold" id="quality-val-badge">
+         75%
+        </span>
+       </div>
+       <input class="w-full" id="param-quality" max="100" min="1" type="range" value="75"/>
+       <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+        <span data-i18n="qualitySlim">
+         Ramping (1)
+        </span>
+        <span data-i18n="qualityBalanced">
+         Seimbang (75)
+        </span>
+        <span data-i18n="qualityCrisp">
+         Tajam (100)
+        </span>
+       </div>
+      </div>
+      <!-- PNG Quant -->
+      <div class="hidden flex flex-col gap-2 p-3 bg-slate-100 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800" id="png-quant-block">
+       <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold text-brand-600 dark:text-brand-400 flex items-center gap-1.5">
+         <i class="w-3.5 h-3.5" data-lucide="palette">
+         </i>
+         <span data-i18n="pngQuantizer">
+          PNG Color Quantizer
+         </span>
+        </span>
+        <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400" id="colors-val-badge">
+         256 Warna
+        </span>
+       </div>
+       <input class="w-full" id="param-colors" max="256" min="2" step="2" type="range" value="256"/>
+       <label class="flex items-center gap-2 cursor-pointer text-[11px] text-slate-700 dark:text-slate-300 mt-1">
+        <input checked="" class="w-3.5 h-3.5 accent-brand-500 rounded" id="param-dither" type="checkbox"/>
+        <span data-i18n="dithering">
+         Floyd-Steinberg Dithering
+        </span>
+       </label>
+      </div>
+      <!-- Resize -->
+      <div class="flex flex-col gap-2.5 p-3 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800">
+       <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+         <i class="w-3.5 h-3.5 text-indigo-500" data-lucide="scaling">
+         </i>
+         <span data-i18n="resolutionResize">
+          Resolusi (Resize)
+         </span>
+        </span>
+        <label class="flex items-center gap-1.5 cursor-pointer text-[10px] text-slate-500 dark:text-slate-400">
+         <input checked="" class="w-3 h-3 accent-brand-500 rounded" id="param-resize-lock" type="checkbox"/>
+         <span data-i18n="lockRatio">
+          Kunci Rasio
+         </span>
+        </label>
+       </div>
+       <div class="grid grid-cols-2 gap-2">
+        <div>
+         <span class="text-[9px] text-slate-500 block mb-0.5 font-mono" data-i18n="widthPx">
+          Lebar (px)
+         </span>
+         <input class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-mono text-slate-800 dark:text-slate-200 focus:border-brand-500 focus:outline-none" id="param-width" type="number"/>
+        </div>
+        <div>
+         <span class="text-[9px] text-slate-500 block mb-0.5 font-mono" data-i18n="heightPx">
+          Tinggi (px)
+         </span>
+         <input class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-mono text-slate-800 dark:text-slate-200 focus:border-brand-500 focus:outline-none" id="param-height" type="number"/>
+        </div>
+       </div>
+       <div class="grid grid-cols-4 gap-1 text-[10px] font-mono text-center">
+        <button class="btn-scale-preset py-1 bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 transition" data-scale="0.25" type="button">
+         25%
+        </button>
+        <button class="btn-scale-preset py-1 bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 transition" data-scale="0.50" type="button">
+         50%
+        </button>
+        <button class="btn-scale-preset py-1 bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 transition" data-scale="0.75" type="button">
+         75%
+        </button>
+        <button class="btn-scale-preset py-1 bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 transition" data-scale="1.00" type="button">
+         100%
+        </button>
+       </div>
+      </div>
+      <!-- Transform & Filter -->
+      <div class="flex flex-col gap-2.5 p-3 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800">
+       <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+        <i class="w-3.5 h-3.5 text-amber-500" data-lucide="sliders">
+        </i>
+        <span data-i18n="filtersTransform">
+         Filter &amp; Transformasi
+        </span>
+       </span>
+       <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-[11px] text-slate-600 dark:text-slate-400">
+         <span data-i18n="sharpen">
+          Ketajaman (Unsharp Mask)
+         </span>
+         <span class="font-mono text-slate-700 dark:text-slate-300 font-semibold" id="sharpen-val-badge">
+          0
+         </span>
+        </div>
+        <input class="w-full" id="param-sharpen" max="10" min="0" type="range" value="0"/>
+       </div>
+       <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200 dark:border-slate-800">
+        <button class="py-1.5 px-2 bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5 font-medium transition" id="btn-rotate-cw" type="button">
+         <i class="w-3.5 h-3.5 text-brand-500" data-lucide="rotate-cw">
+         </i>
+         <span data-i18n="rotate90">
+          Putar 90°
+         </span>
+        </button>
+        <button class="py-1.5 px-2 bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5 font-medium transition" id="btn-flip-h" type="button">
+         <i class="w-3.5 h-3.5 text-indigo-500" data-lucide="flip-horizontal">
+         </i>
+         <span data-i18n="flipH">
+          Balik (Flip)
+         </span>
+        </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- VIEW 2: BATCH MODE -->
+   <div class="hidden flex flex-col gap-3 sm:gap-4 flex-1" id="batch-view">
+    <!-- Dashboard Stats Summary -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+     <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-col justify-between shadow-sm">
+      <span class="text-[11px] text-slate-500 font-medium" data-i18n="totalFiles">
+       Total Berkas
+      </span>
+      <p class="text-base sm:text-xl font-bold font-mono text-slate-800 dark:text-slate-100" id="batch-stat-count">
+       0 Berkas
+      </p>
+     </div>
+     <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-col justify-between shadow-sm">
+      <span class="text-[11px] text-slate-500 font-medium" data-i18n="totalOrigSize">
+       Ukuran Asli Total
+      </span>
+      <p class="text-base sm:text-xl font-bold font-mono text-slate-800 dark:text-slate-100" id="batch-stat-orig-total">
+       0 KB
+      </p>
+     </div>
+     <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-col justify-between shadow-sm">
+      <span class="text-[11px] text-brand-600 dark:text-brand-400 font-medium" data-i18n="totalCompSize">
+       Ukuran Hasil Total
+      </span>
+      <p class="text-base sm:text-xl font-bold font-mono text-brand-600 dark:text-brand-400" id="batch-stat-comp-total">
+       0 KB
+      </p>
+     </div>
+     <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-col justify-between shadow-sm">
+      <span class="text-[11px] text-slate-500 font-medium" data-i18n="totalSavings">
+       Total Penghematan
+      </span>
+      <p class="text-base sm:text-xl font-bold font-mono text-emerald-600 dark:text-emerald-400" id="batch-stat-saved-total">
+       -0%
+      </p>
+     </div>
+    </div>
+    <!-- Batch Custom Tuning Card -->
+    <div class="glass-panel rounded-2xl p-3.5 sm:p-5 shadow-sm flex flex-col gap-3.5">
+     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+      <div class="flex items-center gap-2">
+       <div class="p-2 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
+        <i class="w-4 h-4" data-lucide="sliders">
+        </i>
+       </div>
+       <div>
+        <h3 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white" data-i18n="batchTitle">
+         Pengaturan Kompresi Batch Mandiri
+        </h3>
+        <p class="text-[11px] text-slate-500" data-i18n="batchSubtitle">
+         Sesuaikan kualitas, format, dan dimensi untuk semua berkas antrean.
+        </p>
+       </div>
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+       <button class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 transition" id="btn-batch-add">
+        <i class="w-3.5 h-3.5" data-lucide="plus">
+        </i>
+        <span data-i18n="addFiles">
+         Tambah Berkas
+        </span>
+       </button>
+       <input accept="image/*,.svg" class="hidden" id="batch-file-input" multiple="" type="file"/>
+       <button class="px-3.5 py-1.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white dark:text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md shadow-brand-500/20 transition disabled:opacity-40" id="btn-batch-process">
+        <i class="w-3.5 h-3.5 stroke-[2.5]" data-lucide="play">
+        </i>
+        <span data-i18n="runBatch">
+         Jalankan Kompresi
+        </span>
+       </button>
+       <button class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-indigo-600/20 transition disabled:opacity-40" disabled="" id="btn-batch-zip">
+        <i class="w-3.5 h-3.5" data-lucide="archive">
+        </i>
+        <span data-i18n="downloadZip">
+         Download (.ZIP)
+        </span>
+       </button>
+       <button class="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-red-500 text-slate-400 transition" id="btn-batch-clear" title="Bersihkan Antrean">
+        <i class="w-4 h-4" data-lucide="trash-2">
+        </i>
+       </button>
+      </div>
+     </div>
+     <!-- Interactive Settings -->
+     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 pt-1">
+      <div>
+       <label class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block mb-1" data-i18n="outputFormat">
+        Format Output
+       </label>
+       <select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:border-brand-500 focus:outline-none" id="batch-opt-format">
+        <option data-i18n="optWebP" value="image/webp">
+         WebP (Sangat Dianjurkan)
+        </option>
+        <option data-i18n="optAVIF" value="image/avif">
+         AVIF (Kompresi Maksimal)
+        </option>
+        <option data-i18n="optSVG" value="image/svg+xml">
+         SVG (Minifikasi Vektor)
+        </option>
+        <option data-i18n="optJPEG" value="image/jpeg">
+         JPEG (Universal)
+        </option>
+        <option data-i18n="optPNG" value="image/png">
+         PNG (Transparansi / Kuantisasi)
+        </option>
+        <option data-i18n="optOriginal" value="original">
+         Pertahankan Format Asli Tiap File
+        </option>
+       </select>
+      </div>
+      <div>
+       <div class="flex justify-between items-center mb-1">
+        <label class="text-[11px] font-semibold text-slate-700 dark:text-slate-300" data-i18n="compressionQuality">
+         Kualitas Kompresi
+        </label>
+        <span class="font-mono text-brand-600 dark:text-brand-400 font-bold text-[11px]" id="batch-quality-val">
+         75%
+        </span>
+       </div>
+       <input class="w-full mt-1" id="batch-opt-quality" max="100" min="1" type="range" value="75"/>
+      </div>
+      <div>
+       <label class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block mb-1" data-i18n="scaleMaxDim">
+        Skala / Resolusi Maksimal
+       </label>
+       <select class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:border-brand-500 focus:outline-none" id="batch-opt-scale">
+        <option data-i18n="scale100" value="1.00">
+         100% (Resolusi Asli Penuh)
+        </option>
+        <option data-i18n="scale75" value="0.75">
+         75% (Turunkan Sedikit)
+        </option>
+        <option data-i18n="scale50" value="0.50">
+         50% (Resolusi Separuh)
+        </option>
+        <option data-i18n="scale25" value="0.25">
+         25% (Thumbnail Cepat)
+        </option>
+        <option data-i18n="scale1920" value="max-1920">
+         Batas Maks Lebar 1920px (Full HD)
+        </option>
+        <option data-i18n="scale1280" value="max-1280">
+         Batas Maks Lebar 1280px (HD)
+        </option>
+        <option data-i18n="scale800" value="max-800">
+         Batas Maks Lebar 800px (Web Content)
+        </option>
+       </select>
+      </div>
+      <div>
+       <div class="flex justify-between items-center mb-1">
+        <label class="text-[11px] font-semibold text-slate-700 dark:text-slate-300" data-i18n="microSharpen">
+         Ketajaman Mikro
+        </label>
+        <span class="font-mono text-slate-700 dark:text-slate-300 font-bold text-[11px]" id="batch-sharpen-val">
+         0
+        </span>
+       </div>
+       <input class="w-full mt-1" id="batch-opt-sharpen" max="8" min="0" type="range" value="0"/>
+      </div>
+     </div>
+     <div class="flex flex-wrap items-center gap-4 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 text-[11px] text-slate-600 dark:text-slate-400">
+      <label class="flex items-center gap-2 cursor-pointer">
+       <input checked="" class="w-3.5 h-3.5 accent-brand-500 rounded" id="batch-opt-svg-clean" type="checkbox"/>
+       <span data-i18n="batchCleanSvg">
+        Bersihkan Metadata Editor &amp; Komentar XML (Khusus SVG)
+       </span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+       <input checked="" class="w-3.5 h-3.5 accent-brand-500 rounded" id="batch-opt-png-dither" type="checkbox"/>
+       <span data-i18n="batchPngDither">
+        Aktifkan Error Diffusion Dithering (Khusus PNG)
+       </span>
+      </label>
+     </div>
+     <div class="hidden flex-col gap-1.5 pt-2" id="batch-progress-box">
+      <div class="flex justify-between text-[11px] font-mono">
+       <span class="text-brand-600 dark:text-brand-400 font-semibold" id="batch-progress-text">
+        Memproses 0 / 0...
+       </span>
+       <span class="text-slate-500 font-bold" id="batch-progress-pct">
+        0%
+       </span>
+      </div>
+      <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+       <div class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 rounded-full transition-all duration-200" id="batch-progress-bar" style="width: 0%;">
+       </div>
+      </div>
+     </div>
+    </div>
+    <!-- Batch File List -->
+    <div class="glass-panel rounded-2xl p-3 sm:p-4 flex-1 flex flex-col overflow-hidden min-h-[380px] shadow-sm">
+     <div class="border-2 border-dashed border-slate-300 dark:border-slate-800 hover:border-brand-500 rounded-xl p-5 sm:p-6 text-center flex flex-col items-center justify-center cursor-pointer transition mb-3" id="batch-dropzone">
+      <i class="w-7 h-7 sm:w-8 sm:h-8 text-brand-500 mb-1.5" data-lucide="folder-up">
+      </i>
+      <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200" data-i18n="batchDropTitle">
+       Tarik &amp; Jatuhkan Banyak Berkas (Gambar / SVG) ke Sini
+      </p>
+      <p class="text-[11px] text-slate-400" data-i18n="batchDropSubtitle">
+       Mendukung SVG, WebP, AVIF, PNG, JPEG
+      </p>
+     </div>
+     <div class="overflow-x-auto flex-1">
+      <table class="w-full text-left text-xs">
+       <thead class="bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-mono uppercase text-[10px] border-b border-slate-200 dark:border-slate-800">
+        <tr>
+         <th class="p-2.5" data-i18n="thPreview">
+          Pratinjau
+         </th>
+         <th class="p-2.5" data-i18n="thName">
+          Nama Berkas
+         </th>
+         <th class="p-2.5" data-i18n="thFormat">
+          Format Input → Output
+         </th>
+         <th class="p-2.5" data-i18n="thOriginal">
+          Ukuran Asli
+         </th>
+         <th class="p-2.5" data-i18n="thResult">
+          Hasil Kompresi
+         </th>
+         <th class="p-2.5" data-i18n="thSavings">
+          Penghematan
+         </th>
+         <th class="p-2.5" data-i18n="thStatus">
+          Status
+         </th>
+         <th class="p-2.5 text-right" data-i18n="thAction">
+          Aksi
+         </th>
+        </tr>
+       </thead>
+       <tbody class="divide-y divide-slate-200 dark:divide-slate-800/50 font-mono text-slate-700 dark:text-slate-300" id="batch-table-body">
+       </tbody>
+      </table>
+      <div class="py-12 text-center text-slate-400 text-xs" data-i18n="batchEmpty" id="batch-empty-state">
+       Belum ada berkas dalam antrean batch. Silakan tarik berkas atau klik tombol
+       <b>
+        Tambah Berkas
+       </b>
+       di atas.
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- MODAL: SVG Source Code Inspector -->
+   <div class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 hidden" id="modal-svg-code">
+    <div class="glass-panel rounded-2xl w-full max-w-2xl flex flex-col max-h-[85vh] shadow-2xl border border-indigo-300 dark:border-indigo-500/30">
+     <div class="p-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-xs sm:text-sm">
+       <i class="w-4 h-4" data-lucide="code">
+       </i>
+       <span data-i18n="svgCodeTitle">
+        Kode SVG Teroptimasi
+       </span>
+      </div>
+      <button class="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition" id="btn-close-modal-svg">
+       <i class="w-4 h-4" data-lucide="x">
+       </i>
+      </button>
+     </div>
+     <div class="p-3.5 flex-1 overflow-auto">
+      <textarea class="w-full h-72 sm:h-80 bg-slate-100 dark:bg-slate-950 font-mono text-[11px] text-indigo-800 dark:text-indigo-300 p-3 rounded-xl border border-slate-200 dark:border-slate-800 focus:outline-none select-all resize-none" id="svg-code-output" readonly=""></textarea>
+     </div>
+     <div class="p-3.5 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+      <span class="text-[11px] text-slate-500 font-mono" id="svg-code-size-info">
+       0 karakter
+      </span>
+      <button class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition" id="btn-copy-svg-code">
+       <i class="w-3.5 h-3.5" data-lucide="copy">
+       </i>
+       <span data-i18n="copyCode">
+        Salin Kode
+       </span>
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- JAVASCRIPT LOGIC ENGINE -->
+  <script src="js/kompresi_gambar_svg.js">
+  </script>
+ </body>
+</html>
