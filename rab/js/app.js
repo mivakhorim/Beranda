@@ -31,6 +31,14 @@ window.App = (function() {
       printUsedMaterialsCatalog();
       return;
     }
+    if (pId === "panel-proposal") {
+      printProposal();
+      return;
+    }
+    if (pId === "panel-info-proyek") {
+      printProjectInfo();
+      return;
+    }
     showLoading("Menyiapkan Dokumen Cetak A4...", "Mengatur margin A4 presisi tanpa header peramban...");
     setTimeout(() => {
       window.PrintEngine.printDocument(pId, " ");
@@ -41,6 +49,7 @@ window.App = (function() {
   let ahspPageSize = 50;
   let currentKatalogPage = 1;
   let katalogPageSize = 50;
+  let katalogFilterMode = 'used'; // 'used' | 'all'
 
   
   // ==========================================
@@ -507,8 +516,8 @@ window.App = (function() {
     const ppnInput = document.getElementById("projPpnRateInput");
     if (!ovInput || !ppnInput) return;
 
-    const newOverhead = parseFloat(ovInput.value) || 0;
-    const newPpn = parseFloat(ppnInput.value) || 0;
+    const newOverhead = (ovInput.value !== "" && !isNaN(parseFloat(ovInput.value))) ? parseFloat(ovInput.value) : 0;
+    const newPpn = (ppnInput.value !== "" && !isNaN(parseFloat(ppnInput.value))) ? parseFloat(ppnInput.value) : 0;
 
     const ovSpan = document.getElementById("liveOverheadRatePct");
     const ppnSpan = document.getElementById("livePpnRatePct");
@@ -533,7 +542,7 @@ window.App = (function() {
     if (rcEl) rcEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.realCost, false, true);
     if (ppnEl) ppnEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.ppnAmount, false, true);
     if (gtEl) gtEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.grandTotal, false, true);
-    if (tbEl) tbEl.innerHTML = `<em>${recalc.terbilangStr}</em>`;
+    if (tbEl) tbEl.innerHTML = `"${recalc.terbilangStr}"`;
   }
 
   function renderInfoProyekView() {
@@ -561,30 +570,32 @@ window.App = (function() {
     const totalLaborOH = laborList.reduce((acc, l) => acc + (Number(l.qty) || 0), 0);
     const avgDailyPersons = durationDays > 0 ? (totalLaborOH / durationDays) : 0;
 
-    // Signatories & Bank fallback
-    const sig = proj.signatories || {
-      ownerName: proj.owner || "",
-      ownerTitle: "Kuasa Pengguna Anggaran / Pemilik",
-      ownerNip: "-",
-      contractorName: "",
-      contractorTitle: "Direktur Utama",
-      contractorCompany: proj.contractor || "",
-      consultantName: "",
-      consultantTitle: "Team Leader / Pengawas",
-      consultantCompany: proj.consultant || "",
-      qcInspectorName: "",
-      qcInspectorRole: "Konsultan Pengawas / QC",
-      fieldMandorName: "",
-      fieldMandorRole: "Mandor Lapangan / Pelaksana",
-      siteManagerName: "",
-      siteManagerRole: "Site Manager Kontraktor",
-      docCity: proj.location || "Indonesia",
-      docDate: proj.startDate || "2026-04-01"
+    // Signatories & Bank fallback (Penuh Nilai Standar Proyek Resmi - Bebas Titik-Titik)
+    const rawSig = proj.signatories || {};
+    const sig = {
+      ownerName: (rawSig.ownerName && !rawSig.ownerName.includes('...')) ? rawSig.ownerName : (proj.owner || "Ir. Budi Santoso, M.T."),
+      ownerTitle: rawSig.ownerTitle || "Kuasa Pengguna Anggaran / Pemilik",
+      ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "19780512 200312 1 002",
+      contractorName: (rawSig.contractorName && !rawSig.contractorName.includes('...')) ? rawSig.contractorName : "H. Ahmad Fauzi, S.T.",
+      contractorTitle: rawSig.contractorTitle || "Direktur Utama",
+      contractorCompany: (rawSig.contractorCompany && !rawSig.contractorCompany.includes('...')) ? rawSig.contractorCompany : (proj.contractor || "PT. Karya Mandiri Perkasa"),
+      consultantName: (rawSig.consultantName && !rawSig.consultantName.includes('...')) ? rawSig.consultantName : "Ir. Bambang Hartono, S.T., M.T.",
+      consultantTitle: rawSig.consultantTitle || "Team Leader / Pengawas",
+      consultantCompany: (rawSig.consultantCompany && !rawSig.consultantCompany.includes('...')) ? rawSig.consultantCompany : (proj.consultant || "CV. Architecindo Consultant"),
+      qcInspectorName: (rawSig.qcInspectorName && !rawSig.qcInspectorName.includes('...')) ? rawSig.qcInspectorName : "Ir. M. Ridwan",
+      qcInspectorRole: rawSig.qcInspectorRole || "Konsultan Pengawas / QC",
+      fieldMandorName: (rawSig.fieldMandorName && !rawSig.fieldMandorName.includes('...')) ? rawSig.fieldMandorName : "Sutarji / Warsito",
+      fieldMandorRole: rawSig.fieldMandorRole || "Mandor Lapangan / Pelaksana",
+      siteManagerName: (rawSig.siteManagerName && !rawSig.siteManagerName.includes('...')) ? rawSig.siteManagerName : "Ir. Hendra Prasetya",
+      siteManagerRole: rawSig.siteManagerRole || "Site Manager Kontraktor",
+      docCity: rawSig.docCity || proj.location || "Indonesia",
+      docDate: rawSig.docDate || proj.startDate || "2026-04-01"
     };
-    const bank = proj.bankInfo || {
-      bankName: "Bank Mandiri / BCA / BNI",
-      accountNumber: "-",
-      accountName: proj.contractor || ""
+    const rawBank = proj.bankInfo || {};
+    const bank = {
+      bankName: rawBank.bankName || "Bank Mandiri",
+      accountNumber: rawBank.accountNumber || "131-00-8899221-5",
+      accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "PT. Karya Mandiri Perkasa"
     };
 
     // Buat baris tabel estimasi kebutuhan tenaga kerja harian
@@ -616,6 +627,21 @@ window.App = (function() {
         ${window.PrintEngine.createPrintHeader(proj, "INFORMASI PROYEK & ANALISIS KEBUTUHAN TENAGA KERJA")}
       </div>
 
+      <!-- Header Aksi Panel Informasi & Setting Proyek -->
+      <div class="d-flex justify-content-between align-items-center mb-3 no-print" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px;">
+        <div>
+          <h2 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+            <span>📋</span> Informasi, Setting &amp; Parameter Finansial Proyek
+          </h2>
+          <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Identitas kontrak, persentase pajak &amp; overhead, rekening penagihan termin, serta pejabat penandatangan</div>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1.5px solid #0284c7; color: #0284c7; background: #ffffff;" onclick="App.printProjectInfo()">
+            🖨️ Cetak PDF Informasi &amp; Setting Proyek
+          </button>
+        </div>
+      </div>
+
       <!-- Kartu Ringkasan KPI Proyek -->
       <div class="dashboard-grid mb-4">
         <div class="stat-card">
@@ -640,57 +666,85 @@ window.App = (function() {
         </div>
       </div>
 
-      <!-- Kartu Kalkulasi Finansial, Alokasi Profit & Pajak PPN (Terhitung Otomatis Live) -->
-      <div class="card mb-4" id="projectFinancialSummaryCard" style="border: 1px solid #e2e8f0; border-radius: 8px; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-        <div class="card-header d-flex justify-content-between align-items-center flex-wrap" style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 12px 16px;">
-          <div class="card-title" style="margin: 0;">
-            <span style="font-weight: 800; color: #0f172a; font-size: 14px;">Kalkulasi Anggaran Proyek, Alokasi Profit & Pajak PPN</span>
+      <!-- Kartu Kalkulasi Finansial, Alokasi Profit & Pajak PPN (Dutavis Executive Live Sync) -->
+      <div class="card mb-4" id="projectFinancialSummaryCard" style="border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06); overflow: hidden;">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap" style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; padding: 14px 18px;">
+          <div class="card-title" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">💎</span>
+            <span style="font-weight: 800; color: #0f172a; font-size: 15px; letter-spacing: 0.3px;">Ringkasan Kalkulasi Keuangan Proyek (Live Sync)</span>
           </div>
           <div class="card-actions no-print">
-            <span class="badge badge-light" style="font-size: 11px; padding: 4px 8px; border: 1px solid #e2e8f0;">Otomatis Dihitung Ulang Sesuai Nilai Profit & Pajak</span>
+            <span class="badge badge-success" style="font-size: 11.5px; padding: 5px 10px; font-weight: 700; border-radius: 6px;">⚡ Terhubung Otomatis ke RAB & SPK</span>
           </div>
         </div>
-        <div class="card-body p-3">
-          <div class="d-flex justify-content-between flex-wrap" style="gap: 14px;">
-            <div style="flex: 1; min-width: 170px;">
-              <div class="text-muted" style="font-size: 10.5px; text-transform: uppercase; font-weight: 700;">1. BIAYA LANGSUNG (DIRECT)</div>
-              <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-top: 3px;" id="liveDirectCostVal">
+        <div class="card-body p-4">
+          <!-- Grid 4 Kartu Metrik Keuangan -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px;">
+            <!-- 1. Biaya Langsung -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #64748b; border-radius: 8px; padding: 12px 16px;">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #475569;">1. Biaya Langsung (Direct)</span>
+                <span class="badge badge-light" style="font-size: 10px; padding: 2px 6px;">HPP Pokok</span>
+              </div>
+              <div style="font-size: 16px; font-weight: 900; color: #0f172a; font-family: var(--font-mono); margin: 4px 0;" id="liveDirectCostVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.totalDirectCost, false, true)}
               </div>
-              <div class="text-muted" style="font-size: 11px; margin-top: 2px;">Bahan, Upah & Alat Murni</div>
+              <div style="font-size: 11px; color: #64748b;">Bahan, Upah Lapangan & Alat Murni</div>
             </div>
 
-            <div style="flex: 1; min-width: 170px; border-left: 1px solid #e2e8f0; padding-left: 12px;">
-              <div class="text-muted" style="font-size: 10.5px; text-transform: uppercase; font-weight: 700;">2. OVERHEAD & PROFIT (<span id="liveOverheadRatePct">${proj.overheadRate || 15}</span>%)</div>
-              <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-top: 3px;" id="liveOverheadVal">
+            <!-- 2. Overhead & Profit -->
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-top: 3px solid #16a34a; border-radius: 8px; padding: 12px 16px;">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #166534;">2. Overhead & Profit</span>
+                <span class="badge badge-success" style="font-size: 10.5px; font-weight: 800; padding: 2px 7px;"><span id="liveOverheadRatePct">${(proj.overheadRate !== undefined && proj.overheadRate !== null) ? proj.overheadRate : 15}</span>%</span>
+              </div>
+              <div style="font-size: 16px; font-weight: 900; color: #15803d; font-family: var(--font-mono); margin: 4px 0;" id="liveOverheadVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.overheadAmount, false, true)}
               </div>
-              <div class="text-muted" style="font-size: 11px; margin-top: 2px;">Keuntungan & Biaya Operasional</div>
+              <div style="font-size: 11px; color: #166534;">Keuntungan & Biaya Operasional</div>
             </div>
 
-            <div style="flex: 1; min-width: 170px; border-left: 1px solid #e2e8f0; padding-left: 12px;">
-              <div class="text-muted" style="font-size: 10.5px; text-transform: uppercase; font-weight: 700;">3. REAL COST (SEBELUM PPN)</div>
-              <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-top: 3px;" id="liveRealCostVal">
+            <!-- 3. Real Cost -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-top: 3px solid #2563eb; border-radius: 8px; padding: 12px 16px;">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #1e40af;">3. Real Cost Proyek</span>
+                <span class="badge badge-primary" style="font-size: 10px; padding: 2px 6px;">Subtotal</span>
+              </div>
+              <div style="font-size: 16px; font-weight: 900; color: #1d4ed8; font-family: var(--font-mono); margin: 4px 0;" id="liveRealCostVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.realCost, false, true)}
               </div>
-              <div class="text-muted" style="font-size: 11px; margin-top: 2px;">Biaya Langsung + Overhead</div>
+              <div style="font-size: 11px; color: #1e40af;">Biaya Langsung + Overhead (Sebelum PPN)</div>
             </div>
 
-            <div style="flex: 1; min-width: 170px; border-left: 1px solid #e2e8f0; padding-left: 12px;">
-              <div class="text-muted" style="font-size: 10.5px; text-transform: uppercase; font-weight: 700;">4. PAJAK PPN (<span id="livePpnRatePct">${proj.ppnRate || 11}</span>%)</div>
-              <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-top: 3px;" id="livePpnVal">
+            <!-- 4. PPN -->
+            <div style="background: #fefce8; border: 1px solid #fef08a; border-top: 3px solid #ca8a04; border-radius: 8px; padding: 12px 16px;">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #854d0e;">4. Pajak PPN</span>
+                <span class="badge badge-warning" style="font-size: 10.5px; font-weight: 800; padding: 2px 7px;"><span id="livePpnRatePct">${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}</span>%</span>
+              </div>
+              <div style="font-size: 16px; font-weight: 900; color: #a16207; font-family: var(--font-mono); margin: 4px 0;" id="livePpnVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.ppnAmount, false, true)}
               </div>
-              <div class="text-muted" style="font-size: 11px; margin-top: 2px;">Pajak Pertambahan Nilai</div>
+              <div style="font-size: 11px; color: #854d0e;">Pajak Pertambahan Nilai Resmi</div>
             </div>
+          </div>
 
-            <div style="flex: 1.2; min-width: 210px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; padding: 10px 14px;">
-              <div style="color: #0f172a; font-size: 10.5px; text-transform: uppercase; font-weight: 800;">5. GRAND TOTAL ANGGARAN (SETELAH PPN)</div>
-              <div style="font-size: 16px; font-weight: 900; color: #0f172a; margin-top: 3px;" id="liveGrandTotalVal">
+          <!-- Hero Banner: Grand Total RAB & Terbilang Resmi -->
+          <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 8px; padding: 16px 20px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);">
+            <div style="flex: 1; min-width: 260px;">
+              <div style="display: inline-block; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; padding: 3px 9px; border-radius: 4px;">
+                5. GRAND TOTAL RENCANA ANGGARAN BIAYA (TERMASUK PAJAK)
+              </div>
+              <div id="liveTerbilangVal" style="color: #cbd5e1; font-size: 12.5px; font-style: italic; margin-top: 6px; line-height: 1.4;">
+                "${calcRecalc.terbilangStr}"
+              </div>
+            </div>
+            <div style="text-align: right; min-width: 220px;">
+              <div id="liveGrandTotalVal" style="font-size: 26px; font-weight: 900; color: #38bdf8; font-family: var(--font-mono); letter-spacing: -0.5px;">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.grandTotal, false, true)}
               </div>
-              <div style="font-size: 10.5px; color: #475569; margin-top: 2px;" id="liveTerbilangVal">
-                <em>${calcRecalc.terbilangStr}</em>
+              <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
+                Akumulasi Real Cost &amp; Pajak Pertambahan Nilai
               </div>
             </div>
           </div>
@@ -723,13 +777,25 @@ window.App = (function() {
                 <label class="form-label">Lokasi Pekerjaan Proyek</label>
                 <input type="text" class="form-control" name="location" value="${proj.location || ''}">
               </div>
+              <div class="form-group" style="flex: 2;">
+                <label class="form-label">Sumber Data Acuan / Dasar Regulasi</label>
+                <input type="text" list="dataSourceOptions" class="form-control" name="dataSource" value="${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}" placeholder="Pilih atau ketik sumber data acuan...">
+                <datalist id="dataSourceOptions">
+                  <option value="SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026">
+                  <option value="Permen PUPR No. 1 Tahun 2022 tentang Pedoman AHSP">
+                  <option value="Standar Satuan Harga (SSH) Pemerintah Daerah 2026">
+                  <option value="Harga Satuan Pokok Kegiatan (HSPK) Dinas PUPR 2026">
+                  <option value="Survei Pasar & Analisis Mandiri 2026">
+                </datalist>
+                <div class="modal-help-text">Dasar acuan analisa koefisien dan penentuan harga satuan pekerjaan</div>
+              </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Tarif PPN (%)</label>
-                <input type="number" step="1" min="0" max="25" class="form-control" name="ppnRate" id="projPpnRateInput" value="${proj.ppnRate || 11}" oninput="App.handleLiveProjectSettingsChange()">
+                <input type="number" step="1" min="0" max="25" class="form-control" name="ppnRate" id="projPpnRateInput" value="${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}" oninput="App.handleLiveProjectSettingsChange()">
               </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Overhead & Profit (%)</label>
-                <input type="number" step="0.5" min="0" max="30" class="form-control" name="overheadRate" id="projOverheadRateInput" value="${proj.overheadRate || 15}" oninput="App.handleLiveProjectSettingsChange()">
+                <input type="number" step="0.5" min="0" max="30" class="form-control" name="overheadRate" id="projOverheadRateInput" value="${(proj.overheadRate !== undefined && proj.overheadRate !== null) ? proj.overheadRate : 15}" oninput="App.handleLiveProjectSettingsChange()">
               </div>
             </div>
 
@@ -767,15 +833,15 @@ window.App = (function() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Nama Pemilik / Pemberi Tugas <span class="modal-field-required">*</span></label>
-                  <input type="text" class="form-control" name="ownerName" value="${sig.ownerName || proj.owner || ''}" placeholder="Nama lengkap & gelar">
+                  <input type="text" class="form-control" name="ownerName" value="${sig.ownerName}" placeholder="Nama lengkap & gelar">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Jabatan Pemilik / PPK</label>
-                  <input type="text" class="form-control" name="ownerTitle" value="${sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas'}" placeholder="Misal: Pemilik Bangunan / PPK">
+                  <input type="text" class="form-control" name="ownerTitle" value="${sig.ownerTitle}" placeholder="Misal: Pemilik Bangunan / PPK">
                 </div>
                 <div class="form-group">
                   <label class="form-label">NIP / No. Identitas Pemilik</label>
-                  <input type="text" class="form-control" name="ownerNip" value="${sig.ownerNip || '-'}" placeholder="Nomor identitas / NIP">
+                  <input type="text" class="form-control" name="ownerNip" value="${sig.ownerNip}" placeholder="Nomor identitas / NIP">
                 </div>
               </div>
             </div>
@@ -786,15 +852,15 @@ window.App = (function() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Nama Team Leader / Perencana <span class="modal-field-required">*</span></label>
-                  <input type="text" class="form-control" name="consultantName" value="${sig.consultantName || ''}" placeholder="Nama Pengawas / Perencana">
+                  <input type="text" class="form-control" name="consultantName" value="${sig.consultantName}" placeholder="Nama Pengawas / Perencana">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Nama Badan Usaha / Kantor Konsultan (PT / CV)</label>
-                  <input type="text" class="form-control" name="consultantCompany" value="${sig.consultantCompany || proj.consultant || ''}" placeholder="Nama PT / CV / Studio Konsultan">
+                  <input type="text" class="form-control" name="consultantCompany" value="${sig.consultantCompany}" placeholder="Nama PT / CV / Studio Konsultan">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Jabatan Konsultan</label>
-                  <input type="text" class="form-control" name="consultantTitle" value="${sig.consultantTitle || 'Konsultan Perencana / Team Leader'}">
+                  <input type="text" class="form-control" name="consultantTitle" value="${sig.consultantTitle}">
                 </div>
               </div>
             </div>
@@ -805,15 +871,15 @@ window.App = (function() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Nama Direktur / Penanggung Jawab <span class="modal-field-required">*</span></label>
-                  <input type="text" class="form-control" name="contractorName" value="${sig.contractorName || ''}" placeholder="Nama Direktur / PM">
+                  <input type="text" class="form-control" name="contractorName" value="${sig.contractorName}" placeholder="Nama Direktur / PM">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Nama Perusahaan Kontraktor (PT / CV)</label>
-                  <input type="text" class="form-control" name="contractorCompany" value="${sig.contractorCompany || proj.contractor || ''}" placeholder="Nama PT / CV Kontraktor Pelaksana">
+                  <input type="text" class="form-control" name="contractorCompany" value="${sig.contractorCompany}" placeholder="Nama PT / CV Kontraktor Pelaksana">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Jabatan Kontraktor</label>
-                  <input type="text" class="form-control" name="contractorTitle" value="${sig.contractorTitle || 'Direktur Utama'}">
+                  <input type="text" class="form-control" name="contractorTitle" value="${sig.contractorTitle}">
                 </div>
               </div>
             </div>
@@ -896,8 +962,11 @@ window.App = (function() {
               </div>
             </div>
 
-            <div class="mt-3 text-right no-print">
-              <button type="button" class="btn btn-primary" style="padding: 9px 20px;" onclick="App.saveProjectInfoForm(event)">
+            <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap gap-2 no-print">
+              <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border: 1.5px solid #0284c7; color: #0284c7; background: #ffffff;" onclick="App.printProjectInfo()">
+                🖨️ Cetak PDF Informasi &amp; Setting Proyek
+              </button>
+              <button type="button" class="btn btn-primary" style="padding: 9px 22px; font-weight: 700;" onclick="App.saveProjectInfoForm(event)">
                 💾 Simpan Perubahan Informasi Proyek
               </button>
             </div>
@@ -962,12 +1031,15 @@ window.App = (function() {
     const durationDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const durationWeeks = Math.ceil(durationDays / 7);
 
-    const newOverhead = parseFloat(formData.get("overheadRate")) || 15;
-    const newPpn = parseFloat(formData.get("ppnRate")) || 11;
+    const rawOverhead = formData.get("overheadRate");
+    const newOverhead = (rawOverhead !== null && rawOverhead !== "" && !isNaN(parseFloat(rawOverhead))) ? parseFloat(rawOverhead) : 15;
+    const rawPpn = formData.get("ppnRate");
+    const newPpn = (rawPpn !== null && rawPpn !== "" && !isNaN(parseFloat(rawPpn))) ? parseFloat(rawPpn) : 11;
 
     proj.name = formData.get("name") || proj.name;
     proj.docNumber = formData.get("docNumber") || proj.docNumber;
     proj.location = formData.get("location") || proj.location;
+    proj.dataSource = formData.get("dataSource") || proj.dataSource || "SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026";
     proj.startDate = formData.get("startDate") || proj.startDate;
     proj.finishDate = formData.get("finishDate") || proj.finishDate;
     proj.durationDays = durationDays;
@@ -980,24 +1052,29 @@ window.App = (function() {
       accountName: formData.get("accountName") || (proj.bankInfo && proj.bankInfo.accountName) || proj.contractor || ""
     };
 
+    const getCleanSigner = (val, fallback) => {
+      const s = (val || "").toString().trim();
+      return (s && !s.includes("...")) ? s : fallback;
+    };
+
     proj.signatories = {
-      ownerName: formData.get("ownerName") || proj.owner || "",
-      ownerTitle: formData.get("ownerTitle") || "Pemilik / Pemberi Tugas",
-      ownerNip: formData.get("ownerNip") || "-",
-      contractorCompany: formData.get("contractorCompany") || proj.contractor || "",
-      contractorName: formData.get("contractorName") || "",
-      contractorTitle: formData.get("contractorTitle") || "Direktur Utama",
-      consultantCompany: formData.get("consultantCompany") || proj.consultant || "",
-      consultantName: formData.get("consultantName") || "",
-      consultantTitle: formData.get("consultantTitle") || "Team Leader",
-      qcInspectorName: formData.get("qcInspectorName") || (proj.signatories && proj.signatories.qcInspectorName) || "Ir. M. Ridwan",
-      qcInspectorRole: formData.get("qcInspectorRole") || "Site Inspector / QC",
-      fieldMandorName: formData.get("fieldMandorName") || (proj.signatories && proj.signatories.fieldMandorName) || "Sutarji / Warsito",
-      fieldMandorRole: formData.get("fieldMandorRole") || "Mandor Lapangan",
-      siteManagerName: formData.get("siteManagerName") || (proj.signatories && proj.signatories.siteManagerName) || "Ir. Hendra Prasetya",
-      siteManagerRole: formData.get("siteManagerRole") || "Site Manager Kontraktor",
-      docCity: formData.get("docCity") || "Indonesia",
-      docDate: formData.get("docDate") || proj.startDate
+      ownerName: getCleanSigner(formData.get("ownerName"), (proj.signatories && proj.signatories.ownerName) || proj.owner || "Ir. Budi Santoso, M.T."),
+      ownerTitle: getCleanSigner(formData.get("ownerTitle"), (proj.signatories && proj.signatories.ownerTitle) || "Kuasa Pengguna Anggaran / Pemilik"),
+      ownerNip: getCleanSigner(formData.get("ownerNip"), (proj.signatories && proj.signatories.ownerNip) || "19780512 200312 1 002"),
+      contractorCompany: getCleanSigner(formData.get("contractorCompany"), (proj.signatories && proj.signatories.contractorCompany) || proj.contractor || "PT. Karya Mandiri Perkasa"),
+      contractorName: getCleanSigner(formData.get("contractorName"), (proj.signatories && proj.signatories.contractorName) || "H. Ahmad Fauzi, S.T."),
+      contractorTitle: getCleanSigner(formData.get("contractorTitle"), (proj.signatories && proj.signatories.contractorTitle) || "Direktur Utama"),
+      consultantCompany: getCleanSigner(formData.get("consultantCompany"), (proj.signatories && proj.signatories.consultantCompany) || proj.consultant || "CV. Architecindo Consultant"),
+      consultantName: getCleanSigner(formData.get("consultantName"), (proj.signatories && proj.signatories.consultantName) || "Ir. Bambang Hartono, S.T., M.T."),
+      consultantTitle: getCleanSigner(formData.get("consultantTitle"), (proj.signatories && proj.signatories.consultantTitle) || "Team Leader / Pengawas"),
+      qcInspectorName: getCleanSigner(formData.get("qcInspectorName"), (proj.signatories && proj.signatories.qcInspectorName) || "Ir. M. Ridwan"),
+      qcInspectorRole: getCleanSigner(formData.get("qcInspectorRole"), (proj.signatories && proj.signatories.qcInspectorRole) || "Site Inspector / QC"),
+      fieldMandorName: getCleanSigner(formData.get("fieldMandorName"), (proj.signatories && proj.signatories.fieldMandorName) || "Sutarji / Warsito"),
+      fieldMandorRole: getCleanSigner(formData.get("fieldMandorRole"), (proj.signatories && proj.signatories.fieldMandorRole) || "Mandor Lapangan"),
+      siteManagerName: getCleanSigner(formData.get("siteManagerName"), (proj.signatories && proj.signatories.siteManagerName) || "Ir. Hendra Prasetya"),
+      siteManagerRole: getCleanSigner(formData.get("siteManagerRole"), (proj.signatories && proj.signatories.siteManagerRole) || "Site Manager Kontraktor"),
+      docCity: getCleanSigner(formData.get("docCity"), (proj.signatories && proj.signatories.docCity) || proj.location || "Indonesia"),
+      docDate: getCleanSigner(formData.get("docDate"), (proj.signatories && proj.signatories.docDate) || proj.startDate || "2026-04-01")
     };
 
     proj.contractBudget = parseFloat(formData.get("contractBudget")) || proj.contractBudget || 0;
@@ -1048,6 +1125,13 @@ window.App = (function() {
 
     const proj = window.ProjectManager.getActiveProject();
     const rab = window.RabCalculator.calculateProjectRab(proj);
+    const sig = (proj && proj.signatories) || {};
+    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : ((proj && proj.owner) || 'Ir. Budi Santoso, M.T.');
+    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
+    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.';
+    const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || (proj && proj.consultant) || 'CV. Architecindo Consultant';
+    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.';
+    const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || (proj && proj.contractor) || 'PT. Karya Mandiri Perkasa';
 
     let rowsHtml = "";
     rab.divisionSummaries.forEach((div, idx) => {
@@ -1088,11 +1172,11 @@ window.App = (function() {
             <table class="table">
               <thead>
                 <tr>
-                  <th style="width: 4%">No</th>
-                  <th style="width: 8%">Divisi</th>
-                  <th style="width: 42%">Uraian Divisi Pekerjaan</th>
-                  <th style="width: 24%">Jumlah Harga (Rp)</th>
-                  <th style="width: 12%">Bobot (%)</th>
+                  <th style="width: 5%">No</th>
+                  <th style="width: 10%">Divisi</th>
+                  <th style="width: 47%">Uraian Divisi Pekerjaan</th>
+                  <th style="width: 25%">Jumlah Harga (Rp)</th>
+                  <th style="width: 13%">Bobot (%)</th>
                   <th style="width: 10%" class="no-print">Aksi</th>
                 </tr>
               </thead>
@@ -1134,35 +1218,31 @@ window.App = (function() {
             </div>
           </div>
 
-          <!-- Tanda Tangan Tiga Pihak -->
+          <!-- Tanda Tangan Tiga Pihak (Bebas Titik-Titik Sesuai Setting Proyek) -->
           <div class="signature-clean-grid three-parties mt-4">
             <div class="sig-block" style="border: none !important; background: transparent !important;">
               <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
               <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui:</div>
               <div class="sig-space" style="height: 45px;"></div>
-              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${proj.owner || 'Pemilik Bangunan'} )</div>
-              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">Pemilik Proyek</div>
+              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigOwnerName} )</div>
+              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
             </div>
             <div class="sig-block" style="border: none !important; background: transparent !important;">
               <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
               <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
               <div class="sig-space" style="height: 45px;"></div>
-              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ................................. )</div>
-              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${proj.consultant || 'Tim Perencana'}</div>
+              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigConsultantName} )</div>
+              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
             </div>
             <div class="sig-block" style="border: none !important; background: transparent !important;">
               <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
               <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
               <div class="sig-space" style="height: 45px;"></div>
-              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ................................. )</div>
-              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${proj.contractor || 'Direktur Pelaksana'}</div>
+              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigContractorName} )</div>
+              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Halaman 1 dari 1", statusDoc: "Dokumen Sah Rekapitulasi RAB" })}
       </div>
     `;
   }
@@ -1179,6 +1259,13 @@ window.App = (function() {
 
     const proj = window.ProjectManager.getActiveProject();
     if (!proj || !proj.divisions) return;
+    const sig = proj.signatories || {};
+    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || 'Ir. Budi Santoso, M.T.');
+    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
+    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.';
+    const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || proj.consultant || 'CV. Architecindo Consultant';
+    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.';
+    const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || proj.contractor || 'PT. Karya Mandiri Perkasa';
 
     let totalProjectLaborCost = 0;
     let totalProjectLaborQty = 0;
@@ -1228,17 +1315,17 @@ window.App = (function() {
 
         itemsHtml += `
           <tr>
-            <td class="text-center">${idx + 1}</td>
-            <td>
+            <td class="text-center" style="width: 4%;">${idx + 1}</td>
+            <td style="width: 38%;">
               <strong>${itm.name}</strong>
               ${itm.notes ? `<div class="text-muted" style="font-size: 11px;">${itm.notes}</div>` : ''}
               ${laborDetailHtml}
             </td>
-            <td class="text-center"><span class="badge badge-light">${itm.code}</span></td>
-            <td class="text-right font-bold">${window.CurrencyUtil.formatNumber(itm.volume, 2)}</td>
-            <td class="text-center">${itm.unit}</td>
-            <td class="text-right">${window.CurrencyUtil.formatRupiah(itm.price, false, true)}</td>
-            <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(itm.total, false, true)}</td>
+            <td class="text-center" style="width: 9%;"><span class="badge badge-light">${itm.code}</span></td>
+            <td class="text-right font-bold" style="width: 8%;">${window.CurrencyUtil.formatNumber(itm.volume, 2)}</td>
+            <td class="text-center" style="width: 6%;">${itm.unit}</td>
+            <td class="text-right" style="width: 17%; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(itm.price, false, true)}</td>
+            <td class="text-right font-bold" style="width: 18%; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(itm.total, false, true)}</td>
             <td class="text-center no-print" style="white-space: nowrap;">
               <button class="btn btn-sm btn-outline" style="padding: 2px 7px; margin-right: 3px;" title="Ubah Item Pekerjaan" onclick="App.openEditRabItemModal('${div.id}', '${itm.id}')">✏️</button>
               <button class="btn btn-sm btn-outline text-danger" style="padding: 2px 7px;" title="Hapus Item" onclick="App.deleteRabItem('${itm.id}')">✕</button>
@@ -1270,19 +1357,19 @@ window.App = (function() {
             <div class="table-responsive" style="margin-bottom: 0;">
               <table class="table">
                 <thead>
-                  <tr class="print-only division-header-row" style="background-color: #e2e8f0; border: 1px solid #cbd5e1;">
-                    <th colspan="7" style="padding: 7px 10px; font-size: 9.5pt; font-weight: 800; color: #0f172a; text-align: left; background-color: #e2e8f0 !important; border: 1px solid #cbd5e1 !important; letter-spacing: 0.5px;">
+                  <tr class="division-header-row">
+                    <th colspan="7" class="division-title-cell">
                       DIVISI ${div.code}. ${div.name.toUpperCase()}
                     </th>
                   </tr>
                   <tr>
                     <th style="width: 4%; text-align: center;">No</th>
-                    <th style="width: 44%;">Uraian Pekerjaan & Rincian Tenaga</th>
-                    <th style="width: 10%; text-align: center;">Kode AHSP</th>
-                    <th style="width: 9%; text-align: right;">Volume</th>
-                    <th style="width: 7%; text-align: center;">Satuan</th>
-                    <th style="width: 13%; text-align: right;">Harga Satuan (Rp)</th>
-                    <th style="width: 13%; text-align: right;">Jumlah Harga (Rp)</th>
+                    <th style="width: 38%; text-align: left;">Uraian Pekerjaan &amp; Rincian Tenaga</th>
+                    <th style="width: 9%; text-align: center;">Kode AHSP</th>
+                    <th style="width: 8%; text-align: right;">Volume</th>
+                    <th style="width: 6%; text-align: center;">Satuan</th>
+                    <th style="width: 17%; text-align: right;">Harga Satuan (Rp)</th>
+                    <th style="width: 18%; text-align: right;">Jumlah Harga (Rp)</th>
                     <th style="width: 5%" class="no-print">Aksi</th>
                   </tr>
                 </thead>
@@ -1290,7 +1377,7 @@ window.App = (function() {
                   ${itemsHtml || '<tr><td colspan="8" class="text-center text-muted p-3">Belum ada item pada divisi ini.</td></tr>'}
                   <tr class="division-subtotal-row" style="background-color: #f8fafc; font-weight: 700; border-top: 1.5px solid #cbd5e1;">
                     <td colspan="5" style="text-align: right; font-size: 8.5pt; padding: 5px 8px;">Subtotal Divisi ${div.code}:</td>
-                    <td colspan="2" style="text-align: right; font-weight: 800; color: #0f172a; font-size: 9pt; padding: 5px 8px;">${window.CurrencyUtil.formatRupiah(div.subtotal || 0, false, true)}</td>
+                    <td colspan="2" style="text-align: right; font-weight: 800; color: #0f172a; font-size: 9.5pt; padding: 5px 8px; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(div.subtotal || 0, false, true)}</td>
                     <td class="no-print"></td>
                   </tr>
                 </tbody>
@@ -1302,7 +1389,26 @@ window.App = (function() {
     });
 
     const rabCalc = window.RabCalculator ? window.RabCalculator.calculateProjectRab(proj) : null;
-    const realCost = rabCalc ? rabCalc.realCost : 1;
+    const activeRealCost = (rabCalc && typeof rabCalc.realCost === 'number' && !isNaN(rabCalc.realCost) && rabCalc.realCost > 0)
+      ? rabCalc.realCost
+      : (proj.divisions || []).reduce((acc, d) => acc + (Number(d.subtotal) || 0), 0);
+    const realCost = activeRealCost > 0 ? activeRealCost : 1;
+
+    const isPpnIncluded = proj.includePpn !== false && proj.includeTax !== false;
+    const activePpnRate = (rabCalc && typeof rabCalc.ppnRate === 'number' && !isNaN(rabCalc.ppnRate))
+      ? rabCalc.ppnRate
+      : ((proj.ppnRate !== undefined && proj.ppnRate !== null && !isNaN(Number(proj.ppnRate))) ? Number(proj.ppnRate) : 11);
+
+    const activePpnAmount = isPpnIncluded
+      ? ((rabCalc && typeof rabCalc.ppnAmount === 'number' && !isNaN(rabCalc.ppnAmount) && rabCalc.ppnAmount > 0)
+          ? rabCalc.ppnAmount
+          : Math.round(activeRealCost * (activePpnRate / 100)))
+      : 0;
+
+    const activeGrandTotal = (rabCalc && typeof rabCalc.grandTotal === 'number' && !isNaN(rabCalc.grandTotal) && rabCalc.grandTotal > 0)
+      ? rabCalc.grandTotal
+      : Math.round(activeRealCost + activePpnAmount);
+
     const durDays = proj.durationDays || 180;
     const durWeeks = Math.ceil(durDays / 7);
     container.innerHTML = `
@@ -1369,54 +1475,52 @@ window.App = (function() {
       ${divisionsHtml}
 
       <!-- Ringkasan Grand Total & Pengesahan Cetak Detail RAB (Print Only) -->
-      <div class="print-only" style="margin-top: 15px; page-break-inside: avoid;">
+      <div class="print-only" style="margin-top: 15px; page-break-inside: avoid; break-inside: avoid;">
         <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-          <table style="width: 380px; font-size: 9pt; border-collapse: collapse;">
+          <table style="width: 400px; font-size: 9pt; border-collapse: collapse;">
             <tr>
-              <td style="padding: 4px 8px; color: #475569;">Total Biaya Fisik Konstruksi (Real Cost):</td>
-              <td style="padding: 4px 8px; text-align: right; font-weight: 700;">${window.CurrencyUtil.formatRupiah(realCost, false, true)}</td>
+              <td style="padding: 5px 8px; color: #475569;">Total Biaya Fisik Konstruksi (Real Cost):</td>
+              <td style="padding: 5px 8px; text-align: right; font-weight: 700; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(activeRealCost, false, true)}</td>
             </tr>
-            ${proj.includeTax !== false ? `
+            ${isPpnIncluded ? `
             <tr>
-              <td style="padding: 4px 8px; color: #475569;">PPN 11%:</td>
-              <td style="padding: 4px 8px; text-align: right; font-weight: 600;">${window.CurrencyUtil.formatRupiah(rabCalc ? rabCalc.taxAmount : 0, false, true)}</td>
+              <td style="padding: 5px 8px; color: #475569;">PPN ${activePpnRate}%:</td>
+              <td style="padding: 5px 8px; text-align: right; font-weight: 600; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(activePpnAmount, false, true)}</td>
             </tr>
             ` : ''}
             <tr style="border-top: 2px solid #0f172a; background-color: #f1f5f9;">
-              <td style="padding: 6px 8px; font-weight: 800; color: #0f172a;">TOTAL AKHIR RAB:</td>
-              <td style="padding: 6px 8px; text-align: right; font-weight: 800; color: #2563eb; font-size: 10.5pt;">${window.CurrencyUtil.formatRupiah(rabCalc ? rabCalc.roundedCost : realCost, false, true)}</td>
+              <td style="padding: 7px 8px; font-weight: 800; color: #0f172a; font-size: 9.5pt;">TOTAL AKHIR RAB:</td>
+              <td style="padding: 7px 8px; text-align: right; font-weight: 800; color: #2563eb; font-size: 11pt; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(activeGrandTotal, false, true)}</td>
             </tr>
           </table>
         </div>
 
-        <!-- Lembar Pengesahan Tiga Pihak (Polos Tanpa Border) -->
-        <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; text-align: center;">
-          <div class="sig-block" style="border: none !important; background: transparent !important;">
+        <!-- Lembar Pengesahan Tiga Pihak (Bebas Titik-Titik Sesuai Setting Proyek) -->
+        <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; text-align: center; page-break-inside: avoid; break-inside: avoid;">
+          <div class="sig-block" style="border: none !important; background: transparent !important; page-break-inside: avoid; break-inside: avoid;">
             <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
             <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui & Menetapkan:</div>
-            <div class="sig-space" style="height: 50px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${proj.owner || '.................................'} )</div>
-            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">Pemilik Proyek</div>
+            <div class="sig-space" style="height: 38px;"></div>
+            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigOwnerName} )</div>
+            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
           </div>
-          <div class="sig-block" style="border: none !important; background: transparent !important;">
+          <div class="sig-block" style="border: none !important; background: transparent !important; page-break-inside: avoid; break-inside: avoid;">
             <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
             <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
-            <div class="sig-space" style="height: 50px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ................................. )</div>
-            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${proj.consultant || 'Tim Perencana'}</div>
+            <div class="sig-space" style="height: 38px;"></div>
+            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigConsultantName} )</div>
+            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
           </div>
-          <div class="sig-block" style="border: none !important; background: transparent !important;">
+          <div class="sig-block" style="border: none !important; background: transparent !important; page-break-inside: avoid; break-inside: avoid;">
             <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
             <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
-            <div class="sig-space" style="height: 50px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ................................. )</div>
-            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${proj.contractor || 'Direktur Pelaksana'}</div>
+            <div class="sig-space" style="height: 38px;"></div>
+            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigContractorName} )</div>
+            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
           </div>
         </div>
       </div>
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Rincian Detail RAB", statusDoc: "Dokumen Sah Detail RAB" })}
-      </div>
+
     `;
   }
 
@@ -1504,8 +1608,8 @@ window.App = (function() {
                   <th style="width: 5%">No</th>
                   <th style="width: 12%">Kode AHSP</th>
                   <th style="width: 63%">Uraian Pekerjaan</th>
-                  <th style="width: 8%">Satuan</th>
-                  <th style="width: 12%" class="text-right">Volume Pekerjaan</th>
+                  <th style="width: 8%" class="th-nowrap">Satuan</th>
+                  <th style="width: 12%">Volume Pekerjaan</th>
                 </tr>
               </thead>
               <tbody>
@@ -1516,9 +1620,7 @@ window.App = (function() {
         </div>
       </div>
 
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Halaman 1 dari 1", statusDoc: "Dokumen Sah Analisis Volume Pekerjaan" })}
-      </div>
+
     `;
   }
 
@@ -1813,8 +1915,9 @@ window.App = (function() {
       return;
     }
 
+    const isUsed = (katalogFilterMode === 'used');
     const offset = (currentKatalogPage - 1) * katalogPageSize;
-    const result = window.CatalogPricing.getFilteredMaterials(katalogPageSize, offset, true);
+    const result = window.CatalogPricing.getFilteredMaterials(katalogPageSize, offset, isUsed);
     const totalPages = Math.max(1, Math.ceil(result.total / katalogPageSize));
 
     if (currentKatalogPage > totalPages) {
@@ -1828,42 +1931,45 @@ window.App = (function() {
       <tr>
         <td colspan="6" class="text-center p-4">
           <div style="font-size: 24px; margin-bottom: 8px;">📋</div>
-          <div style="font-weight: 700; color: #1e293b; margin-bottom: 4px;">Belum Ada Item Pekerjaan AHSP yang Digunakan</div>
+          <div style="font-weight: 700; color: #1e293b; margin-bottom: 4px;">${isUsed ? 'Belum Ada Item Pekerjaan AHSP yang Digunakan' : 'Data Katalog Tidak Ditemukan'}</div>
           <div class="text-muted" style="font-size: 12px; max-width: 480px; margin: 0 auto 12px auto;">
-            Menu ini hanya menampilkan data harga satuan upah, material, dan peralatan dari item pekerjaan AHSP yang dipakai dalam RAB proyek aktif.
+            ${isUsed 
+              ? 'Menu ini memfilter data harga satuan upah, material, dan peralatan dari item pekerjaan AHSP yang dipakai dalam RAB proyek aktif.' 
+              : 'Tidak ada data material atau upah dalam katalog yang sesuai filter pencarian.'}
           </div>
-          <button class="btn btn-sm btn-primary" onclick="App.switchTab('detail-rab')">Buka Detail RAB & Tambah Item</button>
+          ${isUsed ? '<button class="btn btn-sm btn-primary" onclick="App.switchTab(\'detail-rab\')">Buka Detail RAB & Tambah Item</button>' : ''}
         </td>
       </tr>
     `;
-    if (totalBadge) totalBadge.textContent = `Total: ${result.total} Item Terpakai`;
+    if (totalBadge) totalBadge.textContent = isUsed ? `Total: ${result.total} Item Terpakai` : `Total: ${result.total} Item Master`;
     if (pagContainer) {
       pagContainer.innerHTML = renderKatalogPaginationInner(offset, katalogPageSize, result.total, currentKatalogPage, totalPages, pageButtons);
     }
   }
 
-  // 5. Katalog Upah, Bahan, dan Alat View (HANYA MENAMPILKAN DATA HARGA DARI ITEM PEKERJAAN AHSP YANG DIPAKAI)
+  // 5. Katalog Upah, Bahan, dan Alat View (Mendukung Toggle: Item Terpakai vs Seluruh Master Data)
   function renderKatalogView() {
     const container = document.getElementById("katalogContent");
     if (!container) return;
 
-    const categories = (window.CatalogPricing && window.CatalogPricing.getUsedCategories) 
-      ? window.CatalogPricing.getUsedCategories() 
-      : ["Upah Tenaga Kerja", "Material / Bahan Bangunan", "Sewa Peralatan"];
+    const isUsed = (katalogFilterMode === 'used');
+    const categories = isUsed 
+      ? ((window.CatalogPricing && window.CatalogPricing.getUsedCategories) ? window.CatalogPricing.getUsedCategories() : ["Upah Tenaga Kerja", "Material / Bahan Bangunan", "Sewa Peralatan"])
+      : (window.CatalogPricing ? window.CatalogPricing.getCategories() : ["Upah Tenaga Kerja", "Material / Bahan Bangunan", "Sewa Peralatan"]);
     const regions = window.REGIONAL_PRESETS || [];
     const currentRegId = window.CatalogPricing.getCurrentRegionId();
     const activeCat = window.CatalogPricing.getCategory() || "ALL";
     const searchVal = window.CatalogPricing.getSearch() || "";
 
     const offset = (currentKatalogPage - 1) * katalogPageSize;
-    const result = window.CatalogPricing.getFilteredMaterials(katalogPageSize, offset, true);
+    const result = window.CatalogPricing.getFilteredMaterials(katalogPageSize, offset, isUsed);
     const totalPages = Math.max(1, Math.ceil(result.total / katalogPageSize));
 
     if (currentKatalogPage > totalPages) {
       currentKatalogPage = totalPages;
     }
 
-    let catOptions = `<option value="ALL" ${activeCat === "ALL" ? 'selected' : ''}>Semua Kategori (Upah, Bahan, Alat Terpakai)</option>`;
+    let catOptions = `<option value="ALL" ${activeCat === "ALL" ? 'selected' : ''}>Semua Kategori (${isUsed ? 'Upah, Bahan, Alat Terpakai' : 'Seluruh Katalog Master'})</option>`;
     categories.forEach(c => {
       catOptions += `<option value="${c}" ${c === activeCat ? 'selected' : ''}>${c}</option>`;
     });
@@ -1880,22 +1986,29 @@ window.App = (function() {
 
     container.innerHTML = `
       <div class="print-only">
-        ${window.PrintEngine.createPrintHeader(proj, "KATALOG HARGA SATUAN UPAH, BAHAN & PERALATAN (ITEM TERPAKAI)")}
+        ${window.PrintEngine.createPrintHeader(proj, isUsed ? "KATALOG HARGA SATUAN UPAH, BAHAN & PERALATAN (ITEM TERPAKAI)" : "STANDAR HARGA SATUAN UPAH, BAHAN & PERALATAN (SELURUH MASTER KATALOG)")}
       </div>
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <span>Katalog Harga Satuan Upah, Material, dan Peralatan (Item Terpakai)</span>
-            <span class="badge badge-light" id="katalogTotalBadge">Total: ${result.total} Item Terpakai</span>
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap" style="gap: 10px;">
+          <div class="card-title d-flex align-items-center flex-wrap" style="gap: 10px;">
+            <span>${isUsed ? 'Katalog Upah &amp; Bahan (Item yang Dipakai)' : 'Katalog Upah &amp; Bahan (Seluruh Master Data)'}</span>
+            <span class="badge ${isUsed ? 'badge-primary' : 'badge-info'}" id="katalogTotalBadge">Total: ${result.total} ${isUsed ? 'Item Terpakai' : 'Item Master'}</span>
           </div>
           <div class="card-actions no-print d-flex align-items-center flex-wrap" style="gap: 8px;">
-            <button class="btn btn-primary" onclick="App.printUsedMaterialsCatalog()" title="Cetak seluruh data harga satuan upah, material, dan peralatan yang dipakai dalam proyek">
-              🖨️ Cetak Item yang Terpakai
+            <!-- Tombol Toggle Tampilkan Seluruh Data Katalog vs Katalog yang Dipakai -->
+            <div class="btn-group" style="display: inline-flex; border-radius: 6px; overflow: hidden; border: 1.5px solid #2563eb; background: #ffffff;">
+              <button type="button" class="btn btn-sm ${isUsed ? 'btn-primary' : 'btn-light'}" style="font-weight: 700; padding: 6px 12px; font-size: 12px;" onclick="App.setKatalogMode('used')" title="Tampilkan hanya upah dan bahan yang dipakai dalam RAB proyek aktif">
+                📋 Katalog yang Dipakai
+              </button>
+              <button type="button" class="btn btn-sm ${!isUsed ? 'btn-primary' : 'btn-light'}" style="font-weight: 700; padding: 6px 12px; font-size: 12px;" onclick="App.setKatalogMode('all')" title="Tampilkan seluruh basis data katalog upah, bahan bangunan, dan peralatan nasional">
+                🌐 Seluruh Data Katalog
+              </button>
+            </div>
+
+            <button class="btn btn-sm btn-outline" onclick="${isUsed ? 'App.printUsedMaterialsCatalog()' : 'App.printAllMaterialsCatalog()'}" title="Cetak data katalog yang sedang aktif ditampilkan">
+              🖨️ Cetak Tampilan Ini
             </button>
-            <button class="btn btn-outline" onclick="App.printAllMaterialsCatalog()" title="Cetak seluruh katalog standar harga satuan upah, bahan, dan peralatan lengkap nasional">
-              📑 Cetak Seluruh Katalog
-            </button>
-            <button class="btn btn-outline" onclick="App.openAddCustomMaterialModal()">+ Tambah Material Kustom</button>
+            <button class="btn btn-sm btn-outline" onclick="App.openAddCustomMaterialModal()">+ Tambah Material Kustom</button>
           </div>
         </div>
         <div class="card-body">
@@ -1912,12 +2025,23 @@ window.App = (function() {
             </div>
           </div>
 
-          <!-- Filter & Search Bar -->
-          <div class="filter-bar no-print">
-            <input type="text" id="katalogSearchInput" class="search-input" placeholder="Cari nama atau kode bahan/upah/alat terpakai..." value="${searchVal}" oninput="App.handleMaterialSearch(this.value)">
-            <select class="select-filter" id="katalogCategorySelect" onchange="App.handleMaterialCategory(this.value)">
-              ${catOptions}
-            </select>
+          <!-- Filter & Search Bar with Quick Filter Toggles -->
+          <div class="filter-bar no-print d-flex align-items-center justify-content-between flex-wrap" style="gap: 10px;">
+            <div class="d-flex align-items-center flex-wrap" style="flex: 1; gap: 8px; min-width: 280px;">
+              <input type="text" id="katalogSearchInput" class="search-input" style="flex: 1; min-width: 200px;" placeholder="Cari nama atau kode bahan/upah/alat..." value="${searchVal}" oninput="App.handleMaterialSearch(this.value)">
+              <select class="select-filter" id="katalogCategorySelect" style="min-width: 240px;" onchange="App.handleMaterialCategory(this.value)">
+                ${catOptions}
+              </select>
+            </div>
+            <div class="d-flex align-items-center" style="gap: 6px;">
+              <span class="text-muted" style="font-size: 11.5px; font-weight: 600;">Mode Tampilan:</span>
+              <button class="btn btn-sm ${isUsed ? 'btn-primary' : 'btn-outline'}" style="padding: 4px 10px; font-size: 11.5px; font-weight: 700;" onclick="App.setKatalogMode('used')">
+                📋 Yang Dipakai
+              </button>
+              <button class="btn btn-sm ${!isUsed ? 'btn-primary' : 'btn-outline'}" style="padding: 4px 10px; font-size: 11.5px; font-weight: 700;" onclick="App.setKatalogMode('all')">
+                🌐 Seluruh Katalog
+              </button>
+            </div>
           </div>
 
           <div class="table-responsive">
@@ -1925,7 +2049,7 @@ window.App = (function() {
               <thead>
                 <tr>
                   <th style="width: 5%">No</th>
-                  <th style="width: 45%">Nama Upah / Material / Peralatan (Terpakai)</th>
+                  <th style="width: 45%">Nama Upah / Material / Peralatan (${isUsed ? 'Terpakai' : 'Katalog Master'})</th>
                   <th style="width: 12%">Kode</th>
                   <th style="width: 10%">Satuan</th>
                   <th style="width: 18%">Harga Satuan (Rp)</th>
@@ -1937,11 +2061,13 @@ window.App = (function() {
                   <tr>
                     <td colspan="6" class="text-center p-4">
                       <div style="font-size: 24px; margin-bottom: 8px;">📋</div>
-                      <div style="font-weight: 700; color: #1e293b; margin-bottom: 4px;">Belum Ada Item Pekerjaan AHSP yang Digunakan</div>
+                      <div style="font-weight: 700; color: #1e293b; margin-bottom: 4px;">${isUsed ? 'Belum Ada Item Pekerjaan AHSP yang Digunakan' : 'Data Katalog Tidak Ditemukan'}</div>
                       <div class="text-muted" style="font-size: 12px; max-width: 480px; margin: 0 auto 12px auto;">
-                        Menu ini hanya menampilkan data harga satuan upah, material, dan peralatan dari item pekerjaan AHSP yang dipakai dalam RAB proyek aktif.
+                        ${isUsed 
+                          ? 'Menu ini hanya menampilkan data harga satuan upah, material, dan peralatan dari item pekerjaan AHSP yang dipakai dalam RAB proyek aktif.' 
+                          : 'Tidak ada data material atau upah dalam katalog yang sesuai filter pencarian.'}
                       </div>
-                      <button class="btn btn-sm btn-primary" onclick="App.switchTab('detail-rab')">Buka Detail RAB & Tambah Item</button>
+                      ${isUsed ? '<button class="btn btn-sm btn-primary" onclick="App.switchTab(\'detail-rab\')">Buka Detail RAB & Tambah Item</button>' : ''}
                     </td>
                   </tr>
                 `}
@@ -2069,13 +2195,13 @@ window.App = (function() {
                 <tr>
                   <th style="width: 4%">No</th>
                   <th style="width: 10%">Kode</th>
-                  <th style="width: 32%">Nama Bahan Material</th>
-                  <th style="width: 8%">Satuan</th>
-                  <th style="width: 10%">Total Kuantitas</th>
+                  <th style="width: 28%">Nama Bahan Material</th>
+                  <th style="width: 8%" class="th-nowrap">Satuan</th>
+                  <th style="width: 11%">Total Kuantitas</th>
                   <th style="width: 13%">Harga Satuan</th>
-                  <th style="width: 15%">Subtotal Biaya</th>
-                  <th style="width: 4%">% Thd Bahan</th>
-                  <th style="width: 4%">% Thd Total</th>
+                  <th style="width: 14%">Subtotal Biaya</th>
+                  <th style="width: 6%" class="th-nowrap">% Bahan</th>
+                  <th style="width: 6%" class="th-nowrap">% Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -2104,13 +2230,13 @@ window.App = (function() {
                 <tr>
                   <th style="width: 4%">No</th>
                   <th style="width: 10%">Kode</th>
-                  <th style="width: 32%">Klasifikasi Tenaga</th>
-                  <th style="width: 8%">Satuan</th>
-                  <th style="width: 10%">Jumlah OH</th>
+                  <th style="width: 28%">Klasifikasi Tenaga</th>
+                  <th style="width: 8%" class="th-nowrap">Satuan</th>
+                  <th style="width: 11%">Jumlah OH</th>
                   <th style="width: 13%">Upah Harian</th>
-                  <th style="width: 15%">Subtotal Biaya</th>
-                  <th style="width: 4%">% Thd Upah</th>
-                  <th style="width: 4%">% Thd Total</th>
+                  <th style="width: 14%">Subtotal Biaya</th>
+                  <th style="width: 6%" class="th-nowrap">% Upah</th>
+                  <th style="width: 6%" class="th-nowrap">% Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -2139,13 +2265,13 @@ window.App = (function() {
                 <tr>
                   <th style="width: 4%">No</th>
                   <th style="width: 10%">Kode</th>
-                  <th style="width: 32%">Nama Peralatan</th>
-                  <th style="width: 8%">Satuan</th>
-                  <th style="width: 10%">Total Sewa</th>
+                  <th style="width: 28%">Nama Peralatan</th>
+                  <th style="width: 8%" class="th-nowrap">Satuan</th>
+                  <th style="width: 11%">Total Sewa</th>
                   <th style="width: 13%">Tarif Sewa</th>
-                  <th style="width: 15%">Subtotal Biaya</th>
-                  <th style="width: 4%">% Thd Alat</th>
-                  <th style="width: 4%">% Thd Total</th>
+                  <th style="width: 14%">Subtotal Biaya</th>
+                  <th style="width: 6%" class="th-nowrap">% Alat</th>
+                  <th style="width: 6%" class="th-nowrap">% Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -2162,10 +2288,6 @@ window.App = (function() {
             </table>
           </div>
         </div>
-      </div>
-
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Halaman 1 dari 1", statusDoc: "Dokumen Sah Rekapitulasi Sumber Daya" })}
       </div>
     `;
   }
@@ -2219,7 +2341,26 @@ window.App = (function() {
 
     container.innerHTML = `
       <div class="print-only">
-        ${window.PrintEngine.createPrintHeader(proj, `KURVA S PEKERJAAN PROYEK (${isDaily ? 'GRID HARIAN' : 'GRID MINGGUAN'})`)}
+        ${window.PrintEngine.createLandscapePrintHeader ? window.PrintEngine.createLandscapePrintHeader(proj, `KURVA S PEKERJAAN PROYEK (${isDaily ? 'GRID HARIAN' : 'GRID MINGGUAN'})`) : window.PrintEngine.createPrintHeader(proj, `KURVA S PEKERJAAN PROYEK (${isDaily ? 'GRID HARIAN' : 'GRID MINGGUAN'})`)}
+        <!-- Baris KPI Ringkas Khusus Cetak Landscape -->
+        <div style="display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: 8pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+          <div style="flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2.5px 6px; text-align: center;">
+            <span style="font-size: 7pt; color: #64748b; text-transform: uppercase;">Target Rencana:</span>
+            <strong style="color: #2563eb; margin-left: 4px;">100,00%</strong>
+          </div>
+          <div style="flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2.5px 6px; text-align: center;">
+            <span style="font-size: 7pt; color: #64748b; text-transform: uppercase;">Realisasi Fisik:</span>
+            <strong style="color: ${hasRealProgress ? '#059669' : '#64748b'}; margin-left: 4px;">${hasRealProgress ? `${window.CurrencyUtil.formatNumber(lastActCum, 2)}%` : '0,00%'}</strong>
+          </div>
+          <div style="flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2.5px 6px; text-align: center;">
+            <span style="font-size: 7pt; color: #64748b; text-transform: uppercase;">Deviasi Jadwal:</span>
+            <strong style="color: ${devColor}; margin-left: 4px;">${deviationText}</strong>
+          </div>
+          <div style="flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2.5px 6px; text-align: center;">
+            <span style="font-size: 7pt; color: #64748b; text-transform: uppercase;">Total Durasi:</span>
+            <strong style="color: #0891b2; margin-left: 4px;">${totalDays} Hari (${weeksCount} Mgg)</strong>
+          </div>
+        </div>
       </div>
 
       <div class="page-header no-print">
@@ -2289,37 +2430,36 @@ window.App = (function() {
             <!-- SVG dirender di sini -->
           </div>
 
-          <!-- Tabel Data Detail -->
-          <div class="d-flex justify-content-between align-items-center mb-2 no-print">
-            <h4 style="font-size: 14px; font-weight: 700; margin: 0;">
-              Tabel Rencana & Realisasi Progres ${isDaily ? 'Harian (Per Hari Kerja)' : 'Mingguan (Per Minggu)'}
-            </h4>
-            <div class="text-muted" style="font-size: 12px;">
-              Format Waktu: <strong>${isDaily ? 'H-1 s.d. H-' + totalDays : 'M-1 s.d. M-' + weeksCount}</strong>
+          <!-- Tabel Data Detail (Tercetak di Halaman 2 Bersama Kurva S) -->
+          <div class="kurva-s-table-wrapper" style="page-break-before: always; break-before: page; margin-top: 16px;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h4 style="font-size: 14px; font-weight: 700; margin: 0; color: #0f172a;">
+                Tabel Rencana & Realisasi Progres ${isDaily ? 'Harian (Per Hari Kerja)' : 'Mingguan (Per Minggu)'}
+              </h4>
+              <div class="text-muted" style="font-size: 12px;">
+                Format Waktu: <strong>${isDaily ? 'H-1 s.d. H-' + totalDays : 'M-1 s.d. M-' + weeksCount}</strong>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 6%; text-align: center; vertical-align: middle;">${isDaily ? 'Hari Ke' : 'Minggu'}</th>
+                    <th style="width: 14%; text-align: center; vertical-align: middle;">${isDaily ? 'Hari & Tanggal' : 'Periode Tanggal'}</th>
+                    <th style="width: 38%; text-align: center; vertical-align: middle;">Pekerjaan / Jadwal Aktif</th>
+                    <th style="width: 10%; text-align: center; vertical-align: middle;">${isDaily ? 'Bobot (%)' : 'Bobot (%)'}</th>
+                    <th style="width: 11%; text-align: center; vertical-align: middle;">Rencana Kum (%)</th>
+                    <th style="width: 11%; text-align: center; vertical-align: middle;">Realisasi Kum (%)</th>
+                    <th style="width: 10%; text-align: center; vertical-align: middle;">Deviasi (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="scheduleTableBody">
+                  <!-- Diisi loop tabel -->
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="table-responsive no-print">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th style="width: 10%">${isDaily ? 'Hari Ke' : 'Minggu'}</th>
-                  <th style="width: 25%">${isDaily ? 'Hari & Tanggal' : 'Periode Tanggal'}</th>
-                  <th style="width: 17%">${isDaily ? 'Bobot Rencana Harian (%)' : 'Bobot Rencana Mgg (%)'}</th>
-                  <th style="width: 16%">Rencana Kumulatif (%)</th>
-                  <th style="width: 16%">Realisasi Kumulatif (%)</th>
-                  <th style="width: 16%">Deviasi (%)</th>
-                </tr>
-              </thead>
-              <tbody id="scheduleTableBody">
-                <!-- Diisi loop tabel -->
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
-
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Halaman 1 dari 1", statusDoc: `Dokumen Sah Kurva S (${isDaily ? 'Harian' : 'Mingguan'})` })}
       </div>
     `;
 
@@ -2350,18 +2490,25 @@ window.App = (function() {
           : (s.dateRangeFormatted || ((s.startDate || s.dateStart) ? `${s.startDate || s.dateStart} s.d. ${s.endDate || s.dateEnd}` : '-'));
         const weightVal = isDaily ? (s.planDaily || 0) : (s.planWeekly || 0);
 
+        const activeTasksList = (s.activeTasks && s.activeTasks.length > 0)
+          ? s.activeTasks.map(name => `<div class="task-active-line" style="font-size: 8pt; color: #1e293b; line-height: 1.4; padding: 1.5px 0; text-align: left; word-break: normal; white-space: normal;">&bull; ${name}</div>`).join("")
+          : '<span class="text-muted" style="font-size: 8pt; font-style: italic;">(Tidak ada pekerjaan aktif)</span>';
+
         rowsHtml += `
           <tr>
-            <td class="text-center font-bold" style="color: #1e40af;">${tagLabel}</td>
-            <td style="font-size: 11px; color: #334155; font-weight: 600;">
+            <td class="text-center font-bold" style="color: #1e40af; vertical-align: middle; text-align: center;">${tagLabel}</td>
+            <td style="font-size: 8pt; color: #334155; font-weight: 600; vertical-align: middle; text-align: center;">
               ${dateDesc}
             </td>
-            <td class="text-right font-bold">${window.CurrencyUtil.formatNumber(weightVal, 2)}%</td>
-            <td class="text-right font-bold text-primary">${window.CurrencyUtil.formatNumber(s.planCum, 2)}%</td>
-            <td class="text-right font-bold ${s.actCum !== null ? 'text-success' : 'text-muted'}">
+            <td style="vertical-align: middle; text-align: left; padding: 4px 8px;">
+              ${activeTasksList}
+            </td>
+            <td class="text-right font-bold" style="vertical-align: middle; text-align: right;">${window.CurrencyUtil.formatNumber(weightVal, 2)}%</td>
+            <td class="text-right font-bold text-primary" style="vertical-align: middle; text-align: right;">${window.CurrencyUtil.formatNumber(s.planCum, 2)}%</td>
+            <td class="text-right font-bold ${s.actCum !== null ? 'text-success' : 'text-muted'}" style="vertical-align: middle; text-align: right;">
               ${s.actCum !== null ? `${window.CurrencyUtil.formatNumber(s.actCum, 2)}%` : '-'}
             </td>
-            <td class="text-right">${deviasiHtml}</td>
+            <td class="text-center font-bold" style="vertical-align: middle; text-align: center;">${deviasiHtml}</td>
           </tr>
         `;
       });
@@ -2372,20 +2519,30 @@ window.App = (function() {
   // 8. Kalender Proyek 1 Tahun View
   
   function handleSyncTasksFromRab() {
-    if (!window.ProjectCalendar || !window.ProjectCalendar.syncTasksFromRabDetail) return;
-    const res = window.ProjectCalendar.syncTasksFromRabDetail();
-    renderKalenderView();
-    if (window.App && window.App.showConfirmModal) {
-      window.App.showConfirmModal({
-        title: "Sinkronisasi Jadwal Berhasil",
-        message: `Jadwal pekerjaan berhasil dimuat dari Rincian Detail RAB!<br><br>
-          &bull; <strong>${res.synced}</strong> jadwal pekerjaan diperbarui / ditambahkan.<br>
-          &bull; <strong>${res.locked}</strong> jadwal berstatus <strong>Selesai</strong> terkunci aman (tidak diubah).<br>
-          &bull; Seluruh jadwal kini memuat <strong>2 baris</strong>: Standar Rencana & Penanggalan Lapangan.`,
-        confirmText: "Tutup & Lihat Jadwal",
-        onConfirm: () => {}
-      });
-    }
+    syncCalendarFromRab(true);
+  }
+
+  function confirmClearAllCalendarTasks() {
+    showConfirmModal({
+      title: "Konfirmasi Kosongkan Kalender Proyek",
+      message: `Apakah Anda yakin ingin <strong>menghapus seluruh data jadwal</strong> di Kalender Proyek?<br><br>
+        Seluruh daftar penanggalan pekerjaan fisik akan dikosongkan. Anda dapat membuat ulang jadwal kapan saja secara bersih menggunakan tombol <strong>'Muat / Refresh Jadwal dari Rincian RAB'</strong>.`,
+      confirmText: "🗑️ Ya, Kosongkan Semua Jadwal",
+      confirmClass: "btn-danger",
+      onConfirm: () => {
+        if (window.ProjectCalendar && window.ProjectCalendar.clearAllTasks) {
+          const res = window.ProjectCalendar.clearAllTasks();
+          renderKalenderView();
+          showNotificationModal({
+            title: "Kalender Berhasil Dikosongkan",
+            icon: "🗑️",
+            type: "info",
+            contentHtml: `<div style="font-size: 13px;">Sebanyak <strong>${res.count}</strong> jadwal pekerjaan fisik telah dihapus dari kalender.<br><br>Silakan gunakan tombol <strong>'Muat / Refresh Jadwal dari Rincian RAB'</strong> untuk men-generate jadwal baru kapan saja.</div>`,
+            confirmText: "Tutup"
+          });
+        }
+      }
+    });
   }
 
   let kalenderDivisionFilter = "ALL";
@@ -2401,7 +2558,10 @@ window.App = (function() {
 
     const proj = window.ProjectManager ? window.ProjectManager.getActiveProject() : null;
     let allTasks = window.ProjectCalendar ? window.ProjectCalendar.getTasks() : [];
-    if (allTasks.length === 0 && proj && proj.divisions && proj.divisions.some(d => d.items && d.items.length > 0)) {
+    
+    // Hanya auto-sync saat proyek baru dibuka pertama kali dan belum pernah diinisialisasi kalendernya (undefined)
+    // Jika proj.calendarTasks adalah array kosong [] (telah dihapus/dikosongkan user), jangan di-auto-sync paksa!
+    if (proj && proj.calendarTasks === undefined && proj.divisions && proj.divisions.some(d => d.items && d.items.length > 0)) {
       window.ProjectCalendar.syncTasksFromRabDetail();
       allTasks = window.ProjectCalendar.getTasks();
     }
@@ -2482,7 +2642,7 @@ window.App = (function() {
                 ${isCompleted ? '<span class="badge badge-success ml-1" style="font-size: 9.5px;">🔒 Terkunci Aman</span>' : ''}
               </div>
             </td>
-            <td colspan="2" style="padding: 6px 8px; width: 330px;">
+            <td style="padding: 6px 8px;">
               <!-- Baris 1: Standar Rencana Sesuai Data Proyek -->
               <div class="schedule-2row-std" style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-size: 11px; border-left: 3px solid #2563eb; margin-bottom: 3px;">
                 <span style="color: #1e40af; font-weight: 700;">📅 Standar Rencana:</span>
@@ -2529,7 +2689,7 @@ window.App = (function() {
 
     container.innerHTML = `
       <div class="print-only">
-        ${window.PrintEngine.createPrintHeader(proj, "JADWAL KALENDER PEKERJAAN PROYEK")}
+        ${window.PrintEngine.createLandscapePrintHeader ? window.PrintEngine.createLandscapePrintHeader(proj, "JADWAL KALENDER PEKERJAAN PROYEK") : window.PrintEngine.createPrintHeader(proj, "JADWAL KALENDER PEKERJAAN PROYEK")}
       </div>
       <div class="page-header no-print">
         <div>
@@ -2537,7 +2697,8 @@ window.App = (function() {
           <div class="page-header-sub">Memuat detail jadwal tanggal per item pekerjaan/AHSP fisik, durasi standar versus realisasi lapangan, dan visualisasi timeline</div>
         </div>
         <div class="page-header-actions">
-          <button class="btn btn-outline" onclick="App.syncCalendarFromRab()" title="Sinkronkan jadwal total dari rincian detail divisi RAB">🔄 Muat / Refresh Jadwal dari Rincian RAB</button>
+          <button class="btn btn-outline-danger" onclick="App.confirmClearAllCalendarTasks()" title="Kosongkan semua data jadwal di kalender untuk di-generate ulang bersih">🗑️ Hapus Semua Data Kalender</button>
+          <button class="btn btn-primary" onclick="App.syncCalendarFromRab(true)" title="Sinkronkan & perbarui seluruh jadwal dari rincian detail divisi RAB">🔄 Muat / Refresh Jadwal dari Rincian RAB</button>
           <button class="btn btn-outline" onclick="App.openAddTaskModal()">+ Tambah Jadwal Manual</button>
           <button class="btn btn-outline" onclick="App.printCurrentPage('panel-kalender', 'Kalender_Proyek')">🖨️ Cetak A4 PDF</button>
         </div>
@@ -2582,25 +2743,38 @@ window.App = (function() {
           <table class="table table-hover mb-0">
             <thead>
               <tr>
-                <th style="width: 85px;" class="text-center">KODE AHSP</th>
-                <th>URAIAN PEKERJAAN & DETAIL SPESIFIKASI</th>
-                <th colspan="2" style="width: 330px;">PENANGGALAN (BARIS 1: STANDAR RENCANA • BARIS 2: LAPANGAN MANUAL)</th>
-                <th class="text-center" style="width: 95px;">DURASI</th>
-                <th class="text-center" style="width: 115px;">STATUS</th>
-                <th>CATATAN KHUSUS</th>
-                <th class="text-center no-print" style="width: 130px;">AKSI</th>
+                <th style="width: 12%;" class="text-center">KODE AHSP</th>
+                <th style="width: 28%;">URAIAN PEKERJAAN & DETAIL SPESIFIKASI</th>
+                <th style="width: 28%;">PENANGGALAN (BARIS 1: STANDAR RENCANA • BARIS 2: LAPANGAN MANUAL)</th>
+                <th class="text-center" style="width: 8%;">DURASI</th>
+                <th class="text-center" style="width: 10%;">STATUS</th>
+                <th style="width: 14%;">CATATAN KHUSUS</th>
+                <th class="text-center no-print" style="width: 110px;">AKSI</th>
               </tr>
             </thead>
             <tbody>
-              ${taskRows || '<tr><td colspan="7" class="text-center p-4 text-muted">Belum ada jadwal pekerjaan. Klik "Muat / Refresh Jadwal dari Rincian RAB" untuk memuat otomatis.</td></tr>'}
+              ${taskRows || `
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div class="p-5 text-center" style="background: #f8fafc; border-radius: 8px;">
+                      <div style="font-size: 40px; margin-bottom: 10px;">📅</div>
+                      <div style="font-weight: 700; color: #1e293b; font-size: 15px; margin-bottom: 6px;">Jadwal Kalender Proyek Masih Kosong</div>
+                      <div class="text-muted" style="font-size: 12.5px; max-width: 520px; margin: 0 auto 16px auto;">
+                        Seluruh jadwal pekerjaan fisik telah dikosongkan. Klik tombol di bawah untuk membuat dan menyinkronkan jadwal secara otomatis berdasarkan seluruh volume dan OH dari Rincian Detail RAB.
+                      </div>
+                      <button class="btn btn-primary btn-md font-bold" onclick="App.syncCalendarFromRab(true)" style="padding: 9px 22px; font-size: 13px; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);">
+                        🔄 Muat / Refresh Jadwal dari Rincian RAB
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `}
             </tbody>
           </table>
         </div>
       </div>
 
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Halaman 1 dari 1", statusDoc: "Dokumen Sah Kalender Proyek" })}
-      </div>
+      
     `;
   }
 
@@ -2629,10 +2803,6 @@ window.App = (function() {
         <div class="card-body">
           ${sheetHtml}
         </div>
-      </div>
-
-      <div class="print-only">
-        ${window.PrintEngine.createPrintFooter(proj, { pageStr: "Halaman 1 dari 1", statusDoc: "Dokumen Sah Lembar Pengawasan Mutu Lapangan" })}
       </div>
     `;
   }
@@ -2832,7 +3002,7 @@ window.App = (function() {
           <div class="page-header-sub">Format bundel cetak A4 lengkap: Cover eksekutif, lembar pengesahan, daftar isi, rekapitulasi & lampiran</div>
         </div>
         <div class="page-header-actions">
-          <button class="btn btn-primary" onclick="App.printCurrentPage('panel-proposal', 'Proposal_Rencana_Proyek')">🖨️ Cetak Proposal Lengkap (A4 PDF)</button>
+          <button class="btn btn-primary" onclick="App.printProposal()">🖨️ Cetak Proposal Lengkap (A4 PDF)</button>
         </div>
       </div>
 
@@ -3085,16 +3255,16 @@ window.App = (function() {
     const initTotal = Math.round(initVolume * initPrice);
 
     const customBodyHtml = `
-      <!-- Panel Pencarian & Integrasi AHSP PUPR 2026 -->
-      <div class="mb-3" style="background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px 16px;">
+      <!-- Step 1: Panel Pencarian & Integrasi AHSP PUPR 2026 -->
+      <div class="mb-3" style="background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div style="font-weight: 700; color: #1e3a8a; font-size: 13px;">
-            ⚡ Pilihan Cepat AHSP Standar SE PUPR No. 47/2026
+          <div style="font-weight: 800; color: #1e3a8a; font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
+            <span>⚡</span> <span>1. Pilihan Cepat AHSP Standar SE PUPR No. 47/2026</span>
           </div>
-          <span class="badge badge-primary" style="font-size: 11px;">Pustaka Terintegrasi</span>
+          <span class="badge badge-primary" style="font-size: 11px; padding: 4px 8px;">Pustaka Terintegrasi</span>
         </div>
-        <div style="font-size: 12px; color: #3b82f6; margin-bottom: 10px;">
-          Cari jenis pekerjaan di bawah ini. Memilih AHSP akan otomatis membaca dan mengisi Kode AHSP, Nama Pekerjaan, Satuan, dan Harga Satuan Pekerjaan (HSP) standar proyek.
+        <div style="font-size: 11.5px; color: #3b82f6; margin-bottom: 10px; line-height: 1.4;">
+          Pilih item pekerjaan dari pustaka standar PUPR di bawah. Sistem akan otomatis mengisi dan <strong>mengunci</strong> Kode AHSP, Nama Pekerjaan, Satuan Hasil, dan Harga Satuan (HSP) standar acuan.
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 8px;">
@@ -3105,86 +3275,107 @@ window.App = (function() {
             </select>
           </div>
           <div>
-            <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; display: block;">Pencarian Kata Kunci / Kode AHSP:</label>
-            <input type="text" id="modalAhspSearchInput" class="form-control" placeholder="Ketik misal: plesteran, sloof, bata, cat, pipa, pintu, keramik, 1.1..." style="font-size: 12px; padding: 5px 10px;">
+            <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; display: block;">Cari Pekerjaan / Kode AHSP:</label>
+            <input type="text" id="modalAhspSearchInput" class="form-control" placeholder="Ketik misal: plesteran, sloof, bata, cat, pipa, pintu, keramik..." style="font-size: 12px; padding: 5px 10px;">
           </div>
         </div>
 
-        <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; display: block;">
-          Pilih Item AHSP untuk Mengisi Otomatis (Klik salah satu):
+        <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: block;">
+          Pilih Item Pekerjaan Standar (Klik untuk menerapkan):
         </label>
-        <select id="modalAhspResultList" size="4" class="form-control" style="font-size: 12px; font-family: monospace; background: #ffffff; cursor: pointer; border: 1px solid #93c5fd;">
+        <select id="modalAhspResultList" size="4" class="form-control" style="font-size: 12px; font-family: monospace; background: #ffffff; cursor: pointer; border: 1px solid #93c5fd; border-radius: 6px;">
           <!-- Diisi secara dinamis -->
         </select>
         <div id="modalAhspHelpText" style="font-size: 11px; color: #64748b; margin-top: 4px;">
-          Menampilkan rekomendasi item AHSP. Ketik pencarian untuk mempersempit pilihan.
+          Menampilkan rekomendasi item AHSP standar PUPR.
         </div>
         <div id="modalAhspSelectedInfo" style="margin-top: 8px; display: none;"></div>
       </div>
 
-      <div class="form-group mb-3">
-        <label class="form-label font-bold">Divisi Pekerjaan Tujuan <span class="modal-field-required">*</span></label>
-        <select class="form-control" name="divisionId" id="modalItemDivSelect" required>
-          ${divOptionsHtml}
-        </select>
-      </div>
+      <!-- Step 2: Spesifikasi Teknis & Harga Terkunci -->
+      <div class="mb-3" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+        <div style="font-weight: 800; color: #0f172a; font-size: 13px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          <span>🏛️</span> <span>2. Divisi Tujuan & Spesifikasi Standar</span>
+        </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-        <div>
-          <div class="d-flex justify-content-between align-items-center mb-1">
-            <label class="form-label font-bold mb-0">Kode AHSP / Item <span class="modal-field-required">*</span></label>
-            <span id="modalItemCodeLockBadge" class="badge" style="font-size: 10px; background: #e0e7ff; color: #3730a3; ${initAhspId ? '' : 'display: none;'}">🔒 Terkunci Standar AHSP</span>
+        <div class="form-group mb-3">
+          <label class="form-label font-bold" style="font-size: 12px;">Divisi Pekerjaan Tujuan <span class="modal-field-required">*</span></label>
+          <select class="form-control" name="divisionId" id="modalItemDivSelect" required style="font-size: 12.5px;">
+            ${divOptionsHtml}
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label font-bold mb-0" style="font-size: 11.5px;">Kode AHSP <span class="modal-field-required">*</span></label>
+              <span id="modalItemCodeLockBadge" class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Terkunci</span>
+            </div>
+            <input type="text" class="form-control font-bold" name="code" id="modalItemCode" value="${initCode}" required placeholder="Contoh: 1.1.1.1" readonly style="background-color: #f8fafc; cursor: not-allowed; color: #1e293b; font-size: 12px;">
+            <input type="hidden" name="ahspId" id="modalItemAhspId" value="${initAhspId}">
           </div>
-          <input type="text" class="form-control" name="code" id="modalItemCode" value="${initCode}" required placeholder="Contoh: 1.1.1.1 atau CUST.01" ${initAhspId ? 'readonly style="background-color: #f1f5f9; cursor: not-allowed;"' : ''}>
-          <input type="hidden" name="ahspId" id="modalItemAhspId" value="${initAhspId}">
-        </div>
-        <div>
-          <label class="form-label font-bold">Satuan Hasil <span class="modal-field-required">*</span></label>
-          <input type="text" class="form-control" name="unit" id="modalItemUnit" value="${initUnit}" required placeholder="m2, m3, m', buah, titik, unit, kg, ls">
-        </div>
-      </div>
-
-      <div class="form-group mb-3">
-        <label class="form-label font-bold">Uraian / Nama Pekerjaan <span class="modal-field-required">*</span></label>
-        <textarea class="form-control" name="name" id="modalItemName" rows="2" required placeholder="Nama spesifik uraian pekerjaan sesuai AHSP atau gambar rencana">${initName}</textarea>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-        <div>
-          <label class="form-label font-bold">Volume Pekerjaan <span class="modal-field-required">*</span></label>
-          <input type="number" step="any" min="0" class="form-control" name="volume" id="modalItemVolume" value="${initVolume}" required placeholder="0.00">
-          <div class="modal-help-text">Volume hasil perhitungan gambar / opname</div>
-        </div>
-        <div>
-          <div class="d-flex justify-content-between align-items-center mb-1">
-            <label class="form-label font-bold mb-0">Harga Satuan Pekerjaan (HSP) <span class="modal-field-required">*</span></label>
-            <span id="modalItemPriceLockBadge" class="badge" style="font-size: 10px; background: #e0e7ff; color: #3730a3; ${initAhspId ? '' : 'display: none;'}">🔒 Terkunci Standar</span>
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label font-bold mb-0" style="font-size: 11.5px;">Satuan Hasil <span class="modal-field-required">*</span></label>
+              <span id="modalItemUnitLockBadge" class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Terkunci Standar</span>
+            </div>
+            <input type="text" class="form-control font-bold text-center" name="unit" id="modalItemUnit" value="${initUnit}" required readonly style="background-color: #f8fafc; cursor: not-allowed; color: #1e293b; font-size: 12px; border: 1px solid #cbd5e1;">
           </div>
-          <div class="input-group" style="display: flex;">
-            <span class="input-group-text" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-right: none; padding: 6px 10px; font-weight: 700; color: #475569; font-size: 12px; border-radius: 6px 0 0 6px;">Rp</span>
-            <input type="text" inputmode="numeric" class="form-control" id="modalItemPriceDisplay" value="${window.CurrencyUtil.formatNumber(initPrice, 0)}" required placeholder="0" style="border-radius: 0 6px 6px 0; ${initAhspId ? 'background-color: #f1f5f9; cursor: not-allowed;' : ''}" ${initAhspId ? 'readonly' : ''}>
-            <input type="hidden" name="price" id="modalItemPrice" value="${initPrice}">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label font-bold mb-0" style="font-size: 11.5px;">Harga Satuan (HSP) <span class="modal-field-required">*</span></label>
+              <span id="modalItemPriceLockBadge" class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Terkunci PUPR</span>
+            </div>
+            <div class="input-group" style="display: flex;">
+              <span class="input-group-text" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-right: none; padding: 4px 8px; font-weight: 700; color: #475569; font-size: 11.5px; border-radius: 6px 0 0 6px;">Rp</span>
+              <input type="text" inputmode="numeric" class="form-control font-bold" id="modalItemPriceDisplay" value="${window.CurrencyUtil.formatNumber(initPrice, 0)}" required readonly placeholder="0" style="border-radius: 0 6px 6px 0; background-color: #f8fafc; cursor: not-allowed; color: #0f766e; font-size: 12px;">
+              <input type="hidden" name="price" id="modalItemPrice" value="${initPrice}">
+            </div>
           </div>
-          <div class="modal-help-text">Format ribuan bertitik (Contoh: 3.129.324). Sebelum PPN.</div>
+        </div>
+
+        <div class="form-group mb-2">
+          <label class="form-label font-bold" style="font-size: 12px;">Uraian / Nama Pekerjaan <span class="modal-field-required">*</span></label>
+          <textarea class="form-control font-bold" name="name" id="modalItemName" rows="2" required placeholder="Nama spesifik uraian pekerjaan sesuai AHSP atau gambar rencana" style="font-size: 12.5px; color: #0f172a;">${initName}</textarea>
+        </div>
+
+        <div class="form-group mb-0">
+          <label class="form-label text-muted" style="font-size: 11.5px;">Catatan Khusus / Spesifikasi Teknis Lapangan (Opsional)</label>
+          <input type="text" class="form-control" name="notes" id="modalItemNotes" value="${initNotes}" placeholder="Misal: Spesifikasi Granit 60x60, Mutu K-250, Standar SNI" style="font-size: 12px;">
         </div>
       </div>
 
-      <div class="form-group mb-3">
-        <label class="form-label">Catatan / Spesifikasi Teknis (Opsional)</label>
-        <input type="text" class="form-control" name="notes" id="modalItemNotes" value="${initNotes}" placeholder="Misal: Spesifikasi Granit 60x60, Standar Mutu SNI">
+      <!-- Step 3: Input Volume Pekerjaan Realisasi (Hero Manual Field) -->
+      <div class="p-3 mb-3" style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: 10px; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.08);">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="form-label font-bold mb-0" style="color: #1e40af; font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
+            <span>✏️</span> <span>3. Volume Pekerjaan (Input Manual)</span> <span class="modal-field-required">*</span>
+          </label>
+          <span class="badge badge-primary" style="font-size: 11px; padding: 4px 10px;">⭐ Satu-Satunya Input Manual</span>
+        </div>
+        <div style="font-size: 11.5px; color: #3b82f6; margin-bottom: 10px;">
+          Masukkan volume fisik pekerjaan sesuai hasil opname atau pengukuran gambar kerja (DED). Satuan hasil dan harga satuan telah dikunci otomatis.
+        </div>
+        <div class="input-group" style="display: flex;">
+          <input type="number" step="any" min="0" class="form-control font-bold" name="volume" id="modalItemVolume" value="${initVolume}" required placeholder="0.00" style="font-size: 18px; color: #1e3a8a; border: 2px solid #3b82f6; border-right: none; height: 46px; text-align: right; padding-right: 12px; border-radius: 6px 0 0 6px; background: #ffffff;">
+          <span id="modalItemVolumeUnitBadge" class="input-group-text" style="background: #dbeafe; border: 2px solid #3b82f6; border-left: none; padding: 6px 18px; font-weight: 800; color: #1e40af; font-size: 14px; border-radius: 0 6px 6px 0; min-width: 75px; text-align: center; justify-content: center;">${initUnit}</span>
+        </div>
+        <div class="modal-help-text mt-1" style="color: #64748b; font-size: 11px;">
+          Gunakan tanda titik (.) untuk pecahan desimal jika diperlukan (contoh: 12.50 atau 150).
+        </div>
       </div>
 
-      <!-- Live Calculation Bar -->
-      <div id="modalItemLiveTotalBox" style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+      <!-- Step 4: Live Subtotal & Biaya Real-Time -->
+      <div id="modalItemLiveTotalBox" style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: #ffffff; border-radius: 10px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <div>
-          <div style="font-size: 11px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">Kalkulasi Otomatis Item</div>
-          <div id="modalItemFormulaText" style="font-size: 12px; color: #15803d; margin-top: 2px;">
+          <div style="font-size: 10.5px; font-weight: 700; color: #a7f3d0; text-transform: uppercase; letter-spacing: 0.5px;">💰 Kalkulasi Otomatis Item RAB</div>
+          <div id="modalItemFormulaText" style="font-size: 13px; color: #ecfdf5; margin-top: 3px; font-family: monospace;">
             ${window.CurrencyUtil.formatNumber(initVolume, 2)} ${initUnit} &times; ${window.CurrencyUtil.formatRupiah(initPrice, false, true)}
           </div>
         </div>
         <div style="text-align: right;">
-          <div style="font-size: 11px; color: #166534;">Estimasi Subtotal:</div>
-          <div id="modalItemSubtotalText" style="font-size: 18px; font-weight: 800; color: #166534;">
+          <div style="font-size: 11px; color: #a7f3d0;">Estimasi Subtotal Biaya:</div>
+          <div id="modalItemSubtotalText" style="font-size: 20px; font-weight: 900; color: #34d399;">
             ${window.CurrencyUtil.formatRupiah(initTotal, false, true)}
           </div>
         </div>
@@ -3211,9 +3402,18 @@ window.App = (function() {
         const itemPrice = modalBody.querySelector("#modalItemPrice");
         const itemPriceDisplay = modalBody.querySelector("#modalItemPriceDisplay");
         const itemCodeLockBadge = modalBody.querySelector("#modalItemCodeLockBadge");
+        const itemUnitLockBadge = modalBody.querySelector("#modalItemUnitLockBadge");
         const itemPriceLockBadge = modalBody.querySelector("#modalItemPriceLockBadge");
+        const volumeUnitBadge = modalBody.querySelector("#modalItemVolumeUnitBadge");
         const formulaText = modalBody.querySelector("#modalItemFormulaText");
         const subtotalText = modalBody.querySelector("#modalItemSubtotalText");
+
+        // Kunci satuan hasil secara absolut sesuai instruksi
+        if (itemUnit) {
+          itemUnit.readOnly = true;
+          itemUnit.style.backgroundColor = "#f8fafc";
+          itemUnit.style.cursor = "not-allowed";
+        }
 
         function updateLiveSubtotal() {
           const v = parseFloat(itemVolume.value) || 0;
@@ -3226,30 +3426,12 @@ window.App = (function() {
           if (subtotalText) {
             subtotalText.innerHTML = window.CurrencyUtil.formatRupiah(tot, false, true);
           }
-        }
-
-        // Format angka ribuan dengan titik saat mengetik
-        function formatPriceInput(el) {
-          let raw = (el.value || "").replace(/[^\d]/g, "");
-          if (!raw) {
-            itemPrice.value = 0;
-            el.value = "";
-          } else {
-            const num = parseInt(raw, 10);
-            itemPrice.value = num;
-            el.value = window.CurrencyUtil.formatNumber(num, 0);
+          if (volumeUnitBadge && u) {
+            volumeUnitBadge.textContent = u;
           }
-          updateLiveSubtotal();
-        }
-
-        if (itemPriceDisplay) {
-          itemPriceDisplay.addEventListener("input", function() {
-            formatPriceInput(this);
-          });
         }
 
         itemVolume.addEventListener("input", updateLiveSubtotal);
-        itemUnit.addEventListener("input", updateLiveSubtotal);
 
         function populateAhspList() {
           const q = (searchInput.value || "").toLowerCase().trim();
@@ -3270,7 +3452,7 @@ window.App = (function() {
           const topItems = matches.slice(0, 35);
           let optHtml = "";
           if (topItems.length === 0) {
-            optHtml = '<option disabled>Tidak ditemukan item AHSP yang cocok. Anda dapat mengetik data item secara manual di bawah.</option>';
+            optHtml = '<option disabled>Tidak ditemukan item AHSP yang cocok.</option>';
           } else {
             topItems.forEach(a => {
               const hspVal = a.hsp || (window.AhspEngine ? window.AhspEngine.calculateHsp(a).finalHsp : 0);
@@ -3286,26 +3468,6 @@ window.App = (function() {
         searchInput.addEventListener("input", populateAhspList);
         catFilter.addEventListener("change", populateAhspList);
 
-        function attachUnlockListener() {
-          const unlockBtn = modalBody.querySelector("#modalItemUnlockBtn");
-          if (unlockBtn) {
-            unlockBtn.addEventListener("click", function() {
-              itemCode.readOnly = false;
-              itemCode.style.backgroundColor = "#ffffff";
-              itemCode.style.cursor = "text";
-              if (itemCodeLockBadge) itemCodeLockBadge.style.display = "none";
-
-              if (itemPriceDisplay) {
-                itemPriceDisplay.readOnly = false;
-                itemPriceDisplay.style.backgroundColor = "#ffffff";
-                itemPriceDisplay.style.cursor = "text";
-              }
-              if (itemPriceLockBadge) itemPriceLockBadge.style.display = "none";
-              unlockBtn.parentElement.innerHTML = "🔓 <em>Mode Edit Kustom Aktif. Kode & Harga Satuan dapat disesuaikan manual.</em>";
-            });
-          }
-        }
-
         resultList.addEventListener("change", function() {
           const chosenId = this.value;
           if (!chosenId) return;
@@ -3320,19 +3482,26 @@ window.App = (function() {
 
             itemCode.value = ahsp.code;
             itemCode.readOnly = true;
-            itemCode.style.backgroundColor = "#f1f5f9";
+            itemCode.style.backgroundColor = "#f8fafc";
             itemCode.style.cursor = "not-allowed";
             if (itemCodeLockBadge) itemCodeLockBadge.style.display = "inline-block";
 
             itemAhspId.value = ahsp.id;
             itemName.value = ahsp.name;
             itemUnit.value = ahsp.unit;
+            itemUnit.readOnly = true;
+            itemUnit.style.backgroundColor = "#f8fafc";
+            itemUnit.style.cursor = "not-allowed";
+            if (itemUnitLockBadge) itemUnitLockBadge.style.display = "inline-block";
+
+            if (volumeUnitBadge) volumeUnitBadge.textContent = ahsp.unit;
+
             itemPrice.value = hspInfo.finalHsp;
 
             if (itemPriceDisplay) {
               itemPriceDisplay.value = window.CurrencyUtil.formatNumber(hspInfo.finalHsp, 0);
               itemPriceDisplay.readOnly = true;
-              itemPriceDisplay.style.backgroundColor = "#f1f5f9";
+              itemPriceDisplay.style.backgroundColor = "#f8fafc";
               itemPriceDisplay.style.cursor = "not-allowed";
             }
             if (itemPriceLockBadge) itemPriceLockBadge.style.display = "inline-block";
@@ -3343,21 +3512,36 @@ window.App = (function() {
                 <div style="background: #ffffff; border: 1px solid #10b981; border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #065f46;">
                   <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>✅ <strong>AHSP Terpilih: [${ahsp.code}]</strong> ${ahsp.name}</div>
-                    <a href="javascript:void(0)" id="modalItemUnlockBtn" style="font-size: 11px; text-decoration: underline; color: #2563eb; font-weight: 600;">[Buka Kunci Input]</a>
+                    <span class="badge badge-success" style="font-size: 10px;">Satuan: ${ahsp.unit} • Terkunci</span>
                   </div>
                   <div style="color: #047857; margin-top: 4px;">
-                    Satuan: <strong>${ahsp.unit}</strong> &bull; HSP Acuan Proyek: <strong>${window.CurrencyUtil.formatRupiah(hspInfo.finalHsp)}</strong> 
+                    HSP Acuan Proyek: <strong>${window.CurrencyUtil.formatRupiah(hspInfo.finalHsp)} / ${ahsp.unit}</strong> 
                     (Tenaga: ${window.CurrencyUtil.formatRupiah(hspInfo.subtotalTenaga)} | Bahan: ${window.CurrencyUtil.formatRupiah(hspInfo.subtotalBahan)} | Overhead ${hspInfo.overheadPercent}%: ${window.CurrencyUtil.formatRupiah(hspInfo.eOverhead)})
                   </div>
                 </div>
               `;
-              attachUnlockListener();
             }
             updateLiveSubtotal();
+
+            // Auto-focus ke volume agar user dapat langsung mengetik angka volume pekerjaan
+            if (itemVolume) {
+              setTimeout(() => {
+                itemVolume.focus();
+                itemVolume.select();
+              }, 60);
+            }
           }
         });
 
         populateAhspList();
+
+        // Auto focus ke volume jika mode edit atau sudah ada nilai
+        if (itemVolume) {
+          setTimeout(() => {
+            itemVolume.focus();
+            itemVolume.select();
+          }, 100);
+        }
       },
       onSubmit: (data) => {
         const divId = data.divisionId;
@@ -3437,7 +3621,8 @@ window.App = (function() {
   }
 
   // Sinkronkan seluruh rincian divisi RAB ke Kalender Pelaksanaan Proyek (Matematis: OH x Volume)
-  function syncCalendarFromRab() {
+  // forceReset = true memastikan data tanggal & durasi dihitung ulang murni dari data terbaru RAB
+  function syncCalendarFromRab(forceReset = true) {
     if (!window.ProjectCalendar || !window.ProjectCalendar.syncTasksFromRabDetail) {
       showNotificationModal({
         title: "Modul Belum Siap",
@@ -3448,7 +3633,7 @@ window.App = (function() {
       });
       return;
     }
-    const res = window.ProjectCalendar.syncTasksFromRabDetail();
+    const res = window.ProjectCalendar.syncTasksFromRabDetail(forceReset);
     renderCurrentTabContent();
     showNotificationModal({
       title: "Sinkronisasi Jadwal Berhasil!",
@@ -3456,10 +3641,11 @@ window.App = (function() {
       type: "success",
       contentHtml: `
         <div style="line-height: 1.6; font-size: 13px;">
-          <p>Seluruh item pekerjaan dari Rincian Detail RAB telah disinkronkan ke Kalender Pelaksanaan:</p>
+          <p>Seluruh item pekerjaan dari Rincian Detail RAB telah berhasil disinkronkan & diperbarui ke Kalender Pelaksanaan:</p>
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin: 10px 0;">
             <div>📅 <strong>Total Kegiatan Terjadwal:</strong> <span class="badge badge-success" style="font-size: 12px;">${res.total} Kegiatan</span></div>
-            <div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">Durasi dihitung matematis berbasis alokasi Orang-Hari (OH) &times; Volume pekerjaan.</div>
+            <div style="margin-top: 4px;">🔄 <strong>Jadwal Diperbarui:</strong> <span class="badge badge-primary" style="font-size: 12px;">${res.synced} Kegiatan</span></div>
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 6px;">Durasi dan penanggalan telah dihitung ulang berbasis alokasi Orang-Hari (OH) &times; Volume pekerjaan terkini.</div>
           </div>
           <div class="text-muted" style="font-size: 11.5px;">Kalender dan Kurva S telah diperbarui secara otomatis.</div>
         </div>
@@ -3575,6 +3761,14 @@ window.App = (function() {
     currentKatalogPage = 1;
     window.CatalogPricing.setCategory(val);
     renderKatalogTableOnly();
+  }
+
+  function setKatalogMode(mode) {
+    katalogFilterMode = (mode === 'all') ? 'all' : 'used';
+    currentKatalogPage = 1;
+    window.CatalogPricing.setCategory('ALL');
+    window.CatalogPricing.setSearch('');
+    renderKatalogView();
   }
 
   function changeKatalogPage(p) {
@@ -4580,6 +4774,10 @@ window.App = (function() {
           ${rowsHtml}
         </tbody>
       </table>
+      ${window.PrintEngine.createPrintFooter(proj, {
+        pageStr: `Katalog Master AHSP 2026 • Total ${list.length} Item`,
+        statusDoc: "Dokumen Sah Master AHSP 2026"
+      })}
     `;
 
     window.PrintEngine.printViaHiddenIframe(fullHtml, " ");
@@ -4599,34 +4797,36 @@ window.App = (function() {
             <td style="text-align: center; padding: 2.5px 3px; font-family: monospace; font-size: 7.5pt;">${c.code || '-'}</td>
             <td style="text-align: center; padding: 2.5px 3px;">${c.unit}</td>
             <td style="text-align: right; padding: 2.5px 4px;">${c.koef}</td>
-            <td style="text-align: right; padding: 2.5px 4px;">${window.CurrencyUtil.formatRupiah(c.price)}</td>
-            <td style="text-align: right; font-weight: 700; padding: 2.5px 5px;">${window.CurrencyUtil.formatRupiah(c.total)}</td>
+            <td style="text-align: right; padding: 2.5px 4px; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(c.price, false, true)}</td>
+            <td style="text-align: right; font-weight: 700; padding: 2.5px 5px; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(c.total, false, true)}</td>
           </tr>
         `;
       });
 
       cardsHtml += `
-        <div class="ahsp-print-card" style="border: 1px solid #94a3b8; padding: 6px 10px; margin-bottom: 10px; border-radius: 4px; page-break-inside: avoid; break-inside: avoid; background-color: #ffffff;">
-          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; border-bottom: 1.5px solid #0f172a; padding-bottom: 2px;">
-            <div>
-              <span style="font-weight: 800; font-size: 10pt; color: #0f172a;">${aIdx + 1}. [${item.code}] ${item.name}</span>
+        <div class="ahsp-print-card" style="border: none !important; border-radius: 0 !important; padding: 0 0 10px 0 !important; margin-bottom: 16px !important; page-break-inside: avoid; break-inside: avoid; background-color: transparent !important;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; border-bottom: 1.5px solid #0f172a; padding-bottom: 3px; gap: 14px;">
+            <div style="flex: 1; min-width: 0;">
+              <span style="font-weight: 800; font-size: 10pt; color: #0f172a; word-break: break-word;">${aIdx + 1}. [${item.code}] ${item.name}</span>
               <div style="font-size: 8pt; color: #64748b; margin-top: 1px;">Kategori: <strong>${item.category || '-'}</strong> | Satuan Hasil: <strong>${item.unit}</strong></div>
             </div>
-            <div style="text-align: right;">
-              <span style="font-size: 7.5pt; color: #64748b;">Harga Satuan Pekerjaan (HSP):</span><br>
-              <strong style="font-size: 11pt; color: #2563eb;">${window.CurrencyUtil.formatRupiah(item.hsp)} / ${item.unit}</strong>
+            <div style="text-align: right; flex-shrink: 0; white-space: nowrap; min-width: 220px;">
+              <div style="font-size: 7.5pt; color: #64748b; margin-bottom: 2px; white-space: nowrap;">Harga Satuan Pekerjaan (HSP):</div>
+              <div style="font-size: 11pt; font-weight: 800; color: #2563eb; white-space: nowrap; font-variant-numeric: tabular-nums;">
+                ${window.CurrencyUtil.formatRupiah(item.hsp, false, true)} <span style="font-size: 8.5pt; font-weight: 600; color: #475569;">/ ${item.unit}</span>
+              </div>
             </div>
           </div>
           <table class="table" style="font-size: 7.5pt; margin-bottom: 0; width: 100%; border-collapse: collapse;">
             <thead>
               <tr style="background-color: #f1f5f9; color: #1e293b;">
                 <th style="width: 4%; text-align: center; padding: 3px 2px;">No</th>
-                <th style="width: 44%; padding: 3px 6px;">Uraian Bahan / Tenaga / Alat</th>
-                <th style="width: 12%; text-align: center; padding: 3px 2px;">Kode</th>
+                <th style="width: 42%; padding: 3px 6px;">Uraian Bahan / Tenaga / Alat</th>
+                <th style="width: 10%; text-align: center; padding: 3px 2px;">Kode</th>
                 <th style="width: 8%; text-align: center; padding: 3px 2px;">Satuan</th>
                 <th style="width: 10%; text-align: right; padding: 3px 4px;">Koefisien</th>
-                <th style="width: 11%; text-align: right; padding: 3px 4px;">Harga Satuan (Rp)</th>
-                <th style="width: 11%; text-align: right; padding: 3px 4px;">Subtotal (Rp)</th>
+                <th style="width: 13%; text-align: right; padding: 3px 4px;">Harga Satuan (Rp)</th>
+                <th style="width: 13%; text-align: right; padding: 3px 4px;">Subtotal (Rp)</th>
               </tr>
             </thead>
             <tbody>
@@ -4641,13 +4841,17 @@ window.App = (function() {
       <div class="print-header-block" style="margin-bottom: 12px;">
         ${window.PrintEngine.createPrintHeader(proj, headerTitle)}
         <div style="font-size: 9pt; margin-top: 4px; color: #475569; display: flex; justify-content: space-between; border-bottom: 1.5px solid #0f172a; padding-bottom: 4px;">
-          <div>Standar Acuan: <strong>SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026</strong></div>
+          <div>Standar Acuan: <strong>${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</strong></div>
           <div>Total Analisis Terlampir: <strong>${list.length} item</strong></div>
         </div>
       </div>
       <div class="ahsp-cards-flow">
         ${cardsHtml}
       </div>
+      ${window.PrintEngine.createPrintFooter(proj, {
+        pageStr: `Katalog Rincian Komponen AHSP 2026 • Total ${list.length} Item`,
+        statusDoc: "Dokumen Sah Analisis AHSP 2026"
+      })}
     `;
 
     // Eksekusi via hidden iframe (100% terisolasi dari DOM layar utama)
@@ -4742,11 +4946,19 @@ window.App = (function() {
       curNo += alatList.length;
     }
 
+    const sig = (proj && proj.signatories) || {};
+    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : ((proj && proj.owner) || 'Ir. Budi Santoso, M.T.');
+    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
+    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.';
+    const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || (proj && proj.consultant) || 'CV. Architecindo Consultant';
+    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.';
+    const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || (proj && proj.contractor) || 'PT. Karya Mandiri Perkasa';
+
     const fullHtml = `
       <div class="print-header-block" style="margin-bottom: 14px;">
         ${window.PrintEngine.createPrintHeader(proj, "DAFTAR HARGA SATUAN UPAH, BAHAN & PERALATAN (ITEM TERPAKAI)")}
         <div style="font-size: 9pt; margin-top: 5px; color: #475569; display: flex; justify-content: space-between; border-bottom: 1.5px solid #0f172a; padding-bottom: 5px;">
-          <div>Standar Acuan: <strong>SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026</strong></div>
+          <div>Standar Acuan: <strong>${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</strong></div>
           <div>Total Sumber Daya Terpakai: <strong>${usedMaterials.length} Item</strong></div>
         </div>
       </div>
@@ -4766,30 +4978,31 @@ window.App = (function() {
         </tbody>
       </table>
 
-      <!-- Lembar Pengesahan Polos Tanpa Border -->
+      <!-- Lembar Pengesahan Polos Tanpa Border (Bebas Titik-Titik Sesuai Setting Proyek) -->
       <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; text-align: center; page-break-inside: avoid; margin-top: 25px;">
         <div class="sig-block" style="border: none !important; background: transparent !important;">
           <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
           <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui & Menetapkan:</div>
           <div class="sig-space" style="height: 45px;"></div>
-          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${proj.owner || '.................................'} )</div>
-          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">Pemilik Proyek</div>
+          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigOwnerName} )</div>
+          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
         </div>
         <div class="sig-block" style="border: none !important; background: transparent !important;">
           <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
           <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
           <div class="sig-space" style="height: 45px;"></div>
-          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ................................. )</div>
-          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${proj.consultant || 'Tim Perencana'}</div>
+          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigConsultantName} )</div>
+          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
         </div>
         <div class="sig-block" style="border: none !important; background: transparent !important;">
           <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
           <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
           <div class="sig-space" style="height: 45px;"></div>
-          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ................................. )</div>
-          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${proj.contractor || 'Direktur Pelaksana'}</div>
+          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigContractorName} )</div>
+          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
         </div>
       </div>
+      
     `;
 
     window.PrintEngine.printViaHiddenIframe(fullHtml, "Katalog_Item_Terpakai");
@@ -4883,7 +5096,7 @@ window.App = (function() {
       <div class="print-header-block" style="margin-bottom: 14px;">
         ${window.PrintEngine.createPrintHeader(proj, "DAFTAR STANDAR HARGA SATUAN UPAH, BAHAN & PERALATAN LENGKAP")}
         <div style="font-size: 9pt; margin-top: 5px; color: #475569; display: flex; justify-content: space-between; border-bottom: 1.5px solid #0f172a; padding-bottom: 5px;">
-          <div>Standar Acuan: <strong>SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026</strong></div>
+          <div>Standar Acuan: <strong>${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</strong></div>
           <div>Total Master Sumber Daya: <strong>${allMaterials.length} Item</strong></div>
         </div>
       </div>
@@ -4902,6 +5115,10 @@ window.App = (function() {
           ${tableRows}
         </tbody>
       </table>
+      ${window.PrintEngine.createPrintFooter(proj, {
+        pageStr: `Katalog Master Harga Satuan Lengkap 2026 • Total ${allMaterials.length} Item`,
+        statusDoc: "Dokumen Sah Master Sumber Daya"
+      })}
     `;
 
     window.PrintEngine.printViaHiddenIframe(fullHtml, "Katalog_Lengkap_Harga_Satuan");
@@ -4942,7 +5159,7 @@ window.App = (function() {
       <div class="print-header-block" style="margin-bottom: 20px;">
         ${window.PrintEngine.createPrintHeader(proj, "DAFTAR HARGA SATUAN & RINCIAN ANALISIS HARGA SATUAN PEKERJAAN (AHSP) TERPILIH")}
         <div style="font-size: 11px; margin-top: 6px; color: #475569; display: flex; justify-content: space-between; border-bottom: 1.5px solid #0f172a; padding-bottom: 6px;">
-          <div>Standar Acuan: <strong>SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026</strong></div>
+          <div>Standar Acuan: <strong>${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</strong></div>
           <div>Total: <strong>${usedAhspList.length} AHSP Terpilih</strong> &bull; <strong>${usedMaterials.length} Sumber Daya Terpakai</strong></div>
         </div>
       </div>
@@ -5030,8 +5247,8 @@ window.App = (function() {
               <td style="text-align: center;">${c.code || '-'}</td>
               <td style="text-align: center;">${c.unit}</td>
               <td style="text-align: right;">${c.koef}</td>
-              <td style="text-align: right;">${window.CurrencyUtil.formatRupiah(c.price)}</td>
-              <td style="text-align: right; font-weight: 700;">${window.CurrencyUtil.formatRupiah(cTotal)}</td>
+              <td style="text-align: right; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(c.price, false, true)}</td>
+              <td style="text-align: right; font-weight: 700; white-space: nowrap;">${window.CurrencyUtil.formatRupiah(cTotal, false, true)}</td>
             </tr>
           `;
         });
@@ -5042,30 +5259,32 @@ window.App = (function() {
         const calculatedHsp = Number(item.hsp) || (totalBiayaLangsung + overheadValue);
 
         fullHtml += `
-          <div class="ahsp-print-card" style="border: 1px solid #cbd5e1; padding: 10px 12px; margin-bottom: 16px; border-radius: 6px; page-break-inside: avoid; background-color: #ffffff;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; border-bottom: 1.5px solid #0f172a; padding-bottom: 4px;">
-              <div>
-                <span style="font-weight: 800; font-size: 11pt; color: #0f172a;">${aIdx + 1}. [${item.code}] ${item.name}</span>
-                <div style="font-size: 9pt; color: #64748b; margin-top: 2px;">
+          <div class="ahsp-print-card" style="border: none !important; border-radius: 0 !important; padding: 0 0 10px 0 !important; margin-bottom: 16px !important; page-break-inside: avoid; background-color: transparent !important;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 6px; border-bottom: 1.5px solid #0f172a; padding-bottom: 4px; gap: 14px;">
+              <div style="flex: 1; min-width: 0;">
+                <span style="font-weight: 800; font-size: 10.5pt; color: #0f172a; word-break: break-word;">${aIdx + 1}. [${item.code}] ${item.name}</span>
+                <div style="font-size: 8.5pt; color: #64748b; margin-top: 2px;">
                   Divisi: <strong>${item.category || '-'}</strong> &bull; Satuan Hasil: <strong>${item.unit}</strong>
                 </div>
               </div>
-              <div style="text-align: right;">
-                <span style="font-size: 8pt; color: #64748b;">Harga Satuan Pekerjaan (HSP):</span><br>
-                <strong style="font-size: 13pt; color: #2563eb;">${window.CurrencyUtil.formatRupiah(calculatedHsp)} / ${item.unit}</strong>
+              <div style="text-align: right; flex-shrink: 0; white-space: nowrap; min-width: 220px;">
+                <div style="font-size: 8pt; color: #64748b; margin-bottom: 2px; white-space: nowrap;">Harga Satuan Pekerjaan (HSP):</div>
+                <div style="font-size: 12pt; font-weight: 800; color: #2563eb; white-space: nowrap; font-variant-numeric: tabular-nums;">
+                  ${window.CurrencyUtil.formatRupiah(calculatedHsp, false, true)} <span style="font-size: 9pt; font-weight: 600; color: #475569;">/ ${item.unit}</span>
+                </div>
               </div>
             </div>
 
-            <table class="table" style="font-size: 8pt; margin-bottom: 6px; width: 100%;">
+            <table class="table" style="font-size: 8pt; margin-bottom: 6px; width: 100%; border-collapse: collapse;">
               <thead>
                 <tr style="background-color: #f8fafc;">
                   <th style="width: 4%; text-align: center;">No</th>
-                  <th style="width: 44%;">Uraian Bahan / Tenaga / Alat</th>
-                  <th style="width: 12%; text-align: center;">Kode</th>
+                  <th style="width: 42%;">Uraian Bahan / Tenaga / Alat</th>
+                  <th style="width: 10%; text-align: center;">Kode</th>
                   <th style="width: 8%; text-align: center;">Satuan</th>
                   <th style="width: 10%; text-align: right;">Koefisien</th>
-                  <th style="width: 11%; text-align: right;">Harga Satuan (Rp)</th>
-                  <th style="width: 11%; text-align: right;">Subtotal (Rp)</th>
+                  <th style="width: 13%; text-align: right;">Harga Satuan (Rp)</th>
+                  <th style="width: 13%; text-align: right;">Subtotal (Rp)</th>
                 </tr>
               </thead>
               <tbody>
@@ -5108,14 +5327,317 @@ window.App = (function() {
     }
 
     fullHtml += `</div>`;
+    fullHtml += window.PrintEngine.createPrintFooter(proj, {
+      pageStr: `Analisis AHSP Terpilih & Harga Satuan • ${usedAhspList.length} AHSP`,
+      statusDoc: "Dokumen Sah AHSP & Bahan Terpilih"
+    });
 
     // Eksekusi via hidden iframe (100% terisolasi dari DOM layar utama)
     window.PrintEngine.printViaHiddenIframe(fullHtml, " ");
   }
 
+  // 13. Cetak PDF Informasi & Setting Proyek (Executive A4 Profile Sheet)
+  function printProjectInfo() {
+    showLoading("Menyiapkan Dokumen Cetak A4...", "Menyusun lembar eksekutif informasi & setting proyek...");
+
+    setTimeout(() => {
+      try {
+        const proj = window.ProjectManager.getActiveProject() || {};
+        const calcRecalc = window.RabCalculator 
+          ? window.RabCalculator.calculateProjectRab(proj) 
+          : { totalDirectCost: 0, overheadAmount: 0, realCost: 0, ppnAmount: 0, grandTotal: 0, terbilangStr: '' };
+
+        const rawSig = proj.signatories || {};
+        const sig = {
+          ownerName: (rawSig.ownerName && !rawSig.ownerName.includes('...')) ? rawSig.ownerName : (proj.owner || "Ir. Budi Santoso, M.T."),
+          ownerTitle: rawSig.ownerTitle || "Kuasa Pengguna Anggaran / Pemilik",
+          ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "19780512 200312 1 002",
+          contractorName: (rawSig.contractorName && !rawSig.contractorName.includes('...')) ? rawSig.contractorName : "H. Ahmad Fauzi, S.T.",
+          contractorTitle: rawSig.contractorTitle || "Direktur Utama",
+          contractorCompany: (rawSig.contractorCompany && !rawSig.contractorCompany.includes('...')) ? rawSig.contractorCompany : (proj.contractor || "PT. Karya Mandiri Perkasa"),
+          consultantName: (rawSig.consultantName && !rawSig.consultantName.includes('...')) ? rawSig.consultantName : "Ir. Bambang Hartono, S.T., M.T.",
+          consultantTitle: rawSig.consultantTitle || "Team Leader / Pengawas",
+          consultantCompany: (rawSig.consultantCompany && !rawSig.consultantCompany.includes('...')) ? rawSig.consultantCompany : (proj.consultant || "CV. Architecindo Consultant"),
+          qcInspectorName: (rawSig.qcInspectorName && !rawSig.qcInspectorName.includes('...')) ? rawSig.qcInspectorName : "Ir. M. Ridwan",
+          qcInspectorRole: rawSig.qcInspectorRole || "Konsultan Pengawas / QC",
+          fieldMandorName: (rawSig.fieldMandorName && !rawSig.fieldMandorName.includes('...')) ? rawSig.fieldMandorName : "Sutarji / Warsito",
+          fieldMandorRole: rawSig.fieldMandorRole || "Mandor Lapangan / Pelaksana",
+          siteManagerName: (rawSig.siteManagerName && !rawSig.siteManagerName.includes('...')) ? rawSig.siteManagerName : "Ir. Hendra Prasetya",
+          siteManagerRole: rawSig.siteManagerRole || "Site Manager Kontraktor",
+          docCity: rawSig.docCity || proj.location || "Indonesia",
+          docDate: rawSig.docDate || proj.startDate || "2026-04-01"
+        };
+
+        const rawBank = proj.bankInfo || {};
+        const bank = {
+          bankName: rawBank.bankName || "Bank Mandiri",
+          accountNumber: rawBank.accountNumber || "131-00-8899221-5",
+          accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "PT. Karya Mandiri Perkasa"
+        };
+
+        const dStart = new Date(proj.startDate || "2026-04-01");
+        const dFinish = new Date(proj.finishDate || "2026-09-30");
+        const diffDays = Math.ceil(Math.abs(dFinish - dStart) / (1000 * 60 * 60 * 24)) || proj.durationDays || 180;
+        const diffWeeks = Math.ceil(diffDays / 7);
+        const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        const sheetHtml = `
+          <div class="printable-bap-doc a4-portrait" style="padding: 10mm 12mm 8mm 12mm; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; min-height: 255mm;">
+            <div>
+              <!-- KOP HEADER RESMI -->
+              <div style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                  <div style="font-size: 13pt; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${sig.contractorCompany}</div>
+                  <div style="font-size: 8pt; color: #475569;">Kontraktor Perencanaan, Estimasi Biaya &amp; Pelaksanaan Konstruksi Terpadu</div>
+                </div>
+                <div style="text-align: right; font-size: 8pt; color: #475569;">
+                  <div><strong>No. Dokumen:</strong> ${proj.docNumber || 'RAB/SETTING/2026/01'}</div>
+                  <div><strong>Tanggal Cetak:</strong> ${printDate}</div>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-bottom: 14px;">
+                <h2 style="font-size: 13pt; font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.4px;">
+                  LEMBAR INFORMASI, SETTING &amp; PARAMETER PROYEK
+                </h2>
+                <div style="font-size: 8.5pt; color: #64748b; margin-top: 2px;">
+                  Dokumen Parameter Legalitas Finansial, Rekening Bank, Jadwal &amp; Susunan Pejabat Penandatangan
+                </div>
+              </div>
+
+              <!-- BAGIAN 1: IDENTITAS UMUM PROYEK -->
+              <div style="font-size: 8.5pt; font-weight: 800; color: #0f172a; margin-bottom: 4px; text-transform: uppercase; border-left: 3px solid #0284c7; padding-left: 6px;">
+                1. Data Identitas Umum Proyek
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 10px; border: 1px solid #cbd5e1;">
+                <tr style="background-color: #f8fafc;">
+                  <td style="width: 28%; padding: 4px 8px; font-weight: 700; border: 1px solid #cbd5e1; color: #334155;">Nama Pekerjaan Proyek</td>
+                  <td style="width: 72%; padding: 4px 8px; border: 1px solid #cbd5e1; font-weight: 700; color: #0f172a;">${proj.name || 'Proyek Konstruksi'}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 4px 8px; font-weight: 700; border: 1px solid #cbd5e1; color: #334155;">Lokasi Pelaksanaan</td>
+                  <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">${proj.location || 'Indonesia'}</td>
+                </tr>
+                <tr style="background-color: #f8fafc;">
+                  <td style="padding: 4px 8px; font-weight: 700; border: 1px solid #cbd5e1; color: #334155;">Nomor Kontrak / Registrasi</td>
+                  <td style="padding: 4px 8px; border: 1px solid #cbd5e1; font-family: var(--font-mono);">${proj.docNumber || '-'}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 4px 8px; font-weight: 700; border: 1px solid #cbd5e1; color: #334155;">Sumber Data Acuan AHSP</td>
+                  <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</td>
+                </tr>
+                <tr style="background-color: #f8fafc;">
+                  <td style="padding: 4px 8px; font-weight: 700; border: 1px solid #cbd5e1; color: #334155;">Periode Pelaksanaan &amp; Durasi</td>
+                  <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">
+                    ${proj.startDate || '2026-04-01'} s.d. ${proj.finishDate || '2026-09-30'} 
+                    <strong>(${diffDays} Hari Kalender / ${diffWeeks} Minggu Kerja)</strong>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BAGIAN 2: PARAMETER FINANSIAL & KALKULASI RESMI -->
+              <div style="font-size: 8.5pt; font-weight: 800; color: #0f172a; margin-bottom: 4px; text-transform: uppercase; border-left: 3px solid #16a34a; padding-left: 6px;">
+                2. Ringkasan Parameter Finansial &amp; Anggaran Biaya (RAB)
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 10px; border: 1px solid #cbd5e1;">
+                <thead>
+                  <tr style="background-color: #f1f5f9; color: #0f172a; font-weight: 700;">
+                    <th style="width: 8%; padding: 4px 6px; text-align: center; border: 1px solid #cbd5e1;">No</th>
+                    <th style="width: 54%; padding: 4px 8px; text-align: left; border: 1px solid #cbd5e1;">Komponen Parameter Biaya</th>
+                    <th style="width: 15%; padding: 4px 6px; text-align: center; border: 1px solid #cbd5e1;">Besaran (%)</th>
+                    <th style="width: 23%; padding: 4px 8px; text-align: right; border: 1px solid #cbd5e1;">Nilai Nominal (Rp)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align: center; padding: 4px 6px; border: 1px solid #cbd5e1;">1</td>
+                    <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">Total Biaya Langsung (Bahan, Upah &amp; Alat Murni)</td>
+                    <td style="text-align: center; padding: 4px 6px; border: 1px solid #cbd5e1;">HPP Pokok</td>
+                    <td style="text-align: right; font-weight: 700; padding: 4px 8px; border: 1px solid #cbd5e1; font-family: var(--font-mono);">${window.CurrencyUtil.formatRupiah(calcRecalc.totalDirectCost, false, true)}</td>
+                  </tr>
+                  <tr style="background-color: #f8fafc;">
+                    <td style="text-align: center; padding: 4px 6px; border: 1px solid #cbd5e1;">2</td>
+                    <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">Biaya Umum (Overhead) &amp; Keuntungan Kontraktor</td>
+                    <td style="text-align: center; font-weight: 700; padding: 4px 6px; border: 1px solid #cbd5e1; color: #166534;">${(proj.overheadRate !== undefined && proj.overheadRate !== null) ? proj.overheadRate : 15}%</td>
+                    <td style="text-align: right; font-weight: 700; padding: 4px 8px; border: 1px solid #cbd5e1; font-family: var(--font-mono); color: #166534;">${window.CurrencyUtil.formatRupiah(calcRecalc.overheadAmount, false, true)}</td>
+                  </tr>
+                  <tr style="font-weight: 700;">
+                    <td style="text-align: center; padding: 4px 6px; border: 1px solid #cbd5e1;">3</td>
+                    <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">Real Cost Proyek (Biaya Riil Sebelum Pajak)</td>
+                    <td style="text-align: center; padding: 4px 6px; border: 1px solid #cbd5e1;">Subtotal</td>
+                    <td style="text-align: right; padding: 4px 8px; border: 1px solid #cbd5e1; font-family: var(--font-mono);">${window.CurrencyUtil.formatRupiah(calcRecalc.realCost, false, true)}</td>
+                  </tr>
+                  <tr style="background-color: #f8fafc;">
+                    <td style="text-align: center; padding: 4px 6px; border: 1px solid #cbd5e1;">4</td>
+                    <td style="padding: 4px 8px; border: 1px solid #cbd5e1;">Pajak Pertambahan Nilai (PPN) Resmi</td>
+                    <td style="text-align: center; font-weight: 700; padding: 4px 6px; border: 1px solid #cbd5e1; color: #854d0e;">${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}%</td>
+                    <td style="text-align: right; font-weight: 700; padding: 4px 8px; border: 1px solid #cbd5e1; font-family: var(--font-mono); color: #854d0e;">${window.CurrencyUtil.formatRupiah(calcRecalc.ppnAmount, false, true)}</td>
+                  </tr>
+                  <tr style="background-color: #0f172a; color: #ffffff; font-weight: 800;">
+                    <td style="text-align: center; padding: 5px 6px; border: 1px solid #0f172a;">5</td>
+                    <td style="padding: 5px 8px; border: 1px solid #0f172a;">GRAND TOTAL RENCANA ANGGARAN BIAYA</td>
+                    <td style="text-align: center; padding: 5px 6px; border: 1px solid #0f172a; color: #38bdf8;">FINAL</td>
+                    <td style="text-align: right; padding: 5px 8px; border: 1px solid #0f172a; color: #38bdf8; font-size: 9.5pt; font-family: var(--font-mono);">${window.CurrencyUtil.formatRupiah(calcRecalc.grandTotal, false, true)}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 10px; font-size: 7.5pt;">
+                <strong>Terbilang Resmi:</strong> <em>"${calcRecalc.terbilangStr}"</em>
+              </div>
+
+              <!-- BAGIAN 3: REKENING BANK & TIM LAPANGAN -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <!-- Rekening Bank -->
+                <div>
+                  <div style="font-size: 8pt; font-weight: 800; color: #0f172a; margin-bottom: 4px; text-transform: uppercase; border-left: 3px solid #2563eb; padding-left: 6px;">
+                    3. Rekening Bank Pembayaran (BAP)
+                  </div>
+                  <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; border: 1px solid #cbd5e1;">
+                    <tr style="background-color: #f8fafc;">
+                      <td style="width: 40%; padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Nama Bank</td>
+                      <td style="width: 60%; padding: 3px 6px; border: 1px solid #cbd5e1; font-weight: 700;">${bank.bankName}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Nomor Rekening</td>
+                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1; font-family: var(--font-mono); font-weight: 700;">${bank.accountNumber}</td>
+                    </tr>
+                    <tr style="background-color: #f8fafc;">
+                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Atas Nama</td>
+                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1;">${bank.accountName}</td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Tim Pengawasan Lapangan -->
+                <div>
+                  <div style="font-size: 8pt; font-weight: 800; color: #0f172a; margin-bottom: 4px; text-transform: uppercase; border-left: 3px solid #d97706; padding-left: 6px;">
+                    4. Tim Pengawas &amp; Pelaksana Lapangan
+                  </div>
+                  <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; border: 1px solid #cbd5e1;">
+                    <tr style="background-color: #f8fafc;">
+                      <td style="width: 40%; padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Pengawas QC</td>
+                      <td style="width: 60%; padding: 3px 6px; border: 1px solid #cbd5e1;">${sig.qcInspectorName} <br><small class="text-muted">(${sig.qcInspectorRole})</small></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Mandor Utama</td>
+                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1;">${sig.fieldMandorName} <br><small class="text-muted">(${sig.fieldMandorRole})</small></td>
+                    </tr>
+                    <tr style="background-color: #f8fafc;">
+                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Site Manager</td>
+                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1;">${sig.siteManagerName} <br><small class="text-muted">(${sig.siteManagerRole})</small></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- BAGIAN 5: LEMBAR PENGESAHAN TIGA PIHAK RESMI (BEBAS TITIK-TITIK) -->
+            <div style="margin-top: auto; page-break-inside: avoid;">
+              <div style="text-align: center; font-size: 8pt; color: #475569; margin-bottom: 8px;">
+                Ditetapkan di <strong>${sig.docCity}</strong>, tanggal <strong>${sig.docDate}</strong>
+              </div>
+              <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; text-align: center; border-top: 1px solid #cbd5e1; padding-top: 8px;">
+                <div class="sig-block" style="border: none !important; background: transparent !important;">
+                  <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px;">PEMBERI TUGAS / OWNER</div>
+                  <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Menyetujui &amp; Menetapkan:</div>
+                  <div class="sig-space" style="height: 38px;"></div>
+                  <div class="sig-name" style="font-weight: 700; font-size: 8.5pt; text-decoration: underline;">( ${sig.ownerName} )</div>
+                  <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.ownerTitle}</div>
+                  <div style="font-size: 7pt; color: #64748b;">NIP: ${sig.ownerNip}</div>
+                </div>
+                <div class="sig-block" style="border: none !important; background: transparent !important;">
+                  <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px;">KONSULTAN PERENCANA</div>
+                  <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Direncanakan:</div>
+                  <div class="sig-space" style="height: 38px;"></div>
+                  <div class="sig-name" style="font-weight: 700; font-size: 8.5pt; text-decoration: underline;">( ${sig.consultantName} )</div>
+                  <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.consultantTitle}</div>
+                  <div style="font-size: 7pt; color: #64748b;">${sig.consultantCompany}</div>
+                </div>
+                <div class="sig-block" style="border: none !important; background: transparent !important;">
+                  <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px;">KONTRAKTOR PELAKSANA</div>
+                  <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Diajukan:</div>
+                  <div class="sig-space" style="height: 38px;"></div>
+                  <div class="sig-name" style="font-weight: 700; font-size: 8.5pt; text-decoration: underline;">( ${sig.contractorName} )</div>
+                  <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.contractorTitle}</div>
+                  <div style="font-size: 7pt; color: #64748b;">${sig.contractorCompany}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        window.PrintEngine.printViaHiddenIframe(sheetHtml, "Informasi_dan_Setting_Proyek");
+      } catch (err) {
+        console.error("Gagal mencetak informasi proyek:", err);
+        hideLoading();
+        showConfirmModal({
+          title: "Gagal Mencetak",
+          message: "Terjadi kesalahan saat menyusun dokumen cetak: " + (err.message || err),
+          confirmLabel: "Tutup",
+          cancelLabel: "",
+          isDanger: true
+        });
+      }
+    }, 100);
+  }
+
+  // 14. Cetak PDF Dokumen Proposal Lengkap (9 Halaman A4 Standar SE PUPR No. 47/2026)
+  function printProposal() {
+    showLoading("Menyiapkan Dokumen Proposal A4...", "Mengompilasi 9 halaman dokumen proposal dan menyematkan grafik Kurva S...");
+
+    setTimeout(() => {
+      try {
+        // 1. Dapatkan SVG Kurva S jika ada elemen aktif di DOM atau render via SCurveDiagram
+        let svgContent = "";
+        const domEmbed = document.getElementById("proposal-scurve-embed");
+        if (domEmbed && domEmbed.querySelector("svg")) {
+          svgContent = domEmbed.innerHTML;
+        } else if (window.SCurveDiagram) {
+          const tempDiv = document.createElement("div");
+          tempDiv.id = "temp-scurve-generator";
+          tempDiv.style.position = "absolute";
+          tempDiv.style.left = "-9999px";
+          document.body.appendChild(tempDiv);
+          const sched = window.SCurveDiagram.getScheduleData();
+          window.SCurveDiagram.renderSvgChart("temp-scurve-generator", sched);
+          svgContent = tempDiv.innerHTML;
+          tempDiv.remove();
+        }
+
+        // 2. Dapatkan HTML proposal lengkap
+        let proposalHtml = window.ProposalGen.generateProposalHtml();
+
+        // 3. Sematkan SVG ke dalam proposal HTML jika tersedia
+        if (svgContent && proposalHtml.includes('id="proposal-scurve-embed"')) {
+          proposalHtml = proposalHtml.replace(
+            /(<div id="proposal-scurve-embed"[^>]*>)([\s\S]*?)(<\/div>)/,
+            `$1${svgContent}$3`
+          );
+        }
+
+        // 4. Eksekusi via hidden iframe (100% terisolasi dari DOM layar utama)
+        window.PrintEngine.printViaHiddenIframe(proposalHtml, "Proposal_Rencana_Proyek");
+      } catch (err) {
+        console.error("Gagal mencetak proposal:", err);
+        hideLoading();
+        showConfirmModal({
+          title: "Gagal Mencetak Proposal",
+          message: "Terjadi kesalahan saat menyusun proposal cetak: " + (err.message || err),
+          confirmLabel: "Tutup",
+          cancelLabel: "",
+          isDanger: true
+        });
+      }
+    }, 100);
+  }
+
   return {
     init,
+    printProjectInfo,
+    printProposal,
     handleSyncTasksFromRab,
+    confirmClearAllCalendarTasks,
     toggleLaborDetailInRab,
     switchTab,
     showLoading,
@@ -5162,6 +5684,7 @@ window.App = (function() {
     openCreateCustomAhspModal,
     handleMaterialSearch,
     handleMaterialCategory,
+    setKatalogMode,
     handleRegionChange,
     openCustomIndexModal,
     openEditMaterialPriceModal,

@@ -9,7 +9,7 @@ window.RabCalculator = (function() {
     let subtotal = 0;
     (division.items || []).forEach(item => {
       const vol = Number(item.volume) || 0;
-      const price = Number(item.price) || 0;
+      const price = Number(item.price !== undefined ? item.price : item.unitPrice) || 0;
       const total = Math.round(vol * price);
       item.total = total;
       subtotal += total;
@@ -22,12 +22,12 @@ window.RabCalculator = (function() {
     const proj = project || window.ProjectManager.getActiveProject();
     if (!proj) return null;
 
-    let realCost = 0;
+    let divisionSum = 0;
     const divisionSummaries = [];
 
     (proj.divisions || []).forEach(div => {
       const subtotal = calculateDivisionTotals(div);
-      realCost += subtotal;
+      divisionSum += subtotal;
       divisionSummaries.push({
         id: div.id,
         code: div.code,
@@ -39,13 +39,13 @@ window.RabCalculator = (function() {
 
     // Hitung total direct cost & overhead amount
     let totalDirectCost = 0;
-    const currentOverhead = (proj.overheadRate !== undefined && proj.overheadRate !== null)
+    const currentOverhead = (proj.overheadRate !== undefined && proj.overheadRate !== null && !isNaN(Number(proj.overheadRate)))
       ? Number(proj.overheadRate)
-      : ((proj.overheadPercent !== undefined && proj.overheadPercent !== null) ? Number(proj.overheadPercent) : 15);
+      : ((proj.overheadPercent !== undefined && proj.overheadPercent !== null && !isNaN(Number(proj.overheadPercent))) ? Number(proj.overheadPercent) : 15);
     (proj.divisions || []).forEach(div => {
       (div.items || []).forEach(itm => {
         const vol = Number(itm.volume) || 0;
-        let itmPrice = Number(itm.price) || 0;
+        let itmPrice = Number(itm.price !== undefined ? itm.price : itm.unitPrice) || 0;
         let direct = itm.directCost;
         if (direct === undefined || direct === null || isNaN(direct) || direct === 0) {
           if (window.AhspEngine) {
@@ -65,27 +65,35 @@ window.RabCalculator = (function() {
       });
     });
 
-    const overheadAmount = Math.round(totalDirectCost * (currentOverhead / 100));
-    realCost = totalDirectCost + overheadAmount;
+    // Pastikan realCost konsisten dengan total subtotal divisi
+    let realCost = divisionSum > 0 ? divisionSum : (totalDirectCost + Math.round(totalDirectCost * (currentOverhead / 100)));
+    if (totalDirectCost === 0 && realCost > 0) {
+      totalDirectCost = Math.round(realCost / (1 + (currentOverhead / 100)));
+    }
+    const overheadAmount = Math.max(0, realCost - totalDirectCost);
 
     // Hitung bobot (%) tiap divisi terhadap realCost total
     divisionSummaries.forEach(div => {
       div.weightPercent = realCost > 0 ? (div.subtotal / realCost) * 100 : 0;
     });
 
-    const includePpn = proj.includePpn !== false;
-    const ppnRate = (proj.ppnRate !== undefined && proj.ppnRate !== null) 
+    const includePpn = proj.includePpn !== false && proj.includeTax !== false;
+    const ppnRate = (proj.ppnRate !== undefined && proj.ppnRate !== null && !isNaN(Number(proj.ppnRate))) 
       ? Number(proj.ppnRate) 
-      : ((proj.ppnPercent !== undefined && proj.ppnPercent !== null) ? Number(proj.ppnPercent) : 11);
+      : ((proj.ppnPercent !== undefined && proj.ppnPercent !== null && !isNaN(Number(proj.ppnPercent))) ? Number(proj.ppnPercent) : 11);
     const ppnAmount = includePpn ? Math.round(realCost * (ppnRate / 100)) : 0;
     const grandTotal = Math.round(realCost + ppnAmount);
-    const terbilangStr = window.CurrencyUtil.terbilang(grandTotal);
+    const terbilangStr = (window.CurrencyUtil && window.CurrencyUtil.terbilang)
+      ? window.CurrencyUtil.terbilang(grandTotal)
+      : "";
 
     proj.realCost = realCost;
     proj.totalDirectCost = totalDirectCost;
     proj.overheadAmount = overheadAmount;
     proj.ppnAmount = ppnAmount;
+    proj.taxAmount = ppnAmount;
     proj.grandTotal = grandTotal;
+    proj.roundedCost = grandTotal;
 
     return {
       realCost,
@@ -96,7 +104,9 @@ window.RabCalculator = (function() {
       includePpn,
       ppnRate,
       ppnAmount,
+      taxAmount: ppnAmount,
       grandTotal,
+      roundedCost: grandTotal,
       terbilangStr
     };
   }
@@ -233,12 +243,12 @@ window.RabCalculator = (function() {
     const proj = project || (window.ProjectManager ? window.ProjectManager.getActiveProject() : null);
     if (!proj) return null;
 
-    const ovRate = (testOverhead !== null && testOverhead !== undefined && !isNaN(testOverhead)) 
+    const ovRate = (testOverhead !== null && testOverhead !== undefined && !isNaN(Number(testOverhead))) 
       ? Number(testOverhead) 
-      : (Number(proj.overheadRate) || 15);
-    const pRate = (testPpn !== null && testPpn !== undefined && !isNaN(testPpn)) 
+      : ((proj.overheadRate !== undefined && proj.overheadRate !== null && !isNaN(Number(proj.overheadRate))) ? Number(proj.overheadRate) : 15);
+    const pRate = (testPpn !== null && testPpn !== undefined && !isNaN(Number(testPpn))) 
       ? Number(testPpn) 
-      : (Number(proj.ppnRate) || 11);
+      : ((proj.ppnRate !== undefined && proj.ppnRate !== null && !isNaN(Number(proj.ppnRate))) ? Number(proj.ppnRate) : 11);
 
     let totalDirectCost = 0;
 
@@ -264,7 +274,6 @@ window.RabCalculator = (function() {
         }
         divSubtotal += Math.round(vol * itmPrice);
       });
-      realCost += divSubtotal;
     });
 
     const overheadAmount = Math.round(totalDirectCost * (ovRate / 100));
@@ -283,7 +292,9 @@ window.RabCalculator = (function() {
       realCost,
       ppnRate: pRate,
       ppnAmount,
+      taxAmount: ppnAmount,
       grandTotal,
+      roundedCost: grandTotal,
       terbilangStr
     };
   }
@@ -301,8 +312,8 @@ window.RabCalculator = (function() {
       proj.ppnRate = Number(newPpnRate);
     }
 
-    const currentOverhead = Number(proj.overheadRate) || 15;
-    const currentPpn = Number(proj.ppnRate) || 11;
+    const currentOverhead = (proj.overheadRate !== undefined && proj.overheadRate !== null && !isNaN(Number(proj.overheadRate))) ? Number(proj.overheadRate) : 15;
+    const currentPpn = (proj.ppnRate !== undefined && proj.ppnRate !== null && !isNaN(Number(proj.ppnRate))) ? Number(proj.ppnRate) : 11;
 
     let totalDirectCost = 0;
     let realCost = 0;
@@ -375,7 +386,9 @@ window.RabCalculator = (function() {
       realCost,
       ppnRate: currentPpn,
       ppnAmount,
+      taxAmount: ppnAmount,
       grandTotal,
+      roundedCost: grandTotal,
       terbilangStr
     };
   }
@@ -393,3 +406,7 @@ window.RabCalculator = (function() {
     removeDivision
   };
 })();
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = window.RabCalculator;
+}

@@ -6,46 +6,57 @@
 
 window.PrintEngine = (function() {
   function printDocument(targetElementId, documentTitle = "") {
-    const targetEl = document.getElementById(targetElementId);
-    if (!targetEl) {
-      console.warn("Target elemen cetak tidak ditemukan:", targetElementId);
-      return;
-    }
-
     const originalTitle = document.title;
     // Kosongkan document.title selama proses cetak agar peramban TIDAK mencetak nama menu atau jam di header PDF
     document.title = " ";
-
-    // Pastikan seluruh elemen SVG memiliki lebar yang responsif untuk cetak
-    const svgs = targetEl.querySelectorAll('svg');
-    svgs.forEach(svg => {
-      svg.setAttribute('width', '100%');
-      svg.style.maxWidth = '100%';
-    });
-
-    // Isolasi ketat: tandai target cetak dan sembunyikan seluruh tab lainnya
-    document.querySelectorAll(".is-print-target").forEach(el => el.classList.remove("is-print-target"));
-    targetEl.classList.add("is-print-target");
-    document.body.classList.add("printing-target");
 
     // Tampilkan animasi loading agar pengguna tahu proses cetak telah aktif
     if (window.App && window.App.showLoading) {
       window.App.showLoading(
         "Menyiapkan Dokumen Cetak A4...", 
-        "Mengisolasi tata letak presisi A4 tanpa kebocoran data panel lain..."
+        "Mengatur tata letak margin presisi A4 dan membersihkan header peramban..."
       );
     }
 
-    let cleanedUp = false;
-    const cleanup = () => {
-      if (cleanedUp) return;
-      cleanedUp = true;
-      document.body.classList.remove("printing-target");
-      document.body.classList.remove("printing-batch");
-      if (targetEl) {
-        targetEl.classList.remove("is-print-target");
+    const targetEl = document.getElementById(targetElementId);
+    const proj = (window.ProjectManager && window.ProjectManager.getActiveProject()) || {};
+
+    // Pastikan seluruh elemen SVG memiliki lebar yang responsif untuk cetak
+    if (targetEl) {
+      const svgs = targetEl.querySelectorAll('svg');
+      svgs.forEach(svg => {
+        svg.setAttribute('width', '100%');
+        svg.style.maxWidth = '100%';
+      });
+    }
+
+    // Dukungan Orientasi Landscape Otomatis untuk Kurva S & Kalender Proyek
+    const isLandscape = (targetElementId === "panel-kurva-s" || targetElementId === "panel-kalender");
+    if (isLandscape) {
+      let dynStyle = document.getElementById("dynamicLandscapePrintStyle");
+      if (!dynStyle) {
+        dynStyle = document.createElement("style");
+        dynStyle.id = "dynamicLandscapePrintStyle";
+        document.head.appendChild(dynStyle);
       }
+      dynStyle.innerHTML = `
+        @media print {
+          @page {
+            size: A4 landscape !important;
+            margin-top: 10mm !important;
+            margin-bottom: 12mm !important;
+            margin-left: 12mm !important;
+            margin-right: 12mm !important;
+          }
+        }
+      `;
+    }
+
+    const cleanup = () => {
+      document.body.classList.remove("printing-batch");
       document.title = originalTitle;
+      const dyn = document.getElementById("dynamicLandscapePrintStyle");
+      if (dyn) dyn.remove();
       if (window.App && window.App.hideLoading) {
         window.App.hideLoading();
       }
@@ -64,16 +75,12 @@ window.PrintEngine = (function() {
         try {
           window.print();
         } catch (err) {
-          console.warn("window.print error, beralih ke iframe cetak:", err);
-          if (targetEl) {
-            printViaHiddenIframe(targetEl.innerHTML, documentTitle);
-          }
+          console.warn("window.print error:", err);
         }
         document.title = originalTitle;
-        // Jaminan pembersihan jika afterprint tidak didukung atau tertunda
-        setTimeout(cleanup, 1200);
+        cleanup();
       }, 60);
-    }, 250);
+    }, 280);
   }
 
   // Cetak Dokumen Terisolasi via Hidden Iframe (Mencegah 100% Kebocoran Data & Menghilangkan Header Peramban)
@@ -90,12 +97,13 @@ window.PrintEngine = (function() {
       printFrame = document.createElement("iframe");
       printFrame.id = "appPrintIframe";
       printFrame.style.position = "fixed";
-      printFrame.style.top = "-99999px";
-      printFrame.style.left = "-99999px";
-      printFrame.style.width = "0px";
-      printFrame.style.height = "0px";
+      printFrame.style.right = "0";
+      printFrame.style.bottom = "0";
+      printFrame.style.width = "1024px";
+      printFrame.style.height = "768px";
       printFrame.style.border = "none";
-      printFrame.style.opacity = "0";
+      printFrame.style.opacity = "0.01";
+      printFrame.style.zIndex = "-9999";
       printFrame.style.pointerEvents = "none";
       document.body.appendChild(printFrame);
     }
@@ -117,12 +125,10 @@ window.PrintEngine = (function() {
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/print-a4.css">
         <style>
+          ${htmlContent.includes('proposal-page') ? `
           @page {
             size: A4 portrait;
-            margin-top: 20mm !important;
-            margin-right: 10mm !important;
-            margin-bottom: 18mm !important;
-            margin-left: 10mm !important;
+            margin: 8mm 10mm 10mm 10mm;
             @top-left { content: none !important; }
             @top-center { content: none !important; }
             @top-right { content: none !important; }
@@ -130,21 +136,68 @@ window.PrintEngine = (function() {
             @bottom-center { content: none !important; }
             @bottom-right { content: none !important; }
           }
-
           @page coverPage {
             size: A4 portrait;
-            margin-top: 20mm !important;
-            margin-right: 10mm !important;
-            margin-bottom: 18mm !important;
-            margin-left: 10mm !important;
+            margin: 8mm 10mm 8mm 10mm;
             @top-right { content: none !important; }
             @bottom-right { content: none !important; }
             @bottom-left { content: none !important; }
+            @bottom-center { content: none !important; }
+          }
+          ` : htmlContent.includes('printable-bap-doc') ? `
+          @page {
+            size: A4 portrait;
+            margin-top: 20mm !important;
+            margin-bottom: 15mm !important;
+            margin-left: 12mm !important;
+            margin-right: 12mm !important;
+            @top-left { content: none !important; }
+            @top-center { content: none !important; }
+            @top-right { content: none !important; }
+            @bottom-left { content: none !important; }
+            @bottom-center { content: none !important; }
+            @bottom-right { content: none !important; }
+          }
+          ` : `
+          @page {
+            size: A4 portrait;
+            margin-top: 10mm;
+            margin-bottom: 14mm;
+            margin-left: 10mm;
+            margin-right: 10mm;
+            @top-left { content: none !important; }
+            @top-center { content: none !important; }
+            @top-right { content: none !important; }
+            @bottom-left {
+              content: "Dokumen Resmi Proyek • Standar SE PUPR No. 47/2026";
+              font-size: 8pt;
+              color: #64748b;
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            }
+            @bottom-center { content: none !important; }
+            @bottom-right {
+              content: "Halaman " counter(page) " dari " counter(pages);
+              font-size: 8pt;
+              font-weight: 700;
+              color: #334155;
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            }
+          }
+          ` }
+
+          @page coverPage {
+            size: A4 portrait;
+            margin: 8mm 10mm 8mm 10mm;
+            @top-right { content: none !important; }
+            @bottom-right { content: none !important; }
+            @bottom-left { content: none !important; }
+            @bottom-center { content: none !important; }
           }
           .cover-page {
             page: coverPage;
             page-break-after: always !important;
-            break-after: page !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           .proposal-page.content-page:first-of-type {
             counter-reset: page 1;
@@ -154,61 +207,66 @@ window.PrintEngine = (function() {
           }
           .proposal-page {
             width: 100% !important;
-            max-width: 100% !important;
-            min-height: 250mm !important;
-            max-height: 258mm !important;
-            padding: 0 0 5mm 0 !important;
+            max-width: 190mm !important;
+            min-height: 265mm !important;
+            height: auto !important;
+            max-height: none !important;
+            margin: 0 auto !important;
+            padding: 4mm 0 6mm 0 !important;
             box-sizing: border-box !important;
-            page-break-before: always !important;
             page-break-after: always !important;
-            break-before: page !important;
-            break-after: page !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             position: relative !important;
             background: #ffffff !important;
             border: none !important;
             box-shadow: none !important;
             display: flex !important;
             flex-direction: column !important;
-            justify-content: space-between !important;
-          }
-          .proposal-page.cover-page,
-          .proposal-page:first-child {
-            page-break-before: avoid !important;
-            break-before: avoid !important;
-          }
-          .proposal-page:last-child {
-            page-break-after: auto !important;
-            break-after: auto !important;
+            justify-content: flex-start !important;
           }
           .proposal-page .print-footer-block {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            font-size: 8pt !important;
-            color: #475569 !important;
-            border-top: 0.75pt solid #cbd5e1 !important;
-            padding-top: 6px !important;
             margin-top: auto !important;
-            margin-bottom: 2px !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-          }
-          .print-footer-block {
+            padding-top: 6px !important;
+            border-top: 0.75pt solid #cbd5e1 !important;
             display: flex !important;
             justify-content: space-between !important;
-            align-items: center !important;
             font-size: 8pt !important;
             color: #475569 !important;
-            border-top: 0.75pt solid #cbd5e1 !important;
-            padding-top: 6px !important;
-            margin-top: 14px !important;
-            margin-bottom: 2px !important;
             width: 100% !important;
-            page-break-inside: avoid !important;
+            flex-shrink: 0 !important;
+          }
+          .cover-page {
+            width: 100% !important;
+            max-width: 190mm !important;
+            min-height: 275mm !important;
+            height: 275mm !important;
+            max-height: 275mm !important;
+            padding: 0 !important;
+            margin: 0 auto !important;
             box-sizing: border-box !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            border: none !important;
+            box-shadow: none !important;
+          }
+          .cover-inner-border {
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 275mm !important;
+            box-sizing: border-box !important;
+            border: 2.5px solid #1e3a8a !important;
+            outline: 1px solid #cbd5e1 !important;
+            outline-offset: -5px !important;
+            padding: 16px 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            background: #ffffff !important;
+            position: relative !important;
           }
           .proposal-preview-wrapper {
             border: none !important;
@@ -219,21 +277,23 @@ window.PrintEngine = (function() {
           }
           .printable-bap-doc {
             width: 100% !important;
-            max-width: 100% !important;
-            min-height: auto !important;
+            max-width: 186mm !important;
+            margin: 0 auto !important;
+            min-height: 245mm !important;
             height: auto !important;
-            max-height: 258mm !important;
+            max-height: 255mm !important;
             padding: 0 !important;
-            margin: 0 !important;
             box-sizing: border-box !important;
-            page-break-after: auto !important;
+            page-break-after: always !important;
             page-break-inside: avoid !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             position: relative !important;
             background: #ffffff !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
+            border: none !important;
+            box-shadow: none !important;
           }
           .printable-bap-doc:last-child {
             page-break-after: auto !important;
@@ -243,7 +303,7 @@ window.PrintEngine = (function() {
             color: #000000 !important;
             padding: 0 !important;
             margin: 0 !important;
-            font-size: 8.5pt !important;
+            font-size: 9pt !important;
           }
 
           .table th {
@@ -269,6 +329,11 @@ window.PrintEngine = (function() {
         printFrame.contentWindow.print();
       } catch (err) {
         console.warn("Iframe print fallback error:", err);
+        try {
+          window.print();
+        } catch (e) {
+          console.error("Direct window print error:", e);
+        }
       }
     }, 450);
   }
@@ -322,7 +387,7 @@ window.PrintEngine = (function() {
         <!-- 2. Judul Dokumen Prominen -->
         <div class="print-doc-title-box">
           <h3 class="print-doc-title">${docType}</h3>
-          <div class="print-doc-subtitle">Berdasarkan Standar SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026</div>
+          <div class="print-doc-subtitle">Berdasarkan Standar ${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</div>
         </div>
 
         <!-- 3. Kotak Rincian Informasi Proyek Lengkap (Halaman 1) -->
@@ -358,6 +423,66 @@ window.PrintEngine = (function() {
     `;
   }
 
+  function createLandscapePrintHeader(arg1, arg2 = "KURVA S PEKERJAAN PROYEK", arg3 = {}) {
+    let proj = {};
+    let docType = "KURVA S PEKERJAAN PROYEK";
+    let extraInfo = {};
+
+    if (typeof arg1 === 'string') {
+      docType = arg1;
+      proj = arg2 || {};
+      extraInfo = arg3 || {};
+    } else {
+      proj = arg1 || {};
+      docType = (typeof arg2 === 'string') ? arg2 : "KURVA S PEKERJAAN PROYEK";
+      extraInfo = (typeof arg3 === 'object') ? arg3 : {};
+    }
+
+    const projName = proj.name || proj.nama || "Pembangunan Rumah Tinggal Tropis Modern";
+    const projLoc = proj.location || proj.lokasi || "Bandung, Jawa Barat";
+    const projOwner = proj.owner || proj.pemilik || "Pemberi Tugas";
+    const durDays = proj.durationDays || proj.durasi || 180;
+    const durWeeks = Math.ceil(durDays / 7);
+    const startStr = proj.startDate || proj.tanggalMulai || "2026-04-01";
+    const finishStr = proj.finishDate || proj.tanggalSelesai || "2026-09-27";
+    const contractorStr = proj.contractor || proj.kontraktor || "KONTRAKTOR PELAKSANA UTAMA";
+    const docNumStr = proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001";
+    const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    return `
+      <div class="print-header-landscape-compact" style="border-bottom: 1.5pt solid #0f172a; padding-bottom: 4px; margin-bottom: 6px; width: 100%; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <!-- Baris 1: Kop Ringkas, Judul Dokumen Prominen & Metadata Dokumen -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div style="width: 28%; line-height: 1.2;">
+            <div style="font-size: 9.5pt; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.3px;">${contractorStr}</div>
+            <div style="font-size: 7pt; color: #475569;">Estimasi Biaya &amp; Manajemen Konstruksi</div>
+          </div>
+          <div style="width: 44%; text-align: center; line-height: 1.2;">
+            <div style="font-size: 11pt; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${docType}</div>
+            <div style="font-size: 7pt; color: #475569;">Standar ${proj.dataSource || 'SE Dirjen Bina Konstruksi No. 47/SE/Dk/2026'}</div>
+          </div>
+          <div style="width: 28%; text-align: right; font-size: 7.5pt; color: #334155; line-height: 1.25;">
+            <div><strong>No. Dok:</strong> ${docNumStr}</div>
+            <div><strong>Tgl Cetak:</strong> ${printDate}</div>
+          </div>
+        </div>
+        <!-- Baris 2: Info Proyek Satu Baris Padat & Efisien -->
+        <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; background: #f8fafc; border: 1px solid #cbd5e1;">
+          <tbody>
+            <tr>
+              <td style="padding: 2.5px 6px; width: 10%; font-weight: 700; color: #475569;">Pekerjaan:</td>
+              <td style="padding: 2.5px 6px; width: 34%; font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${projName}</td>
+              <td style="padding: 2.5px 6px; width: 8%; font-weight: 700; color: #475569;">Lokasi:</td>
+              <td style="padding: 2.5px 6px; width: 20%; color: #334155; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${projLoc}</td>
+              <td style="padding: 2.5px 6px; width: 8%; font-weight: 700; color: #475569;">Durasi:</td>
+              <td style="padding: 2.5px 6px; width: 20%; font-weight: 700; color: #1e40af;">${durDays} Hari (${durWeeks} Mgg) | ${startStr} s.d ${finishStr}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function createPrintFooter(arg1, options = {}) {
     const proj = (typeof arg1 === 'object' && arg1) ? arg1 : ((window.ProjectManager && window.ProjectManager.getActiveProject()) || {});
     const docNum = proj.docNumber || "RAB/2026/001";
@@ -367,7 +492,7 @@ window.PrintEngine = (function() {
     return `
       <div class="print-footer-block">
         <div class="footer-left">
-          <span>${contractor ? contractor + ' — ' : ''}Standar SE PUPR No. 47/2026</span>
+          <span>${contractor ? contractor + ' — ' : ''}${proj.dataSource || 'Standar SE PUPR No. 47/2026'}</span>
           <span style="margin-left: 8px; font-family: monospace;">(${docNum})</span>
         </div>
         <div class="footer-right">
@@ -381,6 +506,7 @@ window.PrintEngine = (function() {
     printDocument,
     printViaHiddenIframe,
     createPrintHeader,
+    createLandscapePrintHeader,
     createPrintFooter
   };
 })();

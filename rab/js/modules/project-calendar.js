@@ -198,8 +198,8 @@ window.ProjectCalendar = (function() {
   // Menghasilkan 2 baris tanggal: Standar Rencana & Penanggalan Lapangan Manual
   // Data yang berstatus 'Selesai' DIKUNCI (tidak dapat diubah atau di-refresh)
   // Menghasilkan detail jadwal per item pekerjaan / AHSP fisik yang digunakan di proyek
-  // Data yang berstatus 'Selesai' DIKUNCI (tidak dapat diubah atau di-refresh)
-  function syncTasksFromRabDetail() {
+  // forceReset: jika true, seluruh data penanggalan & durasi dihitung ulang murni dari data terbaru RAB
+  function syncTasksFromRabDetail(forceReset = false) {
     const proj = window.ProjectManager.getActiveProject();
     if (!proj || !proj.divisions || proj.divisions.length === 0) return { synced: 0, locked: 0, total: 0 };
 
@@ -341,7 +341,7 @@ window.ProjectCalendar = (function() {
         let status = "Belum Mulai";
         let actualProgress = 0;
 
-        if (existing) {
+        if (existing && !forceReset) {
           status = existing.status || "Belum Mulai";
           isLocked = existing.isLocked || false;
           if (status === "Selesai") {
@@ -358,6 +358,14 @@ window.ProjectCalendar = (function() {
           manualFinish = existing.manualFinishDate || existing.finishDate || stdFinishStr;
           manualDur = existing.manualDuration !== undefined ? existing.manualDuration : calculatedDuration;
           if (isLocked) lockedCount++;
+        } else {
+          // Mode forceReset atau item baru: hitung ulang murni dari data terbaru RAB
+          status = "Belum Mulai";
+          actualProgress = 0;
+          isLocked = false;
+          manualStart = stdStartStr;
+          manualFinish = stdFinishStr;
+          manualDur = calculatedDuration;
         }
 
         const itemCost = (Number(item.volume) || 0) * (Number(item.price) || 0);
@@ -446,6 +454,22 @@ window.ProjectCalendar = (function() {
     return false;
   }
 
+  // Hapus SEMUA jadwal tugas di Kalender Proyek (Mengosongkan kalender untuk re-generate bersih)
+  function clearAllTasks() {
+    const proj = window.ProjectManager.getActiveProject();
+    if (!proj) return { cleared: false, count: 0 };
+
+    const count = (proj.calendarTasks || []).length;
+    proj.calendarTasks = [];
+    window.ProjectManager.updateActiveProject(proj);
+
+    if (window.SCurveDiagram && window.SCurveDiagram.calculateScheduleFromCalendar) {
+      window.SCurveDiagram.calculateScheduleFromCalendar(proj);
+    }
+
+    return { cleared: true, count };
+  }
+
   // Dapatkan pekerjaan yang aktif pada tanggal spesifik YYYY-MM-DD
   function getTasksOnDate(dateStr) {
     const tasks = getTasks();
@@ -493,7 +517,10 @@ window.ProjectCalendar = (function() {
       }
     });
 
-    let monthCardsHtml = "";
+    let page1Cards = "";
+    let page2Cards = "";
+    let page3Cards = "";
+    let page4Cards = "";
 
     months.forEach((mObj, mIdx) => {
       const year = mObj.year;
@@ -552,7 +579,7 @@ window.ProjectCalendar = (function() {
 
       const totalTasksInMonth = monthTaskSets[mIdx].size;
 
-      monthCardsHtml += `
+      const singleCardHtml = `
         <div class="year-month-card">
           <div class="year-month-header">
             <div>
@@ -583,7 +610,32 @@ window.ProjectCalendar = (function() {
           </div>
         </div>
       `;
+
+      if (mIdx < 2) {
+        page1Cards += singleCardHtml;
+      } else if (mIdx < 6) {
+        page2Cards += singleCardHtml;
+      } else if (mIdx < 10) {
+        page3Cards += singleCardHtml;
+      } else {
+        page4Cards += singleCardHtml;
+      }
     });
+
+    const monthCardsHtml = `
+      <div class="cal-print-page cal-print-page-1">
+        ${page1Cards}
+      </div>
+      <div class="cal-print-page cal-print-page-2">
+        ${page2Cards}
+      </div>
+      <div class="cal-print-page cal-print-page-3">
+        ${page3Cards}
+      </div>
+      <div class="cal-print-page cal-print-page-4">
+        ${page4Cards}
+      </div>
+    `;
 
     // Ringkasan Statistik Kalender 1 Tahun
     const completedTasksCount = allTasks.filter(t => t.status === "Selesai").length;
@@ -788,6 +840,7 @@ window.ProjectCalendar = (function() {
   return {
     getTwelveMonths,
     syncTasksFromRabDetail,
+    clearAllTasks,
     getTasks,
     addTask,
     updateTask,

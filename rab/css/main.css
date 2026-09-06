@@ -271,7 +271,10 @@ body {
   text-align: left;
 }
 
-.table th {
+.table th,
+.table thead th,
+table thead th,
+.table-header-row th {
   background-color: var(--color-surface-muted);
   color: var(--color-text-secondary);
   font-weight: 600;
@@ -280,6 +283,8 @@ body {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  text-align: center !important;
+  vertical-align: middle !important;
 }
 
 .table td {
@@ -1228,9 +1233,9 @@ body {
 
 .proposal-page {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .printable-bap-doc {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }

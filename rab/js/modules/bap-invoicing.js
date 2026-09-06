@@ -133,7 +133,7 @@ window.BapInvoicing = (function() {
       (proj.divisions || []).forEach(d => (d.items || []).forEach(it => {
         divSum += (Number(it.volume) || 0) * (Number(it.price) || 0);
       }));
-      contractVal = divSum > 0 ? Math.round(divSum * (1 + ((proj.ppnRate || 11) / 100))) : 500000000;
+      contractVal = divSum > 0 ? Math.round(divSum * (1 + (((proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11) / 100))) : 500000000;
     }
 
     const calc = calculateBapValues(
@@ -141,7 +141,7 @@ window.BapInvoicing = (function() {
       data.claimedPercent || 20,
       data.dpPercentDeduction || 0,
       data.retentionPercent || 5,
-      proj.ppnRate || 11
+      (proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11
     );
 
     const newBap = {
@@ -203,7 +203,7 @@ window.BapInvoicing = (function() {
       claimedPct,
       dpPct,
       retPct,
-      proj.ppnRate || 11
+      (proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11
     );
 
     current.bapNumber = data.bapNumber || current.bapNumber;
@@ -248,20 +248,54 @@ window.BapInvoicing = (function() {
       contractVal = rabCalc.grandTotal;
     } else if (Number(proj.contractBudget) > 0) {
       contractVal = Number(proj.contractBudget);
+    } else if (Number(proj.grandTotal) > 0) {
+      contractVal = Number(proj.grandTotal);
     } else if (bapItem.grossAmount && bapItem.claimedPercent > 0) {
       contractVal = Math.round(bapItem.grossAmount / (bapItem.claimedPercent / 100));
     } else {
-      contractVal = bapItem.grossAmount || 500000000;
+      let divSum = 0;
+      (proj.divisions || []).forEach(d => (d.items || []).forEach(it => {
+        divSum += (Number(it.volume) || 0) * (Number(it.price) || 0);
+      }));
+      contractVal = divSum > 0 ? Math.round(divSum * (1 + (((proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11) / 100))) : (bapItem.grossAmount || 500000000);
+    }
+
+    // Periksa dan hitung ulang kalkulasi finansial BAP jika data awal bernilai 0 atau belum sinkron
+    const phaseTitleLower = (bapItem.phaseTitle || "").toLowerCase();
+    const isDp = phaseTitleLower.includes("uang muka") || phaseTitleLower.includes("down payment") || phaseTitleLower.includes("termin i");
+    const claimedPct = Number(bapItem.claimedPercent) || (isDp ? 20 : 30);
+
+    let grossAmount = Number(bapItem.grossAmount) || 0;
+    let dpDeduction = Number(bapItem.dpDeduction) || 0;
+    let retentionDeduction = Number(bapItem.retentionDeduction) || 0;
+    let netBeforeTax = Number(bapItem.netBeforeTax) || 0;
+    let ppnAmount = Number(bapItem.ppnAmount) || 0;
+    let netPayable = Number(bapItem.netPayable) || 0;
+
+    if ((grossAmount === 0 || netPayable === 0) && contractVal > 0) {
+      const dpPct = isDp ? 0 : (bapItem.dpPercentDeduction !== undefined ? Number(bapItem.dpPercentDeduction) : 20);
+      const retPct = isDp ? 0 : (bapItem.retentionPercent !== undefined ? Number(bapItem.retentionPercent) : 5);
+      const ppnRate = (proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11;
+      const rec = calculateBapValues(contractVal, claimedPct, dpPct, retPct, ppnRate);
+      grossAmount = rec.grossAmount;
+      dpDeduction = rec.dpDeduction;
+      retentionDeduction = rec.retentionDeduction;
+      netBeforeTax = rec.netBeforeTax;
+      ppnAmount = rec.ppnAmount;
+      netPayable = rec.netPayable;
     }
 
     const terbilangStr = (window.CurrencyUtil && window.CurrencyUtil.terbilang) 
-      ? window.CurrencyUtil.terbilang(bapItem.netPayable) 
+      ? window.CurrencyUtil.terbilang(netPayable) 
       : "";
 
-    const ownerName = sig.ownerName || proj.owner || "Pemberi Tugas";
+    const ownerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || "Ir. Budi Santoso, M.T.");
     const ownerTitle = sig.ownerTitle || "Pemilik Proyek / Pemberi Tugas";
-    const contractorCompany = sig.contractorCompany || proj.contractor || "";
-    const contractorSigner = sig.contractorName || "Penanggung Jawab Kontraktor";
+    const consultantCompany = sig.consultantCompany || proj.consultant || "PT. Sarana Buana Konsultan";
+    const consultantSigner = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : "Ir. Bambang Hartono, S.T., M.T.";
+    const consultantTitle = sig.consultantTitle || "Team Leader / Pengawas";
+    const contractorCompany = sig.contractorCompany || proj.contractor || "PT. Duta Konstruksi Pratama";
+    const contractorSigner = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : (sig.siteManagerName || "H. Ahmad Fauzi, S.T.");
     const contractorTitle = sig.contractorTitle || "Direktur Utama";
 
     const bankName = bank.bankName || "Bank Mandiri (Persero) Tbk";
@@ -269,133 +303,154 @@ window.BapInvoicing = (function() {
     const bankOwner = bank.accountName || contractorCompany;
 
     return `
-      <div class="printable-bap-doc a4-portrait" style="position: relative !important; width: 100%; max-width: 100%; height: auto; max-height: 258mm; box-sizing: border-box !important; padding: 0 !important; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; page-break-inside: avoid !important; page-break-after: auto !important; font-family: Arial, sans-serif; font-size: 8.5pt; color: #0f172a; background: #ffffff !important;">
+      <div class="printable-bap-doc a4-portrait" style="position: relative !important; width: 100%; max-width: 186mm !important; margin: 0 auto !important; min-height: 245mm; box-sizing: border-box !important; padding: 0 !important; display: flex; flex-direction: column; justify-content: space-between; overflow: visible; page-break-inside: avoid !important; page-break-after: auto !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8pt; color: #0f172a; background: #ffffff !important;">
 
-        <!-- 1. Kop Surat & Judul BAP Resmi -->
-        <div class="bap-header" style="border-bottom: 2pt double #0f172a; padding-bottom: 4px; margin-bottom: 5px;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <!-- 1. Kop Surat & Judul BAP Resmi -->
+          <div class="bap-header" style="border-bottom: 2pt double #0f172a; padding-bottom: 5px; margin-bottom: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="font-size: 11pt; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${contractorCompany}</div>
+                <div style="font-size: 7.5pt; color: #475569;">Kontraktor Pelaksana Konstruksi & Manajemen Proyek</div>
+              </div>
+              <div style="text-align: right; font-size: 8pt; color: #334155; line-height: 1.35;">
+                <div><strong>No. Dokumen:</strong> ${bapItem.bapNumber}</div>
+                <div><strong>Tanggal:</strong> ${bapItem.date}</div>
+              </div>
+            </div>
+            <div style="text-align: center; margin-top: 4px;">
+              <h3 style="font-size: 11pt; font-weight: 800; margin: 0; color: #0f172a; letter-spacing: 0.5px; text-transform: uppercase;">BERITA ACARA PEMBAYARAN (BAP)</h3>
+              <div style="font-size: 7.5pt; color: #475569;">Prestasi Kemajuan Pekerjaan Fisik & Verifikasi Tagihan Termin Konstruksi</div>
+            </div>
+          </div>
+
+          <!-- 2. Ringkasan Para Pihak (3 Pihak) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 4px 0 6px 0; margin-bottom: 5px; font-size: 7.5pt; border-bottom: 1px solid #e2e8f0;">
             <div>
-              <div style="font-size: 10.5pt; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${contractorCompany}</div>
-              <div style="font-size: 7.5pt; color: #475569;">Kontraktor Pelaksana Konstruksi & Manajemen Proyek</div>
+              <div style="font-size: 7pt; font-weight: 700; color: #475569; text-transform: uppercase;">1. Pemberi Tugas (Owner)</div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 8pt;">${ownerName}</div>
+              <div style="color: #475569; font-size: 7pt;">${ownerTitle}</div>
             </div>
-            <div style="text-align: right; font-size: 7.5pt; color: #334155; line-height: 1.3;">
-              <div><strong>No. Dokumen:</strong> ${bapItem.bapNumber}</div>
-              <div><strong>Tanggal:</strong> ${bapItem.date}</div>
+            <div>
+              <div style="font-size: 7pt; font-weight: 700; color: #475569; text-transform: uppercase;">2. Konsultan Pengawas</div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 8pt;">${consultantCompany}</div>
+              <div style="color: #475569; font-size: 7pt;">${consultantTitle}</div>
+            </div>
+            <div>
+              <div style="font-size: 7pt; font-weight: 700; color: #475569; text-transform: uppercase;">3. Kontraktor Pelaksana</div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 8pt;">${contractorCompany}</div>
+              <div style="color: #475569; font-size: 7pt;">${contractorSigner} (${contractorTitle})</div>
             </div>
           </div>
-          <div style="text-align: center; margin-top: 3px;">
-            <h3 style="font-size: 11pt; font-weight: 800; margin: 0; color: #0f172a; letter-spacing: 0.5px; text-transform: uppercase;">BERITA ACARA PEMBAYARAN (BAP)</h3>
-            <div style="font-size: 7.5pt; color: #475569;">Prestasi Kemajuan Pekerjaan Fisik & Verifikasi Tagihan Termin Konstruksi</div>
+
+          <div style="font-size: 7.5pt; color: #334155; margin-bottom: 5px; line-height: 1.3;">
+            Menyatakan bersama bahwa prestasi kemajuan fisik pekerjaan lapangan untuk proyek <strong>${proj.name || 'Konstruksi'}</strong> telah diperiksa, diverifikasi, dan disetujui untuk penagihan pembayaran termin dengan rincian:
           </div>
-        </div>
 
-        <!-- 2. Ringkasan Para Pihak & Lokasi -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 3px 0 5px 0; margin-bottom: 4px; font-size: 7.5pt; border-bottom: 1px solid #e2e8f0;">
-          <div>
-            <div style="font-size: 7pt; font-weight: 700; color: #475569; text-transform: uppercase;">1. Pihak Pertama (Pemberi Tugas / Owner)</div>
-            <div style="font-weight: 700; color: #0f172a; font-size: 8pt;">${ownerName}</div>
-            <div style="color: #475569; font-size: 7pt;">${ownerTitle} &bull; Proyek: <strong>${proj.name || 'Pembangunan'}</strong></div>
-          </div>
-          <div>
-            <div style="font-size: 7pt; font-weight: 700; color: #475569; text-transform: uppercase;">2. Pihak Kedua (Kontraktor Pelaksana)</div>
-            <div style="font-weight: 700; color: #0f172a; font-size: 8pt;">${contractorCompany}</div>
-            <div style="color: #475569; font-size: 7pt;">Diwakili oleh: <strong>${contractorSigner}</strong> (${contractorTitle})</div>
-          </div>
-        </div>
+          <!-- 3. Tabel Rincian Nilai Tagihan Termin BAP -->
+          <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; margin-bottom: 6px; border: 1px solid #cbd5e1;">
+            <tbody>
+              <tr style="background: #f1f5f9; font-weight: 700;">
+                <td style="border: 1px solid #cbd5e1; padding: 3px 6px; width: 55%;">Uraian Tahapan / Termin Pembayaran</td>
+                <td style="border: 1px solid #cbd5e1; padding: 3px 6px; width: 45%; text-align: right; color: #1d4ed8; font-weight: 800;">${bapItem.phaseTitle}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px;">Nilai Total Kontrak Rencana Anggaran Biaya (RAB)</td>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; text-align: right;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(contractVal, false, true) : contractVal}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px;">Prestasi Fisik Lapangan & Porsi Tagihan Diajukan</td>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; text-align: right;">Fisik: <strong>${bapItem.physicalProgressPercent}%</strong> &bull; Tagihan: <strong>${bapItem.claimedPercent}%</strong></td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px;">Nilai Prestasi Bruto Pekerjaan (${bapItem.claimedPercent}% x Kontrak)</td>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; text-align: right; font-weight: 600;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(grossAmount, false, true) : grossAmount}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; color: #64748b;">Potongan Pengembalian Uang Muka (DP)</td>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; text-align: right; color: #dc2626;">- ${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(dpDeduction, false, true) : dpDeduction}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; color: #64748b;">Potongan Retensi Masa Pemeliharaan (5%)</td>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; text-align: right; color: #dc2626;">- ${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(retentionDeduction, false, true) : retentionDeduction}</td>
+              </tr>
+              <tr style="background: #f8fafc; font-weight: 700;">
+                <td style="border: 1px solid #cbd5e1; padding: 3px 6px;">Jumlah Pembayaran Sebelum Pajak (Net Before PPN)</td>
+                <td style="border: 1px solid #cbd5e1; padding: 3px 6px; text-align: right;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(netBeforeTax, false, true) : netBeforeTax}</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px;">Pajak Pertambahan Nilai (PPN ${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}%)</td>
+                <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px; text-align: right;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(ppnAmount, false, true) : ppnAmount}</td>
+              </tr>
+              <tr style="background: #f1f5f9; font-weight: 800; border-top: 1.5pt solid #0f172a;">
+                <td style="border: 1.5px solid #0f172a; padding: 4px 6px; font-size: 8pt; letter-spacing: 0.3px;">TOTAL BERSIH DIBAYARKAN (NET PAYABLE)</td>
+                <td style="border: 1.5px solid #0f172a; padding: 4px 6px; text-align: right; font-size: 9pt; color: #1d4ed8;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(netPayable, false, true) : netPayable}</td>
+              </tr>
+            </tbody>
+          </table>
 
-        <div style="font-size: 7.5pt; color: #334155; margin-bottom: 4px; line-height: 1.25;">
-          Menyatakan bersama bahwa prestasi kemajuan fisik pekerjaan lapangan telah diperiksa, diverifikasi, dan disetujui untuk penagihan pembayaran termin dengan rincian:
-        </div>
-
-        <!-- 3. Tabel Rincian Nilai Tagihan Termin BAP (Presisi Ringkas 1 Lembar) -->
-        <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; margin-bottom: 5px; border: 1px solid #cbd5e1;">
-          <tbody>
-            <tr style="background: #f1f5f9; font-weight: 700;">
-              <td style="border: 1px solid #cbd5e1; padding: 2.5px 5px; width: 55%;">Uraian Tahapan / Termin Pembayaran</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2.5px 5px; width: 45%; text-align: right; color: #1d4ed8;">${bapItem.phaseTitle}</td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px;">Nilai Total Kontrak Rencana Anggaran Biaya (RAB)</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; text-align: right;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(contractVal, false, true) : contractVal}</td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px;">Prestasi Fisik Lapangan & Porsi Tagihan Diajukan</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; text-align: right;">Fisik: <strong>${bapItem.physicalProgressPercent}%</strong> &bull; Tagihan: <strong>${bapItem.claimedPercent}%</strong></td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px;">Nilai Prestasi Bruto Pekerjaan (${bapItem.claimedPercent}% x Kontrak)</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; text-align: right; font-weight: 600;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(bapItem.grossAmount, false, true) : bapItem.grossAmount}</td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; color: #64748b;">Potongan Pengembalian Uang Muka (DP)</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; text-align: right; color: #dc2626;">- ${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(bapItem.dpDeduction, false, true) : bapItem.dpDeduction}</td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; color: #64748b;">Potongan Retensi Masa Pemeliharaan (5%)</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; text-align: right; color: #dc2626;">- ${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(bapItem.retentionDeduction, false, true) : bapItem.retentionDeduction}</td>
-            </tr>
-            <tr style="background: #f8fafc; font-weight: 700;">
-              <td style="border: 1px solid #cbd5e1; padding: 2.5px 5px;">Jumlah Pembayaran Sebelum Pajak (Net Before PPN)</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2.5px 5px; text-align: right;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(bapItem.netBeforeTax, false, true) : bapItem.netBeforeTax}</td>
-            </tr>
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px;">Pajak Pertambahan Nilai (PPN ${proj.ppnRate || 11}%)</td>
-              <td style="border: 1px solid #cbd5e1; padding: 2px 5px; text-align: right;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(bapItem.ppnAmount, false, true) : bapItem.ppnAmount}</td>
-            </tr>
-            <tr style="background: #f1f5f9; font-weight: 800; border-top: 1.5pt solid #0f172a;">
-              <td style="border: 1px solid #0f172a; padding: 3px 5px; font-size: 8pt;">TOTAL BERSIH DIBAYARKAN (NET PAYABLE)</td>
-              <td style="border: 1px solid #0f172a; padding: 3px 5px; text-align: right; font-size: 8.5pt; color: #1d4ed8;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(bapItem.netPayable, false, true) : bapItem.netPayable}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 4. Terbilang & Rekening Bank -->
-        <div style="padding: 3px 0; margin-bottom: 4px; font-size: 7pt; line-height: 1.3;">
-          <div><strong>Terbilang:</strong> <em>"${terbilangStr}"</em></div>
-          <div style="margin-top: 2px; color: #334155; border-top: 1px dashed #cbd5e1; padding-top: 2px;">
-            <strong>Instruksi Transfer:</strong> ${bankName} &bull; No. Rek: <strong>${bankAccount}</strong> &bull; a.n <strong>${bankOwner}</strong>
-          </div>
-        </div>
-
-        <!-- 5. Catatan Mutu Lapangan Tunggal (Tanpa Duplikasi) -->
-        <div style="padding: 3px 0; margin-bottom: 4px; font-size: 7pt; line-height: 1.25; border-top: 1px dashed #cbd5e1; padding-top: 3px;">
-          <div style="font-weight: 700; color: #0f172a;">Catatan & Rekomendasi Mutu Lapangan:</div>
-          <div style="color: #334155;">${bapItem.notes || 'Pekerjaan fisik telah diperiksa bersama di lapangan dan memenuhi spesifikasi gambar kerja serta standar mutu SE PUPR.'}</div>
-          ${bapItem.manualNotes ? `
-            <div style="margin-top: 2px; color: #1e40af;"><strong>Catatan Tambahan:</strong> ${bapItem.manualNotes}</div>
-          ` : `
-            <div style="margin-top: 2px; display: flex; align-items: center; gap: 6px;">
-              <span style="color: #64748b; font-size: 6.5pt;">Catatan Manual:</span>
-              <span style="flex: 1; border-bottom: 1px dotted #94a3b8; height: 8px;"></span>
+          <!-- 4. Terbilang & Rekening Bank -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px 8px; margin-bottom: 6px; font-size: 7.5pt; line-height: 1.35;">
+            <div><strong>Terbilang:</strong> <em>"${terbilangStr}"</em></div>
+            <div style="margin-top: 3px; color: #334155; border-top: 1px dashed #cbd5e1; padding-top: 3px;">
+              <strong>Instruksi Transfer:</strong> ${bankName} &bull; No. Rek: <strong>${bankAccount}</strong> &bull; a.n <strong>${bankOwner}</strong>
             </div>
-          `}
-        </div>
-
-        <!-- 6. Pernyataan Penutup -->
-        <div style="font-size: 6.5pt; color: #475569; text-align: center; margin-bottom: 4px;">
-          Demikian Berita Acara Pembayaran ini dibuat rangkap 2 (dua) sah untuk dipergunakan sebagai dasar pencairan tagihan.
-        </div>
-
-        <!-- 7. Tanda Tangan Dua Pihak (Tinggi Proporsional 32px) -->
-        <div style="display: flex; justify-content: space-around; margin-top: 2px; margin-bottom: 4px;">
-          <div style="width: 45%; text-align: center;">
-            <div style="font-weight: 700; font-size: 7.5pt; color: #0f172a;">PIHAK PERTAMA<br><span style="font-size: 7pt; font-weight: 400; color: #475569;">Pemberi Tugas / Pemilik Proyek</span></div>
-            <div style="height: 32px;"></div>
-            <div style="font-weight: 700; font-size: 7.5pt; color: #0f172a; text-decoration: underline;">( ${ownerName} )</div>
-            <div style="font-size: 7pt; color: #64748b;">${ownerTitle}</div>
           </div>
-          <div style="width: 45%; text-align: center;">
-            <div style="font-weight: 700; font-size: 7.5pt; color: #0f172a;">PIHAK KEDUA<br><span style="font-size: 7pt; font-weight: 400; color: #475569;">Kontraktor Pelaksana</span></div>
-            <div style="height: 32px;"></div>
-            <div style="font-weight: 700; font-size: 7.5pt; color: #0f172a; text-decoration: underline;">( ${contractorSigner} )</div>
-            <div style="font-size: 7pt; color: #64748b;">${contractorTitle} — ${contractorCompany}</div>
+
+          <!-- 5. Catatan Mutu Lapangan -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px 8px; margin-bottom: 6px; font-size: 7.5pt; line-height: 1.3;">
+            <div style="font-weight: 700; color: #0f172a;">Catatan & Rekomendasi Mutu Lapangan:</div>
+            <div style="color: #334155;">${bapItem.notes || 'Pekerjaan fisik telah diperiksa bersama di lapangan dan memenuhi spesifikasi gambar kerja serta standar mutu SE PUPR.'}</div>
+            ${bapItem.manualNotes ? `
+              <div style="margin-top: 3px; color: #1e40af;"><strong>Catatan Tambahan:</strong> ${bapItem.manualNotes}</div>
+            ` : `
+              <div style="margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+                <span style="color: #64748b; font-size: 7pt;">Catatan Manual:</span>
+                <span style="flex: 1; border-bottom: 1px dotted #94a3b8; height: 10px;"></span>
+              </div>
+            `}
+          </div>
+
+          <!-- 6. Pernyataan Penutup -->
+          <div style="font-size: 7pt; color: #475569; text-align: center; margin-bottom: 6px;">
+            Demikian Berita Acara Pembayaran ini dibuat rangkap 3 (tiga) sah untuk dipergunakan sebagai dasar pencairan tagihan.
           </div>
         </div>
 
-        <!-- 8. Running Footer Standar Dokumen Sah -->
-        <div style="border-top: 1px solid #94a3b8; padding-top: 2px; display: flex; justify-content: space-between; font-size: 6.5pt; color: #64748b;">
-          <div>${contractorCompany} &bull; ${bapItem.phaseTitle} (${bapItem.bapNumber})</div>
-          <div><strong>Halaman 1 dari 1</strong> &bull; Dokumen Sah Berita Acara Pembayaran</div>
+        <div>
+          <!-- 7. Tanda Tangan Tiga Pihak (Sesuai Format Rujukan Image 2) -->
+          <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; margin-bottom: 6px;">
+            <div style="flex: 1; text-align: center;">
+              <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">PEMBERI TUGAS / OWNER</div>
+              <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Menyetujui &amp; Menetapkan:</div>
+              <div style="height: 42px;"></div>
+              <div style="font-weight: 700; font-size: 8pt; color: #0f172a;">( ${ownerName} )</div>
+              <div style="border-bottom: 1.5px solid #0f172a; width: 85%; margin: 3px auto 4px auto;"></div>
+              <div style="font-size: 7pt; color: #64748b;">${ownerTitle}</div>
+            </div>
+            <div style="flex: 1; text-align: center;">
+              <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">KONSULTAN PERENCANA</div>
+              <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Direncanakan / Diawasi:</div>
+              <div style="height: 42px;"></div>
+              <div style="font-weight: 700; font-size: 8pt; color: #0f172a;">( ${consultantSigner} )</div>
+              <div style="border-bottom: 1.5px solid #0f172a; width: 85%; margin: 3px auto 4px auto;"></div>
+              <div style="font-size: 7pt; color: #64748b;">${consultantCompany}</div>
+            </div>
+            <div style="flex: 1; text-align: center;">
+              <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">KONTRAKTOR PELAKSANA</div>
+              <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Diajukan:</div>
+              <div style="height: 42px;"></div>
+              <div style="font-weight: 700; font-size: 8pt; color: #0f172a;">( ${contractorSigner} )</div>
+              <div style="border-bottom: 1.5px solid #0f172a; width: 85%; margin: 3px auto 4px auto;"></div>
+              <div style="font-size: 7pt; color: #64748b;">${contractorTitle} &bull; ${contractorCompany}</div>
+            </div>
+          </div>
+
+          <!-- 8. Running Footer Standar Dokumen Sah -->
+          <div style="border-top: 1.5px solid #0f172a; padding-top: 3px; display: flex; justify-content: space-between; font-size: 6.5pt; color: #64748b; margin-top: 6px;">
+            <div>${contractorCompany} &bull; ${bapItem.phaseTitle} (${bapItem.bapNumber})</div>
+            <div><strong>Halaman 1 dari 1</strong> &bull; Dokumen Sah Berita Acara Pembayaran</div>
+          </div>
         </div>
 
       </div>
@@ -427,10 +482,11 @@ window.BapInvoicing = (function() {
       (proj.divisions || []).forEach(d => (d.items || []).forEach(it => {
         divSum += (Number(it.volume) || 0) * (Number(it.price) || 0);
       }));
-      contractTotal = divSum > 0 ? Math.round(divSum * (1 + ((proj.ppnRate || 11) / 100))) : 0;
+      const pRate = (proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11;
+      contractTotal = divSum > 0 ? Math.round(divSum * (1 + (pRate / 100))) : 0;
     }
 
-    const ppnRate = proj.ppnRate || 11;
+    const ppnRate = (proj.ppnRate !== undefined && proj.ppnRate !== null) ? Number(proj.ppnRate) : 11;
     const isPpn = (proj.includePpn !== false);
     const pStart = new Date(proj.startDate || "2026-04-01");
 

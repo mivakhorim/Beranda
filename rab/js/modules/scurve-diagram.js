@@ -319,6 +319,7 @@ window.SCurveDiagram = (function() {
         fullLabel: `Minggu ${w} (${formatShortDateNoYear(wStart)} - ${formatShortDateNoYear(wEnd)})`,
         planCost: 0,
         actCost: 0,
+        activeTasks: [],
         planWeekly: 0,
         planCum: 0,
         actWeekly: null,
@@ -336,6 +337,13 @@ window.SCurveDiagram = (function() {
           scheduleWeekly[wIdx].planCost += d.planCost;
           if (d.actCost > 0) {
             scheduleWeekly[wIdx].actCost += d.actCost;
+          }
+          if (d.activeTasks && d.activeTasks.length > 0) {
+            d.activeTasks.forEach(taskName => {
+              if (!scheduleWeekly[wIdx].activeTasks.includes(taskName)) {
+                scheduleWeekly[wIdx].activeTasks.push(taskName);
+              }
+            });
           }
         }
       });
@@ -417,11 +425,11 @@ window.SCurveDiagram = (function() {
       : (data.isDaily !== undefined ? data.isDaily : (data.length > 0 && data[0].day !== undefined));
 
     const width = 920;
-    const height = 460;
+    const height = 340;
     const padL = 65;
     const padR = 45;
-    const padT = 45;
-    const padB = 85;
+    const padT = 36;
+    const padB = 66;
 
     const plotW = width - padL - padR;
     const plotH = height - padT - padB;
@@ -487,7 +495,7 @@ window.SCurveDiagram = (function() {
 
     // Diagram Batang Bobot Rencana (Harian / Mingguan)
     let planBars = "";
-    const maxBarH = 95;
+    const maxBarH = 75;
     const barWidth = numPoints === 1 
       ? 48 
       : Math.max(8, Math.min(38, (plotW / numPoints) * 0.55));
@@ -642,7 +650,7 @@ window.SCurveDiagram = (function() {
         ${deviasiBadge}
 
         <!-- Legend / Keterangan -->
-        <g transform="translate(${padL + 10}, ${height - 24})">
+        <g transform="translate(${padL + 10}, ${height - 16})">
           <line x1="0" y1="0" x2="22" y2="0" stroke="#2563eb" stroke-width="3" />
           <circle cx="11" cy="0" r="3.5" fill="#2563eb" />
           <text x="28" y="4" font-size="10.5" fill="#1e293b">Target Rencana Kumulatif (${isDaily ? 'Harian' : 'Mingguan'})</text>
