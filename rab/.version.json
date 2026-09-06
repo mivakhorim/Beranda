@@ -1,0 +1,18 @@
+{
+  "version": "0.28",
+  "codename": "A4 Zero-Leak Tab Isolation Engine, Anti-Duplicate Margin Box Suppressor, & Proposal Single-Sheet Lock",
+  "updatedAt": "2026-09-06T16:30:00+07:00",
+  "standard": "SE Bina Konstruksi No. 47/SE/Dk/2026",
+  "branding": {
+    "appName": "Duta RAB S1",
+    "developer": "Duta Digital Agensi",
+    "legal": "Dutamik.id | Duta Media Informasi berKarya"
+  },
+  "changes": [
+    "Eliminasi Kebocoran Data Massal Antar-Tab (Strict Zero-Leak Tab Isolation): Menghapus daftar selektor ID panel massal pada css/print-a4.css yang sebelumnya memaksakan display: block !important pada seluruh tab secara bersamaan. Menerapkan isolasi mutlak .tab-panel { display: none !important; } dan hanya membuka panel yang aktif atau ditargetkan.",
+    "Supresi Total Duplikasi Footer: Menyetel @bottom-left dan @bottom-right ke content: none !important pada @page utama, mengeliminasi duplikasi teks margin box yang bertabrakan dengan footer resmi HTML .print-footer-block.",
+    "Penambahan Penutup Footer Resmi pada Rincian Detail RAB: Menyematkan blok window.PrintEngine.createPrintFooter(...) resmi berlabel Dokumen Sah Detail RAB pada renderDetailRabView() di js/app.js.",
+    "Kunci Ketinggian Presisi Proposal & BAP: Mengunci max-height .proposal-page dan .printable-bap-doc pada 258mm !important, mengeliminasi lembar kosong atau halaman tambahan tak sengaja pada setiap bab dokumen proposal dan BAP.",
+    "Penguatan Logika Target Cetak pada PrintEngine: Menyempurnakan printDocument() di js/utils/print-engine.js dengan penandaan ketat is-print-target dan printing-target, pembersihan otomatis via afterprint, serta fallback mulus ke printViaHiddenIframe()."
+  ]
+}

@@ -1,0 +1,930 @@
+/**
+ * Print Stylesheet - Standar Cetak A4 PDF Presisi
+ * Margin: Atas 20mm (2cm), Bawah 20mm (2cm), Kiri 10mm (1cm), Kanan 10mm (1cm)
+ * Kepatuhan Negative Prompt:
+ * - Anti-Terpotong Lebar Teks & Kolom Tabel
+ * - Anti-Terpotong Grafik SVG Kurva S
+ * - Anti-Pemisahan Baris Rp dan Angka
+ * - Anti-Border Berlebih pada Kolom Tanda Tangan
+ */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin-top: 20mm !important;
+    margin-bottom: 18mm !important;
+    margin-left: 10mm !important;
+    margin-right: 10mm !important;
+    @top-left { content: none !important; }
+    @top-center { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-center { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+
+  /* Kover Proposal: TANPA nomor halaman sama sekali */
+  @page coverPage {
+    size: A4 portrait;
+    margin-top: 20mm !important;
+    margin-bottom: 18mm !important;
+    margin-left: 10mm !important;
+    margin-right: 10mm !important;
+    @top-left { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-center { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+
+  /* Dokumen BAP: Single Page Presisi TANPA nomor halaman */
+  @page bapPage {
+    size: A4 portrait;
+    margin-top: 20mm !important;
+    margin-bottom: 18mm !important;
+    margin-left: 10mm !important;
+    margin-right: 10mm !important;
+    @top-left { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-center { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+
+  /* Dokumen Tunggal Lainnya (Kurva S / Kalender): TANPA nomor halaman */
+  @page singleSheetPage {
+    size: A4 portrait;
+    margin-top: 20mm !important;
+    margin-bottom: 18mm !important;
+    margin-left: 10mm !important;
+    margin-right: 10mm !important;
+    @top-left { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-center { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+
+  /* Proposal Content Pages: Gunakan footer DOM proposal, supresi margin box peramban */
+  @page proposalPage {
+    size: A4 portrait;
+    margin-top: 20mm !important;
+    margin-bottom: 16mm !important;
+    margin-left: 10mm !important;
+    margin-right: 10mm !important;
+    @top-left { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-center { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+
+  /* Sembunyikan elemen navigasi layar & tombol saat cetak */
+  .app-sidebar,
+  .app-topbar,
+  .topbar-actions,
+  .btn,
+  .filter-bar,
+  .modal-backdrop,
+  .modal,
+  .modal-dialog,
+  .global-loader-backdrop,
+  #globalLoader,
+  .global-loader-card,
+  .spinner,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 9.5pt !important;
+    line-height: 1.35 !important;
+  }
+
+  .app-layout, 
+  .app-main, 
+  .app-content {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 
+   * ISOLASI KETAT TAB PANEL SAAT CETAK (Anti-Bocor & Anti-Duplikasi):
+   * Sembunyikan SELURUH tab panel secara mutlak saat cetak.
+   * Hanya tab panel yang aktif (atau yang secara eksplisit ditargetkan) yang boleh ditampilkan!
+   */
+  .tab-panel {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+  }
+
+  /* Skenario 1: Cetak via browser reguler (Ctrl+P) - Tampilkan HANYA tab panel aktif */
+  body:not(.printing-target) .tab-panel.active {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Skenario 2: Cetak melalui tombol aksi (PrintEngine) - Tampilkan HANYA target yang dipilih */
+  body.printing-target .tab-panel.is-print-target {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Konten di dalam tab aktif yang dicetak */
+  .tab-panel.active > div,
+  .tab-panel.is-print-target > div,
+  .printable-inspection-doc {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .card-header {
+    display: none !important;
+  }
+
+  .card-body {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Proteksi Mata Uang Rupiah Saat Cetak */
+  .rupiah-nowrap, .currency {
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Tabel Cetak Proporsional & Rapi Tanpa Terpotong */
+  .table-responsive {
+    overflow: visible !important;
+    margin-bottom: 12pt !important;
+  }
+
+  .table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 8.5pt !important;
+    page-break-inside: auto !important;
+  }
+
+  .table th {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 4.5pt 6pt !important;
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .table td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 4pt 6pt !important;
+    color: #0f172a !important;
+  }
+
+  .table tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  .table-active {
+    background-color: #f8fafc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .total-highlight-row {
+    background-color: #f1f5f9 !important;
+    font-weight: 700 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Grafik SVG Kurva S Anti-Terpotong */
+  .scurve-svg, .svg-print-container svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid !important;
+  }
+
+  
+  /* KEPATUHAN MUTLAK: Tampilkan Kop Judul & Informasi Proyek pada Halaman 1 Cetak */
+  .print-only {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    margin-bottom: 12pt !important;
+  }
+
+  /* Kepatuhan Elemen Tabel: Anti-Tumpuk & Bentang Penuh 100% Seluruh Kolom */
+  tr.print-only,
+  tr.division-header-row {
+    display: table-row !important;
+    visibility: visible !important;
+    height: auto !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  th.print-only,
+  td.print-only,
+  tr.division-header-row th {
+    display: table-cell !important;
+    visibility: visible !important;
+    margin: 0 !important;
+  }
+
+  /* Header & Footer Berulang Cetak */
+  .print-header-block {
+    display: block !important;
+    margin-bottom: 14pt;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 8pt;
+  }
+
+  .print-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .company-brand {
+    font-size: 11pt;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .company-sub {
+    display: block;
+    font-size: 7.5pt;
+    color: #475569;
+  }
+
+  .print-header-meta {
+    font-size: 8pt;
+    text-align: right;
+    color: #334155;
+  }
+
+  .print-header-project-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    margin-top: 5pt;
+    color: #1e293b;
+  }
+
+  /* Kolom Tanda Tangan Bersih (Anti-Border Berlebihan) */
+  .signature-clean-grid {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 24pt !important;
+    page-break-inside: avoid !important;
+    gap: 20pt;
+  }
+
+  .signature-clean-grid.three-parties .sig-block {
+    flex: 1;
+    text-align: center;
+  }
+
+  .sig-block {
+    flex: 1;
+    text-align: center;
+  }
+
+  .sig-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 45pt; /* Ruang tanda tangan tangan basah / stempel */
+  }
+
+  .sig-name {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 1px solid #1e293b; /* Garis bawah tunggal bersih */
+    display: inline-block;
+    padding-bottom: 2pt;
+    min-width: 140pt;
+  }
+
+  .sig-role {
+    font-size: 8pt;
+    color: #475569;
+    margin-top: 2pt;
+  }
+
+  /* Lembar Paraf Mandor Lapangan */
+  .paraf-stamp {
+    display: inline-block;
+    border: 1px dashed #475569;
+    padding: 2pt 6pt;
+    font-weight: 700;
+    font-size: 8pt;
+    border-radius: 2pt;
+  }
+
+  .paraf-line {
+    display: inline-block;
+    width: 35pt;
+    border-bottom: 1px solid #64748b;
+    height: 12pt;
+  }
+
+  /* Area Catatan Manual Pengawas Lapangan */
+  .blank-lines-container {
+    margin-top: 6pt;
+  }
+
+  .blank-line {
+    border-bottom: 1px dotted #94a3b8;
+    height: 16pt;
+  }
+
+  /* Proposal Pages Break & No Border */
+  .proposal-page {
+    page: proposalPage !important;
+    page-break-before: always !important;
+    page-break-after: always !important;
+    break-before: page !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 250mm !important;
+    max-height: 258mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    padding: 0 0 5mm 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    overflow: hidden !important;
+  }
+
+  .proposal-page.cover-page,
+  .proposal-page:first-child {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+
+  .proposal-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  .cover-page {
+    page: coverPage !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: none !important;
+  }
+
+  .printable-bap-doc {
+    page: bapPage !important;
+  }
+
+  #panel-kurva-s, .single-sheet-print {
+    page: singleSheetPage !important;
+  }
+
+  .proposal-preview-wrapper {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+
+  /* Halaman setelah kover (Kata Pengantar) dihitung sebagai Halaman 1 */
+  .proposal-page.content-page:first-of-type {
+    counter-reset: page 1;
+  }
+
+  .cover-inner-border {
+    border: 2px solid #0f172a;
+    padding: 30pt 25pt;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover-badge-top {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #475569;
+    text-align: center;
+  }
+
+  .cover-main-title {
+    font-size: 16pt;
+    font-weight: 800;
+    color: #0f172a;
+    text-align: center;
+    line-height: 1.3;
+    margin: 15pt 0 10pt 0;
+  }
+
+  .cover-project-name {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #2563eb;
+    text-align: center;
+    margin-bottom: 5pt;
+  }
+
+  .cover-project-location {
+    font-size: 9pt;
+    color: #475569;
+    text-align: center;
+  }
+
+  .cover-divider-accent {
+    width: 60pt;
+    height: 3pt;
+    background-color: #0f172a;
+    margin: 15pt auto;
+  }
+
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12pt;
+    margin: 20pt 0;
+    border-top: 1px solid #cbd5e1;
+    border-bottom: 1px solid #cbd5e1;
+    padding: 14pt 0;
+  }
+
+  .cover-meta-lbl {
+    display: block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 2pt;
+  }
+
+  .cover-meta-val {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .cover-total-box {
+    text-align: center;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10pt;
+    border-radius: 4pt;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .total-caption {
+    font-size: 7.5pt;
+    font-weight: 700;
+    color: #475569;
+  }
+
+  .total-nominal {
+    font-size: 15pt;
+    font-weight: 800;
+    color: #059669;
+    margin: 2pt 0;
+  }
+
+  .total-terbilang {
+    font-size: 8pt;
+    font-style: italic;
+    color: #334155;
+  }
+
+  .cover-date-year {
+    text-align: center;
+    font-size: 8pt;
+    color: #64748b;
+    margin-top: 8pt;
+  }
+
+  .page-heading h2 {
+    font-size: 12pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 4pt;
+  }
+
+  .heading-line {
+    height: 1.5pt;
+    background-color: #0f172a;
+    width: 40pt;
+    margin-bottom: 12pt;
+  }
+
+  .toc-list {
+    margin: 15pt 0;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    font-size: 9pt;
+    margin-bottom: 8pt;
+  }
+
+  .toc-title {
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  .toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #94a3b8;
+    margin: 0 6pt;
+  }
+
+  .toc-page {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  /* Batch Print Isolation: Hanya cetak batch AHSP jika mode printing-batch aktif */
+  body.printing-batch .app-layout {
+    display: none !important;
+  }
+  body.printing-batch #printableAhspBatchArea {
+    display: block !important;
+    width: 100% !important;
+  }
+  #printableAhspBatchArea {
+    display: none !important;
+  }
+
+  /* Proposal Pages: 1 Halaman Utuh Mandiri per Bab */
+  .proposal-page {
+    page-break-before: always !important;
+    page-break-after: always !important;
+    break-before: page !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-height: 250mm !important;
+    max-height: 258mm !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 0 0 5mm 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+  .proposal-page.cover-page,
+  .proposal-page:first-child {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+  .proposal-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* Footer Halaman Proposal Presisi (Menampilkan Nomor Halaman & Detail Lembar) */
+  .proposal-page .print-footer-block {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 8pt !important;
+    color: #475569 !important;
+    border-top: 0.75pt solid #cbd5e1 !important;
+    padding-top: 6px !important;
+    margin-top: auto !important;
+    margin-bottom: 2px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Kover Proposal dan BAP TIDAK menampilkan footer nomor halaman */
+  .cover-page .print-footer-block,
+  .printable-bap-doc .print-footer-block {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+  }
+}
+
+/* Sembunyikan elemen cetak khusus di layar reguler (@media screen), tampilkan footer preview proposal */
+@media screen {
+  .print-only,
+  #printableAhspBatchArea,
+  #appPrintIframe {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .proposal-page {
+    position: relative;
+    box-sizing: border-box;
+    min-height: 275mm;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    margin: 0 auto 24px auto;
+    padding: 15mm 15mm 12mm 15mm;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 210mm;
+    border-radius: 4px;
+  }
+
+  .proposal-page .print-footer-block {
+    display: flex !important;
+    visibility: visible !important;
+    border-top: none !important;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: #475569;
+    padding-top: 6px;
+    margin-top: auto !important;
+    width: 100%;
+    flex-shrink: 0 !important;
+  }
+
+  .cover-page .print-footer-block,
+  .printable-bap-doc .print-footer-block {
+    display: none !important;
+  }
+}
+
+/* Rincian Tenaga Kerja pada Detail RAB Cetak A4 */
+.item-labor-box {
+  background: #f8fafc !important;
+  border: 0.5pt solid #cbd5e1 !important;
+  border-radius: 3pt !important;
+  padding: 3pt 5pt !important;
+  margin-top: 3pt !important;
+  font-size: 7.5pt !important;
+  page-break-inside: avoid !important;
+}
+.item-labor-box strong {
+  color: #0f172a !important;
+}
+
+  /* Kop Dokumen Cetak Halaman 1 Formal Standar PUPR */
+  .print-header-block {
+    display: block !important;
+    visibility: visible !important;
+    margin-bottom: 14pt !important;
+    border-bottom: 2.5pt double #0f172a !important;
+    padding-bottom: 10pt !important;
+  }
+  .print-header-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+  }
+  .company-brand {
+    font-size: 13pt !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+  }
+  .company-sub {
+    display: block !important;
+    font-size: 8pt !important;
+    color: #475569 !important;
+    margin-top: 2pt !important;
+  }
+  .print-header-meta {
+    font-size: 8pt !important;
+    text-align: right !important;
+    color: #334155 !important;
+    line-height: 1.4 !important;
+  }
+  .print-doc-title-box {
+    text-align: center !important;
+    margin: 8pt 0 10pt 0 !important;
+    padding: 6pt 0 !important;
+    border-top: 1pt solid #cbd5e1 !important;
+    border-bottom: 1pt solid #cbd5e1 !important;
+  }
+  .print-doc-title {
+    font-size: 12pt !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    margin: 0 !important;
+  }
+  .print-doc-subtitle {
+    font-size: 8pt !important;
+    color: #475569 !important;
+    margin-top: 2pt !important;
+  }
+  .print-header-project-table {
+    width: 100% !important;
+    margin-top: 6pt !important;
+    font-size: 8pt !important;
+    border-collapse: collapse !important;
+  }
+  .print-header-project-table td {
+    padding: 2.5pt 5pt !important;
+    vertical-align: top !important;
+    border: none !important;
+  }
+
+
+  /* Supresi Total Proposal Footer Teks Statis (Anti-Muncul Kembali) */
+  .proposal-footer {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Standar BAP A4 Mandiri — Anti-Bertumpuk & Terkunci Tepat 1 Lembar A4 */
+  .printable-bap-doc {
+    page-break-before: auto !important;
+    page-break-after: auto !important;
+    page-break-inside: avoid !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 258mm !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background: #ffffff !important;
+  }
+
+  .printable-bap-doc:last-child {
+    page-break-after: auto !important;
+  }
+
+  .bap-card-item {
+    page-break-after: auto !important;
+    page-break-inside: avoid !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .bap-card-item:last-child {
+    page-break-after: auto !important;
+  }
+
+  /* Tata Letak Ringkasan Eksekutif Proposal */
+  .executive-summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8pt !important;
+    margin-bottom: 12pt !important;
+    page-break-inside: avoid !important;
+  }
+  .letter-meta-box {
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 8pt !important;
+    border-bottom: 1.5pt solid #cbd5e1 !important;
+    padding-bottom: 6pt !important;
+    margin-bottom: 10pt !important;
+  }
+
+
+.print-footer-block {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8pt;
+  color: #475569;
+  border-top: 0.75pt solid #cbd5e1;
+  padding-top: 6px;
+  margin-top: 14px;
+  margin-bottom: 2px;
+  width: 100%;
+  page-break-inside: avoid;
+  box-sizing: border-box;
+}
+.print-footer-block .footer-left {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 8pt;
+}
+.print-footer-block .footer-right {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 8pt;
+}
+
+.proposal-page {
+  position: relative;
+  overflow: hidden;
+}
+.printable-bap-doc {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Styling Presisi Input Volume Mandiri & Kartu AHSP saat Cetak */
+@media print {
+  .vol-input-clean {
+    border: none !important;
+    background: transparent !important;
+    text-align: right !important;
+    font-size: 8.5pt !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  .ahsp-print-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 10px !important;
+  }
+}
+
