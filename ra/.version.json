@@ -1,0 +1,17 @@
+{
+  "version": "0.45",
+  "codename": "Architectural Precision Print Engine, Monochromatic Button System & Compact Executive KPI",
+  "updatedAt": "2026-09-08T06:15:00+07:00",
+  "standard": "SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026 (Cipta Karya, Bina Marga, Sumber Daya Air, SMKK)",
+  "branding": {
+    "appName": "Duta RAB S1",
+    "developer": "Duta Digital Agensi",
+    "legal": "Dutamik.id | Duta Media Informasi berKarya"
+  },
+  "changes": [
+    "Precision A4 PDF Engine: Mengembangkan Isolated Sandboxed Off-Screen Print Engine (794px portrait, 1123px landscape) yang membersihkan seluruh tombol aksi dan artefak layar, memastikan kop resmi PUPR tampil utuh, dan menstandarisasi border tabel teknik sipil presisi.",
+    "Monochromatic Slate Button Design: Mengeliminasi warna-warni pelangi pada tombol (menghapus btn-primary-gradient, btn-success, btn-warning, dan style cyan inline), menggantikannya dengan palet arsitektur konsultan teknik sipil: Obsidian Slate (#0f172a) untuk aksi utama dan Crisp White (#ffffff) dengan border slate (#cbd5e1) untuk aksi sekunder.",
+    "Sleek Executive KPI Strip (Anti-Over Bagan): Menggantikan 4 kartu KPI raksasa ber-border tebal warna-warni pada Kurva S dengan bilah metrik ramping .kurva-kpi-bar (tinggi ~50px, 4 kolom desktop, 2x2 grid mobile) sehingga grafik Kurva S langsung terlihat tanpa tergeser ke bawah.",
+    "Penyempurnaan Strict @media print CSS: Menegakkan display: table !important untuk seluruh tabel desktop dan display: none !important untuk kartu sentuh ponsel saat mencetak dokumen di peramban mobile/desktop."
+  ]
+}
