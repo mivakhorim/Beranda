@@ -120,7 +120,9 @@
   .app-sidebar,
   .app-topbar,
   .topbar-actions,
+  .page-header-actions,
   .btn,
+  .btn-group,
   .filter-bar,
   .modal-backdrop,
   .modal,
@@ -129,8 +131,21 @@
   #globalLoader,
   .global-loader-card,
   .spinner,
-  .no-print {
+  .no-print,
+  .d-mobile-only {
     display: none !important;
+  }
+
+  /* Force desktop table layouts during print */
+  .d-desktop-only {
+    display: block !important;
+  }
+  table.d-desktop-only {
+    display: table !important;
+  }
+  .table-responsive.d-desktop-only {
+    display: block !important;
+    overflow: visible !important;
   }
 
   html, body, .app-layout, .app-main, .app-content {
@@ -337,12 +352,31 @@
   }
 
   /* Kolom Tanda Tangan Bersih (Anti-Border Berlebihan) */
-  .signature-clean-grid {
+  .signature-clean-grid,
+  .signature-clean-grid.three-parties {
     display: flex !important;
+    flex-direction: row !important;
     justify-content: space-between !important;
+    align-items: flex-start !important;
     margin-top: 24pt !important;
     page-break-inside: avoid !important;
-    gap: 20pt;
+    break-inside: avoid !important;
+    gap: 16pt !important;
+  }
+
+  .signature-clean-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: none !important;
+    background: transparent !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .signature-clean-table td {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 8px !important;
   }
 
   .signature-clean-grid.three-parties .sig-block {
@@ -366,10 +400,11 @@
     font-size: 9pt;
     font-weight: 700;
     color: #0f172a;
-    border-bottom: 1px solid #1e293b; /* Garis bawah tunggal bersih */
-    display: inline-block;
+    border-bottom: none !important;
+    text-decoration: none !important;
+    display: block;
     padding-bottom: 2pt;
-    min-width: 140pt;
+    min-width: unset !important;
   }
 
   .sig-role {
@@ -495,9 +530,8 @@
     height: 100% !important;
     max-height: 275mm !important;
     box-sizing: border-box !important;
-    border: 2.5px solid #1e3a8a !important;
-    outline: 1px solid #cbd5e1 !important;
-    outline-offset: -5px !important;
+    border: 1px solid #94a3b8 !important;
+    outline: none !important;
     padding: 16px 20px !important;
     display: flex !important;
     flex-direction: column !important;
@@ -555,14 +589,14 @@
   .cover-title-divider {
     width: 65px;
     height: 3px;
-    background: linear-gradient(90deg, #1e3a8a, #0284c7);
+    background: #0f172a;
     margin: 5px auto;
     border-radius: 2px;
   }
 
   .cover-project-card {
-    background-color: #eff6ff;
-    border: 1.5px solid #bfdbfe;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 6px;
     padding: 6px 14px;
     display: inline-block;
@@ -574,7 +608,7 @@
   .cover-project-name {
     font-size: 12.5pt;
     font-weight: 800;
-    color: #1e40af;
+    color: #0f172a;
     line-height: 1.25;
     text-align: center;
   }
@@ -627,10 +661,10 @@
   }
 
   .cover-grand-total-banner {
-    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
-    border: 1.5px solid #3b82f6;
-    border-radius: 6px;
-    padding: 8px 12px;
+    background: #0f172a;
+    border: 1px solid #0f172a;
+    border-radius: 4px;
+    padding: 9px 14px;
     text-align: center;
     box-sizing: border-box;
     -webkit-print-color-adjust: exact !important;
@@ -639,8 +673,8 @@
 
   .cover-grand-total-banner .banner-lbl {
     font-size: 7.2pt;
-    font-weight: 800;
-    color: #1e40af;
+    font-weight: 700;
+    color: #94a3b8;
     letter-spacing: 0.8px;
     text-transform: uppercase;
   }
@@ -648,7 +682,7 @@
   .cover-grand-total-banner .banner-nominal {
     font-size: 15.5pt;
     font-weight: 900;
-    color: #0f172a;
+    color: #ffffff;
     margin: 2px 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     letter-spacing: -0.4px;
@@ -657,8 +691,8 @@
   .cover-grand-total-banner .banner-terbilang {
     font-size: 7.6pt;
     font-style: italic;
-    color: #1e40af;
-    font-weight: 600;
+    color: #e2e8f0;
+    font-weight: 500;
     line-height: 1.25;
   }
 
@@ -1143,3 +1177,19 @@
   display: contents;
 }
 
+
+/* Kalender Proyek: Header Divisi Full-Width (Anti-Bertumpuk di Kiri) */
+.calendar-division-header-row td {
+  background-color: #f1f5f9 !important;
+}
+.calendar-div-inner-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border: none !important;
+  background: transparent !important;
+}
+.calendar-div-inner-table td {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}

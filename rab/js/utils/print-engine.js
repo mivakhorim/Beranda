@@ -120,11 +120,16 @@ window.PrintEngine = (function() {
       <html lang="id">
       <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=1024">
         <title> </title>
         <link rel="stylesheet" href="css/theme.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/print-a4.css">
         <style>
+          .print-only { display: block !important; visibility: visible !important; }
+          .no-print, .btn, .btn-group, .page-header-actions, .d-mobile-only { display: none !important; }
+          .d-desktop-only, table.d-desktop-only { display: table !important; }
+          div.d-desktop-only { display: block !important; }
           ${htmlContent.includes('proposal-page') ? `
           @page {
             size: A4 portrait;
@@ -370,18 +375,30 @@ window.PrintEngine = (function() {
       ? `${Number(rawLabor).toFixed(1)} OH (~${(rawLabor / durDays).toFixed(1)} Org/Hari)`
       : "Sesuai Analisis AHSP 2026";
 
+    const defaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' width='200' height='80'><rect width='200' height='80' rx='8' fill='%230f172a'/><path d='M25 60 L45 20 L65 60 Z' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-linejoin='round'/><path d='M35 60 L45 40 L55 60 Z' fill='%2338bdf8' opacity='0.7'/><circle cx='45' cy='18' r='4' fill='%23f59e0b'/><text x='78' y='38' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='%23ffffff'>DUTA CIPTA</text><text x='78' y='54' font-family='Arial, sans-serif' font-size='9' font-weight='500' fill='%2394a3b8' letter-spacing='1'>KONTRAKTOR &amp; KONSULTAN</text></svg>";
+    const logoSrc = (proj.logo && typeof proj.logo === 'string' && proj.logo.trim().length > 10) ? proj.logo : defaultLogoSvg;
+    const logoSize = Math.max(40, Math.min(300, Number(proj.logoSize) || 120));
+    const logoHtml = `
+      <div class="print-header-logo-container" style="flex: 0 0 auto; margin-right: 14px; display: flex; align-items: center;">
+        <img src="${logoSrc}" alt="Logo Proyek" style="width: ${logoSize}px !important; max-width: ${logoSize}px !important; max-height: ${Math.round(logoSize * 0.75)}px !important; object-fit: contain !important; display: block !important;">
+      </div>
+    `;
+
     return `
       <div class="print-header-block">
         <!-- 1. Kop Kontraktor Pelaksana -->
-        <div class="print-header-top">
-          <div class="print-header-logo-text">
-            <span class="company-brand">${contractorStr}</span>
-            <span class="company-sub">Sistem Informasi Perencanaan, Estimasi Biaya & Manajemen Konstruksi</span>
+        <div class="print-header-top" style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; max-width: 65%;">
+            ${logoHtml}
+            <div class="print-header-logo-text">
+              <span class="company-brand">${contractorStr}</span>
+              <span class="company-sub">Sistem Informasi Perencanaan, Estimasi Biaya &amp; Manajemen Konstruksi</span>
+            </div>
           </div>
           <div class="print-header-meta">
             <div><strong>No. Dokumen:</strong> ${docNumStr}</div>
             <div><strong>Tanggal Cetak:</strong> ${printDate}</div>
-            </div>
+          </div>
         </div>
 
         <!-- 2. Judul Dokumen Prominen -->
@@ -449,15 +466,27 @@ window.PrintEngine = (function() {
     const docNumStr = proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001";
     const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
+    const lDefaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' width='200' height='80'><rect width='200' height='80' rx='8' fill='%230f172a'/><path d='M25 60 L45 20 L65 60 Z' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-linejoin='round'/><path d='M35 60 L45 40 L55 60 Z' fill='%2338bdf8' opacity='0.7'/><circle cx='45' cy='18' r='4' fill='%23f59e0b'/><text x='78' y='38' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='%23ffffff'>DUTA CIPTA</text><text x='78' y='54' font-family='Arial, sans-serif' font-size='9' font-weight='500' fill='%2394a3b8' letter-spacing='1'>KONTRAKTOR &amp; KONSULTAN</text></svg>";
+    const lLogoSrc = (proj.logo && typeof proj.logo === 'string' && proj.logo.trim().length > 10) ? proj.logo : lDefaultLogoSvg;
+    const lLogoSize = Math.max(40, Math.min(220, Number(proj.logoSize) || 100));
+    const landLogoHtml = `
+      <div class="print-header-landscape-logo" style="flex: 0 0 auto; margin-right: 10px; display: flex; align-items: center;">
+        <img src="${lLogoSrc}" alt="Logo Proyek" style="width: ${lLogoSize}px !important; max-width: ${lLogoSize}px !important; max-height: ${Math.round(lLogoSize * 0.65)}px !important; object-fit: contain !important; display: block !important;">
+      </div>
+    `;
+
     return `
       <div class="print-header-landscape-compact" style="border-bottom: 1.5pt solid #0f172a; padding-bottom: 4px; margin-bottom: 6px; width: 100%; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
         <!-- Baris 1: Kop Ringkas, Judul Dokumen Prominen & Metadata Dokumen -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <div style="width: 28%; line-height: 1.2;">
-            <div style="font-size: 9.5pt; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.3px;">${contractorStr}</div>
-            <div style="font-size: 7pt; color: #475569;">Estimasi Biaya &amp; Manajemen Konstruksi</div>
+          <div style="width: 35%; display: flex; align-items: center; line-height: 1.2;">
+            ${landLogoHtml}
+            <div>
+              <div style="font-size: 9.5pt; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.3px;">${contractorStr}</div>
+              <div style="font-size: 7pt; color: #475569;">Estimasi Biaya &amp; Manajemen Konstruksi</div>
+            </div>
           </div>
-          <div style="width: 44%; text-align: center; line-height: 1.2;">
+          <div style="width: 37%; text-align: center; line-height: 1.2;">
             <div style="font-size: 11pt; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${docType}</div>
             <div style="font-size: 7pt; color: #475569;">Standar ${proj.dataSource || 'SE Dirjen Bina Konstruksi No. 47/SE/Dk/2026'}</div>
           </div>
@@ -502,9 +531,15 @@ window.PrintEngine = (function() {
     `;
   }
 
+  function downloadPdfDirect(targetElementId, filename = "Dokumen_RAB.pdf", customOrientation = null) {
+    // Alihkan langsung ke printDocument agar membuka browser print preview asli dengan kualitas vektor 100% utuh
+    printDocument(targetElementId, filename);
+  }
+
   return {
     printDocument,
     printViaHiddenIframe,
+    downloadPdfDirect,
     createPrintHeader,
     createLandscapePrintHeader,
     createPrintFooter

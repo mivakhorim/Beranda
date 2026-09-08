@@ -106,24 +106,15 @@ window.ProposalGen = (function() {
             </div>
           </div>
 
-          <!-- Architectural Emblem SVG -->
+          <!-- Logo Resmi Perusahaan / Instansi -->
           <div class="cover-emblem-wrap">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto;">
-              <rect x="4" y="10" width="18" height="34" rx="2" fill="#1e3a8a" />
-              <rect x="26" y="18" width="18" height="26" rx="2" fill="#0284c7" />
-              <rect x="8" y="15" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="14" y="15" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="8" y="22" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="14" y="22" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="8" y="29" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="14" y="29" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="30" y="23" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="36" y="23" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="30" y="30" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <rect x="36" y="30" width="4" height="4" rx="0.5" fill="#ffffff" />
-              <path d="M2 44H46" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
-              <path d="M13 5L22 10H4L13 5Z" fill="#d97706" />
-            </svg>
+            ${proj.logo ? `
+              <img src="${proj.logo}" alt="Logo Perusahaan" style="max-height: 55px; max-width: 170px; object-fit: contain; margin: 0 auto; display: block;" />
+            ` : `
+              <div style="font-family: 'Times New Roman', serif; font-size: 13pt; font-weight: bold; letter-spacing: 2px; color: #0f172a; text-transform: uppercase;">
+                ${companyDisplay}
+              </div>
+            `}
           </div>
 
           <!-- Main Title Block -->
@@ -211,24 +202,24 @@ window.ProposalGen = (function() {
           </p>
         </div>
 
-        <!-- Kartu Ringkasan Eksekutif (3 Kolom Berwarna) -->
+        <!-- Kartu Ringkasan Eksekutif (3 Kolom Arsitektural Bersih Tanpa Warna-Warni) -->
         <div class="executive-summary-grid mb-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-          <div style="border: 1.5px solid #2563eb; background-color: #eff6ff; border-radius: 6px; padding: 10px 12px; text-align: center;">
-            <div style="font-size: 8pt; font-weight: 700; color: #1e40af; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL NILAI INVESTASI (RAB)</div>
-            <div style="font-size: 12.5pt; font-weight: 900; color: #1e3a8a; margin: 4px 0; white-space: nowrap;">${formatRp(activeGrandTotal)}</div>
-            <div style="font-size: 7.5pt; color: #3b82f6; font-weight: 600;">${isPpnIncluded ? `Termasuk PPN ${activePpnRate}% &amp; Overhead ${activeOverheadRate}%` : 'Biaya Bersih Fisik (Tanpa PPN)'}</div>
+          <div style="border: 1px solid #e2e8f0; background-color: #f8fafc; border-radius: 4px; padding: 10px 12px; text-align: center;">
+            <div style="font-size: 7.5pt; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL NILAI INVESTASI (RAB)</div>
+            <div style="font-size: 12.5pt; font-weight: 900; color: #0f172a; margin: 4px 0; white-space: nowrap;">${formatRp(activeGrandTotal)}</div>
+            <div style="font-size: 7.5pt; color: #64748b; font-weight: 500;">${isPpnIncluded ? `Termasuk PPN ${activePpnRate}% &amp; Overhead ${activeOverheadRate}%` : 'Biaya Bersih Fisik (Tanpa PPN)'}</div>
           </div>
 
-          <div style="border: 1.5px solid #059669; background-color: #ecfdf5; border-radius: 6px; padding: 10px 12px; text-align: center;">
-            <div style="font-size: 8pt; font-weight: 700; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px;">WAKTU PELAKSANAAN</div>
-            <div style="font-size: 12.5pt; font-weight: 900; color: #047857; margin: 4px 0; white-space: nowrap;">${proj.durationDays || 180} Hari Kalender</div>
-            <div style="font-size: 7.5pt; color: #059669; font-weight: 600;">Periode: ${proj.startDate || '01 Apr 2026'} s.d. ${proj.finishDate || '30 Sep 2026'}</div>
+          <div style="border: 1px solid #e2e8f0; background-color: #f8fafc; border-radius: 4px; padding: 10px 12px; text-align: center;">
+            <div style="font-size: 7.5pt; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">WAKTU PELAKSANAAN</div>
+            <div style="font-size: 12.5pt; font-weight: 900; color: #0f172a; margin: 4px 0; white-space: nowrap;">${proj.durationDays || 180} Hari Kalender</div>
+            <div style="font-size: 7.5pt; color: #64748b; font-weight: 500;">Periode: ${proj.startDate || '01 Apr 2026'} s.d. ${proj.finishDate || '30 Sep 2026'}</div>
           </div>
 
-          <div style="border: 1.5px solid #d97706; background-color: #fffbeb; border-radius: 6px; padding: 10px 12px; text-align: center;">
-            <div style="font-size: 8pt; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px;">LINGKUP &amp; JAMINAN MUTU</div>
-            <div style="font-size: 12.5pt; font-weight: 900; color: #b45309; margin: 4px 0; white-space: nowrap;">${(proj.divisions || []).length} Divisi Utama</div>
-            <div style="font-size: 7.5pt; color: #d97706; font-weight: 600;">${(proj.divisions || []).reduce((acc, d) => acc + (d.items || []).length, 0)} Item Pekerjaan &bull; Garansi 90 Hari</div>
+          <div style="border: 1px solid #e2e8f0; background-color: #f8fafc; border-radius: 4px; padding: 10px 12px; text-align: center;">
+            <div style="font-size: 7.5pt; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">LINGKUP &amp; JAMINAN MUTU</div>
+            <div style="font-size: 12.5pt; font-weight: 900; color: #0f172a; margin: 4px 0; white-space: nowrap;">${(proj.divisions || []).length} Divisi Utama</div>
+            <div style="font-size: 7.5pt; color: #64748b; font-weight: 500;">${(proj.divisions || []).reduce((acc, d) => acc + (d.items || []).length, 0)} Item Pekerjaan &bull; Garansi 90 Hari</div>
           </div>
         </div>
 
@@ -338,6 +329,24 @@ window.ProposalGen = (function() {
               <td style="font-weight: 700; background-color: #f8fafc;">Wilayah Remunerasi &amp; Indeks</td>
               <td>${proj.regionName || 'Jawa Barat - Bandung Raya & Priangan'} (Indeks Remunerasi Standar PUPR)</td>
             </tr>
+            <tr>
+              <td style="font-weight: 700; background-color: #f8fafc;">Luas Rencana Pembangunan</td>
+              <td><strong>${formatNum(proj.buildingArea || 180, 0)} m²</strong> ${proj.projectType === 'rehab' ? '<span style="color:#f59e0b;font-size:7.5pt;">(Area Bangunan Terrehab)</span>' : '<span style="color:#64748b;font-size:7.5pt;">(Luas Bangunan Baru)</span>'}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; background-color: #f8fafc;">Luas Tanah / Kavling</td>
+              <td>${formatNum(proj.landArea || 200, 0)} m²</td>
+            </tr>
+            ${proj.projectType === 'rehab' ? `
+            <tr>
+              <td style="font-weight: 700; background-color: #fff3cd;">Volume / Bagian Direhab</td>
+              <td><strong>${formatNum(proj.rehabArea || proj.buildingArea || 180, 0)} m²</strong> <span style="color:#f59e0b;font-size:7.5pt;">(Volume rehabilitasi aktif)</span></td>
+            </tr>
+            ` : ''}
+            <tr>
+              <td style="font-weight: 700; background-color: #f8fafc;">Estimasi Biaya per m² (HSP m²)</td>
+              <td><strong style="color:#0f172a;">${(rabCalc && rabCalc.costPerM2 && rabCalc.costPerM2 > 0) ? formatRp(Math.round(rabCalc.costPerM2)) : (activeGrandTotal > 0 ? formatRp(Math.round(activeGrandTotal / (proj.buildingArea || 180))) : 'Rp 0')}</strong> / m² <span style="color:#64748b;font-size:7.5pt;">(Total Anggaran ÷ Luas Bangunan)</span></td>
+            </tr>
           </tbody>
         </table>
 
@@ -372,7 +381,7 @@ window.ProposalGen = (function() {
         <div class="subheading mb-2" style="font-size: 9.5pt; font-weight: 700; color: #0f172a;">
           <strong>C. Standar Teknis &amp; Pengendalian Mutu Konstruksi:</strong>
         </div>
-        <div style="font-size: 7.5pt; color: #334155; line-height: 1.45; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 10px;">
+        <div style="font-size: 8pt; color: #334155; line-height: 1.5; text-align: justify; border-left: 2.5px solid #0f172a; padding: 4px 0 4px 10px; margin-top: 4px;">
           Pekerjaan dilaksanakan sesuai dengan Spesifikasi Teknis Umum Bina Konstruksi 2026, Standar Nasional Indonesia (SNI) Bahan Bangunan (Beton Bertulang SNI 2847:2019, Baja Tulangan SNI 2052:2017, Mortar Pasangan SNI 03-6882-2002), serta Sistem Manajemen Keselamatan dan Kesehatan Kerja Konstruksi (SMKK/K3).
         </div>
 
@@ -484,7 +493,7 @@ window.ProposalGen = (function() {
 
       detailDivisionsHtml += `
         <div class="division-block mb-3" style="page-break-inside: avoid; break-inside: avoid;">
-          <div class="division-title-bar" style="background-color: #f1f5f9; border-left: 3px solid #2563eb; padding: 5px 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div class="division-title-bar" style="background-color: #f1f5f9; border-left: 3px solid #0f172a; padding: 5px 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
             <span style="font-size: 8.5pt; font-weight: 800; color: #0f172a;">${div.code ? `DIVISI ${div.code}. ` : `DIVISI ${dIdx + 1}. `}${(div.name || "").toUpperCase()}</span>
             <span style="font-size: 8.5pt; font-weight: 800; color: #1e40af; white-space: nowrap;">Subtotal: ${formatRp(div.subtotal)}</span>
           </div>
@@ -542,7 +551,7 @@ window.ProposalGen = (function() {
           <!-- Diisi via renderSvgChart langsung ke elemen proposal -->
         </div>
 
-        <div class="prose-text" style="font-size: 8pt; color: #475569; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 10px;">
+        <div class="prose-text" style="font-size: 8pt; color: #475569; line-height: 1.5; margin-top: 4px;">
           <p style="margin: 0;"><strong>Keterangan Diagram Kurva S:</strong> Garis biru mewakili Rencana Target Fisik Kumulatif (%), garis hijau mewakili Realisasi Fisik Aktual Lapangan (%), dan diagram batang pada bagian dasar grafik memperlihatkan bobot rencana mingguan/harian proporsional.</p>
         </div>
 
@@ -745,35 +754,35 @@ window.ProposalGen = (function() {
           Ditetapkan di: <strong>${sig.docCity || proj.location || 'Indonesia'}</strong>, Tanggal: <strong>${docDateStr}</strong>
         </div>
 
-        <!-- Kolom Tanda Tangan Tiga Pihak Bersih Minimalis & Elegan -->
-        <div class="signature-clean-grid three-parties mt-1" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; text-align: center;">
-          <div class="sig-block" style="border: none !important; background: transparent !important; padding: 2px 6px;">
-            <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px;">PEMBERI TUGAS / OWNER</div>
-            <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Menyetujui &amp; Menetapkan:</div>
-            <div class="sig-space" style="height: 44px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: underline;">( ${(sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || 'Ir. Budi Santoso, M.T.')} )</div>
-            <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas'}</div>
-            ${sig.ownerNip && sig.ownerNip !== '-' ? `<div style="font-size: 7pt; color: #64748b; margin-top: 1px;">NIP/NIK: ${sig.ownerNip}</div>` : ''}
-          </div>
-
-          <div class="sig-block" style="border: none !important; background: transparent !important; padding: 2px 6px;">
-            <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px;">KONSULTAN PERENCANA</div>
-            <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Direncanakan &amp; Dihitung:</div>
-            <div class="sig-space" style="height: 44px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: underline;">( ${(sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.'} )</div>
-            <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.consultantTitle || 'Konsultan Perencana / Team Leader'}</div>
-            <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${sig.consultantCompany || proj.consultant || 'PT. Sarana Buana Konsultan'}</div>
-          </div>
-
-          <div class="sig-block" style="border: none !important; background: transparent !important; padding: 2px 6px;">
-            <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px;">KONTRAKTOR PELAKSANA</div>
-            <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Diajukan &amp; Dilaksanakan:</div>
-            <div class="sig-space" style="height: 44px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: underline;">( ${(sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.'} )</div>
-            <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.contractorTitle || 'Direktur Utama'}</div>
-            <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${companyDisplay}</div>
-          </div>
-        </div>
+        <!-- Kolom Tanda Tangan Tiga Pihak Bersih Minimalis & Sejajar 3 Kolom Horizontal -->
+        <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 20pt !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+          <tr style="border: none !important; background: transparent !important;">
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 8px !important; background: transparent !important;">
+              <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px; text-transform: uppercase;">PEMBERI TUGAS / OWNER</div>
+              <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Menyetujui &amp; Menetapkan:</div>
+              <div style="height: 44px;"></div>
+              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${(sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || 'Ir. Budi Santoso, M.T.')} )</div>
+              <div style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas'}</div>
+              ${sig.ownerNip && sig.ownerNip !== '-' ? `<div style="font-size: 7pt; color: #64748b; margin-top: 1px;">NIP/NIK: ${sig.ownerNip}</div>` : ''}
+            </td>
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 8px !important; background: transparent !important;">
+              <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px; text-transform: uppercase;">KONSULTAN PERENCANA</div>
+              <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Direncanakan &amp; Dihitung:</div>
+              <div style="height: 44px;"></div>
+              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${(sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.'} )</div>
+              <div style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.consultantTitle || 'Konsultan Perencana / Team Leader'}</div>
+              <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${sig.consultantCompany || proj.consultant || 'PT. Sarana Buana Konsultan'}</div>
+            </td>
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 8px !important; background: transparent !important;">
+              <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px; text-transform: uppercase;">KONTRAKTOR PELAKSANA</div>
+              <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Diajukan &amp; Dilaksanakan:</div>
+              <div style="height: 44px;"></div>
+              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${(sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.'} )</div>
+              <div style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.contractorTitle || 'Direktur Utama'}</div>
+              <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${companyDisplay}</div>
+            </td>
+          </tr>
+        </table>
 
         <!-- Running Footer Halaman 9 -->
         <div class="print-footer-block" style="margin-top: auto; border-top: 0.75pt solid #cbd5e1; padding-top: 6px; display: flex; justify-content: space-between; font-size: 8pt; color: #475569;">

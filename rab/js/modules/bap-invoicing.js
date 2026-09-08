@@ -418,33 +418,32 @@ window.BapInvoicing = (function() {
         </div>
 
         <div>
-          <!-- 7. Tanda Tangan Tiga Pihak (Sesuai Format Rujukan Image 2) -->
-          <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; margin-bottom: 6px;">
-            <div style="flex: 1; text-align: center;">
-              <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">PEMBERI TUGAS / OWNER</div>
-              <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Menyetujui &amp; Menetapkan:</div>
-              <div style="height: 42px;"></div>
-              <div style="font-weight: 700; font-size: 8pt; color: #0f172a;">( ${ownerName} )</div>
-              <div style="border-bottom: 1.5px solid #0f172a; width: 85%; margin: 3px auto 4px auto;"></div>
-              <div style="font-size: 7pt; color: #64748b;">${ownerTitle}</div>
-            </div>
-            <div style="flex: 1; text-align: center;">
-              <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">KONSULTAN PERENCANA</div>
-              <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Direncanakan / Diawasi:</div>
-              <div style="height: 42px;"></div>
-              <div style="font-weight: 700; font-size: 8pt; color: #0f172a;">( ${consultantSigner} )</div>
-              <div style="border-bottom: 1.5px solid #0f172a; width: 85%; margin: 3px auto 4px auto;"></div>
-              <div style="font-size: 7pt; color: #64748b;">${consultantCompany}</div>
-            </div>
-            <div style="flex: 1; text-align: center;">
-              <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">KONTRAKTOR PELAKSANA</div>
-              <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Diajukan:</div>
-              <div style="height: 42px;"></div>
-              <div style="font-weight: 700; font-size: 8pt; color: #0f172a;">( ${contractorSigner} )</div>
-              <div style="border-bottom: 1.5px solid #0f172a; width: 85%; margin: 3px auto 4px auto;"></div>
-              <div style="font-size: 7pt; color: #64748b;">${contractorTitle} &bull; ${contractorCompany}</div>
-            </div>
-          </div>
+          <!-- 7. Tanda Tangan Tiga Pihak (Format Tabel Sejajar 3 Kolom Bebas Garis Bawah) -->
+          <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 8px !important; margin-bottom: 6px !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+            <tr>
+              <td style="width: 33.33% !important; text-align: center; vertical-align: top; border: none; padding: 0 8px;">
+                <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">PEMBERI TUGAS / OWNER</div>
+                <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Menyetujui &amp; Menetapkan:</div>
+                <div style="height: 40px;"></div>
+                <div style="font-weight: 700; font-size: 8pt; color: #0f172a; margin-bottom: 3px; text-decoration: none !important;">( ${ownerName} )</div>
+                <div style="font-size: 7pt; color: #64748b;">${ownerTitle}</div>
+              </td>
+              <td style="width: 33.33% !important; text-align: center; vertical-align: top; border: none; padding: 0 8px;">
+                <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">KONSULTAN PERENCANA</div>
+                <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Direncanakan / Diawasi:</div>
+                <div style="height: 40px;"></div>
+                <div style="font-weight: 700; font-size: 8pt; color: #0f172a; margin-bottom: 3px; text-decoration: none !important;">( ${consultantSigner} )</div>
+                <div style="font-size: 7pt; color: #64748b;">${consultantCompany}</div>
+              </td>
+              <td style="width: 33.33% !important; text-align: center; vertical-align: top; border: none; padding: 0 8px;">
+                <div style="font-weight: 800; font-size: 8pt; color: #0f172a; text-transform: uppercase;">KONTRAKTOR PELAKSANA</div>
+                <div style="font-size: 7pt; color: #475569; margin-bottom: 2px;">Diajukan:</div>
+                <div style="height: 40px;"></div>
+                <div style="font-weight: 700; font-size: 8pt; color: #0f172a; margin-bottom: 3px; text-decoration: none !important;">( ${contractorSigner} )</div>
+                <div style="font-size: 7pt; color: #64748b;">${contractorTitle} &bull; ${contractorCompany}</div>
+              </td>
+            </tr>
+          </table>
 
           <!-- 8. Running Footer Standar Dokumen Sah -->
           <div style="border-top: 1.5px solid #0f172a; padding-top: 3px; display: flex; justify-content: space-between; font-size: 6.5pt; color: #64748b; margin-top: 6px;">

@@ -47,19 +47,19 @@ window.RabCalculator = (function() {
         const vol = Number(itm.volume) || 0;
         let itmPrice = Number(itm.price !== undefined ? itm.price : itm.unitPrice) || 0;
         let direct = itm.directCost;
-        if (direct === undefined || direct === null || isNaN(direct) || direct === 0) {
+        // Direct cost tidak boleh undefined, null, NaN, <= 0, atau >= itmPrice (karena harga jual sudah mencakup overhead)
+        if (direct === undefined || direct === null || isNaN(direct) || direct <= 0 || direct >= itmPrice) {
           if (window.AhspEngine) {
-            const ahsp = window.AhspEngine.getAhspById(itm.ahspId || itm.code);
+            const ahsp = window.AhspEngine.getAhspById(itm.ahspId || itm.code, itm);
             if (ahsp) {
               const hspInfo = window.AhspEngine.calculateHsp(ahsp, currentOverhead);
               direct = hspInfo.dTotal;
-              itm.directCost = direct;
             }
           }
-          if (!direct) {
+          if (!direct || direct >= itmPrice || direct <= 0) {
             direct = Math.round(itmPrice / (1 + (currentOverhead / 100)));
-            itm.directCost = direct;
           }
+          itm.directCost = direct;
         }
         totalDirectCost += Math.round(direct * vol);
       });
@@ -67,7 +67,8 @@ window.RabCalculator = (function() {
 
     // Pastikan realCost konsisten dengan total subtotal divisi
     let realCost = divisionSum > 0 ? divisionSum : (totalDirectCost + Math.round(totalDirectCost * (currentOverhead / 100)));
-    if (totalDirectCost === 0 && realCost > 0) {
+    // Total direct cost harus selalu lebih kecil dari realCost dan > 0 jika realCost > 0
+    if (totalDirectCost <= 0 || totalDirectCost >= realCost) {
       totalDirectCost = Math.round(realCost / (1 + (currentOverhead / 100)));
     }
     const overheadAmount = Math.max(0, realCost - totalDirectCost);
@@ -87,6 +88,15 @@ window.RabCalculator = (function() {
       ? window.CurrencyUtil.terbilang(grandTotal)
       : "";
 
+    // Hitung Biaya Konstruksi per m2 (Cost per m2) berbasis Luas Rencana Baru / Luas Rehab
+    const isRehab = proj.projectType === 'rehab';
+    const effectiveArea = isRehab 
+      ? (Number(proj.rehabArea) || Number(proj.buildingArea) || 0)
+      : (Number(proj.buildingArea) || 0);
+    
+    const costPerM2 = effectiveArea > 0 ? Math.round(grandTotal / effectiveArea) : 0;
+    const costPerM2Real = effectiveArea > 0 ? Math.round(realCost / effectiveArea) : 0;
+
     proj.realCost = realCost;
     proj.totalDirectCost = totalDirectCost;
     proj.overheadAmount = overheadAmount;
@@ -94,6 +104,9 @@ window.RabCalculator = (function() {
     proj.taxAmount = ppnAmount;
     proj.grandTotal = grandTotal;
     proj.roundedCost = grandTotal;
+    proj.costPerM2 = costPerM2;
+    proj.costPerM2Real = costPerM2Real;
+    proj.effectiveArea = effectiveArea;
 
     return {
       realCost,
@@ -107,7 +120,11 @@ window.RabCalculator = (function() {
       taxAmount: ppnAmount,
       grandTotal,
       roundedCost: grandTotal,
-      terbilangStr
+      terbilangStr,
+      costPerM2,
+      costPerM2Real,
+      effectiveArea,
+      isRehab
     };
   }
 
@@ -260,7 +277,7 @@ window.RabCalculator = (function() {
 
         let ahsp = null;
         if (window.AhspEngine) {
-          ahsp = window.AhspEngine.getAhspById(itm.ahspId || itm.code);
+          ahsp = window.AhspEngine.getAhspById(itm.ahspId || itm.code, itm);
         }
 
         if (ahsp) {
@@ -268,7 +285,10 @@ window.RabCalculator = (function() {
           itmPrice = hspInfo.finalHsp;
           totalDirectCost += (hspInfo.dTotal * vol);
         } else {
-          const baseDirect = itm.directCost || (itmPrice / (1 + (ovRate / 100)));
+          let baseDirect = itm.directCost;
+          if (!baseDirect || isNaN(baseDirect) || baseDirect <= 0 || baseDirect >= itmPrice) {
+            baseDirect = Math.round(itmPrice / (1 + (ovRate / 100)));
+          }
           itmPrice = Math.floor(baseDirect * (1 + (ovRate / 100)));
           totalDirectCost += (baseDirect * vol);
         }
@@ -285,6 +305,13 @@ window.RabCalculator = (function() {
       ? window.CurrencyUtil.terbilang(grandTotal) 
       : "";
 
+    const isRehab = proj.projectType === 'rehab';
+    const effectiveArea = isRehab 
+      ? (Number(proj.rehabArea) || Number(proj.buildingArea) || 0)
+      : (Number(proj.buildingArea) || 0);
+    const costPerM2 = effectiveArea > 0 ? Math.round(grandTotal / effectiveArea) : 0;
+    const costPerM2Real = effectiveArea > 0 ? Math.round(realCost / effectiveArea) : 0;
+
     return {
       totalDirectCost,
       overheadPercent: ovRate,
@@ -295,7 +322,11 @@ window.RabCalculator = (function() {
       taxAmount: ppnAmount,
       grandTotal,
       roundedCost: grandTotal,
-      terbilangStr
+      terbilangStr,
+      costPerM2,
+      costPerM2Real,
+      effectiveArea,
+      isRehab
     };
   }
 
@@ -326,7 +357,7 @@ window.RabCalculator = (function() {
 
         let ahsp = null;
         if (window.AhspEngine) {
-          ahsp = window.AhspEngine.getAhspById(itm.ahspId || itm.code);
+          ahsp = window.AhspEngine.getAhspById(itm.ahspId || itm.code, itm);
         }
 
         if (ahsp) {
@@ -336,7 +367,10 @@ window.RabCalculator = (function() {
           itm.directCost = hspInfo.dTotal;
           totalDirectCost += (hspInfo.dTotal * vol);
         } else {
-          const baseDirect = itm.directCost || (itmPrice / (1 + (currentOverhead / 100)));
+          let baseDirect = itm.directCost;
+          if (!baseDirect || isNaN(baseDirect) || baseDirect <= 0 || baseDirect >= itmPrice) {
+            baseDirect = Math.round(itmPrice / (1 + (currentOverhead / 100)));
+          }
           itm.directCost = baseDirect;
           itmPrice = Math.floor(baseDirect * (1 + (currentOverhead / 100)));
           itm.price = itmPrice;
@@ -366,11 +400,21 @@ window.RabCalculator = (function() {
       ? window.CurrencyUtil.terbilang(grandTotal) 
       : "";
 
+    const isRehab = proj.projectType === 'rehab';
+    const effectiveArea = isRehab 
+      ? (Number(proj.rehabArea) || Number(proj.buildingArea) || 0)
+      : (Number(proj.buildingArea) || 0);
+    const costPerM2 = effectiveArea > 0 ? Math.round(grandTotal / effectiveArea) : 0;
+    const costPerM2Real = effectiveArea > 0 ? Math.round(realCost / effectiveArea) : 0;
+
     proj.realCost = realCost;
     proj.totalDirectCost = totalDirectCost;
     proj.overheadAmount = overheadAmount;
     proj.ppnAmount = ppnAmount;
     proj.grandTotal = grandTotal;
+    proj.costPerM2 = costPerM2;
+    proj.costPerM2Real = costPerM2Real;
+    proj.effectiveArea = effectiveArea;
 
     if (window.ProjectManager) {
       window.ProjectManager.updateActiveProject(proj);
@@ -389,7 +433,11 @@ window.RabCalculator = (function() {
       taxAmount: ppnAmount,
       grandTotal,
       roundedCost: grandTotal,
-      terbilangStr
+      terbilangStr,
+      costPerM2,
+      costPerM2Real,
+      effectiveArea,
+      isRehab
     };
   }
 

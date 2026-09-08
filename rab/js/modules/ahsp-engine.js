@@ -8,6 +8,7 @@
 window.AhspEngine = (function() {
   let masterAhsp = [];
   let customAhspMap = {}; // { ahspId: ahspObject }
+  let selectedBidang = "ALL";
   let selectedCategory = "ALL";
   let searchQuery = "";
   let onlyUsedFilter = false;
@@ -22,10 +23,22 @@ window.AhspEngine = (function() {
     }
   }
 
+  function getBidangs() {
+    const bSet = new Set();
+    masterAhsp.forEach(a => {
+      if (a.bidang) bSet.add(a.bidang);
+    });
+    return Array.from(bSet);
+  }
+
   function getCategories() {
     const cats = new Set();
     masterAhsp.forEach(a => {
-      if (a.category) cats.add(a.category);
+      if (selectedBidang && selectedBidang !== "ALL") {
+        if (a.bidang === selectedBidang && a.category) cats.add(a.category);
+      } else {
+        if (a.category) cats.add(a.category);
+      }
     });
     return Array.from(cats);
   }
@@ -98,13 +111,62 @@ window.AhspEngine = (function() {
   }
 
   // Dapatkan detail AHSP efektif (custom jika ada, atau master bawaan)
-  function getAhspById(id) {
+  function getAhspById(id, itemContext = null) {
     if (!id) return null;
-    if (customAhspMap && customAhspMap[id]) {
-      return customAhspMap[id];
+    
+    let targetId = String(id).trim();
+    
+    // Normalisasi kontekstual: jika item arsitektural terasosiasi dengan ID/kode elektrikal/mekanikal lawas
+    const ctxName = (typeof itemContext === 'string' ? itemContext : (itemContext && itemContext.name ? itemContext.name : '')).toLowerCase();
+    const isKeramikContext = ctxName.includes('keramik') || ctxName.includes('tile') || ctxName.includes('plin') || ctxName.includes('lantai') || ctxName.includes('dinding');
+    const isKusenContext = ctxName.includes('kusen') || ctxName.includes('aluminium');
+    const isKacaContext = ctxName.includes('kaca') || ctxName.includes('tempered');
+    const isPasirContext = ctxName.includes('pasir') || ctxName.includes('urug');
+    const isBouwplankContext = ctxName.includes('bouwplank');
+    const isCatContext = ctxName.includes('cat') || ctxName.includes('pengecatan');
+    const isPipaContext = ctxName.includes('pipa') || ctxName.includes('air bersih');
+    const isAtapContext = ctxName.includes('baja ringan') || ctxName.includes('atap');
+    const isLampuContext = ctxName.includes('lampu') || ctxName.includes('titik lampu');
+    const isStopKontakContext = ctxName.includes('stop kontak');
+    const isKantorContext = ctxName.includes('kantor') || ctxName.includes('gudang');
+
+    if (isKeramikContext) {
+      if (targetId === 'AHSP-1063' || targetId === '5.1.2.1' || ctxName.includes('30x30')) {
+        targetId = 'AHSP-0574';
+      } else if (targetId === 'AHSP-1085' || targetId === '5.1.3.1' || ctxName.includes('30x60')) {
+        targetId = 'AHSP-0608B';
+      } else if (targetId === 'AHSP-1097' || targetId === '5.1.4.1' || ctxName.includes('plin')) {
+        targetId = 'AHSP-0535';
+      } else if (targetId === '5.1.1.1' || ctxName.includes('60x60')) {
+        targetId = 'AHSP-0532';
+      }
+    } else if (isKusenContext && (targetId === 'AHSP-1538' || targetId === '6.1.1.1')) {
+      targetId = 'AHSP-0647';
+    } else if (isKacaContext && (targetId === 'AHSP-1588' || targetId === '6.1.5.1')) {
+      targetId = 'AHSP-0682';
+    } else if (isPasirContext && (targetId === 'AHSP-0177' || targetId === '2.1.2.1')) {
+      targetId = 'AHSP-0086';
+    } else if (isBouwplankContext && (targetId === 'AHSP-0007' || targetId === '1.1.2.1')) {
+      targetId = 'AHSP-0032';
+    } else if (isKantorContext && (targetId === 'AHSP-0031' || targetId === '1.1.4.1')) {
+      targetId = 'AHSP-0031B';
+    } else if (isCatContext && (targetId === 'AHSP-0910' || targetId === 'AHSP-0920' || targetId === 'AHSP-0930' || targetId.startsWith('10.1'))) {
+      targetId = ctxName.includes('eksterior') ? 'AHSP-0494' : (ctxName.includes('plafon') ? 'AHSP-0505' : 'AHSP-0493');
+    } else if (isPipaContext && (targetId === 'AHSP-2202' || targetId.startsWith('8.1.3'))) {
+      targetId = 'AHSP-1568';
+    } else if (isAtapContext && (targetId === 'AHSP-2128' || targetId.startsWith('7.1.1'))) {
+      targetId = 'AHSP-0173';
+    } else if (isLampuContext && (targetId === 'AHSP-2253' || targetId.startsWith('9.1.1'))) {
+      targetId = 'AHSP-1153';
+    } else if (isStopKontakContext && (targetId === 'AHSP-2275' || targetId.startsWith('9.1.2'))) {
+      targetId = 'AHSP-1069';
+    }
+
+    if (customAhspMap && customAhspMap[targetId]) {
+      return customAhspMap[targetId];
     }
     const list = (masterAhsp && masterAhsp.length > 0) ? masterAhsp : (window.MASTER_AHSP || []);
-    const found = list.find(a => a.id === id || a.code === id || (a.code && id && String(a.code).trim() === String(id).trim()));
+    const found = list.find(a => a.id === targetId || a.code === targetId || (a.code && targetId && String(a.code).trim() === String(targetId).trim()));
     if (found) {
       return JSON.parse(JSON.stringify(found));
     }
@@ -199,6 +261,162 @@ window.AhspEngine = (function() {
     return false;
   }
 
+  // Tambah Komponen ke AHSP (dari Katalog atau Kustom)
+  function addComponentToAhsp(ahspId, comp) {
+    let ahsp = getAhspById(ahspId);
+    if (!ahsp) return null;
+
+    if (!customAhspMap[ahsp.id]) {
+      ahsp = JSON.parse(JSON.stringify(ahsp));
+      customAhspMap[ahsp.id] = ahsp;
+    } else {
+      ahsp = customAhspMap[ahsp.id];
+    }
+
+    if (!ahsp.components) ahsp.components = [];
+    const numKoef = Number(comp.koef) || 0;
+    const numPrice = Number(comp.price) || 0;
+    const newComp = {
+      section: comp.section || "BAHAN MATERIAL",
+      name: comp.name || "Komponen Baru",
+      code: comp.code || "-",
+      unit: comp.unit || "satuan",
+      koef: numKoef,
+      price: numPrice,
+      total: Math.round(numKoef * numPrice * 100) / 100
+    };
+    ahsp.components.push(newComp);
+    return saveEditedAhsp(ahsp);
+  }
+
+  // Hapus Komponen dari AHSP
+  function removeComponentFromAhsp(ahspId, compIdx) {
+    let ahsp = getAhspById(ahspId);
+    if (!ahsp) return null;
+
+    if (!customAhspMap[ahsp.id]) {
+      ahsp = JSON.parse(JSON.stringify(ahsp));
+      customAhspMap[ahsp.id] = ahsp;
+    } else {
+      ahsp = customAhspMap[ahsp.id];
+    }
+
+    if (ahsp.components && ahsp.components[compIdx] !== undefined) {
+      ahsp.components.splice(compIdx, 1);
+      return saveEditedAhsp(ahsp);
+    }
+    return ahsp;
+  }
+
+  // Global Price Cascade: Update harga material/upah/alat di katalog & seluruh AHSP/RAB terkait
+  function cascadeMaterialPrice(matCode, matName, newPrice, sourceAhspId = null) {
+    const numPrice = Number(newPrice);
+    if (isNaN(numPrice) || numPrice < 0) return { success: false, affectedAhspCount: 0, affectedItemCount: 0 };
+
+    const cCode = (matCode || '').trim();
+    const cName = (matName || '').trim().toLowerCase();
+    let affectedAhspCount = 0;
+    let affectedItemCount = 0;
+
+    // 1. Update di CatalogPricing override
+    if (window.CatalogPricing && window.CatalogPricing.setOverridePrice) {
+      if (cCode && cCode !== '-') window.CatalogPricing.setOverridePrice(cCode, numPrice);
+      const allMats = window.MASTER_MATERIALS || [];
+      const matchedMats = allMats.filter(m => 
+        (cCode && cCode !== '-' && m.code === cCode) || 
+        (cName && (m.name || '').trim().toLowerCase() === cName)
+      );
+      matchedMats.forEach(m => {
+        window.CatalogPricing.setOverridePrice(m.id, numPrice);
+        if (m.code) window.CatalogPricing.setOverridePrice(m.code, numPrice);
+      });
+    }
+
+    const proj = window.ProjectManager ? window.ProjectManager.getActiveProject() : null;
+
+    // 2. Cascade ke seluruh AHSP di customAhspMap
+    for (let id in customAhspMap) {
+      const ahsp = customAhspMap[id];
+      let ahspModified = false;
+      if (ahsp.components && Array.isArray(ahsp.components)) {
+        ahsp.components.forEach(comp => {
+          const compCodeMatch = cCode && cCode !== '-' && comp.code && comp.code.trim() === cCode;
+          const compNameMatch = cName && comp.name && comp.name.trim().toLowerCase() === cName;
+          if (compCodeMatch || compNameMatch) {
+            comp.price = numPrice;
+            comp.total = Math.round((Number(comp.koef) || 0) * numPrice * 100) / 100;
+            ahspModified = true;
+          }
+        });
+      }
+      if (ahspModified) {
+        ahsp.is_edited = true;
+        const calc = calculateHsp(ahsp);
+        ahsp.hsp = calc.finalHsp;
+        affectedAhspCount++;
+      }
+    }
+
+    // 3. Cascade ke seluruh AHSP yang dipakai dalam RAB aktif (meskipun belum masuk customAhspMap)
+    if (proj && proj.divisions && Array.isArray(proj.divisions)) {
+      proj.divisions.forEach(div => {
+        (div.items || []).forEach(itm => {
+          const targetAhspId = itm.ahspId || itm.code;
+          if (targetAhspId) {
+            let ahsp = customAhspMap[targetAhspId];
+            if (!ahsp) {
+              const list = (masterAhsp && masterAhsp.length > 0) ? masterAhsp : (window.MASTER_AHSP || []);
+              const orig = list.find(a => a.id === targetAhspId || a.code === targetAhspId);
+              if (orig && orig.components) {
+                const hasComp = orig.components.some(comp => 
+                  (cCode && cCode !== '-' && comp.code && comp.code.trim() === cCode) ||
+                  (cName && comp.name && comp.name.trim().toLowerCase() === cName)
+                );
+                if (hasComp) {
+                  ahsp = JSON.parse(JSON.stringify(orig));
+                  ahsp.is_edited = true;
+                  customAhspMap[ahsp.id] = ahsp;
+                  ahsp.components.forEach(comp => {
+                    if ((cCode && cCode !== '-' && comp.code && comp.code.trim() === cCode) || (cName && comp.name && comp.name.trim().toLowerCase() === cName)) {
+                      comp.price = numPrice;
+                      comp.total = Math.round((Number(comp.koef) || 0) * numPrice * 100) / 100;
+                    }
+                  });
+                  const calc = calculateHsp(ahsp);
+                  ahsp.hsp = calc.finalHsp;
+                  affectedAhspCount++;
+                }
+              }
+            }
+
+            if (ahsp) {
+              itm.price = ahsp.hsp;
+              itm.total = Math.round((Number(itm.volume) || 0) * itm.price);
+              affectedItemCount++;
+            }
+          }
+        });
+      });
+
+      proj.customAhsp = customAhspMap;
+      if (window.ProjectManager && window.ProjectManager.updateActiveProject) {
+        window.ProjectManager.updateActiveProject(proj);
+      }
+    }
+
+    // 4. Hitung ulang total RAB
+    if (window.RabCalculator && window.RabCalculator.calculateProjectRab && proj) {
+      window.RabCalculator.calculateProjectRab(proj);
+    }
+
+    return {
+      success: true,
+      affectedAhspCount,
+      affectedItemCount,
+      newPrice: numPrice
+    };
+  }
+
   // Filter daftar AHSP
   function getFilteredAhsp(limit = 100, offset = 0) {
     // Gabungkan custom AHSP yang baru dibuat dengan master AHSP
@@ -211,17 +429,26 @@ window.AhspEngine = (function() {
       allList = allList.filter(a => usedCodes.has(a.id) || usedCodes.has(a.code));
     }
 
-    // Filter Kategori
+    // Filter Bidang (Cipta Karya, Bina Marga, Sumber Daya Air, SMKK)
+    if (selectedBidang && selectedBidang !== "ALL") {
+      allList = allList.filter(a => a.bidang === selectedBidang);
+    }
+
+    // Filter Kategori / Sub-Kategori
     if (selectedCategory && selectedCategory !== "ALL") {
       allList = allList.filter(a => a.category === selectedCategory);
     }
 
-    // Pencarian
+    // Pencarian Multi-Keyword (Nama, Kode, Bidang, Divisi, Tags)
     if (searchQuery && searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase().trim();
       allList = allList.filter(a => 
         (a.name && a.name.toLowerCase().includes(q)) || 
-        (a.code && a.code.toLowerCase().includes(q))
+        (a.code && a.code.toLowerCase().includes(q)) ||
+        (a.bidang && a.bidang.toLowerCase().includes(q)) ||
+        (a.divisi && a.divisi.toLowerCase().includes(q)) ||
+        (a.category && a.category.toLowerCase().includes(q)) ||
+        (a.tags && Array.isArray(a.tags) && a.tags.some(t => t.toLowerCase().includes(q)))
       );
     }
 
@@ -374,6 +601,9 @@ window.AhspEngine = (function() {
     saveEditedAhsp,
     resetToStandard,
     createCustomAhsp,
+    addComponentToAhsp,
+    removeComponentFromAhsp,
+    cascadeMaterialPrice,
     deleteCustomAhsp,
     getFilteredAhsp,
     setOnlyUsedFilter,
@@ -382,6 +612,9 @@ window.AhspEngine = (function() {
     getSearch: () => searchQuery,
     setCategory,
     getCategory: () => selectedCategory,
+    getBidangs,
+    setBidang: (b) => { selectedBidang = b || "ALL"; },
+    getBidang: () => selectedBidang,
     exportAhspJson,
     importAhspJson
   };

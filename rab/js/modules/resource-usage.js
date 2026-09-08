@@ -104,10 +104,10 @@ window.ResourceUsage = (function() {
         let ahsp = null;
         if (window.AhspEngine) {
           if (item.ahspId) {
-            ahsp = window.AhspEngine.getAhspById(item.ahspId);
+            ahsp = window.AhspEngine.getAhspById(item.ahspId, item);
           }
           if (!ahsp && item.code) {
-            ahsp = window.AhspEngine.getAhspById(item.code);
+            ahsp = window.AhspEngine.getAhspById(item.code, item);
           }
         }
 

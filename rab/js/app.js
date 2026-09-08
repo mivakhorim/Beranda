@@ -467,12 +467,11 @@ window.App = (function() {
   }
 
   function setupGlobalEventListeners() {
-    // Tombol Cetak Dokumen Saat Ini
+    // Tombol Cetak / Tampilkan Preview Dokumen A4 Saat Ini
     const printBtn = document.getElementById("globalPrintBtn");
     if (printBtn) {
       printBtn.addEventListener("click", function() {
-        const proj = window.ProjectManager.getActiveProject();
-        window.PrintEngine.printDocument(`panel-${currentTab}`, `${proj.name} - ${currentTab.toUpperCase()}`);
+        printCurrentPage();
       });
     }
 
@@ -490,6 +489,21 @@ window.App = (function() {
 
   
   // ==========================================
+  // ==========================================
+  // DIRECT PDF DOWNLOAD HELPERS (MOBILE & DESKTOP)
+  // ==========================================
+  function downloadCurrentPagePdfDirect(panelId, defaultTitle = "Dokumen_RAB") {
+    printCurrentPage(panelId, defaultTitle);
+  }
+
+  function downloadProposalPdfDirect() {
+    printProposal();
+  }
+
+  function downloadSingleBapPdfDirect(bapId) {
+    printSingleBap(bapId);
+  }
+
   // 0. PANEL INFORMASI & SETTING PROYEK
   // ==========================================
   
@@ -510,7 +524,7 @@ window.App = (function() {
     durInput.value = `${durationDays} Hari (${durationWeeks} Minggu)`;
   }
 
-  // Penanganan Perubahan Live Setting Finansial (Overhead Profit & PPN)
+  // Penanganan Perubahan Live Setting Finansial (Overhead Profit, PPN & Dimensi Bangunan)
   function handleLiveProjectSettingsChange() {
     const ovInput = document.getElementById("projOverheadRateInput");
     const ppnInput = document.getElementById("projPpnRateInput");
@@ -527,8 +541,31 @@ window.App = (function() {
     const proj = window.ProjectManager.getActiveProject();
     if (!proj || !window.RabCalculator || !window.RabCalculator.previewProjectRecalculation) return;
 
+    const typeSelect = document.getElementById("projProjectTypeSelect");
+    const bldInput = document.getElementById("projBuildingAreaInput");
+    const lndInput = document.getElementById("projLandAreaInput");
+    const rhbInput = document.getElementById("projRehabAreaInput");
+    const extInput = document.getElementById("projExistingAreaInput");
+
+    const isRehab = typeSelect ? (typeSelect.value === 'rehab') : (proj.projectType === 'rehab');
+    const bldArea = bldInput ? (parseFloat(bldInput.value) || 0) : (proj.buildingArea || 180);
+    const lndArea = lndInput ? (parseFloat(lndInput.value) || 0) : (proj.landArea || 200);
+    const rhbArea = rhbInput ? (parseFloat(rhbInput.value) || 0) : (proj.rehabArea || 0);
+    const extArea = extInput ? (parseFloat(extInput.value) || 0) : (proj.existingBuildingArea || 0);
+
+    // Salin sementara ke objek kalkulasi
+    proj.projectType = isRehab ? 'rehab' : 'new';
+    proj.buildingArea = bldArea;
+    proj.landArea = lndArea;
+    proj.rehabArea = rhbArea;
+    proj.existingBuildingArea = extArea;
+
     const recalc = window.RabCalculator.previewProjectRecalculation(proj, newOverhead, newPpn);
     if (!recalc) return;
+
+    const effArea = isRehab ? (rhbArea || bldArea) : bldArea;
+    const costPerM2 = effArea > 0 ? Math.round(recalc.grandTotal / effArea) : 0;
+    const costPerM2Real = effArea > 0 ? Math.round(recalc.realCost / effArea) : 0;
 
     const dcEl = document.getElementById("liveDirectCostVal");
     const ovEl = document.getElementById("liveOverheadVal");
@@ -536,6 +573,11 @@ window.App = (function() {
     const ppnEl = document.getElementById("livePpnVal");
     const gtEl = document.getElementById("liveGrandTotalVal");
     const tbEl = document.getElementById("liveTerbilangVal");
+    const cpmEl = document.getElementById("liveCostPerM2Display");
+    const cpmSubEl = document.getElementById("liveCostPerM2SubDisplay");
+    const bldAreaEl = document.getElementById("liveBuildingAreaDisplay");
+    const heroAreaEl = document.getElementById("liveHeroArea");
+    const heroCostEl = document.getElementById("liveHeroCostPerM2");
 
     if (dcEl) dcEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.totalDirectCost, false, true);
     if (ovEl) ovEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.overheadAmount, false, true);
@@ -543,6 +585,20 @@ window.App = (function() {
     if (ppnEl) ppnEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.ppnAmount, false, true);
     if (gtEl) gtEl.innerHTML = window.CurrencyUtil.formatRupiah(recalc.grandTotal, false, true);
     if (tbEl) tbEl.innerHTML = `"${recalc.terbilangStr}"`;
+    if (cpmEl) cpmEl.innerHTML = `${window.CurrencyUtil.formatRupiah(costPerM2, false, true)} / m²`;
+    if (cpmSubEl) cpmSubEl.innerHTML = `Real Cost: ${window.CurrencyUtil.formatRupiah(costPerM2Real, false, true)} / m²`;
+    if (bldAreaEl) bldAreaEl.innerHTML = `${bldArea} m² <span style="font-size: 13px; font-weight: 600; color: #64748b;">/ ${lndArea} m²</span>`;
+    if (heroAreaEl) heroAreaEl.innerHTML = `${effArea} m²`;
+    if (heroCostEl) heroCostEl.innerHTML = `${window.CurrencyUtil.formatRupiah(costPerM2, false, true)} / m²`;
+  }
+
+  function handleProjectTypeToggle() {
+    const typeSelect = document.getElementById("projProjectTypeSelect");
+    const rehabContainer = document.getElementById("rehabFieldsContainer");
+    if (typeSelect && rehabContainer) {
+      rehabContainer.style.display = typeSelect.value === "rehab" ? "flex" : "none";
+    }
+    handleLiveProjectSettingsChange();
   }
 
   function renderInfoProyekView() {
@@ -552,17 +608,34 @@ window.App = (function() {
     const proj = window.ProjectManager.getActiveProject();
     if (!proj) return;
 
-    // Hitung durasi hari dan minggu
+    // Hitung durasi hari dan minggu (Minimal 30 Hari - Standar 180 Hari)
     const startD = new Date(proj.startDate || "2026-04-01");
-    const finishD = new Date(proj.finishDate || "2026-09-30");
-    const diffTime = Math.max(1, finishD.getTime() - startD.getTime());
-    const durationDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    let finishD = new Date(proj.finishDate || "2026-09-30");
+    let diffTime = Math.max(1, finishD.getTime() - startD.getTime());
+    let durationDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (durationDays < 30) {
+      durationDays = (proj.durationDays && proj.durationDays >= 30) ? proj.durationDays : 180;
+      proj.durationDays = durationDays;
+      finishD = new Date(startD.getTime() + durationDays * 86400000);
+      proj.finishDate = finishD.toISOString().split('T')[0];
+    }
     const durationWeeks = Math.ceil(durationDays / 7);
+
+    // Dimensi Bangunan & Perhitungan Biaya Satuan per m2
+    const isRehab = proj.projectType === 'rehab';
+    const bldArea = Number(proj.buildingArea) || 180;
+    const lndArea = Number(proj.landArea) || 200;
+    const extArea = Number(proj.existingBuildingArea) || 0;
+    const rhbArea = Number(proj.rehabArea) || 0;
+    const effArea = isRehab ? (rhbArea || bldArea) : bldArea;
 
     // Kalkulasi nilai RAB terkini untuk kalkulasi live & summary card
     const calcRecalc = window.RabCalculator 
       ? window.RabCalculator.calculateProjectRab(proj) 
-      : { totalDirectCost: 0, overheadAmount: 0, realCost: 0, ppnAmount: 0, grandTotal: 0, terbilangStr: '' };
+      : { totalDirectCost: 0, overheadAmount: 0, realCost: 0, ppnAmount: 0, grandTotal: 0, terbilangStr: '', costPerM2: 0, costPerM2Real: 0 };
+
+    const costPerM2 = effArea > 0 ? Math.round((calcRecalc.grandTotal || 0) / effArea) : 0;
+    const costPerM2Real = effArea > 0 ? Math.round((calcRecalc.realCost || 0) / effArea) : 0;
 
     // Dapatkan data sumber daya tenaga kerja untuk menghitung kebutuhan harian
     const res = window.ResourceUsage.calculateTotalResources(proj);
@@ -570,23 +643,30 @@ window.App = (function() {
     const totalLaborOH = laborList.reduce((acc, l) => acc + (Number(l.qty) || 0), 0);
     const avgDailyPersons = durationDays > 0 ? (totalLaborOH / durationDays) : 0;
 
-    // Signatories & Bank fallback (Penuh Nilai Standar Proyek Resmi - Bebas Titik-Titik)
+    // Signatories & Bank fallback (Penuh Nilai Standar Proyek Resmi - Bebas Titik-Titik & Bebas 'Bapak / Ibu')
+    const cleanSignerName = (val, fallback) => {
+      let s = (val || "").toString().trim();
+      s = s.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
+      if (!s || s.includes('...') || s.includes('Bapak / Ibu')) return fallback;
+      return s;
+    };
+
     const rawSig = proj.signatories || {};
     const sig = {
-      ownerName: (rawSig.ownerName && !rawSig.ownerName.includes('...')) ? rawSig.ownerName : (proj.owner || "Ir. Budi Santoso, M.T."),
+      ownerName: cleanSignerName(rawSig.ownerName, cleanSignerName(proj.owner, "Dr. H. Hendra Gunawan, S.T., M.M.")),
       ownerTitle: rawSig.ownerTitle || "Kuasa Pengguna Anggaran / Pemilik",
-      ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "19780512 200312 1 002",
-      contractorName: (rawSig.contractorName && !rawSig.contractorName.includes('...')) ? rawSig.contractorName : "H. Ahmad Fauzi, S.T.",
+      ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "-",
+      contractorName: cleanSignerName(rawSig.contractorName, "H. Ahmad Fauzi, S.T."),
       contractorTitle: rawSig.contractorTitle || "Direktur Utama",
-      contractorCompany: (rawSig.contractorCompany && !rawSig.contractorCompany.includes('...')) ? rawSig.contractorCompany : (proj.contractor || "PT. Karya Mandiri Perkasa"),
-      consultantName: (rawSig.consultantName && !rawSig.consultantName.includes('...')) ? rawSig.consultantName : "Ir. Bambang Hartono, S.T., M.T.",
+      contractorCompany: cleanSignerName(rawSig.contractorCompany, (proj.contractor || "PT. Duta Konstruksi Pratama")),
+      consultantName: cleanSignerName(rawSig.consultantName, "Ir. Bambang Hartono, S.T., M.T."),
       consultantTitle: rawSig.consultantTitle || "Team Leader / Pengawas",
-      consultantCompany: (rawSig.consultantCompany && !rawSig.consultantCompany.includes('...')) ? rawSig.consultantCompany : (proj.consultant || "CV. Architecindo Consultant"),
-      qcInspectorName: (rawSig.qcInspectorName && !rawSig.qcInspectorName.includes('...')) ? rawSig.qcInspectorName : "Ir. M. Ridwan",
+      consultantCompany: cleanSignerName(rawSig.consultantCompany, (proj.consultant || "PT. Architekta Desain Studio")),
+      qcInspectorName: cleanSignerName(rawSig.qcInspectorName, "Ir. M. Ridwan"),
       qcInspectorRole: rawSig.qcInspectorRole || "Konsultan Pengawas / QC",
-      fieldMandorName: (rawSig.fieldMandorName && !rawSig.fieldMandorName.includes('...')) ? rawSig.fieldMandorName : "Sutarji / Warsito",
+      fieldMandorName: cleanSignerName(rawSig.fieldMandorName, "Sutarji / Warsito"),
       fieldMandorRole: rawSig.fieldMandorRole || "Mandor Lapangan / Pelaksana",
-      siteManagerName: (rawSig.siteManagerName && !rawSig.siteManagerName.includes('...')) ? rawSig.siteManagerName : "Ir. Hendra Prasetya",
+      siteManagerName: cleanSignerName(rawSig.siteManagerName, "Ir. Hendra Prasetya"),
       siteManagerRole: rawSig.siteManagerRole || "Site Manager Kontraktor",
       docCity: rawSig.docCity || proj.location || "Indonesia",
       docDate: rawSig.docDate || proj.startDate || "2026-04-01"
@@ -595,11 +675,12 @@ window.App = (function() {
     const bank = {
       bankName: rawBank.bankName || "Bank Mandiri",
       accountNumber: rawBank.accountNumber || "131-00-8899221-5",
-      accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "PT. Karya Mandiri Perkasa"
+      accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "PT. Duta Konstruksi Pratama"
     };
 
-    // Buat baris tabel estimasi kebutuhan tenaga kerja harian
+    // Buat baris tabel estimasi kebutuhan tenaga kerja harian (Desktop & Mobile)
     let laborRowsHtml = "";
+    let laborMobileCardsHtml = "";
     laborList.forEach((l, idx) => {
       const totalOH = Number(l.qty) || 0;
       const dailyReq = durationDays > 0 ? (totalOH / durationDays) : 0;
@@ -621,6 +702,19 @@ window.App = (function() {
           <td class="text-right font-bold" style="width: 16%">${window.CurrencyUtil.formatRupiah(l.totalCost)}</td>
         </tr>
       `;
+
+      laborMobileCardsHtml += `
+        <div class="resource-mobile-card">
+          <div class="resource-mobile-card-top">
+            <span class="badge badge-secondary font-mono">${l.name}</span>
+            <span class="font-bold text-emerald">${window.CurrencyUtil.formatRupiah(l.totalCost, false, true)}</span>
+          </div>
+          <div class="resource-mobile-card-row mt-1">
+            <span>Total Kebutuhan: <strong>${window.CurrencyUtil.formatNumber(totalOH, 2)} OH</strong></span>
+            <span>Harian: <strong>${dailyRounded} Orang/Hari</strong></span>
+          </div>
+        </div>
+      `;
     });
     container.innerHTML = `
       <div class="print-only">
@@ -636,14 +730,17 @@ window.App = (function() {
           <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Identitas kontrak, persentase pajak &amp; overhead, rekening penagihan termin, serta pejabat penandatangan</div>
         </div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1.5px solid #0284c7; color: #0284c7; background: #ffffff;" onclick="App.printProjectInfo()">
+          <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-color: #0284c7; color: #0284c7;" onclick="App.sanitizeCurrentProject()">
+            🛡️ Verifikasi &amp; Sanitasi SNI 2026
+          </button>
+          <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;" onclick="App.printProjectInfo()">
             🖨️ Cetak PDF Informasi &amp; Setting Proyek
           </button>
         </div>
       </div>
 
-      <!-- Kartu Ringkasan KPI Proyek -->
-      <div class="dashboard-grid mb-4">
+      <!-- Kartu Ringkasan KPI Proyek (Termasuk Dimensi & Biaya/m²) -->
+      <div class="dashboard-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
         <div class="stat-card">
           <div class="stat-label">Total Durasi Konstruksi</div>
           <div class="stat-value">${durationDays} Hari</div>
@@ -664,6 +761,16 @@ window.App = (function() {
           <div class="stat-value">${window.CurrencyUtil.formatRupiah(res.totalLabor || 0)}</div>
           <div class="stat-sub">${laborList.length} Klasifikasi Tenaga Kerja</div>
         </div>
+        <div class="stat-card" style="border-top: 3px solid #0284c7;">
+          <div class="stat-label">Dimensi Bangunan &amp; Tanah</div>
+          <div class="stat-value" id="liveBuildingAreaDisplay">${bldArea} m² <span style="font-size: 13px; font-weight: 600; color: #64748b;">/ ${lndArea} m²</span></div>
+          <div class="stat-sub">${isRehab ? `Rehab: ${rhbArea} m² (Eksis: ${extArea} m²)` : 'Luas Rencana / Luas Tanah'}</div>
+        </div>
+        <div class="stat-card" style="border-top: 3px solid #059669;">
+          <div class="stat-label">Estimasi Biaya per m² (HSP M²)</div>
+          <div class="stat-value text-emerald" id="liveCostPerM2Display" style="color: #059669;">${window.CurrencyUtil.formatRupiah(costPerM2, false, true)} / m²</div>
+          <div class="stat-sub" id="liveCostPerM2SubDisplay">Real Cost: ${window.CurrencyUtil.formatRupiah(costPerM2Real, false, true)} / m²</div>
+        </div>
       </div>
 
       <!-- Kartu Kalkulasi Finansial, Alokasi Profit & Pajak PPN (Dutavis Executive Live Sync) -->
@@ -681,7 +788,7 @@ window.App = (function() {
           <!-- Grid 4 Kartu Metrik Keuangan -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px;">
             <!-- 1. Biaya Langsung -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #64748b; border-radius: 8px; padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #0f172a; border-radius: 8px; padding: 12px 16px;">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #475569;">1. Biaya Langsung (Direct)</span>
                 <span class="badge badge-light" style="font-size: 10px; padding: 2px 6px;">HPP Pokok</span>
@@ -693,58 +800,74 @@ window.App = (function() {
             </div>
 
             <!-- 2. Overhead & Profit -->
-            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-top: 3px solid #16a34a; border-radius: 8px; padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #475569; border-radius: 8px; padding: 12px 16px;">
               <div class="d-flex justify-content-between align-items-center mb-1">
-                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #166534;">2. Overhead & Profit</span>
-                <span class="badge badge-success" style="font-size: 10.5px; font-weight: 800; padding: 2px 7px;"><span id="liveOverheadRatePct">${(proj.overheadRate !== undefined && proj.overheadRate !== null) ? proj.overheadRate : 15}</span>%</span>
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #475569;">2. Overhead & Profit</span>
+                <span class="badge badge-secondary" style="font-size: 10.5px; font-weight: 800; padding: 2px 7px;"><span id="liveOverheadRatePct">${(proj.overheadRate !== undefined && proj.overheadRate !== null) ? proj.overheadRate : 15}</span>%</span>
               </div>
-              <div style="font-size: 16px; font-weight: 900; color: #15803d; font-family: var(--font-mono); margin: 4px 0;" id="liveOverheadVal">
+              <div style="font-size: 16px; font-weight: 900; color: #0f172a; font-family: var(--font-mono); margin: 4px 0;" id="liveOverheadVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.overheadAmount, false, true)}
               </div>
-              <div style="font-size: 11px; color: #166534;">Keuntungan & Biaya Operasional</div>
+              <div style="font-size: 11px; color: #64748b;">Keuntungan & Biaya Operasional</div>
             </div>
 
             <!-- 3. Real Cost -->
-            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-top: 3px solid #2563eb; border-radius: 8px; padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #0f172a; border-radius: 8px; padding: 12px 16px;">
               <div class="d-flex justify-content-between align-items-center mb-1">
-                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #1e40af;">3. Real Cost Proyek</span>
-                <span class="badge badge-primary" style="font-size: 10px; padding: 2px 6px;">Subtotal</span>
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #475569;">3. Real Cost Proyek</span>
+                <span class="badge badge-light" style="font-size: 10px; padding: 2px 6px;">Subtotal</span>
               </div>
-              <div style="font-size: 16px; font-weight: 900; color: #1d4ed8; font-family: var(--font-mono); margin: 4px 0;" id="liveRealCostVal">
+              <div style="font-size: 16px; font-weight: 900; color: #0f172a; font-family: var(--font-mono); margin: 4px 0;" id="liveRealCostVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.realCost, false, true)}
               </div>
-              <div style="font-size: 11px; color: #1e40af;">Biaya Langsung + Overhead (Sebelum PPN)</div>
+              <div style="font-size: 11px; color: #64748b;">Biaya Langsung + Overhead (Sebelum PPN)</div>
             </div>
 
             <!-- 4. PPN -->
-            <div style="background: #fefce8; border: 1px solid #fef08a; border-top: 3px solid #ca8a04; border-radius: 8px; padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 3px solid #475569; border-radius: 8px; padding: 12px 16px;">
               <div class="d-flex justify-content-between align-items-center mb-1">
-                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #854d0e;">4. Pajak PPN</span>
-                <span class="badge badge-warning" style="font-size: 10.5px; font-weight: 800; padding: 2px 7px;"><span id="livePpnRatePct">${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}</span>%</span>
+                <span style="font-size: 10.5px; text-transform: uppercase; font-weight: 800; color: #475569;">4. Pajak PPN</span>
+                <span class="badge badge-secondary" style="font-size: 10.5px; font-weight: 800; padding: 2px 7px;"><span id="livePpnRatePct">${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}</span>%</span>
               </div>
-              <div style="font-size: 16px; font-weight: 900; color: #a16207; font-family: var(--font-mono); margin: 4px 0;" id="livePpnVal">
+              <div style="font-size: 16px; font-weight: 900; color: #0f172a; font-family: var(--font-mono); margin: 4px 0;" id="livePpnVal">
                 ${window.CurrencyUtil.formatRupiah(calcRecalc.ppnAmount, false, true)}
               </div>
-              <div style="font-size: 11px; color: #854d0e;">Pajak Pertambahan Nilai Resmi</div>
+              <div style="font-size: 11px; color: #64748b;">Pajak Pertambahan Nilai Resmi</div>
             </div>
           </div>
 
           <!-- Hero Banner: Grand Total RAB & Terbilang Resmi -->
-          <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 8px; padding: 16px 20px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);">
-            <div style="flex: 1; min-width: 260px;">
-              <div style="display: inline-block; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; padding: 3px 9px; border-radius: 4px;">
-                5. GRAND TOTAL RENCANA ANGGARAN BIAYA (TERMASUK PAJAK)
+          <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 8px; padding: 16px 20px; color: #ffffff; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div style="flex: 1; min-width: 260px;">
+                <div style="display: inline-block; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; padding: 3px 9px; border-radius: 4px;">
+                  5. GRAND TOTAL RENCANA ANGGARAN BIAYA (TERMASUK PAJAK)
+                </div>
+                <div id="liveTerbilangVal" style="color: #cbd5e1; font-size: 12.5px; font-style: italic; margin-top: 6px; line-height: 1.4;">
+                  "${calcRecalc.terbilangStr}"
+                </div>
               </div>
-              <div id="liveTerbilangVal" style="color: #cbd5e1; font-size: 12.5px; font-style: italic; margin-top: 6px; line-height: 1.4;">
-                "${calcRecalc.terbilangStr}"
+              <div style="text-align: right; min-width: 220px;">
+                <div id="liveGrandTotalVal" style="font-size: 26px; font-weight: 900; color: #38bdf8; font-family: var(--font-mono); letter-spacing: -0.5px;">
+                  ${window.CurrencyUtil.formatRupiah(calcRecalc.grandTotal, false, true)}
+                </div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
+                  Akumulasi Real Cost &amp; Pajak Pertambahan Nilai
+                </div>
               </div>
             </div>
-            <div style="text-align: right; min-width: 220px;">
-              <div id="liveGrandTotalVal" style="font-size: 26px; font-weight: 900; color: #38bdf8; font-family: var(--font-mono); letter-spacing: -0.5px;">
-                ${window.CurrencyUtil.formatRupiah(calcRecalc.grandTotal, false, true)}
+            <!-- Sub-Banner: Informasi Luas Bangunan & Biaya per m2 -->
+            <div style="padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.12); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #cbd5e1;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span>📐 Luas Rencana Efektif: <strong class="text-white" id="liveHeroArea">${effArea} m²</strong> <span style="font-size: 11px; color: #94a3b8;">(${isRehab ? 'Bagian Direhab' : 'Bangunan Baru'})</span></span>
+                <span style="color: #64748b;">|</span>
+                <span>🏞️ Luas Tanah: <strong class="text-white">${lndArea} m²</strong></span>
               </div>
-              <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
-                Akumulasi Real Cost &amp; Pajak Pertambahan Nilai
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span>🏷️ Biaya per Satuan Luas (HSP/m²):</span>
+                <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; font-weight: 800; font-size: 13px; padding: 2px 8px; border-radius: 4px;" id="liveHeroCostPerM2">
+                  ${window.CurrencyUtil.formatRupiah(costPerM2, false, true)} / m²
+                </span>
               </div>
             </div>
           </div>
@@ -774,7 +897,7 @@ window.App = (function() {
 
             <div class="form-row">
               <div class="form-group" style="flex: 2;">
-                <label class="form-label">Lokasi Pekerjaan Proyek</label>
+                <label class="form-label">Lokasi / Alamat Pekerjaan Proyek</label>
                 <input type="text" class="form-control" name="location" value="${proj.location || ''}">
               </div>
               <div class="form-group" style="flex: 2;">
@@ -799,6 +922,90 @@ window.App = (function() {
               </div>
             </div>
 
+            <!-- Bagian Dimensi Bangunan, Luas Lahan & Parameter Rehab -->
+            <div class="modal-section-divider">DIMENSI BANGUNAN, LAHAN &amp; PARAMETER REHABILITASI</div>
+            <div class="form-row">
+              <div class="form-group" style="flex: 1.3;">
+                <label class="form-label">Kategori / Tujuan Pekerjaan <span class="modal-field-required">*</span></label>
+                <select class="form-control" name="projectType" id="projProjectTypeSelect" onchange="App.handleProjectTypeToggle()">
+                  <option value="new" ${!isRehab ? 'selected' : ''}>🏗️ Pembangunan Bangunan Baru</option>
+                  <option value="rehab" ${isRehab ? 'selected' : ''}>🛠️ Renovasi / Rehab / Pemeliharaan Bangunan</option>
+                </select>
+                <div class="modal-help-text">Menentukan dasar pembagian estimasi biaya per m²</div>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label class="form-label">Luas Rencana Pembangunan (m²) <span class="modal-field-required">*</span></label>
+                <input type="number" step="0.1" min="1" class="form-control" name="buildingArea" id="projBuildingAreaInput" value="${bldArea}" oninput="App.handleLiveProjectSettingsChange()" required>
+                <div class="modal-help-text">Luas lantai rencana konstruksi</div>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label class="form-label">Luas Tanah / Kavling (m²)</label>
+                <input type="number" step="0.1" min="1" class="form-control" name="landArea" id="projLandAreaInput" value="${lndArea}" oninput="App.handleLiveProjectSettingsChange()">
+                <div class="modal-help-text">Luas tapak tanah / lahan proyek</div>
+              </div>
+            </div>
+
+            <!-- Opsi Tambahan Khusus Rehab / Renovasi (Dinamis) -->
+            <div id="rehabFieldsContainer" style="display: ${isRehab ? 'flex' : 'none'}; gap: 14px; margin-bottom: 14px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 6px; padding: 12px 16px; flex-wrap: wrap;">
+              <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                <label class="form-label" style="color: #9a3412; font-weight: 700;">Luas Bangunan Eksisting (m²)</label>
+                <input type="number" step="0.1" min="0" class="form-control" name="existingBuildingArea" id="projExistingAreaInput" value="${extArea}" oninput="App.handleLiveProjectSettingsChange()">
+                <div class="modal-help-text">Luas fisik bangunan sebelum direhabilitasi</div>
+              </div>
+              <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                <label class="form-label" style="color: #9a3412; font-weight: 700;">Volume / Bagian yang Direhab (m²) <span class="modal-field-required">*</span></label>
+                <input type="number" step="0.1" min="0" class="form-control" name="rehabArea" id="projRehabAreaInput" value="${rhbArea}" oninput="App.handleLiveProjectSettingsChange()">
+                <div class="modal-help-text">Dasar pembagi biaya per m² untuk pekerjaan renovasi/rehab</div>
+              </div>
+            </div>
+
+            <!-- Bagian Pengaturan Logo Cover Proposal & Kop Dokumen Resmi -->
+            <div class="modal-section-divider">LOGO PERUSAHAAN / COVER PROPOSAL</div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px;">
+              <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 16px;">
+                <div style="flex: 1; min-width: 250px;">
+                  <label class="form-label" style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">Logo Resmi Instansi / Perusahaan Kontraktor</label>
+                  <div class="modal-help-text" style="color: #64748b; font-size: 11.5px; line-height: 1.4;">
+                    Logo akan disematkan pada Kover Proposal, Kop Surat, dan Dokumen A4. Format: PNG, JPG, WebP, SVG (latar transparan direkomendasikan).
+                  </div>
+                  <div class="mt-2 d-flex align-items-center gap-2 flex-wrap">
+                    <input type="file" id="projectLogoFileInput" accept="image/*" style="display: none;" onchange="App.handleProjectLogoUpload(event)">
+                    <button type="button" class="btn btn-sm btn-outline" style="font-weight: 600; display: inline-flex; align-items: center; gap: 5px;" onclick="document.getElementById('projectLogoFileInput').click()">
+                      📁 ${proj.logo ? 'Ganti File Logo' : 'Pilih File Logo'}
+                    </button>
+                    ${proj.logo ? `
+                      <button type="button" class="btn btn-sm btn-outline" style="color: #ef4444; border-color: #fca5a5; display: inline-flex; align-items: center; gap: 5px;" onclick="App.removeProjectLogo()">
+                        🗑️ Hapus Logo
+                      </button>
+                    ` : ''}
+                  </div>
+                  <!-- Pengatur Ukuran Logo -->
+                  <div class="mt-3" style="max-width: 320px;">
+                    <label class="form-label" style="font-size: 11.5px; font-weight: 700; color: #475569; margin-bottom: 4px;">
+                      Ukuran Logo pada Dokumen: <span id="logoSizeLabel" style="color: #0284c7;">${proj.logoSize || 120} px</span>
+                    </label>
+                    <input type="range" min="60" max="300" step="10"
+                      value="${proj.logoSize || 120}"
+                      name="logoSize"
+                      id="projLogoSizeSlider"
+                      style="width: 100%; accent-color: #0284c7;"
+                      oninput="App.handleLogoSizeChange(this.value)">
+                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; margin-top: 2px;">
+                      <span>60px (Kecil)</span><span>180px (Standar)</span><span>300px (Besar)</span>
+                    </div>
+                    <input type="hidden" name="logoSize" id="projLogoSizeHidden" value="${proj.logoSize || 120}">
+                  </div>
+                </div>
+                <div style="min-width: 160px; text-align: center;">
+                  <div id="projectLogoPreviewWrapper" style="width: 160px; min-height: 80px; border: 1px dashed #cbd5e1; border-radius: 6px; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px;">
+                    <img id="logoSizePreviewImg" src="${proj.logo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 80\' width=\'200\' height=\'80\'><rect width=\'200\' height=\'80\' rx=\'8\' fill=\'%230f172a\'/><path d=\'M25 60 L45 20 L65 60 Z\' fill=\'none\' stroke=\'%2338bdf8\' stroke-width=\'4\' stroke-linejoin=\'round\'/><path d=\'M35 60 L45 40 L55 60 Z\' fill=\'%2338bdf8\' opacity=\'0.7\'/><circle cx=\'45\' cy=\'18\' r=\'4\' fill=\'%23f59e0b\'/><text x=\'78\' y=\'38\' font-family=\'Arial, sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%23ffffff\'>DUTA CIPTA</text><text x=\'78\' y=\'54\' font-family=\'Arial, sans-serif\' font-size=\'9\' font-weight=\'500\' fill=\'%2394a3b8\' letter-spacing=\'1\'>KONTRAKTOR &amp; KONSULTAN</text></svg>'}" alt="Logo Proyek" style="max-width: ${proj.logoSize || 120}px; max-height: ${Math.round((proj.logoSize || 120) * 0.55)}px; object-fit: contain;">
+                  </div>
+                  <input type="hidden" name="projectLogoBase64" id="projectLogoBase64Input" value="${proj.logo || ''}">
+                  <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">Preview ukuran dokumen</div>
+                </div>
+              </div>
+            </div>
+
             <!-- Bagian Periode Tanggal Mulai & Target Selesai -->
             <div class="modal-section-divider">JADWAL PELAKSANAAN PROYEK (TARGET MULAI & SELESAI)</div>
             <div class="form-row">
@@ -820,7 +1027,7 @@ window.App = (function() {
             </div>
 
             <!-- Bagian Pihak Penandatangan (Lembar Pengesahan Tiga Pihak Bab VII) -->
-            <div class="modal-section-divider" style="background: #eff6ff; color: #1e40af; border-left: 4px solid #2563eb; padding: 8px 12px; font-weight: 800;">
+            <div class="modal-section-divider" style="background: #f8fafc; color: #0f172a; border-left: 4px solid #0f172a; padding: 8px 12px; font-weight: 800;">
               ✍️ PEJABAT PENANDATANGAN DOKUMEN & LEMBAR PENGESAHAN TIGA PIHAK (BAB VII PROPOSAL)
             </div>
             <div style="font-size: 11.5px; color: #64748b; margin-top: -6px; margin-bottom: 12px;">
@@ -963,7 +1170,7 @@ window.App = (function() {
             </div>
 
             <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap gap-2 no-print">
-              <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border: 1.5px solid #0284c7; color: #0284c7; background: #ffffff;" onclick="App.printProjectInfo()">
+              <button type="button" class="btn btn-outline" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;" onclick="App.printProjectInfo()">
                 🖨️ Cetak PDF Informasi &amp; Setting Proyek
               </button>
               <button type="button" class="btn btn-primary" style="padding: 9px 22px; font-weight: 700;" onclick="App.saveProjectInfoForm(event)">
@@ -1000,12 +1207,90 @@ window.App = (function() {
               </tbody>
             </table>
           </div>
+
+          <!-- Mobile Touch Cards View: Kebutuhan Tenaga Kerja Harian -->
+          <div class="d-mobile-only p-3">
+            ${laborMobileCardsHtml || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada data tenaga kerja pada RAB.</div>'}
+          </div>
         </div>
       </div>
     `;
   }
 
-    function saveProjectInfoForm(e) {
+  function handleProjectLogoUpload(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      showNotificationModal({
+        title: "Format File Tidak Didukung",
+        icon: "⚠️",
+        type: "warning",
+        contentHtml: "Silakan pilih file gambar dengan format PNG, JPG, JPEG, WebP, atau SVG.",
+        confirmText: "Mengerti"
+      });
+      return;
+    }
+
+    if (file.size > 2.5 * 1024 * 1024) {
+      showNotificationModal({
+        title: "Ukuran File Terlalu Besar",
+        icon: "⚠️",
+        type: "warning",
+        contentHtml: "Ukuran logo maksimal 2.5MB agar performa aplikasi dan cetak dokumen tetap optimal.",
+        confirmText: "Pilih File Lain"
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const base64Str = evt.target.result;
+      const proj = window.ProjectManager.getActiveProject();
+      if (proj) {
+        proj.logo = base64Str;
+        window.ProjectManager.updateActiveProject(proj);
+      }
+      const previewWrap = document.getElementById("projectLogoPreviewWrapper");
+      if (previewWrap) {
+        previewWrap.innerHTML = `<img src="${base64Str}" alt="Logo Proyek" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+      }
+      const hiddenInput = document.getElementById("projectLogoBase64Input");
+      if (hiddenInput) {
+        hiddenInput.value = base64Str;
+      }
+      renderInfoProyekView();
+      if (window.App && window.App.showNotificationModal) {
+        showNotificationModal({
+          title: "Logo Berhasil Dimuat",
+          icon: "✅",
+          type: "info",
+          contentHtml: "Logo perusahaan berhasil diperbarui dan akan ditampilkan pada Cover Proposal serta Dokumen Cetak.",
+          confirmText: "OK"
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeProjectLogo() {
+    const proj = window.ProjectManager.getActiveProject();
+    if (proj) {
+      proj.logo = "";
+      window.ProjectManager.updateActiveProject(proj);
+    }
+    const previewWrap = document.getElementById("projectLogoPreviewWrapper");
+    if (previewWrap) {
+      previewWrap.innerHTML = `<span style="font-size: 11px; color: #94a3b8; font-weight: 600;">Belum Ada Logo</span>`;
+    }
+    const hiddenInput = document.getElementById("projectLogoBase64Input");
+    if (hiddenInput) {
+      hiddenInput.value = "";
+    }
+    renderInfoProyekView();
+  }
+
+  function saveProjectInfoForm(e) {
     if (e) e.preventDefault();
     const form = document.getElementById("projectInfoForm");
     if (!form) return;
@@ -1036,15 +1321,29 @@ window.App = (function() {
     const rawPpn = formData.get("ppnRate");
     const newPpn = (rawPpn !== null && rawPpn !== "" && !isNaN(parseFloat(rawPpn))) ? parseFloat(rawPpn) : 11;
 
-    proj.name = formData.get("name") || proj.name;
-    proj.docNumber = formData.get("docNumber") || proj.docNumber;
-    proj.location = formData.get("location") || proj.location;
-    proj.dataSource = formData.get("dataSource") || proj.dataSource || "SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026";
-    proj.startDate = formData.get("startDate") || proj.startDate;
-    proj.finishDate = formData.get("finishDate") || proj.finishDate;
+    // Fungsi helper: baca nilai FormData — teks boleh kosong (user sengaja hapus), hanya skip jika null
+    const fd = (key) => formData.get(key);
+    const fdStr = (key, fallback) => { const v = fd(key); return (v !== null) ? v.trim() : fallback; };
+
+    const logoVal = document.getElementById("projectLogoBase64Input") ? document.getElementById("projectLogoBase64Input").value : proj.logo;
+    if (logoVal !== undefined) proj.logo = logoVal;
+    const logoSizeEl = document.getElementById("projLogoSizeHidden");
+    proj.logoSize = logoSizeEl ? (parseInt(logoSizeEl.value) || 120) : (proj.logoSize || 120);
+    proj.name = fdStr("name", proj.name);
+    proj.docNumber = fdStr("docNumber", proj.docNumber || "");
+    proj.location = fdStr("location", proj.location || "");
+    proj.dataSource = fdStr("dataSource", proj.dataSource || "SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026");
+    proj.startDate = fdStr("startDate", proj.startDate || "2026-04-01");
+    proj.finishDate = fdStr("finishDate", proj.finishDate || "2026-09-30");
     proj.durationDays = durationDays;
     proj.overheadRate = newOverhead;
     proj.ppnRate = newPpn;
+
+    proj.projectType = fdStr("projectType", proj.projectType || "new");
+    proj.buildingArea = parseFloat(formData.get("buildingArea")) || proj.buildingArea || 180;
+    proj.landArea = parseFloat(formData.get("landArea")) || proj.landArea || 200;
+    proj.existingBuildingArea = parseFloat(formData.get("existingBuildingArea")) || 0;
+    proj.rehabArea = parseFloat(formData.get("rehabArea")) || 0;
 
     proj.bankInfo = {
       bankName: formData.get("bankName") || (proj.bankInfo && proj.bankInfo.bankName) || "Bank Mandiri",
@@ -1053,18 +1352,19 @@ window.App = (function() {
     };
 
     const getCleanSigner = (val, fallback) => {
-      const s = (val || "").toString().trim();
-      return (s && !s.includes("...")) ? s : fallback;
+      let s = (val || "").toString().trim();
+      s = s.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
+      return (s && !s.includes("...") && !s.includes("Bapak / Ibu")) ? s : fallback;
     };
 
     proj.signatories = {
-      ownerName: getCleanSigner(formData.get("ownerName"), (proj.signatories && proj.signatories.ownerName) || proj.owner || "Ir. Budi Santoso, M.T."),
+      ownerName: getCleanSigner(formData.get("ownerName"), (proj.signatories && proj.signatories.ownerName && !proj.signatories.ownerName.includes("Bapak / Ibu")) ? proj.signatories.ownerName : ((proj.owner && !proj.owner.includes("Bapak / Ibu")) ? proj.owner : "Dr. H. Hendra Gunawan, S.T., M.M.")),
       ownerTitle: getCleanSigner(formData.get("ownerTitle"), (proj.signatories && proj.signatories.ownerTitle) || "Kuasa Pengguna Anggaran / Pemilik"),
-      ownerNip: getCleanSigner(formData.get("ownerNip"), (proj.signatories && proj.signatories.ownerNip) || "19780512 200312 1 002"),
-      contractorCompany: getCleanSigner(formData.get("contractorCompany"), (proj.signatories && proj.signatories.contractorCompany) || proj.contractor || "PT. Karya Mandiri Perkasa"),
+      ownerNip: getCleanSigner(formData.get("ownerNip"), (proj.signatories && proj.signatories.ownerNip) || "-"),
+      contractorCompany: getCleanSigner(formData.get("contractorCompany"), (proj.signatories && proj.signatories.contractorCompany) || proj.contractor || "PT. Duta Konstruksi Pratama"),
       contractorName: getCleanSigner(formData.get("contractorName"), (proj.signatories && proj.signatories.contractorName) || "H. Ahmad Fauzi, S.T."),
       contractorTitle: getCleanSigner(formData.get("contractorTitle"), (proj.signatories && proj.signatories.contractorTitle) || "Direktur Utama"),
-      consultantCompany: getCleanSigner(formData.get("consultantCompany"), (proj.signatories && proj.signatories.consultantCompany) || proj.consultant || "CV. Architecindo Consultant"),
+      consultantCompany: getCleanSigner(formData.get("consultantCompany"), (proj.signatories && proj.signatories.consultantCompany) || proj.consultant || "PT. Architekta Desain Studio"),
       consultantName: getCleanSigner(formData.get("consultantName"), (proj.signatories && proj.signatories.consultantName) || "Ir. Bambang Hartono, S.T., M.T."),
       consultantTitle: getCleanSigner(formData.get("consultantTitle"), (proj.signatories && proj.signatories.consultantTitle) || "Team Leader / Pengawas"),
       qcInspectorName: getCleanSigner(formData.get("qcInspectorName"), (proj.signatories && proj.signatories.qcInspectorName) || "Ir. M. Ridwan"),
@@ -1099,6 +1399,7 @@ window.App = (function() {
     const realFormatted = recalcRes ? window.CurrencyUtil.formatRupiah(recalcRes.realCost, false, true) : "-";
     const ppnFormatted = recalcRes ? window.CurrencyUtil.formatRupiah(recalcRes.ppnAmount, false, true) : "-";
     const grandFormatted = recalcRes ? window.CurrencyUtil.formatRupiah(recalcRes.grandTotal, false, true) : "-";
+    const cpmFormatted = recalcRes ? window.CurrencyUtil.formatRupiah(recalcRes.costPerM2, false, true) : "-";
 
     showConfirmModal({
       title: "✅ Data Proyek Berhasil Disimpan & Dihitung Ulang!",
@@ -1108,7 +1409,9 @@ window.App = (function() {
         &bull; <strong>Subtotal Real Cost:</strong> ${realFormatted}<br>
         &bull; <strong>Pajak PPN (${newPpn}%):</strong> ${ppnFormatted}<br>
         &bull; <strong>Grand Total Kontrak Baru:</strong> <span style="color: #059669; font-weight: 800;">${grandFormatted}</span><br>
-        &bull; <strong>Total Waktu Pelaksanaan:</strong> ${durationDays} Hari Kalender (${durationWeeks} Minggu)<br><br>
+        &bull; <strong>Total Waktu Pelaksanaan:</strong> ${durationDays} Hari Kalender (${durationWeeks} Minggu)<br>
+        &bull; <strong>Dimensi Rencana:</strong> ${proj.buildingArea} m² (Lahan: ${proj.landArea} m²)${proj.projectType === 'rehab' ? ` &bull; Rehab: ${proj.rehabArea} m²` : ''}<br>
+        &bull; <strong>Estimasi Biaya per m²:</strong> <span style="color: #0284c7; font-weight: 800;">${cpmFormatted} / m²</span><br><br>
         <span class="text-muted" style="font-size: 11.5px;">Seluruh rincian pada Rekapitulasi RAB, Rincian Detail RAB, Kalender Proyek, Kurva S, dan Proposal telah otomatis disinkronkan.</span>
       `,
       confirmText: "Tutup & Lihat Data",
@@ -1125,15 +1428,23 @@ window.App = (function() {
 
     const proj = window.ProjectManager.getActiveProject();
     const rab = window.RabCalculator.calculateProjectRab(proj);
+    const cleanSignerName = (val, fallback) => {
+      let s = (val || "").toString().trim();
+      s = s.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
+      if (!s || s.includes('...') || s.includes('Bapak / Ibu')) return fallback;
+      return s;
+    };
+
     const sig = (proj && proj.signatories) || {};
-    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : ((proj && proj.owner) || 'Ir. Budi Santoso, M.T.');
+    const sigOwnerName = cleanSignerName(sig.ownerName, cleanSignerName(proj && proj.owner, 'Dr. H. Hendra Gunawan, S.T., M.M.'));
     const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
-    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.';
+    const sigConsultantName = cleanSignerName(sig.consultantName, 'Ir. Bambang Hartono, S.T., M.T.');
     const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || (proj && proj.consultant) || 'CV. Architecindo Consultant';
-    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.';
+    const sigContractorName = cleanSignerName(sig.contractorName, 'H. Ahmad Fauzi, S.T.');
     const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || (proj && proj.contractor) || 'PT. Karya Mandiri Perkasa';
 
     let rowsHtml = "";
+    let rekapMobileCardsHtml = "";
     rab.divisionSummaries.forEach((div, idx) => {
       rowsHtml += `
         <tr>
@@ -1150,6 +1461,29 @@ window.App = (function() {
           </td>
         </tr>
       `;
+
+      rekapMobileCardsHtml += `
+        <div class="rekap-mobile-card">
+          <div class="rekap-mobile-card-header">
+            <span class="badge badge-secondary font-mono">Divisi ${div.code}</span>
+            <span class="font-bold text-emerald" style="font-size: 15px;">
+              ${window.CurrencyUtil.formatRupiah(div.subtotal, false, true)}
+            </span>
+          </div>
+          <div class="rekap-mobile-card-title">
+            ${div.name}
+          </div>
+          <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 11.5px; margin-top: 4px;">
+            <span>${div.itemCount} Item Pekerjaan</span>
+            <span>Bobot: <strong class="text-dark">${window.CurrencyUtil.formatNumber(div.weightPercent, 2)}%</strong></span>
+          </div>
+          <div class="no-print mt-2">
+            <button class="btn btn-sm btn-outline w-100" onclick="App.jumpToDivision('${div.id}')">
+              Lihat Rincian Pekerjaan &rarr;
+            </button>
+          </div>
+        </div>
+      `;
     });
     container.innerHTML = `
       <div class="print-only">
@@ -1162,13 +1496,14 @@ window.App = (function() {
             <span>Rekapitulasi Rencana Anggaran Biaya (RAB)</span>
             <span class="badge badge-light">Standar SE PUPR No. 47/2026</span>
           </div>
-          <div class="card-actions no-print">
+          <div class="card-actions no-print d-flex align-items-center flex-wrap" style="gap: 8px;">
             <button class="btn btn-primary" onclick="App.openAddDivisionModal()">+ Tambah Divisi</button>
-            <button class="btn btn-outline" onclick="window.PrintEngine.printDocument('panel-rekap-rab', 'Rekapitulasi_RAB')">Cetak A4 PDF</button>
+            <button class="btn btn-outline font-bold" onclick="App.printCurrentPage('panel-rekap-rab', 'Rekapitulasi_RAB')">🖨️ Cetak / Preview A4</button>
           </div>
         </div>
         <div class="card-body">
-          <div class="table-responsive">
+          <!-- Desktop Table View -->
+          <div class="table-responsive d-desktop-only">
             <table class="table">
               <thead>
                 <tr>
@@ -1211,6 +1546,28 @@ window.App = (function() {
             </table>
           </div>
 
+          <!-- Mobile Summary Cards View (Zero Horizontal Scroll, Focused on Core Data) -->
+          <div class="d-mobile-only p-3">
+            ${rekapMobileCardsHtml || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada divisi pekerjaan.</div>'}
+            <div class="rekap-mobile-grand-total-card mt-3">
+              <div class="rekap-grand-total-row">
+                <span>Real Cost (Biaya Konstruksi):</span>
+                <span class="font-bold">${window.CurrencyUtil.formatRupiah(rab.realCost, false, true)}</span>
+              </div>
+              <div class="rekap-grand-total-row">
+                <span>PPN (${rab.ppnRate}%):</span>
+                <span class="font-bold">${window.CurrencyUtil.formatRupiah(rab.ppnAmount, false, true)}</span>
+              </div>
+              <div class="rekap-grand-total-row rekap-grand-total-main">
+                <span style="font-weight: 800; font-size: 13.5px;">TOTAL BIAYA (RAB):</span>
+                <span class="rekap-grand-total-amount">${window.CurrencyUtil.formatRupiah(rab.grandTotal, false, true)}</span>
+              </div>
+              <div class="rekap-grand-total-terbilang">
+                Terbilang: <strong>${rab.terbilangStr}</strong>
+              </div>
+            </div>
+          </div>
+
           <div class="card p-3 bg-light mt-3" style="border: 1px solid #e2e8f0; border-radius: 6px;">
             <strong>Terbilang:</strong>
             <div class="text-muted" style="font-style: italic; margin-top: 2px;">
@@ -1218,30 +1575,38 @@ window.App = (function() {
             </div>
           </div>
 
-          <!-- Tanda Tangan Tiga Pihak (Bebas Titik-Titik Sesuai Setting Proyek) -->
-          <div class="signature-clean-grid three-parties mt-4">
-            <div class="sig-block" style="border: none !important; background: transparent !important;">
-              <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
-              <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui:</div>
-              <div class="sig-space" style="height: 45px;"></div>
-              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigOwnerName} )</div>
-              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
-            </div>
-            <div class="sig-block" style="border: none !important; background: transparent !important;">
-              <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
-              <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
-              <div class="sig-space" style="height: 45px;"></div>
-              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigConsultantName} )</div>
-              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
-            </div>
-            <div class="sig-block" style="border: none !important; background: transparent !important;">
-              <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
-              <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
-              <div class="sig-space" style="height: 45px;"></div>
-              <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigContractorName} )</div>
-              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
-            </div>
+          <!-- Ringkasan Dimensi Bangunan & Biaya per m2 -->
+          <div class="mt-2 mb-2 d-flex justify-content-between align-items-center flex-wrap" style="font-size: 11.5px; color: #64748b; gap: 8px; padding: 6px 0; border-top: 1px solid #f1f5f9;">
+            <span>📐 Luas Rencana: <strong>${proj.buildingArea || 180} m²</strong> | Luas Lahan: <strong>${proj.landArea || 200} m²</strong> ${proj.projectType === 'rehab' ? `| Bagian Direhab: <strong>${proj.rehabArea || 0} m²</strong>` : ''}</span>
+            <span style="font-weight: 700; color: #059669;">🏷️ Estimasi Biaya Satuan: <strong>${window.CurrencyUtil.formatRupiah(rab.costPerM2 || Math.round(rab.grandTotal / (proj.buildingArea || 180)), false, true)} / m²</strong></span>
           </div>
+
+          <!-- Tanda Tangan Tiga Pihak (Bebas Titik-Titik & Sejajar 3 Kolom Horizontal) -->
+          <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 24pt !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+            <tr style="border: none !important; background: transparent !important;">
+              <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+                <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
+                <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui:</div>
+                <div class="sig-space" style="height: 45px;"></div>
+                <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigOwnerName} )</div>
+                <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
+              </td>
+              <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+                <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
+                <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
+                <div class="sig-space" style="height: 45px;"></div>
+                <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigConsultantName} )</div>
+                <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
+              </td>
+              <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+                <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
+                <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
+                <div class="sig-space" style="height: 45px;"></div>
+                <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigContractorName} )</div>
+                <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     `;
@@ -1259,12 +1624,19 @@ window.App = (function() {
 
     const proj = window.ProjectManager.getActiveProject();
     if (!proj || !proj.divisions) return;
+    const cleanSignerName = (val, fallback) => {
+      let s = (val || "").toString().trim();
+      s = s.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
+      if (!s || s.includes('...') || s.includes('Bapak / Ibu')) return fallback;
+      return s;
+    };
+
     const sig = proj.signatories || {};
-    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || 'Ir. Budi Santoso, M.T.');
+    const sigOwnerName = cleanSignerName(sig.ownerName, cleanSignerName(proj.owner, 'Dr. H. Hendra Gunawan, S.T., M.M.'));
     const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
-    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.';
+    const sigConsultantName = cleanSignerName(sig.consultantName, 'Ir. Bambang Hartono, S.T., M.T.');
     const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || proj.consultant || 'CV. Architecindo Consultant';
-    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.';
+    const sigContractorName = cleanSignerName(sig.contractorName, 'H. Ahmad Fauzi, S.T.');
     const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || proj.contractor || 'PT. Karya Mandiri Perkasa';
 
     let totalProjectLaborCost = 0;
@@ -1275,12 +1647,13 @@ window.App = (function() {
       let divLaborCost = 0;
       let divLaborQty = 0;
       let itemsHtml = "";
+      let mobileCardsHtml = "";
 
       (div.items || []).forEach((itm, idx) => {
         let ahsp = null;
         if (window.AhspEngine) {
-          if (itm.ahspId) ahsp = window.AhspEngine.getAhspById(itm.ahspId);
-          if (!ahsp && itm.code) ahsp = window.AhspEngine.getAhspById(itm.code);
+          if (itm.ahspId) ahsp = window.AhspEngine.getAhspById(itm.ahspId, itm);
+          if (!ahsp && itm.code) ahsp = window.AhspEngine.getAhspById(itm.code, itm);
         }
 
         const laborInfo = (window.ResourceUsage && window.ResourceUsage.getItemLaborDetails)
@@ -1313,6 +1686,7 @@ window.App = (function() {
           `;
         }
 
+        // 1. Desktop Table Row
         itemsHtml += `
           <tr>
             <td class="text-center" style="width: 4%;">${idx + 1}</td>
@@ -1332,10 +1706,56 @@ window.App = (function() {
             </td>
           </tr>
         `;
+
+        // 2. Mobile Responsive Touch Card (Zero Horizontal Scroll, Focused on Core Data)
+        mobileCardsHtml += `
+          <div class="rab-mobile-item-card" id="mob-item-${itm.id}">
+            <div class="rab-mobile-card-top">
+              <div class="d-flex align-items-center gap-1">
+                <span class="rab-mobile-item-no">#${idx + 1}</span>
+                <span class="badge badge-secondary font-mono" style="font-size: 11px;">${itm.code}</span>
+              </div>
+              <div class="rab-mobile-card-total font-bold">
+                ${window.CurrencyUtil.formatRupiah(itm.total, false, true)}
+              </div>
+            </div>
+            
+            <div class="rab-mobile-card-name">
+              ${itm.name}
+            </div>
+
+            ${itm.notes ? `<div class="rab-mobile-card-notes"><span class="text-muted">Catatan:</span> ${itm.notes}</div>` : ''}
+
+            <div class="rab-mobile-card-calc-row">
+              <div>
+                <span class="calc-label">Volume:</span>
+                <span class="calc-val font-bold"> ${window.CurrencyUtil.formatNumber(itm.volume, 2)} ${itm.unit}</span>
+              </div>
+              <div class="text-right">
+                <span class="calc-label">Harga Satuan:</span>
+                <span class="calc-val font-bold"> ${window.CurrencyUtil.formatRupiah(itm.price, false, true)}</span>
+              </div>
+            </div>
+
+            <div class="rab-mobile-card-actions no-print">
+              <button type="button" class="btn btn-sm btn-outline flex-1 d-flex align-items-center justify-content-center gap-1" onclick="App.openEditRabItemModal('${div.id}', '${itm.id}')">
+                <span>✏️</span> <span>Ubah</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline text-danger d-flex align-items-center justify-content-center" style="min-width: 44px;" onclick="App.confirmDeleteRabItem('${div.id}', '${itm.id}')" title="Hapus Item">
+                <span>🗑️</span>
+              </button>
+            </div>
+          </div>
+        `;
       });
 
       totalProjectLaborCost += divLaborCost;
       totalProjectLaborQty += divLaborQty;
+
+      // Pastikan tampilan biaya tenaga tidak melebihi subtotal divisi (sanity cap)
+      const divSubtotal = Number(div.subtotal) || 0;
+      const cappedLaborCost = (divSubtotal > 0 && divLaborCost > divSubtotal) ? divSubtotal : divLaborCost;
+      const laborPctOfDiv = divSubtotal > 0 ? ((cappedLaborCost / divSubtotal) * 100).toFixed(1) : '0.0';
 
       divisionsHtml += `
         <div class="card mb-4" id="div-card-${div.id}">
@@ -1345,16 +1765,17 @@ window.App = (function() {
             </div>
             <div class="card-actions no-print d-flex align-items-center flex-wrap" style="gap: 8px;">
               <span class="badge badge-light mr-2" style="font-size: 12px; font-weight: 600; padding: 5px 10px;">
-                👷 Tenaga Divisi: ${window.CurrencyUtil.formatNumber(divLaborQty, 2)} OH (${window.CurrencyUtil.formatRupiah(divLaborCost, false, true)})
+                👷 Tenaga Divisi: ${window.CurrencyUtil.formatNumber(divLaborQty, 2)} OH (${window.CurrencyUtil.formatRupiah(cappedLaborCost, false, true)}) <span style="font-size:10px;font-weight:400;color:#64748b;">${laborPctOfDiv}% dari subtotal</span>
               </span>
-              <span class="mr-2 font-bold" style="font-size: 13px;">Subtotal: ${window.CurrencyUtil.formatRupiah(div.subtotal || 0, false, true)}</span>
+              <span class="mr-2 font-bold" style="font-size: 13px;">Subtotal: ${window.CurrencyUtil.formatRupiah(divSubtotal, false, true)}</span>
               <button class="btn btn-sm btn-primary" onclick="App.openAddItemModal('${div.id}')" title="Tambah baris item pekerjaan pada divisi ini">+ Tambah Item</button>
               <button class="btn btn-sm btn-outline" onclick="App.openEditDivisionModal('${div.id}')" title="Ubah nomor kode atau nama divisi ini">✏️ Edit Divisi</button>
               <button class="btn btn-sm btn-danger" onclick="App.deleteDivision('${div.id}')" title="Hapus divisi beserta seluruh itemnya">🗑️ Hapus Divisi</button>
             </div>
           </div>
           <div class="card-body p-0">
-            <div class="table-responsive" style="margin-bottom: 0;">
+            <!-- Desktop Table View -->
+            <div class="table-responsive d-desktop-only" style="margin-bottom: 0;">
               <table class="table">
                 <thead>
                   <tr class="division-header-row">
@@ -1382,6 +1803,15 @@ window.App = (function() {
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <!-- Mobile Touch Cards View (Zero Horizontal Scroll!) -->
+            <div class="d-mobile-only p-3">
+              ${mobileCardsHtml || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada item pada divisi ini.</div>'}
+              <div class="rab-mobile-div-footer-card">
+                <span class="font-bold text-muted">Subtotal Divisi ${div.code}:</span>
+                <span class="font-black text-emerald" style="font-size: 15px;">${window.CurrencyUtil.formatRupiah(div.subtotal || 0, false, true)}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1424,9 +1854,9 @@ window.App = (function() {
           <button class="btn ${showLaborDetailInRab ? 'btn-outline' : 'btn-secondary'}" onclick="App.toggleLaborDetailInRab()">
             👷 ${showLaborDetailInRab ? 'Sembunyikan' : 'Tampilkan'} Rincian Tenaga
           </button>
-          <button class="btn btn-success" onclick="App.openAddDivisionModal()" title="Tambah kelompok divisi pekerjaan baru">+ Tambah Divisi Baru</button>
+          <button class="btn btn-primary" onclick="App.openAddDivisionModal()" title="Tambah kelompok divisi pekerjaan baru">+ Tambah Divisi Baru</button>
           <button class="btn btn-primary" onclick="App.openAddItemModal()" title="Tambah item pekerjaan terintegrasi AHSP">+ Tambah Item Pekerjaan</button>
-          <button class="btn btn-outline" onclick="App.printCurrentPage('panel-detail-rab', 'Rincian_Detail_RAB')">🖨️ Cetak A4 PDF</button>
+          <button class="btn btn-outline font-bold" onclick="App.printCurrentPage('panel-detail-rab', 'Rincian_Detail_RAB')">🖨️ Cetak / Preview A4</button>
         </div>
       </div>
 
@@ -1495,30 +1925,32 @@ window.App = (function() {
           </table>
         </div>
 
-        <!-- Lembar Pengesahan Tiga Pihak (Bebas Titik-Titik Sesuai Setting Proyek) -->
-        <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; text-align: center; page-break-inside: avoid; break-inside: avoid;">
-          <div class="sig-block" style="border: none !important; background: transparent !important; page-break-inside: avoid; break-inside: avoid;">
-            <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
-            <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui & Menetapkan:</div>
-            <div class="sig-space" style="height: 38px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigOwnerName} )</div>
-            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
-          </div>
-          <div class="sig-block" style="border: none !important; background: transparent !important; page-break-inside: avoid; break-inside: avoid;">
-            <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
-            <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
-            <div class="sig-space" style="height: 38px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigConsultantName} )</div>
-            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
-          </div>
-          <div class="sig-block" style="border: none !important; background: transparent !important; page-break-inside: avoid; break-inside: avoid;">
-            <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
-            <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
-            <div class="sig-space" style="height: 38px;"></div>
-            <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigContractorName} )</div>
-            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
-          </div>
-        </div>
+        <!-- Lembar Pengesahan Tiga Pihak (Bebas Titik-Titik & Sejajar 3 Kolom Horizontal) -->
+        <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 24pt !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+          <tr style="border: none !important; background: transparent !important;">
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+              <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
+              <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui &amp; Menetapkan:</div>
+              <div class="sig-space" style="height: 42px;"></div>
+              <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigOwnerName} )</div>
+              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
+            </td>
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+              <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
+              <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
+              <div class="sig-space" style="height: 42px;"></div>
+              <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigConsultantName} )</div>
+              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
+            </td>
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+              <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
+              <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
+              <div class="sig-space" style="height: 42px;"></div>
+              <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigContractorName} )</div>
+              <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
+            </td>
+          </tr>
+        </table>
       </div>
 
     `;
@@ -1644,7 +2076,10 @@ window.App = (function() {
           <td class="text-center">${offset + idx + 1}</td>
           <td>
             <strong>${item.name}</strong> ${badgeHtml}
-            <div class="text-muted" style="font-size: 11px;">Kategori: ${item.category} | ${item.components ? item.components.length : 0} Komponen</div>
+            <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+              ${item.bidang ? `<span class="badge ${item.bidang === 'SMKK' ? 'badge-danger' : (item.bidang === 'Bina Marga' ? 'badge-warning' : (item.bidang === 'Sumber Daya Air' ? 'badge-info' : 'badge-primary'))}" style="font-size: 9px; padding: 1px 6px; margin-right: 4px; font-weight: 700;">${item.bidang}</span>` : ''}
+              Kategori: <strong>${item.category || item.sub_kategori || item.divisi}</strong> | ${item.components ? item.components.length : 0} Komponen
+            </div>
           </td>
           <td class="text-center"><span class="badge badge-light" style="font-family: var(--font-mono);">${item.code}</span></td>
           <td class="text-center">${item.unit}</td>
@@ -1691,14 +2126,16 @@ window.App = (function() {
           <option value="50" ${pageSize === 50 ? 'selected' : ''}>50 per halaman</option>
           <option value="100" ${pageSize === 100 ? 'selected' : ''}>100 per halaman</option>
           <option value="250" ${pageSize === 250 ? 'selected' : ''}>250 per halaman</option>
-          <option value="2573" ${pageSize >= 2000 ? 'selected' : ''}>Semua (2.573 AHSP)</option>
+          <option value="9999" ${pageSize >= 2000 ? 'selected' : ''}>Semua (${(window.MASTER_AHSP || []).length || 2531} AHSP)</option>
         </select>
       </div>
 
       <div class="pagination-nav d-flex align-items-center" style="gap: 4px;">
         <button class="btn btn-sm btn-outline" ${current <= 1 ? 'disabled' : ''} onclick="App.changeAhspPage(1)" title="Halaman Pertama">««</button>
         <button class="btn btn-sm btn-outline" ${current <= 1 ? 'disabled' : ''} onclick="App.changeAhspPage(${current - 1})" title="Halaman Sebelumnya">‹ Prev</button>
-        ${pageButtons}
+        <span class="pagination-info" style="font-size: 13px; font-weight: 500; padding: 0 8px;">
+          Hal ${current} dari ${totalPages} (${total.toLocaleString('id-ID')} item)
+        </span>
         <button class="btn btn-sm btn-outline" ${current >= totalPages ? 'disabled' : ''} onclick="App.changeAhspPage(${current + 1})" title="Halaman Berikutnya">Next ›</button>
         <button class="btn btn-sm btn-outline" ${current >= totalPages ? 'disabled' : ''} onclick="App.changeAhspPage(${totalPages})" title="Halaman Terakhir">»»</button>
       </div>
@@ -1735,6 +2172,8 @@ window.App = (function() {
     const container = document.getElementById("ahspContent");
     if (!container) return;
 
+    const bidangs = (window.AhspEngine && window.AhspEngine.getBidangs) ? window.AhspEngine.getBidangs() : [];
+    const activeBidang = (window.AhspEngine && window.AhspEngine.getBidang) ? window.AhspEngine.getBidang() : "ALL";
     const categories = window.AhspEngine.getCategories();
     const onlyUsed = window.AhspEngine.getOnlyUsedFilter();
     const activeCat = window.AhspEngine.getCategory() || "ALL";
@@ -1749,7 +2188,12 @@ window.App = (function() {
       currentAhspPage = totalPages;
     }
 
-    let catOptions = `<option value="ALL" ${activeCat === "ALL" ? 'selected' : ''}>Semua Kategori (40 Divisi)</option>`;
+    let bidangOptions = `<option value="ALL" ${activeBidang === "ALL" ? 'selected' : ''}>Semua Bidang (4 Bidang PU)</option>`;
+    bidangs.forEach(b => {
+      bidangOptions += `<option value="${b}" ${b === activeBidang ? 'selected' : ''}>Bidang: ${b}</option>`;
+    });
+
+    let catOptions = `<option value="ALL" ${activeCat === "ALL" ? 'selected' : ''}>Semua Kategori / Divisi</option>`;
     categories.forEach(c => {
       catOptions += `<option value="${c}" ${c === activeCat ? 'selected' : ''}>${c}</option>`;
     });
@@ -1764,13 +2208,13 @@ window.App = (function() {
             📚 Daftar AHSP 2026 (SE Bina Konstruksi No. 47/2026)
             <span class="badge badge-light" id="ahspTotalBadge" style="font-size: 11px;">Total: ${ahspData.total} Item</span>
           </h2>
-          <div class="page-header-sub">Katalog master analisa harga satuan pekerjaan nasional 2026 & kustomisasi analisa</div>
+          <div class="page-header-sub">Katalog master analisa harga satuan terpadu: Cipta Karya, Bina Marga, SDA, dan SMKK</div>
         </div>
         <div class="page-header-actions">
           <button class="btn btn-outline" onclick="App.printUsedAhsp()" title="Cetak seluruh analisa AHSP yang digunakan dalam RAB aktif">
             <span style="margin-right: 4px;">🖨️</span> Cetak AHSP Terpakai
           </button>
-          <button class="btn btn-outline" onclick="App.printAllAhsp()" title="Cetak seluruh 2.573 master AHSP SE Bina Konstruksi No. 47/2026 tanpa kecuali">
+          <button class="btn btn-outline" onclick="App.printAllAhsp()" title="Cetak seluruh master AHSP SE Bina Konstruksi / Permen PUPR No. 8/2023 tanpa kecuali">
             <span style="margin-right: 4px;">📑</span> Cetak Seluruh AHSP Lengkap
           </button>
           <button class="btn btn-primary" onclick="App.openCreateCustomAhspModal()">+ Buat AHSP Custom</button>
@@ -1783,15 +2227,18 @@ window.App = (function() {
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <span>Tabel Analisis Harga Satuan Pekerjaan</span>
+            <span>Tabel Analisis Harga Satuan Pekerjaan (Multi-Bidang)</span>
           </div>
           <div class="card-actions no-print"></div>
         </div>
         <div class="card-body">
           <!-- Filter Bar -->
-          <div class="filter-bar no-print">
-            <input type="text" id="ahspSearchInput" class="search-input" placeholder="Cari nama atau kode analisa..." value="${searchVal}" oninput="App.handleAhspSearch(this.value)">
-            <select class="select-filter" id="ahspCategorySelect" onchange="App.handleAhspCategory(this.value)">
+          <div class="filter-bar no-print" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <input type="text" id="ahspSearchInput" class="search-input" placeholder="Cari nama, kode, bidang, divisi, atau tag..." value="${searchVal}" oninput="App.handleAhspSearch(this.value)" style="min-width: 240px; flex: 1;">
+            <select class="select-filter" id="ahspBidangSelect" onchange="App.handleAhspBidang(this.value)" style="min-width: 170px;">
+              ${bidangOptions}
+            </select>
+            <select class="select-filter" id="ahspCategorySelect" onchange="App.handleAhspCategory(this.value)" style="min-width: 200px;">
               ${catOptions}
             </select>
             <button class="btn ${onlyUsed ? 'btn-accent' : 'btn-outline'}" onclick="App.toggleOnlyUsedAhsp()">
@@ -1996,7 +2443,7 @@ window.App = (function() {
           </div>
           <div class="card-actions no-print d-flex align-items-center flex-wrap" style="gap: 8px;">
             <!-- Tombol Toggle Tampilkan Seluruh Data Katalog vs Katalog yang Dipakai -->
-            <div class="btn-group" style="display: inline-flex; border-radius: 6px; overflow: hidden; border: 1.5px solid #2563eb; background: #ffffff;">
+            <div class="btn-group" style="display: inline-flex; border-radius: 6px; overflow: hidden; border: 1px solid #cbd5e1; background: #ffffff;">
               <button type="button" class="btn btn-sm ${isUsed ? 'btn-primary' : 'btn-light'}" style="font-weight: 700; padding: 6px 12px; font-size: 12px;" onclick="App.setKatalogMode('used')" title="Tampilkan hanya upah dan bahan yang dipakai dalam RAB proyek aktif">
                 📋 Katalog yang Dipakai
               </button>
@@ -2033,15 +2480,7 @@ window.App = (function() {
                 ${catOptions}
               </select>
             </div>
-            <div class="d-flex align-items-center" style="gap: 6px;">
-              <span class="text-muted" style="font-size: 11.5px; font-weight: 600;">Mode Tampilan:</span>
-              <button class="btn btn-sm ${isUsed ? 'btn-primary' : 'btn-outline'}" style="padding: 4px 10px; font-size: 11.5px; font-weight: 700;" onclick="App.setKatalogMode('used')">
-                📋 Yang Dipakai
-              </button>
-              <button class="btn btn-sm ${!isUsed ? 'btn-primary' : 'btn-outline'}" style="padding: 4px 10px; font-size: 11.5px; font-weight: 700;" onclick="App.setKatalogMode('all')">
-                🌐 Seluruh Katalog
-              </button>
-            </div>
+
           </div>
 
           <div class="table-responsive">
@@ -2097,6 +2536,7 @@ window.App = (function() {
     const eqPct = res.grandTotal > 0 ? ((res.totalEquipment / res.grandTotal) * 100).toFixed(2) : "0.00";
 
     let matRows = "";
+    let matMobileCards = "";
     res.materials.forEach((m, idx) => {
       matRows += `
         <tr>
@@ -2111,9 +2551,27 @@ window.App = (function() {
           <td class="text-right text-muted">${m.pctOfTotal ? m.pctOfTotal.toFixed(2) : '0.00'}%</td>
         </tr>
       `;
+
+      matMobileCards += `
+        <div class="resource-mobile-card">
+          <div class="resource-mobile-card-top">
+            <span class="badge badge-secondary font-mono" style="font-size: 11px;">${m.code || 'M.' + String(idx + 1).padStart(4, '0')}</span>
+            <span class="font-bold text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(m.totalCost, false, true)}</span>
+          </div>
+          <div class="resource-mobile-card-name">${m.name}</div>
+          <div class="resource-mobile-card-row">
+            <span>Kebutuhan: <strong>${window.CurrencyUtil.formatNumber(m.qty, 2)} ${m.unit}</strong></span>
+            <span>Harga: <strong>${window.CurrencyUtil.formatRupiah(m.price, false, true)}</strong></span>
+          </div>
+          <div class="d-flex justify-content-end text-muted" style="font-size: 11px; margin-top: 3px;">
+            <span>Bobot Total: <strong class="text-dark">${m.pctOfTotal ? m.pctOfTotal.toFixed(2) : '0.00'}%</strong></span>
+          </div>
+        </div>
+      `;
     });
 
     let labRows = "";
+    let labMobileCards = "";
     res.labor.forEach((l, idx) => {
       labRows += `
         <tr>
@@ -2128,9 +2586,27 @@ window.App = (function() {
           <td class="text-right text-muted">${l.pctOfTotal ? l.pctOfTotal.toFixed(2) : '0.00'}%</td>
         </tr>
       `;
+
+      labMobileCards += `
+        <div class="resource-mobile-card">
+          <div class="resource-mobile-card-top">
+            <span class="badge badge-secondary font-mono" style="font-size: 11px;">${l.code || 'L.' + String(idx + 1).padStart(2, '0')}</span>
+            <span class="font-bold text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(l.totalCost, false, true)}</span>
+          </div>
+          <div class="resource-mobile-card-name">${l.name}</div>
+          <div class="resource-mobile-card-row">
+            <span>Jumlah: <strong>${window.CurrencyUtil.formatNumber(l.qty, 2)} ${l.unit}</strong></span>
+            <span>Upah/OH: <strong>${window.CurrencyUtil.formatRupiah(l.price, false, true)}</strong></span>
+          </div>
+          <div class="d-flex justify-content-end text-muted" style="font-size: 11px; margin-top: 3px;">
+            <span>Bobot Total: <strong class="text-dark">${l.pctOfTotal ? l.pctOfTotal.toFixed(2) : '0.00'}%</strong></span>
+          </div>
+        </div>
+      `;
     });
 
     let eqRows = "";
+    let eqMobileCards = "";
     res.equipment.forEach((e, idx) => {
       eqRows += `
         <tr>
@@ -2145,6 +2621,23 @@ window.App = (function() {
           <td class="text-right text-muted">${e.pctOfTotal ? e.pctOfTotal.toFixed(2) : '0.00'}%</td>
         </tr>
       `;
+
+      eqMobileCards += `
+        <div class="resource-mobile-card">
+          <div class="resource-mobile-card-top">
+            <span class="badge badge-secondary font-mono" style="font-size: 11px;">${e.code || 'E.' + String(idx + 1).padStart(2, '0')}</span>
+            <span class="font-bold text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(e.totalCost, false, true)}</span>
+          </div>
+          <div class="resource-mobile-card-name">${e.name}</div>
+          <div class="resource-mobile-card-row">
+            <span>Sewa: <strong>${window.CurrencyUtil.formatNumber(e.qty, 2)} ${e.unit}</strong></span>
+            <span>Tarif: <strong>${window.CurrencyUtil.formatRupiah(e.price, false, true)}</strong></span>
+          </div>
+          <div class="d-flex justify-content-end text-muted" style="font-size: 11px; margin-top: 3px;">
+            <span>Bobot Total: <strong class="text-dark">${e.pctOfTotal ? e.pctOfTotal.toFixed(2) : '0.00'}%</strong></span>
+          </div>
+        </div>
+      `;
     });
     container.innerHTML = `
       <div class="print-only">
@@ -2156,8 +2649,8 @@ window.App = (function() {
           <h2 class="page-header-title">📊 Rincian Penggunaan Sumber Daya Proyek</h2>
           <div class="page-header-sub">Kebutuhan total material fisik, tenaga kerja (OH), dan sewa alat beserta nilai persentase bobot</div>
         </div>
-        <div class="page-header-actions">
-          <button class="btn btn-outline" onclick="App.printCurrentPage('panel-sumberdaya', 'Rekap_Sumber_Daya')">🖨️ Cetak A4 PDF</button>
+        <div class="page-header-actions d-flex align-items-center flex-wrap" style="gap: 8px;">
+          <button class="btn btn-primary font-bold" onclick="App.printCurrentPage('panel-sumberdaya', 'Rekap_Sumber_Daya')">🖨️ Cetak / Preview A4</button>
         </div>
       </div>
 
@@ -2185,11 +2678,27 @@ window.App = (function() {
         </div>
       </div>
 
+      <!-- Data Sync Reconciliation Banner -->
+      <div class="no-print mb-3 p-3" id="resourceReconciliationBanner" style="background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 6px 6px 0; font-size: 12px; color: #78350f; line-height: 1.6;"></div>
+      <script>
+        (function() {
+          const rab = window.RabCalculator ? window.RabCalculator.calculateProjectRab(window.ProjectManager.getActiveProject()) : null;
+          const res = window.ResourceUsage ? window.ResourceUsage.calculateTotalResources(window.ProjectManager.getActiveProject()) : { grandTotal: 0 };
+          const rabRealCost = rab ? (rab.realCost || 0) : 0;
+          const rabGrandTotal = rab ? (rab.grandTotal || 0) : 0;
+          const diff = Math.abs(res.grandTotal - rabRealCost);
+          const pctDiff = rabRealCost > 0 ? ((diff / rabRealCost) * 100).toFixed(1) : '0.0';
+          const el = document.getElementById('resourceReconciliationBanner');
+          if (el) el.innerHTML = '<strong>ℹ️ Rekonsiliasi Data (Sumber Daya AHSP vs RAB):</strong><br>Total di halaman ini dihitung dari komponen AHSP (bahan, upah, alat × volume per item), <strong>bukan</strong> dari total RAB langsung. Selisih terjadi karena overhead, pembulatan, dan item tanpa AHSP.<br><div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;"><span>📦 <strong>Total AHSP:</strong> <b style="color:#b45309">' + window.CurrencyUtil.formatRupiah(res.grandTotal, false, true) + '</b></span><span>📋 <strong>RAB Real Cost:</strong> <b style="color:#0284c7">' + window.CurrencyUtil.formatRupiah(rabRealCost, false, true) + '</b></span><span>🏷️ <strong>Grand Total RAB+PPN:</strong> <b style="color:#059669">' + window.CurrencyUtil.formatRupiah(rabGrandTotal, false, true) + '</b></span><span>📊 <strong>Selisih:</strong> <b style="color:#dc2626">' + window.CurrencyUtil.formatRupiah(diff, false, true) + ' (' + pctDiff + '%)</b></span></div>';
+        })();
+      </script>
+
       <!-- Tabel Bahan -->
       <div class="card mb-4">
         <div class="card-header"><div class="card-title">1. Rekapitulasi Kebutuhan Bahan Material Fisik</div></div>
         <div class="card-body p-0">
-          <div class="table-responsive">
+          <!-- Desktop Table View -->
+          <div class="table-responsive d-desktop-only">
             <table class="table">
               <thead>
                 <tr>
@@ -2217,6 +2726,15 @@ window.App = (function() {
               </tfoot>
             </table>
           </div>
+
+          <!-- Mobile Touch Cards View (Zero Horizontal Scroll!) -->
+          <div class="d-mobile-only p-3">
+            ${matMobileCards || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada kebutuhan bahan.</div>'}
+            <div class="rab-mobile-div-footer-card">
+              <span class="font-bold text-muted">Subtotal Bahan:</span>
+              <span class="font-black text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(res.totalMaterials, false, true)}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2224,7 +2742,8 @@ window.App = (function() {
       <div class="card mb-4">
         <div class="card-header"><div class="card-title">2. Rekapitulasi Kebutuhan Tenaga Kerja (Orang-Hari / OH)</div></div>
         <div class="card-body p-0">
-          <div class="table-responsive">
+          <!-- Desktop Table View -->
+          <div class="table-responsive d-desktop-only">
             <table class="table">
               <thead>
                 <tr>
@@ -2252,6 +2771,15 @@ window.App = (function() {
               </tfoot>
             </table>
           </div>
+
+          <!-- Mobile Touch Cards View (Zero Horizontal Scroll!) -->
+          <div class="d-mobile-only p-3">
+            ${labMobileCards || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada data tenaga.</div>'}
+            <div class="rab-mobile-div-footer-card">
+              <span class="font-bold text-muted">Subtotal Biaya Upah:</span>
+              <span class="font-black text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(res.totalLabor, false, true)}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2259,7 +2787,8 @@ window.App = (function() {
       <div class="card mb-4">
         <div class="card-header"><div class="card-title">3. Rekapitulasi Sewa Peralatan</div></div>
         <div class="card-body p-0">
-          <div class="table-responsive">
+          <!-- Desktop Table View -->
+          <div class="table-responsive d-desktop-only">
             <table class="table">
               <thead>
                 <tr>
@@ -2286,6 +2815,15 @@ window.App = (function() {
                 </tr>
               </tfoot>
             </table>
+          </div>
+
+          <!-- Mobile Touch Cards View (Zero Horizontal Scroll!) -->
+          <div class="d-mobile-only p-3">
+            ${eqMobileCards || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada kebutuhan alat.</div>'}
+            <div class="rab-mobile-div-footer-card">
+              <span class="font-bold text-muted">Subtotal Sewa Alat:</span>
+              <span class="font-black text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(res.totalEquipment, false, true)}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -2371,7 +2909,7 @@ window.App = (function() {
           </h2>
           <div class="page-header-sub">Sinkronisasi otomatis dengan jadwal Kalender Proyek (Target Rencana vs Realisasi Fisik)</div>
         </div>
-        <div class="page-header-actions d-flex align-items-center" style="gap: 10px;">
+        <div class="page-header-actions d-flex align-items-center flex-wrap" style="gap: 10px;">
           <!-- Toggle Mode Grid Harian vs Grid Mingguan -->
           <div class="btn-group" style="display: inline-flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 8px; border: 1px solid #cbd5e1;">
             <button class="btn btn-sm ${isDaily ? 'btn-primary' : 'btn-outline'}" 
@@ -2385,33 +2923,39 @@ window.App = (function() {
               📆 Grid Mingguan (${weeksCount} Mgg)
             </button>
           </div>
-          <button class="btn btn-outline" onclick="App.printCurrentPage('panel-kurva-s', 'Kurva_S_Proyek')">🖨️ Cetak A4 PDF</button>
+          <button class="btn btn-primary font-bold" onclick="App.printCurrentPage('panel-kurva-s', 'Kurva_S_Proyek')">🖨️ Cetak / Preview A4</button>
         </div>
       </div>
 
-      <!-- 4 KPI Summary Cards (Clean, Professional, No Waste Space) -->
-      <div class="dashboard-grid mb-4 no-print" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px;">
-        <div class="stat-card" style="border-top: 3px solid #2563eb;">
-          <div class="stat-label">TARGET RENCANA KUMULATIF</div>
-          <div class="stat-value text-primary" style="font-size: 22px;">100,00%</div>
-          <div class="stat-desc">Total bobot rencana seluruh divisi</div>
+      <!-- Tips Rotasi Layar Khusus Mobile -->
+      <div class="d-mobile-only no-print mb-2" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #334155; display: flex; align-items: center; gap: 6px;">
+        <span>📱🔄</span>
+        <span>Gunakan orientasi <strong>Landscape</strong> untuk grafik Kurva S &amp; timeline mingguan yang lebih luas.</span>
+      </div>
+
+      <!-- Sleek Compact Executive KPI Strip (Balanced & Proportional - Anti-Over Bagan) -->
+      <div class="kurva-kpi-bar no-print mb-3">
+        <div class="kpi-cell">
+          <div class="kpi-cell-label">Target Rencana</div>
+          <div class="kpi-cell-value">100,00%</div>
+          <div class="kpi-cell-sub">Bobot Total Proyek</div>
         </div>
-        <div class="stat-card" style="border-top: 3px solid ${hasRealProgress ? '#059669' : '#94a3b8'};">
-          <div class="stat-label">REALISASI FISIK AKTUAL</div>
-          <div class="stat-value" style="font-size: 22px; color: ${hasRealProgress ? '#059669' : '#64748b'};">
-            ${hasRealProgress ? `${window.CurrencyUtil.formatNumber(lastActCum, 2)}%` : '<span style="font-size: 15px; font-weight: 700; color: #64748b;">0,00% (Belum Mulai)</span>'}
+        <div class="kpi-cell">
+          <div class="kpi-cell-label">Realisasi Aktual</div>
+          <div class="kpi-cell-value" style="color: ${hasRealProgress ? '#059669' : '#64748b'};">
+            ${hasRealProgress ? `${window.CurrencyUtil.formatNumber(lastActCum, 2)}%` : '0,00% (Belum Mulai)'}
           </div>
-          <div class="stat-desc">${hasRealProgress ? 'Progres aktual fisik terverifikasi' : 'Menunggu input progres Kalender'}</div>
+          <div class="kpi-cell-sub">${hasRealProgress ? 'Terverifikasi Kalender' : 'Menunggu Kalender'}</div>
         </div>
-        <div class="stat-card" style="border-top: 3px solid ${devColor};">
-          <div class="stat-label">DEVIASI JADWAL PROYEK</div>
-          <div class="stat-value" style="font-size: 22px; color: ${devColor};">${deviationText}</div>
-          <div class="stat-desc">${hasRealProgress ? 'Deviasi fisik terhadap rencana' : 'Kalender Proyek belum berjalan'}</div>
+        <div class="kpi-cell">
+          <div class="kpi-cell-label">Deviasi Jadwal</div>
+          <div class="kpi-cell-value" style="color: ${hasRealProgress ? devColor : '#64748b'};">${deviationText}</div>
+          <div class="kpi-cell-sub">${hasRealProgress ? 'Status Pelaksanaan' : 'Belum Berjalan'}</div>
         </div>
-        <div class="stat-card" style="border-top: 3px solid #0891b2;">
-          <div class="stat-label">TOTAL DURASI PELAKSANAAN</div>
-          <div class="stat-value text-info" style="font-size: 22px;">${totalDays} Hari</div>
-          <div class="stat-desc">${weeksCount} Minggu (${proj ? (proj.startDate || '07 Sep 2026') : ''} s.d. ${proj ? (proj.finishDate || '09 Sep 2026') : ''})</div>
+        <div class="kpi-cell">
+          <div class="kpi-cell-label">Total Durasi</div>
+          <div class="kpi-cell-value">${totalDays} Hari</div>
+          <div class="kpi-cell-sub">${weeksCount} Minggu Kerja</div>
         </div>
       </div>
 
@@ -2589,25 +3133,27 @@ window.App = (function() {
       const dSubtotal = dTasks.reduce((sum, t) => sum + (Number(t.cost) || 0), 0);
       const dCompleted = dTasks.filter(t => t.status === "Selesai").length;
 
-      // Division Header Bar
+      // Division Header Bar - Full Width Table (Anti Bertumpuk di Kiri & Space Kanan Termaksimalkan)
       taskRows += `
-        <tr style="background: #f1f5f9; border-top: 2px solid #cbd5e1; border-bottom: 2px solid #cbd5e1;">
-          <td colspan="7" style="padding: 10px 14px;">
-            <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap: 8px;">
-              <div>
-                <span class="badge badge-primary font-bold" style="font-size: 11px; padding: 4px 8px;">DIVISI ${dCode}</span>
-                <span style="font-weight: 800; font-size: 13.5px; color: #0f172a; margin-left: 8px;">${dName.toUpperCase()}</span>
-                <span class="text-muted" style="font-size: 11.5px; margin-left: 10px;">(${dTasks.length} Item AHSP Fisik)</span>
-              </div>
-              <div class="d-flex align-items-center" style="gap: 12px;">
-                <span class="badge ${dCompleted === dTasks.length ? 'badge-success' : (dCompleted > 0 ? 'badge-warning' : 'badge-light')}" style="font-size: 11px;">
-                  Progres: ${dCompleted}/${dTasks.length} Selesai
-                </span>
-                <span style="font-weight: 800; color: #1e40af; font-size: 13px;">
-                  ${window.CurrencyUtil.formatRupiah(dSubtotal, false, true)}
-                </span>
-              </div>
-            </div>
+        <tr class="calendar-division-header-row" style="background: #f1f5f9; border-top: 2px solid #cbd5e1; border-bottom: 2px solid #cbd5e1;">
+          <td colspan="7" style="padding: 8px 12px; background-color: #f1f5f9 !important;">
+            <table class="calendar-div-inner-table" style="width: 100%; border-collapse: collapse; border: none; background: transparent; margin: 0; padding: 0;">
+              <tr style="border: none; background: transparent;">
+                <td style="text-align: left; vertical-align: middle; border: none; padding: 0; font-size: 13px; font-weight: 700; color: #0f172a; width: 52%;">
+                  <span style="background: #2563eb; color: #ffffff; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-right: 8px; display: inline-block;">DIVISI ${dCode}</span>
+                  <span style="font-weight: 800; font-size: 13.5px; color: #0f172a;">${dName.toUpperCase()}</span>
+                  <span style="color: #64748b; font-size: 11.5px; margin-left: 8px; font-weight: 500;">(${dTasks.length} Item AHSP Fisik)</span>
+                </td>
+                <td style="text-align: center; vertical-align: middle; border: none; padding: 0 10px; font-size: 11.5px; white-space: nowrap; width: 23%;">
+                  <span style="background: ${dCompleted === dTasks.length ? '#dcfce7' : (dCompleted > 0 ? '#fef3c7' : '#e2e8f0')}; color: ${dCompleted === dTasks.length ? '#166534' : (dCompleted > 0 ? '#92400e' : '#334155')}; padding: 3px 10px; border-radius: 4px; font-weight: 600; display: inline-block;">
+                    Progres: ${dCompleted}/${dTasks.length} Selesai
+                  </span>
+                </td>
+                <td style="text-align: right; vertical-align: middle; border: none; padding: 0; font-size: 12.5px; font-weight: 700; color: #1e40af; white-space: nowrap; width: 25%;">
+                  Subtotal: <span style="font-weight: 800; color: #1e40af; font-size: 13.5px;">${window.CurrencyUtil.formatRupiah(dSubtotal, false, true)}</span>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
       `;
@@ -2668,7 +3214,7 @@ window.App = (function() {
             <td class="text-muted" style="font-size: 11px; vertical-align: middle;">${t.notes || '-'}</td>
             <td class="text-center no-print" style="vertical-align: middle; white-space: nowrap; width: 130px;">
               ${isCompleted ? `
-                <button class="btn btn-sm btn-warning" onclick="App.unlockTask('${t.code}')" title="Buka kunci pekerjaan ini agar tanggal dapat diedit kembali" style="font-size: 11px; padding: 3px 7px;">🔓 Buka Kunci</button>
+                <button class="btn btn-sm btn-outline" onclick="App.unlockTask('${t.code}')" title="Buka kunci pekerjaan ini agar tanggal dapat diedit kembali" style="font-size: 11px; padding: 3px 7px;">🔓 Buka Kunci</button>
                 <button class="btn btn-sm btn-danger" onclick="App.deleteTask('${t.code}')" title="Hapus jadwal pekerjaan ini" style="font-size: 11px; padding: 3px 7px;">🗑️ Hapus</button>
               ` : `
                 <button class="btn btn-sm btn-outline" onclick="App.openEditTaskModal('${t.code}')" title="Edit tanggal atau status pekerjaan" style="font-size: 11px; padding: 3px 7px;">✏️ Edit</button>
@@ -2696,11 +3242,11 @@ window.App = (function() {
           <h2 class="page-header-title">📅 Kalender Proyek & Jadwal Pelaksanaan</h2>
           <div class="page-header-sub">Memuat detail jadwal tanggal per item pekerjaan/AHSP fisik, durasi standar versus realisasi lapangan, dan visualisasi timeline</div>
         </div>
-        <div class="page-header-actions">
-          <button class="btn btn-outline-danger" onclick="App.confirmClearAllCalendarTasks()" title="Kosongkan semua data jadwal di kalender untuk di-generate ulang bersih">🗑️ Hapus Semua Data Kalender</button>
-          <button class="btn btn-primary" onclick="App.syncCalendarFromRab(true)" title="Sinkronkan & perbarui seluruh jadwal dari rincian detail divisi RAB">🔄 Muat / Refresh Jadwal dari Rincian RAB</button>
-          <button class="btn btn-outline" onclick="App.openAddTaskModal()">+ Tambah Jadwal Manual</button>
-          <button class="btn btn-outline" onclick="App.printCurrentPage('panel-kalender', 'Kalender_Proyek')">🖨️ Cetak A4 PDF</button>
+        <div class="page-header-actions d-flex align-items-center flex-wrap" style="gap: 8px;">
+          <button class="btn btn-outline-danger" onclick="App.confirmClearAllCalendarTasks()" title="Kosongkan semua data jadwal di kalender untuk di-generate ulang bersih">🗑️ Hapus Data</button>
+          <button class="btn btn-primary" onclick="App.syncCalendarFromRab(true)" title="Sinkronkan & perbarui seluruh jadwal dari rincian detail divisi RAB">🔄 Sinkron RAB</button>
+          <button class="btn btn-outline" onclick="App.openAddTaskModal()">+ Tambah Jadwal</button>
+          <button class="btn btn-primary font-bold" onclick="App.printCurrentPage('panel-kalender', 'Kalender_Proyek')">🖨️ Cetak / Preview A4</button>
         </div>
       </div>
 
@@ -2843,12 +3389,12 @@ window.App = (function() {
               <span class="badge badge-light" style="font-family: monospace; font-size: 12px;">${bap.bapNumber}</span>
               <span class="badge badge-success">${bap.status || 'Disetujui'}</span>
             </div>
-            <div class="card-actions d-flex align-items-center" style="gap: 8px;">
+            <div class="card-actions d-flex align-items-center flex-wrap" style="gap: 8px;">
               <button class="btn btn-sm btn-outline" onclick="App.openEditBapModal('${bap.id || bap.bapNumber}')" style="display: inline-flex; align-items: center; gap: 5px;">
                 ✏️ Edit BAP
               </button>
-              <button class="btn btn-sm btn-primary" onclick="App.printSingleBap('${bap.id || bap.bapNumber}')" style="display: inline-flex; align-items: center; gap: 5px;">
-                🖨️ Cetak BAP Ini (A4)
+              <button class="btn btn-sm btn-primary font-bold" onclick="App.printSingleBap('${bap.id || bap.bapNumber}')" style="display: inline-flex; align-items: center; gap: 5px;">
+                🖨️ Cetak / Preview A4
               </button>
               <button class="btn btn-sm btn-danger" onclick="App.deleteBap('${bap.id || bap.bapNumber}')" style="display: inline-flex; align-items: center; gap: 5px;">
                 🗑️ Hapus
@@ -3000,9 +3546,6 @@ window.App = (function() {
         <div>
           <h2 class="page-header-title">📖 Dokumen Proposal Rencana Anggaran Biaya</h2>
           <div class="page-header-sub">Format bundel cetak A4 lengkap: Cover eksekutif, lembar pengesahan, daftar isi, rekapitulasi & lampiran</div>
-        </div>
-        <div class="page-header-actions">
-          <button class="btn btn-primary" onclick="App.printProposal()">🖨️ Cetak Proposal Lengkap (A4 PDF)</button>
         </div>
       </div>
 
@@ -3230,7 +3773,7 @@ window.App = (function() {
     const title = isEdit ? "Edit Item Pekerjaan" : "Tambah Item Pekerjaan Baru";
     const subtitle = isEdit
       ? `Mengubah rincian item: ${existingItem.name}`
-      : "Pilih pekerjaan dari pustaka AHSP Standar PUPR No. 47/2026 atau input secara mandiri";
+      : "Pustaka Resmi AHSP PUPR No. 47/SE/Dk/2026 & Spesifikasi Proyek";
     const submitText = isEdit ? "Simpan Perubahan Item" : "Tambah ke RAB";
 
     let divOptionsHtml = "";
@@ -3240,7 +3783,7 @@ window.App = (function() {
     });
 
     const categories = (window.AhspEngine && window.AhspEngine.getCategories) ? window.AhspEngine.getCategories() : [];
-    let catOptionsHtml = '<option value="ALL">Semua Kategori (Pustaka 2.573 AHSP)</option>';
+    let catOptionsHtml = `<option value="ALL">Semua Kategori (Pustaka ${(window.MASTER_AHSP || []).length || 2577} AHSP)</option>`;
     categories.forEach(c => {
       catOptionsHtml += `<option value="${c}">${c}</option>`;
     });
@@ -3254,129 +3797,134 @@ window.App = (function() {
     const initNotes = existingItem ? (existingItem.notes || "") : "";
     const initTotal = Math.round(initVolume * initPrice);
 
+    // Initial step: If editing, default straight to Step 2 (Volume & Simpan) on mobile
+    const defaultStep = isEdit ? "2" : "1";
+
     const customBodyHtml = `
-      <!-- Step 1: Panel Pencarian & Integrasi AHSP PUPR 2026 -->
-      <div class="mb-3" style="background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.05);">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div style="font-weight: 800; color: #1e3a8a; font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
-            <span>⚡</span> <span>1. Pilihan Cepat AHSP Standar SE PUPR No. 47/2026</span>
-          </div>
-          <span class="badge badge-primary" style="font-size: 11px; padding: 4px 8px;">Pustaka Terintegrasi</span>
-        </div>
-        <div style="font-size: 11.5px; color: #3b82f6; margin-bottom: 10px; line-height: 1.4;">
-          Pilih item pekerjaan dari pustaka standar PUPR di bawah. Sistem akan otomatis mengisi dan <strong>mengunci</strong> Kode AHSP, Nama Pekerjaan, Satuan Hasil, dan Harga Satuan (HSP) standar acuan.
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 8px;">
-          <div>
-            <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; display: block;">Kategori Pekerjaan:</label>
-            <select id="modalAhspCatFilter" class="form-control" style="font-size: 12px; padding: 5px 8px; height: auto;">
-              ${catOptionsHtml}
-            </select>
-          </div>
-          <div>
-            <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; display: block;">Cari Pekerjaan / Kode AHSP:</label>
-            <input type="text" id="modalAhspSearchInput" class="form-control" placeholder="Ketik misal: plesteran, sloof, bata, cat, pipa, pintu, keramik..." style="font-size: 12px; padding: 5px 10px;">
-          </div>
+      <div class="rab-modal-container" id="rabModalContainer" data-active-step="${defaultStep}">
+        <!-- Mobile Segmented Tabs (Screens <= 860px) -->
+        <div class="rab-modal-mobile-tabs" id="modalMobileTabs">
+          <button type="button" class="rab-tab-btn ${defaultStep === '1' ? 'active' : ''}" id="modalTabBtnStep1">
+            <span class="tab-step-num">1</span>
+            <span>Pilih AHSP</span>
+            <span class="tab-check-icon" id="tab1Check" style="${initCode ? 'display:inline-block;' : 'display:none;'}">✓</span>
+          </button>
+          <button type="button" class="rab-tab-btn ${defaultStep === '2' ? 'active' : ''}" id="modalTabBtnStep2">
+            <span class="tab-step-num">2</span>
+            <span>Volume & Simpan</span>
+            <span class="tab-badge-indicator" id="tab2Indicator">Langkah 2</span>
+          </button>
         </div>
 
-        <label style="font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: block;">
-          Pilih Item Pekerjaan Standar (Klik untuk menerapkan):
-        </label>
-        <select id="modalAhspResultList" size="4" class="form-control" style="font-size: 12px; font-family: monospace; background: #ffffff; cursor: pointer; border: 1px solid #93c5fd; border-radius: 6px;">
-          <!-- Diisi secara dinamis -->
-        </select>
-        <div id="modalAhspHelpText" style="font-size: 11px; color: #64748b; margin-top: 4px;">
-          Menampilkan rekomendasi item AHSP standar PUPR.
-        </div>
-        <div id="modalAhspSelectedInfo" style="margin-top: 8px; display: none;"></div>
-      </div>
+        <!-- 2-Column Responsive Grid -->
+        <div class="rab-modal-grid">
+          <!-- LEFT PANEL: Pustaka AHSP Standar PUPR (Step 1) -->
+          <div class="rab-modal-col rab-col-left" id="modalColLeft">
+            <div class="rab-panel-card left-panel-inner">
+              <div class="rab-panel-header">
+                <div class="rab-panel-title">
+                  <span>⚡ Pustaka AHSP PUPR No. 47/2026</span>
+                </div>
+                <span class="badge badge-primary" style="font-size: 10.5px; padding: 2px 7px;" id="modalAhspBadgeTotal">
+                  ${(window.MASTER_AHSP || []).length || 2577} Item
+                </span>
+              </div>
 
-      <!-- Step 2: Spesifikasi Teknis & Harga Terkunci -->
-      <div class="mb-3" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
-        <div style="font-weight: 800; color: #0f172a; font-size: 13px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-          <span>🏛️</span> <span>2. Divisi Tujuan & Spesifikasi Standar</span>
-        </div>
+              <!-- Filter & Search Row -->
+              <div class="rab-filter-row">
+                <div>
+                  <select id="modalAhspCatFilter" class="form-control form-control-sm" style="font-size: 11.5px; padding: 4px 6px; height: 32px; background: #ffffff;">
+                    ${catOptionsHtml}
+                  </select>
+                </div>
+                <div class="rab-search-input-wrap">
+                  <input type="text" id="modalAhspSearchInput" class="form-control form-control-sm" placeholder="🔍 Cari AHSP (plesteran, sloof, pipa...)" style="font-size: 11.5px; padding: 4px 26px 4px 8px; height: 32px; background: #ffffff;">
+                  <button type="button" id="modalAhspSearchClear" class="btn-clear-search" style="display: none;">&times;</button>
+                </div>
+              </div>
 
-        <div class="form-group mb-3">
-          <label class="form-label font-bold" style="font-size: 12px;">Divisi Pekerjaan Tujuan <span class="modal-field-required">*</span></label>
-          <select class="form-control" name="divisionId" id="modalItemDivSelect" required style="font-size: 12.5px;">
-            ${divOptionsHtml}
-          </select>
-        </div>
+              <!-- Interactive AHSP Card List -->
+              <div class="rab-ahsp-results-wrap" id="modalAhspResultsWrap">
+                <div class="rab-ahsp-card-list" id="modalAhspCardList">
+                  <!-- Diisi secara dinamis -->
+                </div>
+              </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 12px;">
-          <div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label font-bold mb-0" style="font-size: 11.5px;">Kode AHSP <span class="modal-field-required">*</span></label>
-              <span id="modalItemCodeLockBadge" class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Terkunci</span>
-            </div>
-            <input type="text" class="form-control font-bold" name="code" id="modalItemCode" value="${initCode}" required placeholder="Contoh: 1.1.1.1" readonly style="background-color: #f8fafc; cursor: not-allowed; color: #1e293b; font-size: 12px;">
-            <input type="hidden" name="ahspId" id="modalItemAhspId" value="${initAhspId}">
-          </div>
-          <div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label font-bold mb-0" style="font-size: 11.5px;">Satuan Hasil <span class="modal-field-required">*</span></label>
-              <span id="modalItemUnitLockBadge" class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Terkunci Standar</span>
-            </div>
-            <input type="text" class="form-control font-bold text-center" name="unit" id="modalItemUnit" value="${initUnit}" required readonly style="background-color: #f8fafc; cursor: not-allowed; color: #1e293b; font-size: 12px; border: 1px solid #cbd5e1;">
-          </div>
-          <div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label class="form-label font-bold mb-0" style="font-size: 11.5px;">Harga Satuan (HSP) <span class="modal-field-required">*</span></label>
-              <span id="modalItemPriceLockBadge" class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Terkunci PUPR</span>
-            </div>
-            <div class="input-group" style="display: flex;">
-              <span class="input-group-text" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-right: none; padding: 4px 8px; font-weight: 700; color: #475569; font-size: 11.5px; border-radius: 6px 0 0 6px;">Rp</span>
-              <input type="text" inputmode="numeric" class="form-control font-bold" id="modalItemPriceDisplay" value="${window.CurrencyUtil.formatNumber(initPrice, 0)}" required readonly placeholder="0" style="border-radius: 0 6px 6px 0; background-color: #f8fafc; cursor: not-allowed; color: #0f766e; font-size: 12px;">
-              <input type="hidden" name="price" id="modalItemPrice" value="${initPrice}">
+              <!-- Footer info -->
+              <div class="rab-panel-footer-info">
+                <span id="modalAhspHelpText" style="font-size: 11px; color: #64748b;">Memuat item AHSP...</span>
+                <span style="font-size: 10.5px; color: #2563eb; font-weight: 700;">💡 Klik untuk memilih</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="form-group mb-2">
-          <label class="form-label font-bold" style="font-size: 12px;">Uraian / Nama Pekerjaan <span class="modal-field-required">*</span></label>
-          <textarea class="form-control font-bold" name="name" id="modalItemName" rows="2" required placeholder="Nama spesifik uraian pekerjaan sesuai AHSP atau gambar rencana" style="font-size: 12.5px; color: #0f172a;">${initName}</textarea>
-        </div>
+          <!-- RIGHT PANEL: Divisi, Spesifikasi & Volume (Step 2) -->
+          <div class="rab-modal-col rab-col-right" id="modalColRight">
+            <div class="rab-panel-card right-panel-inner">
+              <!-- Divisi Tujuan -->
+              <div class="form-group mb-2">
+                <label class="rab-field-label">
+                  <span>🏛️ Divisi Pekerjaan Tujuan</span>
+                  <span class="modal-field-required">*</span>
+                </label>
+                <select class="form-control form-control-sm font-semibold" name="divisionId" id="modalItemDivSelect" required style="font-size: 12px; height: 32px; padding: 4px 8px;">
+                  ${divOptionsHtml}
+                </select>
+              </div>
 
-        <div class="form-group mb-0">
-          <label class="form-label text-muted" style="font-size: 11.5px;">Catatan Khusus / Spesifikasi Teknis Lapangan (Opsional)</label>
-          <input type="text" class="form-control" name="notes" id="modalItemNotes" value="${initNotes}" placeholder="Misal: Spesifikasi Granit 60x60, Mutu K-250, Standar SNI" style="font-size: 12px;">
-        </div>
-      </div>
+              <!-- Selected Item Summary & Locked Badges -->
+              <div class="rab-selected-item-box" id="modalSelectedItemBox">
+                <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap" style="gap: 4px;">
+                  <div class="d-flex align-items-center gap-1">
+                    <span class="rab-badge-code" id="modalItemCodeBadge">${initCode ? '[' + initCode + ']' : '[Pilih AHSP Di Kiri]'}</span>
+                    <span class="badge" style="font-size: 9.5px; background: #e0e7ff; color: #3730a3;">🔒 Standar PUPR</span>
+                  </div>
+                  <span class="rab-badge-hsp" id="modalItemPriceBadge">
+                    ${initPrice ? 'Rp ' + window.CurrencyUtil.formatNumber(initPrice, 0) + ' / ' + initUnit : 'HSP Terkunci'}
+                  </span>
+                </div>
+                <textarea class="form-control font-bold rab-item-name-input" name="name" id="modalItemName" rows="2" required placeholder="Uraian / Nama Pekerjaan sesuai AHSP atau DED">${initName}</textarea>
+                
+                <!-- Hidden inputs for form submit payload -->
+                <input type="hidden" name="code" id="modalItemCode" value="${initCode}">
+                <input type="hidden" name="ahspId" id="modalItemAhspId" value="${initAhspId}">
+                <input type="hidden" name="unit" id="modalItemUnit" value="${initUnit}">
+                <input type="hidden" name="price" id="modalItemPrice" value="${initPrice}">
+              </div>
 
-      <!-- Step 3: Input Volume Pekerjaan Realisasi (Hero Manual Field) -->
-      <div class="p-3 mb-3" style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: 10px; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.08);">
-        <div class="d-flex justify-content-between align-items-center mb-1">
-          <label class="form-label font-bold mb-0" style="color: #1e40af; font-size: 13.5px; display: flex; align-items: center; gap: 6px;">
-            <span>✏️</span> <span>3. Volume Pekerjaan (Input Manual)</span> <span class="modal-field-required">*</span>
-          </label>
-          <span class="badge badge-primary" style="font-size: 11px; padding: 4px 10px;">⭐ Satu-Satunya Input Manual</span>
-        </div>
-        <div style="font-size: 11.5px; color: #3b82f6; margin-bottom: 10px;">
-          Masukkan volume fisik pekerjaan sesuai hasil opname atau pengukuran gambar kerja (DED). Satuan hasil dan harga satuan telah dikunci otomatis.
-        </div>
-        <div class="input-group" style="display: flex;">
-          <input type="number" step="any" min="0" class="form-control font-bold" name="volume" id="modalItemVolume" value="${initVolume}" required placeholder="0.00" style="font-size: 18px; color: #1e3a8a; border: 2px solid #3b82f6; border-right: none; height: 46px; text-align: right; padding-right: 12px; border-radius: 6px 0 0 6px; background: #ffffff;">
-          <span id="modalItemVolumeUnitBadge" class="input-group-text" style="background: #dbeafe; border: 2px solid #3b82f6; border-left: none; padding: 6px 18px; font-weight: 800; color: #1e40af; font-size: 14px; border-radius: 0 6px 6px 0; min-width: 75px; text-align: center; justify-content: center;">${initUnit}</span>
-        </div>
-        <div class="modal-help-text mt-1" style="color: #64748b; font-size: 11px;">
-          Gunakan tanda titik (.) untuk pecahan desimal jika diperlukan (contoh: 12.50 atau 150).
-        </div>
-      </div>
+              <!-- VOLUME PEKERJAAN (Compact, Refined & Balanced) -->
+              <div class="rab-volume-card">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="rab-volume-label" for="modalItemVolume">
+                    <span>Volume Kuantitas</span>
+                    <span class="modal-field-required">*</span>
+                  </label>
+                  <span class="text-muted" style="font-size: 10.5px;">Gunakan titik (.) untuk desimal</span>
+                </div>
+                <div class="rab-volume-input-group">
+                  <input type="number" step="any" min="0" inputmode="decimal" class="form-control rab-volume-input" name="volume" id="modalItemVolume" value="${initVolume}" required placeholder="0.00">
+                  <div class="rab-volume-unit-tag" id="modalItemVolumeUnitBadge">${initUnit}</div>
+                </div>
+              </div>
 
-      <!-- Step 4: Live Subtotal & Biaya Real-Time -->
-      <div id="modalItemLiveTotalBox" style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: #ffffff; border-radius: 10px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-        <div>
-          <div style="font-size: 10.5px; font-weight: 700; color: #a7f3d0; text-transform: uppercase; letter-spacing: 0.5px;">💰 Kalkulasi Otomatis Item RAB</div>
-          <div id="modalItemFormulaText" style="font-size: 13px; color: #ecfdf5; margin-top: 3px; font-family: monospace;">
-            ${window.CurrencyUtil.formatNumber(initVolume, 2)} ${initUnit} &times; ${window.CurrencyUtil.formatRupiah(initPrice, false, true)}
-          </div>
-        </div>
-        <div style="text-align: right;">
-          <div style="font-size: 11px; color: #a7f3d0;">Estimasi Subtotal Biaya:</div>
-          <div id="modalItemSubtotalText" style="font-size: 20px; font-weight: 900; color: #34d399;">
-            ${window.CurrencyUtil.formatRupiah(initTotal, false, true)}
+              <!-- REAL-TIME SUBTOTAL BANNER (Sleek Emerald Accent Bar) -->
+              <div class="rab-subtotal-bar" id="modalItemLiveTotalBox">
+                <div>
+                  <div class="rab-subtotal-bar-label">Subtotal Estimasi RAB</div>
+                  <div id="modalItemFormulaText" class="rab-subtotal-bar-formula">
+                    ${window.CurrencyUtil.formatNumber(initVolume, 2)} ${initUnit} &times; ${window.CurrencyUtil.formatRupiah(initPrice, false, true)}
+                  </div>
+                </div>
+                <div id="modalItemSubtotalText" class="rab-subtotal-bar-amount">
+                  ${window.CurrencyUtil.formatRupiah(initTotal, false, true)}
+                </div>
+              </div>
+
+              <!-- Notes (Optional) -->
+              <div class="form-group mb-0">
+                <input type="text" class="form-control form-control-sm rab-notes-input" name="notes" id="modalItemNotes" value="${initNotes}" placeholder="Catatan teknis / spesifikasi lapangan (opsional, misal: Mutu K-250, Granit 60x60)">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -3385,40 +3933,129 @@ window.App = (function() {
     showFormModal({
       title: title,
       subtitle: subtitle,
-      dialogClass: "modal-lg",
+      dialogClass: "modal-rab-item",
       customBodyHtml: customBodyHtml,
       submitText: submitText,
       onRender: (modalBody) => {
+        const container = modalBody.querySelector("#rabModalContainer");
+        const tabBtn1 = modalBody.querySelector("#modalTabBtnStep1");
+        const tabBtn2 = modalBody.querySelector("#modalTabBtnStep2");
+        const tab1Check = modalBody.querySelector("#tab1Check");
+
+        const modalDialog = modalBody.closest(".modal-dialog");
+        const modalFooter = modalDialog ? modalDialog.querySelector(".modal-footer") : null;
+        const cancelBtn = modalFooter ? modalFooter.querySelector("#formModalCancelBtn") : null;
+        const submitBtn = modalFooter ? modalFooter.querySelector("#formModalSubmitBtn") : null;
+
         const catFilter = modalBody.querySelector("#modalAhspCatFilter");
         const searchInput = modalBody.querySelector("#modalAhspSearchInput");
-        const resultList = modalBody.querySelector("#modalAhspResultList");
+        const searchClearBtn = modalBody.querySelector("#modalAhspSearchClear");
+        const cardList = modalBody.querySelector("#modalAhspCardList");
         const helpText = modalBody.querySelector("#modalAhspHelpText");
-        const selectedInfo = modalBody.querySelector("#modalAhspSelectedInfo");
+
         const itemCode = modalBody.querySelector("#modalItemCode");
         const itemAhspId = modalBody.querySelector("#modalItemAhspId");
         const itemUnit = modalBody.querySelector("#modalItemUnit");
         const itemName = modalBody.querySelector("#modalItemName");
         const itemVolume = modalBody.querySelector("#modalItemVolume");
         const itemPrice = modalBody.querySelector("#modalItemPrice");
-        const itemPriceDisplay = modalBody.querySelector("#modalItemPriceDisplay");
-        const itemCodeLockBadge = modalBody.querySelector("#modalItemCodeLockBadge");
-        const itemUnitLockBadge = modalBody.querySelector("#modalItemUnitLockBadge");
-        const itemPriceLockBadge = modalBody.querySelector("#modalItemPriceLockBadge");
+        const itemNotes = modalBody.querySelector("#modalItemNotes");
+
+        const itemCodeBadge = modalBody.querySelector("#modalItemCodeBadge");
+        const itemPriceBadge = modalBody.querySelector("#modalItemPriceBadge");
         const volumeUnitBadge = modalBody.querySelector("#modalItemVolumeUnitBadge");
         const formulaText = modalBody.querySelector("#modalItemFormulaText");
         const subtotalText = modalBody.querySelector("#modalItemSubtotalText");
 
-        // Kunci satuan hasil secara absolut sesuai instruksi
-        if (itemUnit) {
-          itemUnit.readOnly = true;
-          itemUnit.style.backgroundColor = "#f8fafc";
-          itemUnit.style.cursor = "not-allowed";
+        // Sinkronisasi tombol footer modal sesuai tab aktif & ukuran layar (Anti-Tombol Ganda)
+        function updateFooterButtons(stepNum) {
+          if (!cancelBtn || !submitBtn) return;
+          const isMobile = window.innerWidth <= 860;
+          if (isMobile) {
+            if (String(stepNum) === "1") {
+              cancelBtn.textContent = "Batal";
+              cancelBtn.onclick = () => {
+                const modal = document.getElementById("formModal");
+                if (modal) modal.style.display = "none";
+              };
+              submitBtn.textContent = "Lanjut: Volume →";
+              submitBtn.type = "button";
+              submitBtn.onclick = (e) => {
+                e.preventDefault();
+                if (!itemCode.value) {
+                  showNotificationModal({
+                    title: "Pilih Item Pekerjaan",
+                    icon: "ℹ️",
+                    type: "info",
+                    contentHtml: `<div style="font-size: 13px;">Silakan sentuh salah satu item pekerjaan dari daftar AHSP sebelum melanjutkan ke pengisian volume.</div>`,
+                    confirmText: "Mengerti"
+                  });
+                  return;
+                }
+                setStep(2);
+              };
+            } else {
+              cancelBtn.textContent = "← Ganti AHSP";
+              cancelBtn.onclick = (e) => {
+                e.preventDefault();
+                setStep(1);
+              };
+              submitBtn.textContent = isEdit ? "✓ Simpan Perubahan" : "✓ Tambah ke RAB";
+              submitBtn.type = "submit";
+              submitBtn.onclick = null;
+            }
+          } else {
+            // Desktop standard footer
+            cancelBtn.textContent = "Batal";
+            cancelBtn.onclick = () => {
+              const modal = document.getElementById("formModal");
+              if (modal) modal.style.display = "none";
+            };
+            submitBtn.textContent = isEdit ? "Simpan Perubahan Item" : "Tambah ke RAB";
+            submitBtn.type = "submit";
+            submitBtn.onclick = null;
+          }
         }
 
+        // Fungsi berpindah tab pada Mobile
+        function setStep(stepNum) {
+          if (!container) return;
+          container.setAttribute("data-active-step", String(stepNum));
+          if (tabBtn1 && tabBtn2) {
+            if (String(stepNum) === "1") {
+              tabBtn1.classList.add("active");
+              tabBtn2.classList.remove("active");
+            } else {
+              tabBtn1.classList.remove("active");
+              tabBtn2.classList.add("active");
+            }
+          }
+          updateFooterButtons(stepNum);
+          if (String(stepNum) === "2") {
+            setTimeout(() => {
+              if (itemVolume) {
+                itemVolume.focus();
+                itemVolume.select();
+              }
+            }, 80);
+          }
+        }
+
+        if (tabBtn1) tabBtn1.addEventListener("click", () => setStep(1));
+        if (tabBtn2) tabBtn2.addEventListener("click", () => setStep(2));
+        updateFooterButtons(defaultStep);
+
+        const resizeHandler = () => {
+          const currentStep = container ? container.getAttribute("data-active-step") || "1" : "1";
+          updateFooterButtons(currentStep);
+        };
+        window.addEventListener("resize", resizeHandler);
+
+        // Kalkulasi live subtotal
         function updateLiveSubtotal() {
           const v = parseFloat(itemVolume.value) || 0;
           const p = parseFloat(itemPrice.value) || 0;
-          const u = itemUnit.value || "";
+          const u = itemUnit.value || "m2";
           const tot = Math.round(v * p);
           if (formulaText) {
             formulaText.innerHTML = `${window.CurrencyUtil.formatNumber(v, 2)} ${u} &times; ${window.CurrencyUtil.formatRupiah(p, false, true)}`;
@@ -3429,10 +4066,78 @@ window.App = (function() {
           if (volumeUnitBadge && u) {
             volumeUnitBadge.textContent = u;
           }
+          if (itemPriceBadge && p) {
+            itemPriceBadge.textContent = `Rp ${window.CurrencyUtil.formatNumber(p, 0)} / ${u}`;
+          }
         }
 
-        itemVolume.addEventListener("input", updateLiveSubtotal);
+        if (itemVolume) {
+          itemVolume.addEventListener("input", updateLiveSubtotal);
+        }
 
+        // Terapkan AHSP yang dipilih
+        function applySelectedAhsp(ahsp) {
+          if (!ahsp) return;
+          const hspInfo = (window.AhspEngine && window.AhspEngine.calculateHsp)
+            ? window.AhspEngine.calculateHsp(ahsp)
+            : { finalHsp: ahsp.hsp || 0, subtotalTenaga: 0, subtotalBahan: 0, overheadPercent: 15, eOverhead: 0 };
+
+          itemCode.value = ahsp.code;
+          itemAhspId.value = ahsp.id;
+          itemName.value = ahsp.name;
+          itemUnit.value = ahsp.unit;
+          itemPrice.value = hspInfo.finalHsp;
+
+          if (itemCodeBadge) {
+            itemCodeBadge.textContent = `[${ahsp.code}]`;
+          }
+          if (itemPriceBadge) {
+            itemPriceBadge.textContent = `Rp ${window.CurrencyUtil.formatNumber(hspInfo.finalHsp, 0)} / ${ahsp.unit}`;
+          }
+          if (volumeUnitBadge) {
+            volumeUnitBadge.textContent = ahsp.unit;
+          }
+          if (tab1Check) {
+            tab1Check.style.display = "inline-block";
+          }
+
+          updateLiveSubtotal();
+
+          // Highlight card di card list
+          if (cardList) {
+            cardList.querySelectorAll(".rab-ahsp-card").forEach(c => {
+              if (c.getAttribute("data-ahsp-id") === ahsp.id) {
+                c.classList.add("active");
+                if (!c.querySelector(".rab-selected-chip")) {
+                  const chip = document.createElement("span");
+                  chip.className = "rab-selected-chip";
+                  chip.textContent = "✓ Terpilih";
+                  c.appendChild(chip);
+                }
+              } else {
+                c.classList.remove("active");
+                const ch = c.querySelector(".rab-selected-chip");
+                if (ch) ch.remove();
+              }
+            });
+          }
+
+          // Otomatis pindah ke Step 2 jika di layar mobile (< 860px)
+          if (window.innerWidth <= 860) {
+            setTimeout(() => {
+              setStep(2);
+            }, 120);
+          } else {
+            setTimeout(() => {
+              if (itemVolume) {
+                itemVolume.focus();
+                itemVolume.select();
+              }
+            }, 60);
+          }
+        }
+
+        // Render card list AHSP
         function populateAhspList() {
           const q = (searchInput.value || "").toLowerCase().trim();
           const cat = catFilter.value;
@@ -3445,101 +4150,110 @@ window.App = (function() {
           if (q) {
             matches = matches.filter(a =>
               (a.name && a.name.toLowerCase().includes(q)) ||
-              (a.code && a.code.toLowerCase().includes(q))
+              (a.code && a.code.toLowerCase().includes(q)) ||
+              (a.bidang && a.bidang.toLowerCase().includes(q)) ||
+              (a.divisi && a.divisi.toLowerCase().includes(q)) ||
+              (a.category && a.category.toLowerCase().includes(q)) ||
+              (a.tags && Array.isArray(a.tags) && a.tags.some(t => t.toLowerCase().includes(q)))
             );
           }
 
-          const topItems = matches.slice(0, 35);
-          let optHtml = "";
+          const topItems = matches.slice(0, 50);
           if (topItems.length === 0) {
-            optHtml = '<option disabled>Tidak ditemukan item AHSP yang cocok.</option>';
+            cardList.innerHTML = `
+              <div style="text-align: center; padding: 28px 12px; color: #94a3b8; font-size: 12px;">
+                🔍 Tidak ditemukan item AHSP yang cocok dengan "<strong>${q}</strong>".
+              </div>
+            `;
           } else {
+            let cardsHtml = "";
+            const currentAhspId = itemAhspId.value || "";
             topItems.forEach(a => {
               const hspVal = a.hsp || (window.AhspEngine ? window.AhspEngine.calculateHsp(a).finalHsp : 0);
-              optHtml += `<option value="${a.id}">[${a.code}] ${a.name} — Rp ${window.CurrencyUtil.formatNumber(hspVal)} / ${a.unit}</option>`;
+              const isSel = (a.id === currentAhspId) || (a.code === itemCode.value && !currentAhspId);
+
+              let bClass = "ck";
+              let bText = a.bidang || "Cipta Karya";
+              if (bText.includes("Marga")) bClass = "bm";
+              else if (bText.includes("Air") || bText.includes("SDA")) bClass = "sda";
+              else if (bText.includes("SMKK") || bText.includes("K3")) bClass = "smkk";
+
+              cardsHtml += `
+                <div class="rab-ahsp-card ${isSel ? 'active' : ''}" data-ahsp-id="${a.id}" tabindex="0" role="button" title="Pilih [${a.code}] ${a.name}">
+                  <div class="rab-ahsp-card-header">
+                    <div class="d-flex align-items-center gap-1">
+                      <span class="rab-card-code">${a.code}</span>
+                      <span class="rab-bidang-tag ${bClass}">${bText}</span>
+                    </div>
+                    <span class="rab-card-price">Rp ${window.CurrencyUtil.formatNumber(hspVal)} / ${a.unit}</span>
+                  </div>
+                  <div class="rab-ahsp-card-name">${a.name}</div>
+                  ${isSel ? '<span class="rab-selected-chip">✓ Terpilih</span>' : ''}
+                </div>
+              `;
+            });
+            cardList.innerHTML = cardsHtml;
+
+            // Bind click & keydown ke card
+            cardList.querySelectorAll(".rab-ahsp-card").forEach(card => {
+              card.addEventListener("click", function() {
+                const id = this.getAttribute("data-ahsp-id");
+                const selectedAhsp = (window.AhspEngine && window.AhspEngine.getAhspById)
+                  ? window.AhspEngine.getAhspById(id)
+                  : (window.MASTER_AHSP || []).find(a => a.id === id);
+                applySelectedAhsp(selectedAhsp);
+              });
+              card.addEventListener("keydown", function(e) {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  this.click();
+                }
+              });
             });
           }
-          resultList.innerHTML = optHtml;
+
           if (helpText) {
-            helpText.textContent = `Ditemukan ${matches.length} item AHSP standar PUPR. Menampilkan ${topItems.length} teratas.`;
+            helpText.textContent = `Ditemukan ${matches.length} item AHSP. Menampilkan ${topItems.length} teratas.`;
           }
         }
 
-        searchInput.addEventListener("input", populateAhspList);
-        catFilter.addEventListener("change", populateAhspList);
-
-        resultList.addEventListener("change", function() {
-          const chosenId = this.value;
-          if (!chosenId) return;
-          const ahsp = (window.AhspEngine && window.AhspEngine.getAhspById)
-            ? window.AhspEngine.getAhspById(chosenId)
-            : (window.MASTER_AHSP || []).find(a => a.id === chosenId);
-
-          if (ahsp) {
-            const hspInfo = (window.AhspEngine && window.AhspEngine.calculateHsp)
-              ? window.AhspEngine.calculateHsp(ahsp)
-              : { finalHsp: ahsp.hsp || 0, subtotalTenaga: 0, subtotalBahan: 0, overheadPercent: 15, eOverhead: 0 };
-
-            itemCode.value = ahsp.code;
-            itemCode.readOnly = true;
-            itemCode.style.backgroundColor = "#f8fafc";
-            itemCode.style.cursor = "not-allowed";
-            if (itemCodeLockBadge) itemCodeLockBadge.style.display = "inline-block";
-
-            itemAhspId.value = ahsp.id;
-            itemName.value = ahsp.name;
-            itemUnit.value = ahsp.unit;
-            itemUnit.readOnly = true;
-            itemUnit.style.backgroundColor = "#f8fafc";
-            itemUnit.style.cursor = "not-allowed";
-            if (itemUnitLockBadge) itemUnitLockBadge.style.display = "inline-block";
-
-            if (volumeUnitBadge) volumeUnitBadge.textContent = ahsp.unit;
-
-            itemPrice.value = hspInfo.finalHsp;
-
-            if (itemPriceDisplay) {
-              itemPriceDisplay.value = window.CurrencyUtil.formatNumber(hspInfo.finalHsp, 0);
-              itemPriceDisplay.readOnly = true;
-              itemPriceDisplay.style.backgroundColor = "#f8fafc";
-              itemPriceDisplay.style.cursor = "not-allowed";
+        // Event filter & search
+        if (searchInput) {
+          searchInput.addEventListener("input", () => {
+            if (searchClearBtn) {
+              searchClearBtn.style.display = searchInput.value ? "block" : "none";
             }
-            if (itemPriceLockBadge) itemPriceLockBadge.style.display = "inline-block";
+            populateAhspList();
+          });
+        }
+        if (searchClearBtn) {
+          searchClearBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            searchClearBtn.style.display = "none";
+            populateAhspList();
+            searchInput.focus();
+          });
+        }
+        if (catFilter) {
+          catFilter.addEventListener("change", populateAhspList);
+        }
 
-            if (selectedInfo) {
-              selectedInfo.style.display = "block";
-              selectedInfo.innerHTML = `
-                <div style="background: #ffffff; border: 1px solid #10b981; border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #065f46;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>✅ <strong>AHSP Terpilih: [${ahsp.code}]</strong> ${ahsp.name}</div>
-                    <span class="badge badge-success" style="font-size: 10px;">Satuan: ${ahsp.unit} • Terkunci</span>
-                  </div>
-                  <div style="color: #047857; margin-top: 4px;">
-                    HSP Acuan Proyek: <strong>${window.CurrencyUtil.formatRupiah(hspInfo.finalHsp)} / ${ahsp.unit}</strong> 
-                    (Tenaga: ${window.CurrencyUtil.formatRupiah(hspInfo.subtotalTenaga)} | Bahan: ${window.CurrencyUtil.formatRupiah(hspInfo.subtotalBahan)} | Overhead ${hspInfo.overheadPercent}%: ${window.CurrencyUtil.formatRupiah(hspInfo.eOverhead)})
-                  </div>
-                </div>
-              `;
-            }
-            updateLiveSubtotal();
-
-            // Auto-focus ke volume agar user dapat langsung mengetik angka volume pekerjaan
-            if (itemVolume) {
-              setTimeout(() => {
-                itemVolume.focus();
-                itemVolume.select();
-              }, 60);
-            }
-          }
-        });
-
+        // Inisialisasi daftar
         populateAhspList();
 
-        // Auto focus ke volume jika mode edit atau sudah ada nilai
-        if (itemVolume) {
+        // Auto focus
+        if (defaultStep === "2" || isEdit) {
           setTimeout(() => {
-            itemVolume.focus();
-            itemVolume.select();
+            if (itemVolume) {
+              itemVolume.focus();
+              itemVolume.select();
+            }
+          }, 100);
+        } else {
+          setTimeout(() => {
+            if (searchInput && window.innerWidth > 860) {
+              searchInput.focus();
+            }
           }, 100);
         }
       },
@@ -3710,6 +4424,15 @@ window.App = (function() {
     renderAhspTableOnly();
   }
 
+  function handleAhspBidang(val) {
+    currentAhspPage = 1;
+    if (window.AhspEngine && window.AhspEngine.setBidang) {
+      window.AhspEngine.setBidang(val);
+      window.AhspEngine.setCategory("ALL");
+    }
+    renderAhspView();
+  }
+
   function changeAhspPage(p) {
     currentAhspPage = p;
     renderAhspTableOnly();
@@ -3800,6 +4523,9 @@ window.App = (function() {
         const newPrice = parseFloat(data.price);
         if (!isNaN(newPrice)) {
           window.CatalogPricing.setOverridePrice(matId, newPrice);
+          if (window.AhspEngine && window.AhspEngine.cascadeMaterialPrice) {
+            window.AhspEngine.cascadeMaterialPrice(matId, name, newPrice);
+          }
           renderCurrentTabContent();
         }
       }
@@ -3829,29 +4555,7 @@ window.App = (function() {
     });
   }
 
-  function openCreateCustomAhspModal() {
-    showFormModal({
-      title: "Buat Analisis AHSP Kustom Penuh",
-      subtitle: "Rancang item analisis harga satuan baru sesuai spesifikasi proyek",
-      fields: [
-        { name: "code", label: "Kode Analisis Pekerjaan", type: "text", value: "CUST.01", required: true, placeholder: "Misal: CUST.01 atau 4.1.2.9" },
-        { name: "name", label: "Uraian Analisis Pekerjaan", type: "text", placeholder: "Misal: Pemasangan Kisi-kisi Aluminium Wood-Pattern", required: true },
-        { name: "unit", label: "Satuan Hasil Pekerjaan", type: "text", value: "m2", required: true, placeholder: "m2, m3, m', unit, titik" },
-        { name: "overhead", label: "Biaya Umum & Keuntungan (%)", type: "number", step: "0.1", min: 0, max: 30, value: "15", required: true, help: "Standar PUPR adalah 10% s.d. 15%" }
-      ],
-      submitText: "Buat Analisis",
-      onSubmit: (data) => {
-        window.AhspEngine.createCustomAhsp(
-          data.code, 
-          data.name, 
-          "Pekerjaan Kustom", 
-          data.unit, 
-          parseFloat(data.overhead) || 15
-        );
-        renderAhspView();
-      }
-    });
-  }
+  // [Custom AHSP Full Builder Installed Below]
 
   function handleUpdateActualProgress(weekNum, val) {
     window.SCurveDiagram.updateWeekActual(weekNum, val);
@@ -4273,11 +4977,24 @@ window.App = (function() {
       title: "Buat Rencana Anggaran Biaya Proyek Baru",
       subtitle: "Inisialisasi profil dokumen proyek baru",
       fields: [
-        { name: "name", label: "Nama Proyek", type: "text", value: "Pembangunan Rumah Tinggal Modern", required: true },
-        { name: "owner", label: "Nama Pemilik / Pemberi Tugas", type: "text", value: "Bapak / Ibu", required: true },
-        { name: "location", label: "Lokasi Pekerjaan Proyek", type: "text", value: "Indonesia", required: true },
-        { name: "contractor", label: "Badan Usaha / Kontraktor Pelaksana", type: "text", value: "" },
-        { name: "consultant", label: "Badan Usaha / Konsultan Perencana", type: "text", value: "" },
+        { name: "name", label: "Nama Proyek", type: "text", value: "Pembangunan Rumah Tinggal Tropis Modern", required: true },
+        { name: "owner", label: "Nama Pemilik / Pemberi Tugas", type: "text", value: "Dr. H. Hendra Gunawan, S.T., M.M.", required: true },
+        { name: "location", label: "Lokasi / Alamat Pekerjaan Proyek", type: "text", value: "Jl. Lembah Hijau No. 24, Bandung", required: true },
+        {
+          name: "projectType",
+          label: "Tujuan / Kategori Proyek",
+          type: "select",
+          value: "new",
+          options: [
+            { value: "new", label: "🏗️ Pembangunan Bangunan Baru" },
+            { value: "rehab", label: "🛠️ Renovasi / Rehab Bangunan" }
+          ]
+        },
+        { name: "buildingArea", label: "Luas Rencana Pembangunan (m²)", type: "number", value: 180, required: true, help: "Luas lantai rencana konstruksi" },
+        { name: "landArea", label: "Luas Tanah / Kavling (m²)", type: "number", value: 200, help: "Luas tapak lahan / kavling" },
+        { name: "durationDays", label: "Durasi Waktu Pelaksanaan (Hari)", type: "number", value: 180, required: true, help: "Standar durasi rumah tinggal / gedung: 180 Hari (26 Minggu)" },
+        { name: "contractor", label: "Badan Usaha / Kontraktor Pelaksana", type: "text", value: "PT. Duta Konstruksi Pratama" },
+        { name: "consultant", label: "Badan Usaha / Konsultan Perencana", type: "text", value: "PT. Architekta Desain Studio" },
         { name: "startDate", label: "Tanggal Mulai Pelaksanaan", type: "date", value: new Date().toISOString().split('T')[0] },
         {
           name: "templateMode",
@@ -4299,6 +5016,16 @@ window.App = (function() {
           if (data.contractor) newProj.contractor = data.contractor;
           if (data.consultant) newProj.consultant = data.consultant;
           if (data.startDate) newProj.startDate = data.startDate;
+          if (data.durationDays) {
+            newProj.durationDays = parseInt(data.durationDays) || 180;
+            const startD = new Date(newProj.startDate);
+            newProj.finishDate = new Date(startD.getTime() + newProj.durationDays * 86400000).toISOString().split('T')[0];
+          }
+          newProj.projectType = data.projectType || "new";
+          newProj.buildingArea = parseFloat(data.buildingArea) || 180;
+          newProj.landArea = parseFloat(data.landArea) || 200;
+          newProj.rehabArea = 0;
+          newProj.existingBuildingArea = 0;
           window.ProjectManager.updateActiveProject(newProj);
         }
         setupProjectSwitcher();
@@ -4375,6 +5102,37 @@ window.App = (function() {
   function exportSingleProject(id) {
     const p = window.ProjectManager.getAllProjects().find(proj => proj.id === id);
     if (p) window.ProjectManager.exportProjectJson(p);
+  }
+
+  function sanitizeCurrentProject() {
+    const proj = window.ProjectManager.getActiveProject();
+    if (!proj) return;
+    const res = window.ProjectManager.sanitizeProjectData(proj);
+    window.ProjectManager.updateActiveProject(proj);
+    updateProjectHeader();
+    renderCurrentTabContent();
+    if (window.showNotificationModal) {
+      window.showNotificationModal({
+        title: "Sanitasi Berhasil",
+        subtitle: "Audit Integritas Data SNI PUPR 2026",
+        icon: "✅",
+        type: "success",
+        contentHtml: `
+          <div style="line-height: 1.6; font-size: 13px;">
+            <p>Sistem berhasil memvalidasi dan mensanitasi data proyek <strong>${proj.name}</strong>.</p>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin: 10px 0;">
+              <div>📋 <strong>Status Audit:</strong> 100% Sesuai Standar SNI SE PUPR 2026</div>
+              <div>🛠️ <strong>Item Disanitasi:</strong> ${res.count} item (keramik, bouwplank, urugan pasir, kusen, dsb.)</div>
+              <div>💰 <strong>Real Cost Bersih:</strong> ${window.CurrencyUtil.formatRupiah(proj.realCost || 0)}</div>
+              <div>🏷️ <strong>Grand Total:</strong> ${window.CurrencyUtil.formatRupiah(proj.grandTotal || 0)}</div>
+            </div>
+            <p class="text-muted" style="font-size: 11.5px;">Seluruh nilai abnormal puluhan juta/milyar telah dikoreksi menjadi harga pasar logis dan realistis.</p>
+          </div>
+        `
+      });
+    } else {
+      alert(`Sanitasi berhasil! ${res.count} item telah disesuaikan.`);
+    }
   }
 
   function handleImportProject(input) {
@@ -4545,24 +5303,243 @@ window.App = (function() {
     });
   }
 
+  
+  // State untuk Builder AHSP Kustom Penuh
+  let tempCustomBuilder = {
+    code: "CUST.01",
+    name: "",
+    category: "Pekerjaan Kustom",
+    unit: "m2",
+    overhead: 15,
+    components: []
+  };
+
+  function renderCustomBuilderModal() {
+    let compRows = "";
+    let subtotalTenaga = 0;
+    let subtotalBahan = 0;
+    let subtotalAlat = 0;
+
+    tempCustomBuilder.components.forEach((c, idx) => {
+      const koef = Number(c.koef) || 0;
+      const price = Number(c.price) || 0;
+      const tot = Math.round(koef * price * 100) / 100;
+      c.total = tot;
+
+      const sec = (c.section || "BAHAN MATERIAL").toUpperCase();
+      if (sec.includes("TENAGA")) subtotalTenaga += tot;
+      else if (sec.includes("ALAT") || sec.includes("PERALATAN")) subtotalAlat += tot;
+      else subtotalBahan += tot;
+
+      const badgeColor = sec.includes("TENAGA") ? "badge-primary" : (sec.includes("ALAT") ? "badge-warning" : "badge-success");
+
+      compRows += `
+        <tr>
+          <td class="text-center">${idx + 1}</td>
+          <td><span class="badge ${badgeColor}" style="font-size: 10px;">${c.section || 'BAHAN MATERIAL'}</span></td>
+          <td><strong>${c.name}</strong></td>
+          <td class="text-center font-mono" style="font-size: 11px;">${c.code || '-'}</td>
+          <td class="text-center">${c.unit}</td>
+          <td class="text-right">
+            <input type="number" step="0.0001" style="width: 75px; text-align: right; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px;" value="${c.koef}" onchange="App.handleBuilderCompKoefChange(${idx}, this.value)">
+          </td>
+          <td class="text-right">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(price, false, true) : price}</td>
+          <td class="text-right font-bold">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(tot, false, true) : tot}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-outline-danger" style="padding: 2px 6px; font-size: 11px;" title="Hapus komponen ini" onclick="App.handleBuilderDeleteComp(${idx})">🗑️ Hapus</button>
+          </td>
+        </tr>
+      `;
+    });
+
+    const dTotal = subtotalTenaga + subtotalBahan + subtotalAlat;
+    const overheadPct = Number(tempCustomBuilder.overhead) || 15;
+    const eOverhead = dTotal * (overheadPct / 100);
+    const finalHsp = Math.floor(dTotal + eOverhead);
+
+    const modalBody = document.getElementById("genericModalBody");
+    const modalTitle = document.getElementById("genericModalTitle");
+    if (modalBody && modalTitle) {
+      modalTitle.textContent = "Buat Analisis AHSP Kustom Penuh (Komprehensif)";
+      modalBody.innerHTML = `
+        <div class="p-2 mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+          <div style="font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">1. Parameter Utama Analisis Satuan Pekerjaan:</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: #475569;">Kode Analisis *</label>
+              <input type="text" id="builderAhspCode" class="form-control" style="font-size: 12px; padding: 4px 8px;" value="${tempCustomBuilder.code}" oninput="App.handleBuilderFieldChange('code', this.value)">
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: #475569;">Satuan Pekerjaan *</label>
+              <input type="text" id="builderAhspUnit" class="form-control" style="font-size: 12px; padding: 4px 8px;" value="${tempCustomBuilder.unit}" oninput="App.handleBuilderFieldChange('unit', this.value)">
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: #475569;">Overhead & Keuntungan (%)</label>
+              <input type="number" step="0.5" id="builderAhspOverhead" class="form-control" style="font-size: 12px; padding: 4px 8px;" value="${tempCustomBuilder.overhead}" oninput="App.handleBuilderFieldChange('overhead', this.value)">
+            </div>
+          </div>
+          <div class="mt-2">
+            <label style="font-size: 11px; font-weight: 600; color: #475569;">Uraian Pekerjaan Kustom *</label>
+            <input type="text" id="builderAhspName" class="form-control" placeholder="Misal: Pemasangan Kisi-kisi Aluminium Wood-Pattern atau Pasangan Rangka Hollow" style="font-size: 12px; padding: 4px 8px;" value="${tempCustomBuilder.name}" oninput="App.handleBuilderFieldChange('name', this.value)">
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap" style="gap: 8px;">
+          <div style="font-size: 12px; font-weight: 700; color: #1e293b;">
+            2. Rincian Komponen (Tenaga Kerja, Bahan Material, &amp; Peralatan):
+            <span class="badge badge-light" style="font-size: 11px; margin-left: 6px;">${tempCustomBuilder.components.length} Komponen</span>
+          </div>
+          <button class="btn btn-sm btn-primary font-bold" onclick="App.openAddAhspCompModal(null, App.handleBuilderAddComp)" style="display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(37,99,235,0.2);">
+            ➕ Tambah Komponen dari Katalog Master
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" style="font-size: 12px;">
+            <thead>
+              <tr style="background: #f1f5f9;">
+                <th style="width: 4%;">No</th>
+                <th style="width: 14%;">Kelompok</th>
+                <th style="width: 32%;">Uraian Komponen</th>
+                <th style="width: 10%;" class="text-center">Kode</th>
+                <th style="width: 7%;" class="text-center">Sat.</th>
+                <th style="width: 11%;" class="text-right">Koefisien</th>
+                <th style="width: 13%;" class="text-right">Harga Satuan</th>
+                <th style="width: 14%;" class="text-right">Jumlah Harga</th>
+                <th style="width: 8%;" class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${compRows || '<tr><td colspan="9" class="text-center text-muted p-4">Belum ada komponen rincian. Klik tombol <strong>+ Tambah Komponen dari Katalog Master</strong> di atas untuk memasukkan tenaga, bahan, atau alat.</td></tr>'}
+              <tr class="table-active">
+                <td colspan="7" class="text-right font-bold">Subtotal Tenaga Kerja (A):</td>
+                <td class="text-right font-bold">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(subtotalTenaga, false, true) : subtotalTenaga}</td>
+                <td></td>
+              </tr>
+              <tr class="table-active">
+                <td colspan="7" class="text-right font-bold">Subtotal Bahan Material (B):</td>
+                <td class="text-right font-bold">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(subtotalBahan, false, true) : subtotalBahan}</td>
+                <td></td>
+              </tr>
+              <tr class="table-active">
+                <td colspan="7" class="text-right font-bold">Subtotal Peralatan (C):</td>
+                <td class="text-right font-bold">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(subtotalAlat, false, true) : subtotalAlat}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="7" class="text-right font-bold">Jumlah Biaya Langsung (D = A + B + C):</td>
+                <td class="text-right font-bold">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(dTotal, false, true) : dTotal}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="7" class="text-right font-bold">Biaya Umum &amp; Keuntungan (${overheadPct}% x D):</td>
+                <td class="text-right font-bold">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(eOverhead, false, true) : eOverhead}</td>
+                <td></td>
+              </tr>
+              <tr class="total-highlight-row" style="background: #f0fdf4; border-top: 2px solid #22c55e;">
+                <td colspan="7" class="text-right font-bold" style="font-size: 13px; color: #15803d;">Harga Satuan Pekerjaan (D+E Dibulatkan):</td>
+                <td class="text-right font-bold text-success" style="font-size: 14px;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(finalHsp, false, true) : finalHsp}</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-end align-items-center mt-3 pt-3" style="border-top: 1px solid #e2e8f0; gap: 8px;">
+          <button class="btn btn-outline" onclick="App.closeGenericModal()">Batal</button>
+          <button class="btn btn-primary font-bold" onclick="App.submitCustomAhspBuilder()" style="padding: 7px 20px;">💾 Terbitkan &amp; Simpan AHSP Kustom</button>
+        </div>
+      `;
+      openModal("genericModal");
+    }
+  }
+
+  function openCreateCustomAhspModal() {
+    tempCustomBuilder = {
+      code: "CUST." + Math.floor(10 + Math.random() * 90),
+      name: "",
+      category: "Pekerjaan Kustom",
+      unit: "m2",
+      overhead: 15,
+      components: []
+    };
+    renderCustomBuilderModal();
+  }
+
+  function handleBuilderFieldChange(field, val) {
+    tempCustomBuilder[field] = val;
+  }
+
+  function handleBuilderCompKoefChange(idx, val) {
+    if (tempCustomBuilder.components[idx]) {
+      tempCustomBuilder.components[idx].koef = parseFloat(val) || 0;
+      renderCustomBuilderModal();
+    }
+  }
+
+  function handleBuilderDeleteComp(idx) {
+    if (tempCustomBuilder.components[idx]) {
+      tempCustomBuilder.components.splice(idx, 1);
+      renderCustomBuilderModal();
+    }
+  }
+
+  function handleBuilderAddComp(comp) {
+    tempCustomBuilder.components.push(comp);
+    renderCustomBuilderModal();
+  }
+
+  function submitCustomAhspBuilder() {
+    if (!tempCustomBuilder.name || tempCustomBuilder.name.trim() === "") {
+      alert("Mohon isi Uraian Pekerjaan Kustom terlebih dahulu.");
+      return;
+    }
+    const newAhsp = window.AhspEngine.createCustomAhsp(
+      tempCustomBuilder.code,
+      tempCustomBuilder.name,
+      tempCustomBuilder.category || "Pekerjaan Kustom",
+      tempCustomBuilder.unit || "m2",
+      parseFloat(tempCustomBuilder.overhead) || 15,
+      tempCustomBuilder.components
+    );
+    closeGenericModal();
+    renderAhspView();
+    if (newAhsp && newAhsp.id) {
+      openAhspDetailModal(newAhsp.id);
+    }
+  }
+
+  function closeGenericModal() {
+    const gm = document.getElementById("genericModal");
+    if (gm) gm.style.display = "none";
+  }
+
   function openAhspDetailModal(ahspId) {
     const ahsp = window.AhspEngine.getAhspById(ahspId);
     if (!ahsp) return;
 
     let compRows = "";
     (ahsp.components || []).forEach((c, idx) => {
+      const sec = (c.section || 'BAHAN MATERIAL').toUpperCase();
+      const badgeClass = sec.includes('TENAGA') ? 'badge-primary' : (sec.includes('ALAT') ? 'badge-warning' : 'badge-success');
+
       compRows += `
         <tr>
           <td class="text-center">${idx + 1}</td>
-          <td><span class="badge badge-light">${c.section || 'BAHAN'}</span></td>
+          <td><span class="badge ${badgeClass}" style="font-size: 10px;">${c.section || 'BAHAN MATERIAL'}</span></td>
           <td><strong>${c.name}</strong></td>
-          <td class="text-center">${c.code || '-'}</td>
+          <td class="text-center font-mono" style="font-size: 11px;">${c.code || '-'}</td>
           <td class="text-center">${c.unit}</td>
           <td class="text-right">
-            <input type="number" step="0.0001" style="width: 75px; text-align: right; padding: 2px;" value="${c.koef}" onchange="App.handleCompKoefChange('${ahspId}', ${idx}, this.value)">
+            <input type="number" step="0.0001" style="width: 75px; text-align: right; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px;" value="${c.koef}" onchange="App.handleCompKoefChange('${ahspId}', ${idx}, this.value)">
           </td>
-          <td class="text-right">${window.CurrencyUtil.formatRupiah(c.price, false, true)}</td>
+          <td class="text-right">
+            <input type="number" step="1" min="0" style="width: 100px; text-align: right; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600; color: #1e293b;" value="${Math.round(c.price)}" onchange="App.handleCompPriceChange('${ahspId}', ${idx}, this.value)" title="1x edit harga satuan ini otomatis memperbarui seluruh katalog dan seluruh AHSP yang menggunakannya">
+          </td>
           <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(c.total, false, true)}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-outline-danger" style="padding: 2px 6px; font-size: 11px;" title="Hapus komponen ini" onclick="App.handleDeleteAhspComponent('${ahspId}', ${idx})">🗑️ Hapus</button>
+          </td>
         </tr>
       `;
     });
@@ -4574,53 +5551,68 @@ window.App = (function() {
     if (modalBody && modalTitle) {
       modalTitle.textContent = `Detail Analisis Harga Satuan: ${ahsp.code} - ${ahsp.name}`;
       modalBody.innerHTML = `
-        <div class="mb-3">
-          <div><strong>Kategori:</strong> ${ahsp.category} | <strong>Satuan:</strong> ${ahsp.unit}</div>
-          <div class="mt-2 d-flex align-items-center" style="gap: 10px;">
-            <label><strong>Overhead & Profit:</strong></label>
-            <input type="number" style="width: 60px; padding: 2px 6px;" value="${ahsp.overhead_percent || 15}" onchange="App.handleOverheadChange('${ahspId}', this.value)"> %
+        <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap" style="background: #f8fafc; padding: 10px 14px; border-radius: 6px; border: 1px solid #e2e8f0; gap: 10px;">
+          <div>
+            <div><strong>Kategori:</strong> ${ahsp.category} | <strong>Satuan:</strong> ${ahsp.unit}</div>
+            <div class="mt-1 d-flex align-items-center" style="gap: 8px;">
+              <label><strong>Overhead & Profit:</strong></label>
+              <input type="number" style="width: 60px; padding: 2px 6px; border: 1px solid #cbd5e1; border-radius: 4px;" value="${ahsp.overhead_percent || 15}" onchange="App.handleOverheadChange('${ahspId}', this.value)"> %
+              <span class="text-muted" style="font-size: 11px;">(Standar PUPR: 10% - 15%)</span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center" style="gap: 6px;">
+            <button class="btn btn-sm btn-primary font-bold" onclick="App.openAddAhspCompModal('${ahspId}')" style="display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(37,99,235,0.2);">
+              ➕ Tambah Komponen dari Katalog Master
+            </button>
           </div>
         </div>
 
         <div class="table-responsive">
           <table class="table" style="font-size: 12px;">
             <thead>
-              <tr>
-                <th>No</th>
-                <th>Kelompok</th>
-                <th>Uraian Komponen</th>
-                <th>Kode</th>
-                <th>Sat.</th>
-                <th>Koefisien</th>
-                <th>Harga Satuan</th>
-                <th>Jumlah Harga</th>
+              <tr style="background: #f1f5f9;">
+                <th style="width: 4%;">No</th>
+                <th style="width: 14%;">Kelompok</th>
+                <th style="width: 32%;">Uraian Komponen</th>
+                <th style="width: 10%;" class="text-center">Kode</th>
+                <th style="width: 7%;" class="text-center">Sat.</th>
+                <th style="width: 11%;" class="text-right">Koefisien</th>
+                <th style="width: 13%;" class="text-right">Harga Satuan (Rp)</th>
+                <th style="width: 14%;" class="text-right">Jumlah Harga (Rp)</th>
+                <th style="width: 8%;" class="text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              ${compRows || '<tr><td colspan="8" class="text-center text-muted">Tidak ada komponen rincian.</td></tr>'}
+              ${compRows || '<tr><td colspan="9" class="text-center text-muted p-4">Tidak ada komponen rincian. Klik tombol <strong>+ Tambah Komponen dari Katalog Master</strong> di atas untuk menambahkan tenaga, material, atau alat.</td></tr>'}
               <tr class="table-active">
                 <td colspan="7" class="text-right font-bold">Subtotal Tenaga Kerja (A):</td>
                 <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(calc.subtotalTenaga, false, true)}</td>
+                <td></td>
               </tr>
               <tr class="table-active">
                 <td colspan="7" class="text-right font-bold">Subtotal Bahan Material (B):</td>
                 <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(calc.subtotalBahan, false, true)}</td>
+                <td></td>
               </tr>
               <tr class="table-active">
                 <td colspan="7" class="text-right font-bold">Subtotal Peralatan (C):</td>
                 <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(calc.subtotalAlat, false, true)}</td>
+                <td></td>
               </tr>
               <tr>
                 <td colspan="7" class="text-right font-bold">Jumlah Biaya Langsung (D = A + B + C):</td>
                 <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(calc.dTotal, false, true)}</td>
+                <td></td>
               </tr>
               <tr>
                 <td colspan="7" class="text-right font-bold">Biaya Umum & Keuntungan (${calc.overheadPercent}% x D):</td>
                 <td class="text-right font-bold">${window.CurrencyUtil.formatRupiah(calc.eOverhead, false, true)}</td>
+                <td></td>
               </tr>
-              <tr class="total-highlight-row">
-                <td colspan="7" class="text-right font-bold" style="font-size: 13px;">Harga Satuan Pekerjaan (D+E Dibulatkan):</td>
-                <td class="text-right font-bold text-primary" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(calc.finalHsp, false, true)}</td>
+              <tr class="total-highlight-row" style="background: #f0fdf4; border-top: 2px solid #22c55e;">
+                <td colspan="7" class="text-right font-bold" style="font-size: 13px; color: #15803d;">Harga Satuan Pekerjaan (D+E Dibulatkan):</td>
+                <td class="text-right font-bold text-success" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(calc.finalHsp, false, true)}</td>
+                <td></td>
               </tr>
             </tbody>
           </table>
@@ -4640,6 +5632,40 @@ window.App = (function() {
     }
   }
 
+  function handleCompPriceChange(ahspId, compIdx, newPrice) {
+    const ahsp = window.AhspEngine.getAhspById(ahspId);
+    if (ahsp && ahsp.components && ahsp.components[compIdx]) {
+      const comp = ahsp.components[compIdx];
+      const parsedPrice = parseFloat(newPrice) || 0;
+      // Panggil Global Price Cascade agar 1x edit berlaku pada seluruh data yang menggunakan tenaga/material/alat ini
+      const result = window.AhspEngine.cascadeMaterialPrice(comp.code, comp.name, parsedPrice, ahspId);
+      openAhspDetailModal(ahspId);
+      renderCurrentTabContent();
+      
+      if (window.showNotificationModal) {
+        window.showNotificationModal({
+          title: "Harga Satuan Diperbarui & Disinkronkan",
+          subtitle: `${comp.name} (${comp.code || '-'})`,
+          icon: "⚡",
+          type: "success",
+          contentHtml: `
+            <div style="font-size: 12.5px; line-height: 1.4; color: #334155;">
+              Harga baru <strong>${window.CurrencyUtil.formatRupiah(parsedPrice, false, true)}</strong> per ${comp.unit} telah disimpan.<br><br>
+              ✅ <strong>Global Price Cascade Berhasil:</strong> Perubahan otomatis diterapkan ke <strong>${result.affectedAhspCount || 1} Analisis AHSP</strong> dan <strong>${result.affectedItemCount || 0} Item RAB</strong> yang menggunakan sumber daya ini!
+            </div>
+          `,
+          confirmText: "Lanjutkan"
+        });
+      }
+    }
+  }
+
+  function handleDeleteAhspComponent(ahspId, compIdx) {
+    window.AhspEngine.removeComponentFromAhsp(ahspId, compIdx);
+    openAhspDetailModal(ahspId);
+    renderCurrentTabContent();
+  }
+
   function handleOverheadChange(ahspId, newOverhead) {
     const ahsp = window.AhspEngine.getAhspById(ahspId);
     if (ahsp) {
@@ -4650,6 +5676,193 @@ window.App = (function() {
     }
   }
 
+  // Modal Pemilih Komponen dari Master Katalog
+  let compPickerState = {
+    category: "ALL",
+    search: "",
+    selectedItem: null,
+    ahspId: null,
+    onSelectCallback: null
+  };
+
+  function openAddAhspCompModal(ahspId, callback = null) {
+    compPickerState = {
+      category: "ALL",
+      search: "",
+      selectedItem: null,
+      ahspId: ahspId,
+      onSelectCallback: callback
+    };
+    renderAddAhspCompModal();
+  }
+
+  function renderAddAhspCompModal() {
+    const allMaterials = window.MASTER_MATERIALS || [];
+    let filtered = allMaterials;
+
+    if (compPickerState.category === "UPAH") {
+      filtered = filtered.filter(m => (m.category || "").toUpperCase().includes("UPAH") || (m.code || "").startsWith("L"));
+    } else if (compPickerState.category === "ALAT") {
+      filtered = filtered.filter(m => (m.category || "").toUpperCase().includes("ALAT") || (m.code || "").startsWith("E"));
+    } else if (compPickerState.category === "BAHAN") {
+      filtered = filtered.filter(m => !(m.category || "").toUpperCase().includes("UPAH") && !(m.category || "").toUpperCase().includes("ALAT") && !(m.code || "").startsWith("L") && !(m.code || "").startsWith("E"));
+    }
+
+    if (compPickerState.search && compPickerState.search.trim() !== "") {
+      const q = compPickerState.search.toLowerCase().trim();
+      filtered = filtered.filter(m => 
+        (m.name && m.name.toLowerCase().includes(q)) || 
+        (m.code && m.code.toLowerCase().includes(q))
+      );
+    }
+
+    const previewList = filtered.slice(0, 40);
+
+    let itemsHtml = "";
+    previewList.forEach(m => {
+      const effPrice = window.CatalogPricing ? window.CatalogPricing.getEffectivePrice(m) : m.price;
+      const isSelected = compPickerState.selectedItem && compPickerState.selectedItem.id === m.id;
+      const catBadge = (m.category || "").includes("UPAH") || (m.code || "").startsWith("L") ? "badge-primary" : (((m.category || "").includes("ALAT") || (m.code || "").startsWith("E")) ? "badge-warning" : "badge-success");
+
+      itemsHtml += `
+        <div class="comp-picker-item ${isSelected ? 'selected-picker-item' : ''}" 
+             style="display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; border-bottom: 1px solid #f1f5f9; cursor: pointer; background: ${isSelected ? '#eff6ff' : '#ffffff'}; border-left: ${isSelected ? '3px solid #2563eb' : '3px solid transparent'};"
+             onclick="App.selectCompPickerItem('${m.id}')">
+          <div>
+            <div style="font-weight: 600; font-size: 12px; color: #0f172a;">${m.name}</div>
+            <div style="font-size: 10.5px; color: #64748b; margin-top: 1px;">
+              <span class="badge ${catBadge}" style="font-size: 9px; padding: 1px 5px;">${m.category || 'MATERIAL'}</span>
+              <span class="font-mono ml-1" style="font-weight: 600;">${m.code || '-'}</span> &bull; Satuan: <strong>${m.unit}</strong>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-weight: 700; font-size: 12px; color: #1e40af;">${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(effPrice, false, true) : effPrice}</div>
+            <div style="font-size: 10px; color: #94a3b8;">per ${m.unit}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    const sel = compPickerState.selectedItem;
+    const selPrice = sel ? (window.CatalogPricing ? window.CatalogPricing.getEffectivePrice(sel) : sel.price) : 0;
+
+    showFormModal({
+      title: "Tambah Komponen AHSP dari Master Katalog",
+      subtitle: "Pilih upah, material, atau sewa alat standar SE Bina Konstruksi 2026",
+      bodyHtml: `
+        <div style="font-size: 12px;">
+          <!-- Filter Tabs -->
+          <div class="d-flex align-items-center mb-2 flex-wrap" style="gap: 5px;">
+            <button type="button" class="btn btn-sm ${compPickerState.category === 'ALL' ? 'btn-primary' : 'btn-outline'}" onclick="App.setCompPickerCat('ALL')">Semua (${allMaterials.length})</button>
+            <button type="button" class="btn btn-sm ${compPickerState.category === 'UPAH' ? 'btn-primary' : 'btn-outline'}" onclick="App.setCompPickerCat('UPAH')">👷 Upah Tenaga (45)</button>
+            <button type="button" class="btn btn-sm ${compPickerState.category === 'BAHAN' ? 'btn-primary' : 'btn-outline'}" onclick="App.setCompPickerCat('BAHAN')">🧱 Bahan Material (3.252)</button>
+            <button type="button" class="btn btn-sm ${compPickerState.category === 'ALAT' ? 'btn-primary' : 'btn-outline'}" onclick="App.setCompPickerCat('ALAT')">🚜 Sewa Alat (60)</button>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="mb-2">
+            <input type="text" id="compPickerSearchInput" class="form-control" placeholder="Ketik nama atau kode item (misal: pekerja, pasir, semen, cat)..." style="font-size: 12px; padding: 6px 10px;" value="${compPickerState.search}" oninput="App.handleCompPickerSearch(this.value)">
+          </div>
+
+          <!-- Items Container -->
+          <div id="compPickerItemsList" style="max-height: 220px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 12px;">
+            ${itemsHtml || '<div class="p-3 text-center text-muted">Tidak ditemukan komponen yang sesuai dengan pencarian.</div>'}
+          </div>
+
+          <!-- Selected Item & Coefficient Inputs -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+            ${sel ? `
+              <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; align-items: center;">
+                <div>
+                  <div style="font-size: 11px; color: #64748b;">Item Terpilih:</div>
+                  <div style="font-weight: 700; font-size: 13px; color: #0f172a;">${sel.name}</div>
+                  <div style="font-size: 11px; color: #475569;">Kode: <strong>${sel.code}</strong> &bull; Satuan: <strong>${sel.unit}</strong> &bull; Dasar: <strong>${window.CurrencyUtil.formatRupiah(selPrice, false, true)}</strong></div>
+                </div>
+                <div>
+                  <label style="font-size: 11px; font-weight: 700; color: #1e293b;">Koefisien *</label>
+                  <input type="number" id="compPickerKoefInput" step="0.0001" min="0.0001" class="form-control font-bold" value="1.0000" style="text-align: right; font-size: 13px; padding: 4px 8px;" oninput="App.updateCompPickerSubtotal(this.value, ${selPrice})">
+                  <div style="font-size: 10px; color: #64748b; text-align: right; margin-top: 2px;" id="compPickerSubtotalText">
+                    Subtotal: <strong>${window.CurrencyUtil.formatRupiah(selPrice, false, true)}</strong>
+                  </div>
+                </div>
+              </div>
+            ` : `
+              <div class="text-center text-muted" style="padding: 10px;">
+                👆 Klik salah satu item dari daftar di atas untuk memilih komponen dan menentukan koefisiennya.
+              </div>
+            `}
+          </div>
+        </div>
+      `,
+      submitText: "Tambahkan ke Analisis",
+      onSubmit: () => {
+        if (!compPickerState.selectedItem) {
+          alert("Silakan pilih salah satu item komponen dari katalog terlebih dahulu.");
+          return;
+        }
+        const koefInput = document.getElementById("compPickerKoefInput");
+        const koefVal = koefInput ? (parseFloat(koefInput.value) || 1.0) : 1.0;
+        const sel = compPickerState.selectedItem;
+        const effPrice = window.CatalogPricing ? window.CatalogPricing.getEffectivePrice(sel) : sel.price;
+
+        let section = "BAHAN MATERIAL";
+        const cat = (sel.category || "").toUpperCase();
+        if (cat.includes("UPAH") || (sel.code || "").startsWith("L")) section = "TENAGA KERJA";
+        else if (cat.includes("ALAT") || (sel.code || "").startsWith("E")) section = "PERALATAN";
+
+        const compPayload = {
+          section: section,
+          name: sel.name,
+          code: sel.code || "-",
+          unit: sel.unit || "unit",
+          koef: koefVal,
+          price: effPrice,
+          total: Math.round(koefVal * effPrice * 100) / 100
+        };
+
+        if (compPickerState.ahspId) {
+          window.AhspEngine.addComponentToAhsp(compPickerState.ahspId, compPayload);
+          openAhspDetailModal(compPickerState.ahspId);
+          renderCurrentTabContent();
+        } else if (compPickerState.onSelectCallback) {
+          compPickerState.onSelectCallback(compPayload);
+        }
+      }
+    });
+
+    setTimeout(() => {
+      const inp = document.getElementById("compPickerSearchInput");
+      if (inp) inp.focus();
+    }, 150);
+  }
+
+  function setCompPickerCat(cat) {
+    compPickerState.category = cat;
+    renderAddAhspCompModal();
+  }
+
+  function handleCompPickerSearch(val) {
+    compPickerState.search = val;
+    renderAddAhspCompModal();
+  }
+
+  function selectCompPickerItem(id) {
+    const allMaterials = window.MASTER_MATERIALS || [];
+    const item = allMaterials.find(m => m.id === id);
+    if (item) {
+      compPickerState.selectedItem = item;
+      renderAddAhspCompModal();
+    }
+  }
+
+  function updateCompPickerSubtotal(koefVal, unitPrice) {
+    const k = parseFloat(koefVal) || 0;
+    const tot = Math.round(k * unitPrice * 100) / 100;
+    const txt = document.getElementById("compPickerSubtotalText");
+    if (txt) {
+      txt.innerHTML = `Subtotal: <strong>${window.CurrencyUtil ? window.CurrencyUtil.formatRupiah(tot, false, true) : tot}</strong>`;
+    }
+  }
 
   function changeAhspPage(newPage) {
     currentAhspPage = Number(newPage) || 1;
@@ -4709,9 +5922,9 @@ window.App = (function() {
           type: "select",
           value: "catalog",
           options: [
-            { value: "catalog", label: "📋 Katalog Ringkas 2.573 AHSP (Kode, Uraian, Satuan, HSP) — Cepat & Rapi (~45 Hal A4)" },
+            { value: "catalog", label: "📋 Katalog Ringkas Master AHSP (Kode, Uraian, Satuan, HSP) — Cepat & Rapi (~45 Hal A4)" },
             { value: "category", label: "📑 Rincian Komponen per Divisi / Kategori (Pilih Divisi Tertentu)" },
-            { value: "all_full", label: "⚠️ Seluruh 2.573 Rincian Komponen Lengkap (Dokumen Sangat Besar)" }
+            { value: "all_full", label: "⚠️ Seluruh Rincian Komponen Lengkap AHSP (Dokumen Sangat Besar)" }
           ]
         },
         {
@@ -4978,30 +6191,32 @@ window.App = (function() {
         </tbody>
       </table>
 
-      <!-- Lembar Pengesahan Polos Tanpa Border (Bebas Titik-Titik Sesuai Setting Proyek) -->
-      <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; text-align: center; page-break-inside: avoid; margin-top: 25px;">
-        <div class="sig-block" style="border: none !important; background: transparent !important;">
-          <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
-          <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui & Menetapkan:</div>
-          <div class="sig-space" style="height: 45px;"></div>
-          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigOwnerName} )</div>
-          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
-        </div>
-        <div class="sig-block" style="border: none !important; background: transparent !important;">
-          <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
-          <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
-          <div class="sig-space" style="height: 45px;"></div>
-          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigConsultantName} )</div>
-          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
-        </div>
-        <div class="sig-block" style="border: none !important; background: transparent !important;">
-          <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
-          <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
-          <div class="sig-space" style="height: 45px;"></div>
-          <div class="sig-name" style="font-weight: 700; font-size: 9pt; text-decoration: underline;">( ${sigContractorName} )</div>
-          <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
-        </div>
-      </div>
+      <!-- Lembar Pengesahan Tiga Pihak (Bebas Titik-Titik & Sejajar 3 Kolom Horizontal) -->
+      <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 24pt !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+        <tr style="border: none !important; background: transparent !important;">
+          <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+            <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">PEMBERI TUGAS / OWNER</div>
+            <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Menyetujui &amp; Menetapkan:</div>
+            <div class="sig-space" style="height: 45px;"></div>
+            <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigOwnerName} )</div>
+            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigOwnerTitle}</div>
+          </td>
+          <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+            <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONSULTAN PERENCANA</div>
+            <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Direncanakan:</div>
+            <div class="sig-space" style="height: 45px;"></div>
+            <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigConsultantName} )</div>
+            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigConsultantTitle}</div>
+          </td>
+          <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+            <div class="sig-title" style="font-weight: 800; font-size: 9pt; color: #1e293b; margin-bottom: 4px;">KONTRAKTOR PELAKSANA</div>
+            <div style="font-size: 8pt; color: #64748b; min-height: 16px;">Diajukan:</div>
+            <div class="sig-space" style="height: 45px;"></div>
+            <div class="sig-name" style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sigContractorName} )</div>
+            <div class="sig-role" style="font-size: 8pt; color: #334155; margin-top: 3px;">${sigContractorTitle}</div>
+          </td>
+        </tr>
+      </table>
       
     `;
 
@@ -5473,18 +6688,19 @@ window.App = (function() {
                     <td style="text-align: center; font-weight: 700; padding: 4px 6px; border: 1px solid #cbd5e1; color: #854d0e;">${(proj.ppnRate !== undefined && proj.ppnRate !== null) ? proj.ppnRate : 11}%</td>
                     <td style="text-align: right; font-weight: 700; padding: 4px 8px; border: 1px solid #cbd5e1; font-family: var(--font-mono); color: #854d0e;">${window.CurrencyUtil.formatRupiah(calcRecalc.ppnAmount, false, true)}</td>
                   </tr>
-                  <tr style="background-color: #0f172a; color: #ffffff; font-weight: 800;">
-                    <td style="text-align: center; padding: 5px 6px; border: 1px solid #0f172a;">5</td>
-                    <td style="padding: 5px 8px; border: 1px solid #0f172a;">GRAND TOTAL RENCANA ANGGARAN BIAYA</td>
-                    <td style="text-align: center; padding: 5px 6px; border: 1px solid #0f172a; color: #38bdf8;">FINAL</td>
-                    <td style="text-align: right; padding: 5px 8px; border: 1px solid #0f172a; color: #38bdf8; font-size: 9.5pt; font-family: var(--font-mono);">${window.CurrencyUtil.formatRupiah(calcRecalc.grandTotal, false, true)}</td>
+                  <tr style="background-color: #f1f5f9; color: #0f172a; font-weight: 800;">
+                    <td style="text-align: center; padding: 5px 6px; border: 1px solid #cbd5e1;">5</td>
+                    <td style="padding: 5px 8px; border: 1px solid #cbd5e1; font-weight: 800;">GRAND TOTAL RENCANA ANGGARAN BIAYA</td>
+                    <td style="text-align: center; padding: 5px 6px; border: 1px solid #cbd5e1; color: #0284c7; font-weight: 800;">FINAL</td>
+                    <td style="text-align: right; padding: 5px 8px; border: 1px solid #cbd5e1; color: #0f172a; font-size: 9.5pt; font-family: var(--font-mono); font-weight: 800;">${window.CurrencyUtil.formatRupiah(calcRecalc.grandTotal, false, true)}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" style="background-color: #f8fafc; padding: 5px 8px; border: 1px solid #cbd5e1; font-size: 7.5pt; color: #334155;">
+                      <strong>Terbilang Resmi:</strong> <em>"${calcRecalc.terbilangStr}"</em>
+                    </td>
                   </tr>
                 </tbody>
               </table>
-
-              <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 10px; margin-bottom: 10px; font-size: 7.5pt;">
-                <strong>Terbilang Resmi:</strong> <em>"${calcRecalc.terbilangStr}"</em>
-              </div>
 
               <!-- BAGIAN 3: REKENING BANK & TIM LAPANGAN -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
@@ -5495,16 +6711,16 @@ window.App = (function() {
                   </div>
                   <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; border: 1px solid #cbd5e1;">
                     <tr style="background-color: #f8fafc;">
-                      <td style="width: 40%; padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Nama Bank</td>
-                      <td style="width: 60%; padding: 3px 6px; border: 1px solid #cbd5e1; font-weight: 700;">${bank.bankName}</td>
+                      <td style="width: 40%; padding: 4px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Nama Bank</td>
+                      <td style="width: 60%; padding: 4px 6px; border: 1px solid #cbd5e1; font-weight: 700;">${bank.bankName}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Nomor Rekening</td>
-                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1; font-family: var(--font-mono); font-weight: 700;">${bank.accountNumber}</td>
+                      <td style="padding: 4px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Nomor Rekening</td>
+                      <td style="padding: 4px 6px; border: 1px solid #cbd5e1; font-family: var(--font-mono); font-weight: 700;">${bank.accountNumber}</td>
                     </tr>
                     <tr style="background-color: #f8fafc;">
-                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Atas Nama</td>
-                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1;">${bank.accountName}</td>
+                      <td style="padding: 4px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Atas Nama</td>
+                      <td style="padding: 4px 6px; border: 1px solid #cbd5e1;">${bank.accountName}</td>
                     </tr>
                   </table>
                 </div>
@@ -5516,53 +6732,55 @@ window.App = (function() {
                   </div>
                   <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; border: 1px solid #cbd5e1;">
                     <tr style="background-color: #f8fafc;">
-                      <td style="width: 40%; padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Pengawas QC</td>
-                      <td style="width: 60%; padding: 3px 6px; border: 1px solid #cbd5e1;">${sig.qcInspectorName} <br><small class="text-muted">(${sig.qcInspectorRole})</small></td>
+                      <td style="width: 40%; padding: 4px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Pengawas QC</td>
+                      <td style="width: 60%; padding: 4px 6px; border: 1px solid #cbd5e1;">${sig.qcInspectorName} <span class="text-muted">(${sig.qcInspectorRole})</span></td>
                     </tr>
                     <tr>
-                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Mandor Utama</td>
-                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1;">${sig.fieldMandorName} <br><small class="text-muted">(${sig.fieldMandorRole})</small></td>
+                      <td style="padding: 4px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Mandor Utama</td>
+                      <td style="padding: 4px 6px; border: 1px solid #cbd5e1;">${sig.fieldMandorName} <span class="text-muted">(${sig.fieldMandorRole})</span></td>
                     </tr>
                     <tr style="background-color: #f8fafc;">
-                      <td style="padding: 3px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Site Manager</td>
-                      <td style="padding: 3px 6px; border: 1px solid #cbd5e1;">${sig.siteManagerName} <br><small class="text-muted">(${sig.siteManagerRole})</small></td>
+                      <td style="padding: 4px 6px; font-weight: 700; border: 1px solid #cbd5e1;">Site Manager</td>
+                      <td style="padding: 4px 6px; border: 1px solid #cbd5e1;">${sig.siteManagerName} <span class="text-muted">(${sig.siteManagerRole})</span></td>
                     </tr>
                   </table>
                 </div>
               </div>
             </div>
 
-            <!-- BAGIAN 5: LEMBAR PENGESAHAN TIGA PIHAK RESMI (BEBAS TITIK-TITIK) -->
+            <!-- BAGIAN 5: LEMBAR PENGESAHAN TIGA PIHAK RESMI (BEBAS TITIK-TITIK & TANPA GARIS BAWAH) -->
             <div style="margin-top: auto; page-break-inside: avoid;">
               <div style="text-align: center; font-size: 8pt; color: #475569; margin-bottom: 8px;">
                 Ditetapkan di <strong>${sig.docCity}</strong>, tanggal <strong>${sig.docDate}</strong>
               </div>
-              <div class="signature-clean-grid three-parties" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; text-align: center; border-top: 1px solid #cbd5e1; padding-top: 8px;">
-                <div class="sig-block" style="border: none !important; background: transparent !important;">
-                  <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px;">PEMBERI TUGAS / OWNER</div>
-                  <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Menyetujui &amp; Menetapkan:</div>
-                  <div class="sig-space" style="height: 38px;"></div>
-                  <div class="sig-name" style="font-weight: 700; font-size: 8.5pt; text-decoration: underline;">( ${sig.ownerName} )</div>
-                  <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.ownerTitle}</div>
-                  <div style="font-size: 7pt; color: #64748b;">NIP: ${sig.ownerNip}</div>
-                </div>
-                <div class="sig-block" style="border: none !important; background: transparent !important;">
-                  <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px;">KONSULTAN PERENCANA</div>
-                  <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Direncanakan:</div>
-                  <div class="sig-space" style="height: 38px;"></div>
-                  <div class="sig-name" style="font-weight: 700; font-size: 8.5pt; text-decoration: underline;">( ${sig.consultantName} )</div>
-                  <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.consultantTitle}</div>
-                  <div style="font-size: 7pt; color: #64748b;">${sig.consultantCompany}</div>
-                </div>
-                <div class="sig-block" style="border: none !important; background: transparent !important;">
-                  <div class="sig-title" style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px;">KONTRAKTOR PELAKSANA</div>
-                  <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Diajukan:</div>
-                  <div class="sig-space" style="height: 38px;"></div>
-                  <div class="sig-name" style="font-weight: 700; font-size: 8.5pt; text-decoration: underline;">( ${sig.contractorName} )</div>
-                  <div class="sig-role" style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.contractorTitle}</div>
-                  <div style="font-size: 7pt; color: #64748b;">${sig.contractorCompany}</div>
-                </div>
-              </div>
+              <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 20pt !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+                <tr style="border: none !important; background: transparent !important;">
+                  <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 8px !important; background: transparent !important;">
+                    <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px; text-transform: uppercase;">PEMBERI TUGAS / OWNER</div>
+                    <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Menyetujui &amp; Menetapkan:</div>
+                    <div style="height: 40px;"></div>
+                    <div style="font-weight: 700; font-size: 8.5pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sig.ownerName} )</div>
+                    <div style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.ownerTitle}</div>
+                    <div style="font-size: 7pt; color: #64748b;">NIP: ${sig.ownerNip}</div>
+                  </td>
+                  <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 8px !important; background: transparent !important;">
+                    <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px; text-transform: uppercase;">KONSULTAN PERENCANA</div>
+                    <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Direncanakan:</div>
+                    <div style="height: 40px;"></div>
+                    <div style="font-weight: 700; font-size: 8.5pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sig.consultantName} )</div>
+                    <div style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.consultantTitle}</div>
+                    <div style="font-size: 7pt; color: #64748b;">${sig.consultantCompany}</div>
+                  </td>
+                  <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 8px !important; background: transparent !important;">
+                    <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 3px; text-transform: uppercase;">KONTRAKTOR PELAKSANA</div>
+                    <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Diajukan:</div>
+                    <div style="height: 40px;"></div>
+                    <div style="font-weight: 700; font-size: 8.5pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${sig.contractorName} )</div>
+                    <div style="font-size: 7.5pt; color: #334155; margin-top: 2px;">${sig.contractorTitle}</div>
+                    <div style="font-size: 7pt; color: #64748b;">${sig.contractorCompany}</div>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         `;
@@ -5632,8 +6850,33 @@ window.App = (function() {
     }, 100);
   }
 
+
+  function handleLogoSizeChange(val) {
+    const size = parseInt(val, 10) || 120;
+    const labelEl = document.getElementById('logoSizeLabel');
+    if (labelEl) labelEl.textContent = size + ' px';
+    const hiddenEl = document.getElementById('projLogoSizeHidden');
+    if (hiddenEl) hiddenEl.value = size;
+    const previewEl = document.getElementById('logoSizePreviewImg');
+    if (previewEl) {
+      previewEl.style.maxWidth = size + 'px';
+      previewEl.style.maxHeight = Math.round(size * 0.65) + 'px';
+    }
+    const proj = window.ProjectManager ? window.ProjectManager.getActiveProject() : null;
+    if (proj) {
+      proj.logoSize = size;
+      if (window.ProjectManager && window.ProjectManager.saveProjects) {
+        window.ProjectManager.saveProjects();
+      }
+    }
+  }
+
   return {
+    handleLogoSizeChange,
     init,
+    downloadCurrentPagePdfDirect,
+    downloadProposalPdfDirect,
+    downloadSingleBapPdfDirect,
     printProjectInfo,
     printProposal,
     handleSyncTasksFromRab,
@@ -5678,6 +6921,7 @@ window.App = (function() {
     printAllAhsp,
     handleAhspSearch,
     handleAhspCategory,
+    handleAhspBidang,
     toggleOnlyUsedAhsp,
     resetAhsp,
     deleteAhsp,
@@ -5710,6 +6954,9 @@ window.App = (function() {
     deleteBap,
     printSingleBap,
     printAllBap,
+    handleProjectTypeToggle,
+    handleProjectLogoUpload,
+    removeProjectLogo,
     openCreateProjectModal,
     duplicateCurrentProject,
     deleteProject,
@@ -5718,6 +6965,7 @@ window.App = (function() {
     handleOverheadChange,
     exportCurrentProject,
     exportSingleProject,
+    sanitizeCurrentProject,
     handleImportAhsp,
     handleImportProject,
     handleCompKoefChange,

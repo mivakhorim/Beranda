@@ -150,9 +150,12 @@
           </div>
         </div>
 
-        <div class="topbar-actions">
-          <div class="topbar-badge" style="font-size: 11px; color: var(--color-text-muted); font-weight: 600;">
-            A4 Print Ready &bull; SE No. 47/2026
+        <div class="topbar-actions d-flex align-items-center" style="gap: 8px;">
+          <button class="btn btn-sm btn-primary d-flex align-items-center gap-1 font-bold" id="globalPrintBtn" title="Cetak / Tampilkan Preview Dokumen A4">
+            <span>🖨️</span> <span>Cetak / Preview A4</span>
+          </button>
+          <div class="topbar-badge d-none-mobile" style="font-size: 11px; color: var(--color-text-muted); font-weight: 600;">
+            SE No. 47/2026
           </div>
         </div>
       </header>
@@ -251,7 +254,7 @@
         <button type="button" class="btn btn-sm btn-outline" id="formModalCloseBtn" style="min-width: 28px; padding: 2px 6px;">✕</button>
       </div>
       <form id="dynamicModalForm" onsubmit="return false;">
-        <div class="modal-body" id="formModalBody" style="max-height: 65vh; overflow-y: auto;"></div>
+        <div class="modal-body" id="formModalBody"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" id="formModalCancelBtn">Batal</button>
           <button type="submit" class="btn btn-primary" id="formModalSubmitBtn">Simpan Data</button>

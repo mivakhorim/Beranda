@@ -132,27 +132,29 @@ window.SiteCorrection = (function() {
           </div>
         </div>
 
-        <!-- Kolom Tanda Tangan Bersih Minimalis -->
-        <div class="signature-clean-grid">
-          <div class="sig-block">
-            <div class="sig-title">${qcRole}</div>
-            <div class="sig-space"></div>
-            <div class="sig-name">( ${qcName} )</div>
-            <div class="sig-role">Site Inspector / QC</div>
-          </div>
-          <div class="sig-block">
-            <div class="sig-title">${mandorRole}</div>
-            <div class="sig-space"></div>
-            <div class="sig-name">( ${mandorName} )</div>
-            <div class="sig-role">Pelaksana Harian</div>
-          </div>
-          <div class="sig-block">
-            <div class="sig-title">${smRole}</div>
-            <div class="sig-space"></div>
-            <div class="sig-name">( ${smName} )</div>
-            <div class="sig-role">Penanggung Jawab Teknis</div>
-          </div>
-        </div>
+        <!-- Kolom Tanda Tangan 3 Kolom Sejajar Horizontal Rapi & Profesional (Anti-Bersusun Vertikal) -->
+        <table class="signature-clean-table" style="width: 100% !important; border-collapse: collapse !important; border: none !important; background: transparent !important; margin-top: 28pt !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+          <tr style="border: none !important; background: transparent !important;">
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+              <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 4px; text-transform: uppercase;">${qcRole}</div>
+              <div style="height: 52px;"></div>
+              <div style="font-weight: 700; font-size: 8.5pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${qcName} )</div>
+              <div style="font-size: 7.5pt; color: #475569; margin-top: 2px;">Site Inspector / QC</div>
+            </td>
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+              <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 4px; text-transform: uppercase;">${mandorRole}</div>
+              <div style="height: 52px;"></div>
+              <div style="font-weight: 700; font-size: 8.5pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${mandorName} )</div>
+              <div style="font-size: 7.5pt; color: #475569; margin-top: 2px;">Pelaksana Harian</div>
+            </td>
+            <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
+              <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 4px; text-transform: uppercase;">${smRole}</div>
+              <div style="height: 52px;"></div>
+              <div style="font-weight: 700; font-size: 8.5pt; color: #0f172a; text-decoration: none !important; border-bottom: none !important;">( ${smName} )</div>
+              <div style="font-size: 7.5pt; color: #475569; margin-top: 2px;">Penanggung Jawab Teknis</div>
+            </td>
+          </tr>
+        </table>
       </div>
     `;
   }

@@ -591,18 +591,16 @@ window.SCurveDiagram = (function() {
       const devText = deviasi >= 0 ? `+${deviasi}% (Ahead)` : `${deviasi}% (Behind)`;
 
       deviasiBadge = `
-        <g transform="translate(${width - 255}, ${padT + 8})">
-          <rect width="200" height="34" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
-          <text x="12" y="21" font-size="11" font-family="system-ui, sans-serif" fill="#475569">Deviasi Progres:</text>
-          <text x="110" y="21" font-size="12" font-family="system-ui, sans-serif" font-weight="bold" fill="${devColor}">${devText}</text>
+        <g transform="translate(${width - 260}, ${padT + 10})">
+          <text x="0" y="13" font-size="10.5" font-family="system-ui, sans-serif" fill="#94a3b8">Deviasi Progres:</text>
+          <text x="108" y="13" font-size="12" font-family="system-ui, sans-serif" font-weight="bold" fill="${devColor}">${devText}</text>
         </g>
       `;
     } else {
       deviasiBadge = `
-        <g transform="translate(${width - 255}, ${padT + 8})">
-          <rect width="200" height="34" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
-          <circle cx="16" cy="17" r="4" fill="#94a3b8" />
-          <text x="28" y="21" font-size="10.5" font-family="system-ui, sans-serif" fill="#64748b">Menunggu Input Kalender</text>
+        <g transform="translate(${width - 260}, ${padT + 10})">
+          <circle cx="5" cy="9" r="4" fill="#94a3b8" />
+          <text x="14" y="13" font-size="10.5" font-family="system-ui, sans-serif" fill="#94a3b8">Menunggu Input Kalender</text>
         </g>
       `;
     }
@@ -614,9 +612,8 @@ window.SCurveDiagram = (function() {
 
     const modeBadge = `
       <g transform="translate(${padL}, ${padT - 18})">
-        <rect width="220" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />
-        <circle cx="12" cy="11" r="3.5" fill="#2563eb" />
-        <text x="22" y="15" font-size="9.5" font-weight="700" font-family="system-ui, sans-serif" fill="#1e293b">${modeBadgeText}</text>
+        <circle cx="8" cy="11" r="4" fill="#2563eb" />
+        <text x="18" y="15" font-size="9.5" font-weight="700" font-family="system-ui, sans-serif" fill="#64748b">${modeBadgeText}</text>
       </g>
     `;
 

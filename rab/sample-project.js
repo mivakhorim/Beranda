@@ -1,4 +1,609 @@
-window.SAMPLE_PROJECT = {
+/**
+ * CONTOH PROYEK TERPADU MULTI-BIDANG SE NO 47/SE/Dk/2026
+ * Meliputi: Jalan Akses, Jembatan Girder, Jaringan Irigasi, Gedung Kantor Operasional, dan SMKK
+ */
+window.SAMPLE_PROJECT_V2 = {
+  "id": "PROJ-SE47-2026-MULTI",
+  "name": "Pembangunan Jalan Akses, Jembatan Girder, Jaringan Irigasi, Gedung Kantor Operasional, dan Penerapan SMKK",
+  "owner": "Pejabat Pembuat Komitmen (PPK) Pembangunan Infrastruktur Terpadu",
+  "ministry": "Kementerian Pekerjaan Umum Republik Indonesia",
+  "contractor": "PT. Wijaya Bangun Perkasa (Persero) Tbk",
+  "consultant": "PT. Virama Karya Engineering Consultant",
+  "location": "Kawasan Strategis Nasional, Jawa Barat / Kaltim",
+  "startDate": "2026-05-01",
+  "finishDate": "2026-12-31",
+  "durationDays": 245,
+  "projectType": "new",
+  "buildingArea": 350,
+  "landArea": 500,
+  "existingBuildingArea": 0,
+  "rehabArea": 0,
+  "docNumber": "KTR/PU-SE47/2026/05-001",
+  "regionId": "jabar-bdg",
+  "regionName": "Jawa Barat - Bandung Raya & Priangan",
+  "ppnRate": 11,
+  "includePpn": true,
+  "overheadRate": 10,
+  "divisions": [
+    {
+      "id": "DIV-SMKK",
+      "code": "DIVISI 1",
+      "name": "BIAYA PENERAPAN SISTEM MANAJEMEN KESELAMATAN KONSTRUKSI (SMKK)",
+      "bidang": "SMKK",
+      "items": [
+        {
+          "id": "ITM-SMKK-01",
+          "code": "SMKK-01.01",
+          "ahspId": "AHSP-SMKK-0101",
+          "name": "Penyusunan dan Pembuatan Dokumen RKK",
+          "unit": "set",
+          "volume": 1,
+          "price": 3000000,
+          "notes": "Dokumen RKK Pelaksanaan Lengkap"
+        },
+        {
+          "id": "ITM-SMKK-02",
+          "code": "SMKK-02.01",
+          "ahspId": "AHSP-SMKK-0201",
+          "name": "Induksi Keselamatan (Safety Induction) dan TBM",
+          "unit": "bulan",
+          "volume": 8,
+          "price": 2200000,
+          "notes": "Pelaksanaan rutin bulanan"
+        },
+        {
+          "id": "ITM-SMKK-03",
+          "code": "SMKK-03.01",
+          "ahspId": "AHSP-SMKK-0301",
+          "name": "Jaring Pengaman (Safety Net)",
+          "unit": "m2",
+          "volume": 450,
+          "price": 38850,
+          "notes": "Proteksi area jembatan & lereng"
+        },
+        {
+          "id": "ITM-SMKK-04",
+          "code": "SMKK-03.03",
+          "ahspId": "AHSP-SMKK-0303",
+          "name": "Paket APD Standar Pekerja Lapangan",
+          "unit": "set",
+          "volume": 85,
+          "price": 399000,
+          "notes": "Helm, Rompi, Sepatu Safety, Sarung Tangan, Kacamata"
+        },
+        {
+          "id": "ITM-SMKK-05",
+          "code": "SMKK-05.01",
+          "ahspId": "AHSP-SMKK-0501",
+          "name": "Honorarium Ahli Muda Keselamatan Konstruksi",
+          "unit": "OB",
+          "volume": 8,
+          "price": 9500000,
+          "notes": "Personel K3 stand by penuh waktu"
+        }
+      ]
+    },
+    {
+      "id": "DIV-JALAN",
+      "code": "DIVISI 2",
+      "name": "PEKERJAAN JALAN AKSES (BINA MARGA)",
+      "bidang": "Bina Marga",
+      "items": [
+        {
+          "id": "ITM-BM-01",
+          "code": "3.1.(1a)",
+          "ahspId": "AHSP-BM-0301",
+          "name": "Galian Biasa untuk Badan Jalan",
+          "unit": "m3",
+          "volume": 4200,
+          "price": 52029,
+          "notes": "Galian trase jalan akses"
+        },
+        {
+          "id": "ITM-BM-02",
+          "code": "3.2.(1a)",
+          "ahspId": "AHSP-BM-0302",
+          "name": "Timbunan Biasa Dipadatkan dari Quarry",
+          "unit": "m3",
+          "volume": 2800,
+          "price": 157311,
+          "notes": "Timbunan badan jalan padat"
+        },
+        {
+          "id": "ITM-BM-03",
+          "code": "3.5.(1a)",
+          "ahspId": "AHSP-BM-0303",
+          "name": "Geotekstil Filter Separator Non-Woven",
+          "unit": "m2",
+          "volume": 3600,
+          "price": 40645,
+          "notes": "Pemisah tanah dasar lunak"
+        },
+        {
+          "id": "ITM-BM-04",
+          "code": "5.1.(1)",
+          "ahspId": "AHSP-BM-0501",
+          "name": "Lapis Pondasi Agregat Kelas A",
+          "unit": "m3",
+          "volume": 950,
+          "price": 576444,
+          "notes": "Tebal padat 15 cm"
+        },
+        {
+          "id": "ITM-BM-05",
+          "code": "6.1.(1a)",
+          "ahspId": "AHSP-BM-0601",
+          "name": "Lapis Resap Pengikat (Prime Coat)",
+          "unit": "liter",
+          "volume": 4800,
+          "price": 18707,
+          "notes": "Penyemprotan merata atas LPA"
+        },
+        {
+          "id": "ITM-BM-06",
+          "code": "6.3.(5a)",
+          "ahspId": "AHSP-BM-0603",
+          "name": "Laston Lapis Aus (AC-WC)",
+          "unit": "ton",
+          "volume": 720,
+          "price": 1488126,
+          "notes": "Lapis permukaan jalan tebal 4 cm"
+        },
+        {
+          "id": "ITM-BM-07",
+          "code": "10.1.(21)",
+          "ahspId": "AHSP-BM-1002",
+          "name": "Pengecatan Marka Termoplastik Manik Kaca",
+          "unit": "m2",
+          "volume": 320,
+          "price": 253193,
+          "notes": "Garis tepi dan putus-putus"
+        }
+      ]
+    },
+    {
+      "id": "DIV-JEMBATAN",
+      "code": "DIVISI 3",
+      "name": "PEKERJAAN JEMBATAN GELAGAR BETON (BINA MARGA)",
+      "bidang": "Bina Marga",
+      "items": [
+        {
+          "id": "ITM-JMB-01",
+          "code": "7.6.(1)",
+          "ahspId": "AHSP-BM-0703",
+          "name": "Tiang Pancang Pratekan Dia 500 mm (Spun Pile)",
+          "unit": "M",
+          "volume": 360,
+          "price": 1215285,
+          "notes": "Fondasi dalam abutment jembatan"
+        },
+        {
+          "id": "ITM-JMB-02",
+          "code": "7.1.(5a)",
+          "ahspId": "AHSP-BM-0701",
+          "name": "Beton Struktur fc 30 MPa untuk Abutment & Gelagar",
+          "unit": "m3",
+          "volume": 280,
+          "price": 1494515,
+          "notes": "K-350 struktur utama"
+        },
+        {
+          "id": "ITM-JMB-03",
+          "code": "7.3.(1)",
+          "ahspId": "AHSP-BM-0702",
+          "name": "Baja Tulangan Sirip BjTS 420B",
+          "unit": "kg",
+          "volume": 38500,
+          "price": 20092,
+          "notes": "Pembesian abutment dan lantai jembatan"
+        },
+        {
+          "id": "ITM-JMB-04",
+          "code": "2.2.(1)",
+          "ahspId": "AHSP-BM-0202",
+          "name": "Pasangan Batu dengan Mortar Sayap Abutment",
+          "unit": "m3",
+          "volume": 140,
+          "price": 1175618,
+          "notes": "Dinding penahan tanah jembatan"
+        }
+      ]
+    },
+    {
+      "id": "DIV-IRIGASI",
+      "code": "DIVISI 4",
+      "name": "PEKERJAAN SALURAN IRIGASI & PINTU AIR (SUMBER DAYA AIR)",
+      "bidang": "Sumber Daya Air",
+      "items": [
+        {
+          "id": "ITM-SDA-01",
+          "code": "A.3.01.a.1",
+          "ahspId": "AHSP-SDA-0301",
+          "name": "Galian Tanah Biasa Saluran dengan Excavator",
+          "unit": "m3",
+          "volume": 3100,
+          "price": 46877,
+          "notes": "Galian profil saluran irigasi sekunder"
+        },
+        {
+          "id": "ITM-SDA-02",
+          "code": "A.1.02.a.1",
+          "ahspId": "AHSP-SDA-0104",
+          "name": "Pasangan Batu Kali 1:3 Lining Saluran",
+          "unit": "m3",
+          "volume": 650,
+          "price": 1213160,
+          "notes": "Lining dinding dan lantai saluran"
+        },
+        {
+          "id": "ITM-SDA-03",
+          "code": "A.1.03.a.1",
+          "ahspId": "AHSP-SDA-0105",
+          "name": "Pemasangan Bronjong Kawat Pabrikasi",
+          "unit": "m3",
+          "volume": 180,
+          "price": 751928,
+          "notes": "Perkuatan tebing hilir saluran"
+        },
+        {
+          "id": "ITM-SDA-04",
+          "code": "A.3.02.a.1",
+          "ahspId": "AHSP-SDA-0303",
+          "name": "Pintu Air Sorong Baja Biconcave 1.0 x 1.5 m",
+          "unit": "unit",
+          "volume": 2,
+          "price": 39396500,
+          "notes": "Bangunan bagi sadap saluran"
+        }
+      ]
+    },
+    {
+      "id": "DIV-GEDUNG",
+      "code": "DIVISI 5",
+      "name": "GEDUNG KANTOR OPERASIONAL & POS JAGA (CIPTA KARYA)",
+      "bidang": "Cipta Karya",
+      "items": [
+        {
+          "id": "ITM-CK-01",
+          "code": "1.1.1.1",
+          "ahspId": "AHSP-0001",
+          "name": "Pembuatan Pagar Sementara Kayu Tinggi 2 Meter",
+          "unit": "m'",
+          "volume": 60,
+          "price": 823188,
+          "notes": "Pagar keliling tapak kantor"
+        },
+        {
+          "id": "ITM-CK-02",
+          "code": "1.1.2.1",
+          "ahspId": "AHSP-0007",
+          "name": "Pengukuran dan Pemasangan Bouwplank",
+          "unit": "m'",
+          "volume": 48,
+          "price": 136500,
+          "notes": "Titik as bangunan"
+        },
+        {
+          "id": "ITM-CK-03",
+          "code": "2.1.1.1",
+          "ahspId": "AHSP-0173",
+          "name": "Pekerjaan Galian Pondasi Gedung",
+          "unit": "m3",
+          "volume": 85,
+          "price": 78500,
+          "notes": "Galian pondasi footplat"
+        },
+        {
+          "id": "ITM-CK-04",
+          "code": "2.2.1.2",
+          "ahspId": "AHSP-0195",
+          "name": "Pondasi Batu Kali 1:4 Gedung",
+          "unit": "m3",
+          "volume": 42,
+          "price": 1145000,
+          "notes": "Pondasi menerus"
+        },
+        {
+          "id": "ITM-CK-05",
+          "code": "3.1.1.1",
+          "ahspId": "AHSP-0380",
+          "name": "Dinding Pasangan Bata Ringan Mortar Tebal 10 cm",
+          "unit": "m2",
+          "volume": 240,
+          "price": 168000,
+          "notes": "Dinding kantor operasional"
+        }
+      ]
+    }
+  ],
+  "signatories": {
+    "ownerName": "Pejabat Pembuat Komitmen (PPK)",
+    "ownerTitle": "PPK Pembangunan Infrastruktur Terpadu Kementerian PU",
+    "ownerNip": "19820315 200812 1 001",
+    "consultantCompany": "PT. Virama Karya Engineering Consultant",
+    "consultantName": "Ir. Bambang Hartono, S.T., M.T.",
+    "consultantTitle": "Team Leader / Supervisi Lapangan",
+    "contractorCompany": "PT. Wijaya Bangun Perkasa (Persero) Tbk",
+    "contractorName": "Ir. H. Ahmad Fauzi, S.T., M.M.",
+    "contractorTitle": "Direktur Proyek Infrastruktur",
+    "qcInspectorName": "Ir. M. Ridwan",
+    "qcInspectorRole": "Quality Assurance & QC Engineer",
+    "fieldMandorName": "Sutarji / Warsito",
+    "fieldMandorRole": "Koordinator Lapangan & K3 Konstruksi",
+    "siteManagerName": "Ir. Hendra Prasetya, S.T.",
+    "siteManagerRole": "General Site Manager",
+    "docCity": "Bandung",
+    "docDate": "2026-05-01"
+  },
+  "bankInfo": {
+    "bankName": "Bank Mandiri (Persero) Tbk",
+    "accountNumber": "131-00-8899221-5",
+    "accountName": "PT Wijaya Bangun Perkasa (Persero) Tbk"
+  }
+};
+
+// 100% Backward-Compatibility Alias
+
+/**
+ * PROYEK CONTOH STANDAR SUBSIDI: RUMAH TINGGAL TIPE 30 / TANAH 60 M2 (FLPP PUPR 2026)
+ * Tervalidasi 100% Bebas Anomali Infrastruktur & Sesuai Spesifikasi Teknis Rumah Sederhana Sehat
+ */
+window.SAMPLE_PROJECT_SUBSIDI_30 = {
+  "id": "PROJ-SUBSIDI-30-60",
+  "name": "Pembangunan Rumah Tinggal Subsidi Tipe 30/60",
+  "owner": "Kementerian Perumahan dan Kawasan Permukiman / Konsumen FLPP",
+  "contractor": "PT. Cipta Graha Nusantara",
+  "consultant": "PT. Architekta Desain Studio",
+  "location": "Perumahan Griya Asri Mandiri Kav. B-12, Jawa Barat",
+  "startDate": "2026-09-01",
+  "finishDate": "2026-11-30",
+  "durationDays": 90,
+  "projectType": "new",
+  "buildingArea": 30,
+  "landArea": 60,
+  "existingBuildingArea": 0,
+  "rehabArea": 0,
+  "docNumber": "RAB/SUBSIDI-30/2026/01",
+  "regionId": "jabar-bdg",
+  "regionName": "Jawa Barat - Bandung & Sekitarnya",
+  "ppnRate": 11,
+  "includePpn": true,
+  "logo": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' width='200' height='80'><rect width='200' height='80' rx='8' fill='%230f172a'/><path d='M25 60 L45 20 L65 60 Z' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-linejoin='round'/><path d='M35 60 L45 40 L55 60 Z' fill='%2338bdf8' opacity='0.7'/><circle cx='45' cy='18' r='4' fill='%23f59e0b'/><text x='78' y='38' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='%23ffffff'>DUTA CIPTA</text><text x='78' y='54' font-family='Arial, sans-serif' font-size='9' font-weight='500' fill='%2394a3b8' letter-spacing='1'>KONTRAKTOR &amp; KONSULTAN</text></svg>",
+  "logoSize": 120,
+  "signatures": {
+    "ownerCompany": "Kementerian Perumahan dan Kawasan Permukiman",
+    "ownerName": "Ir. H. Bambang Suryono, M.T.",
+    "ownerTitle": "Pejabat Pembuat Komitmen (PPK) FLPP",
+    "consultantCompany": "PT. Architekta Desain Studio",
+    "consultantName": "Dra. Siti Rahmawati, M.Sc.",
+    "consultantTitle": "Team Leader Supervisi",
+    "contractorCompany": "PT. Cipta Graha Nusantara",
+    "contractorName": "Ir. Dedi Kurniawan",
+    "contractorTitle": "Direktur Pelaksana",
+    "qcInspectorName": "M. Ikhsan, S.T.",
+    "qcInspectorRole": "Site Inspector / Pengawas Lapangan",
+    "fieldMandorName": "Suparno",
+    "fieldMandorRole": "Mandor Utama Lapangan",
+    "siteManagerName": "Ahmad Zaki, S.T.",
+    "siteManagerRole": "Site Manager Kontraktor",
+    "docCity": "Bandung",
+    "docDate": "2026-09-01"
+  },
+  "bankInfo": {
+    "bankName": "Bank Mandiri (Persero) Tbk",
+    "accountNumber": "131-00-5544332-1",
+    "accountName": "PT Cipta Graha Nusantara"
+  },
+  "divisions": [
+    {
+      "id": "DIV-01",
+      "code": "I",
+      "name": "PEKERJAAN PERSIAPAN",
+      "items": [
+        { "id": "S-001", "code": "1.1.1.1", "ahspId": "AHSP-0035", "name": "Pembersihan dan perataan lapangan kerja", "unit": "m2", "volume": 60, "price": 12100, "total": 726000, "directCost": 11000 },
+        { "id": "S-002", "code": "1.1.4.2", "ahspId": "AHSP-0032", "name": "Pengukuran dan pemasangan Bouwplank", "unit": "m'", "volume": 22, "price": 55000, "total": 1210000, "directCost": 50000 },
+        { "id": "S-003", "code": "1.1.5.1", "ahspId": "AHSP-0008", "name": "Penyediaan sumber air kerja dan listrik sementara", "unit": "ls", "volume": 1, "price": 1500000, "total": 1500000, "directCost": 1363636 }
+      ]
+    },
+    {
+      "id": "DIV-02",
+      "code": "II",
+      "name": "PEKERJAAN TANAH DAN PONDASI",
+      "items": [
+        { "id": "S-004", "code": "1.2.1.1", "ahspId": "AHSP-0037", "name": "Galian tanah pondasi biasa kedalaman s.d. 1 meter", "unit": "m3", "volume": 18.5, "price": 94990, "total": 1757315, "directCost": 86355 },
+        { "id": "S-005", "code": "1.3.1.2", "ahspId": "AHSP-0086", "name": "Urugan pasir urug bawah pondasi tebal 5 cm", "unit": "m3", "volume": 1.8, "price": 285000, "total": 513000, "directCost": 259091 },
+        { "id": "S-006", "code": "2.2.2.1", "ahspId": "AHSP-0253", "name": "Pasangan batu kosong (Aanstamping)", "unit": "m3", "volume": 3.2, "price": 520000, "total": 1664000, "directCost": 472727 },
+        { "id": "S-007", "code": "2.2.2.6", "ahspId": "AHSP-0258", "name": "Pasangan pondasi batu belah mortar 1:4", "unit": "m3", "volume": 12.6, "price": 1045000, "total": 13167000, "directCost": 950000 },
+        { "id": "S-008", "code": "1.3.1.1", "ahspId": "AHSP-0085", "name": "Urugan tanah kembali bekas galian pondasi", "unit": "m3", "volume": 6.5, "price": 36500, "total": 237250, "directCost": 33182 }
+      ]
+    },
+    {
+      "id": "DIV-03",
+      "code": "III",
+      "name": "PEKERJAAN STRUKTUR BETON BERTULANG",
+      "items": [
+        { "id": "S-009", "code": "2.2.1.1", "ahspId": "AHSP-0250", "name": "Sloof beton bertulang 15/20 cm praktis", "unit": "m'", "volume": 36, "price": 145000, "total": 5220000, "directCost": 131818 },
+        { "id": "S-010", "code": "2.2.1.2", "ahspId": "AHSP-0249", "name": "Kolom praktis 11/11 cm pengaku dinding bata", "unit": "m'", "volume": 42, "price": 115000, "total": 4830000, "directCost": 104545 },
+        { "id": "S-011", "code": "2.2.1.3", "ahspId": "AHSP-0250", "name": "Ring balok 10/15 cm beton bertulang praktis", "unit": "m'", "volume": 36, "price": 125000, "total": 4500000, "directCost": 113636 },
+        { "id": "S-012", "code": "2.2.1.4", "ahspId": "AHSP-0211", "name": "Rabat lantai kerja beton unreinforced tebal 5 cm", "unit": "m2", "volume": 30, "price": 65000, "total": 1950000, "directCost": 59091 }
+      ]
+    },
+    {
+      "id": "DIV-04",
+      "code": "IV",
+      "name": "PEKERJAAN DINDING DAN PLESTERAN",
+      "items": [
+        { "id": "S-013", "code": "3.6.1.8", "ahspId": "AHSP-0447", "name": "Pasangan dinding bata merah 1/2 batu mortar 1:4", "unit": "m2", "volume": 92, "price": 131125, "total": 12063500, "directCost": 119205 },
+        { "id": "S-014", "code": "3.6.1.6", "ahspId": "AHSP-0445", "name": "Pasangan dinding trasraam kedap air 1:2 kamar mandi", "unit": "m2", "volume": 12, "price": 140682, "total": 1688184, "directCost": 127893 },
+        { "id": "S-015", "code": "3.7.4", "ahspId": "AHSP-0471", "name": "Plesteran tebal 15 mm mortar campuran 1:4", "unit": "m2", "volume": 208, "price": 59365, "total": 12347920, "directCost": 53968 },
+        { "id": "S-016", "code": "3.7.8", "ahspId": "AHSP-0475", "name": "Acian semen portland pada permukaan plesteran", "unit": "m2", "volume": 208, "price": 42500, "total": 8840000, "directCost": 38636 }
+      ]
+    },
+    {
+      "id": "DIV-05",
+      "code": "V",
+      "name": "PEKERJAAN PENUTUP LANTAI",
+      "items": [
+        { "id": "S-017", "code": "3.9.8.1", "ahspId": "AHSP-0574", "name": "Pemasangan lantai keramik 40x40 cm ruangan utama", "unit": "m2", "volume": 26.5, "price": 135000, "total": 3577500, "directCost": 122727 },
+        { "id": "S-018", "code": "3.9.8.2", "ahspId": "AHSP-0574", "name": "Pemasangan lantai keramik 20x20 cm KM anti slip", "unit": "m2", "volume": 3.5, "price": 125000, "total": 437500, "directCost": 113636 },
+        { "id": "S-019", "code": "3.10.1", "ahspId": "AHSP-0608B", "name": "Pemasangan dinding keramik kamar mandi 20x25 cm", "unit": "m2", "volume": 10, "price": 155000, "total": 1550000, "directCost": 140909 },
+        { "id": "S-020", "code": "3.9.4.6", "ahspId": "AHSP-0535", "name": "Plin keramik lantai 10x40 cm", "unit": "m'", "volume": 32, "price": 32500, "total": 1040000, "directCost": 29545 }
+      ]
+    },
+    {
+      "id": "DIV-06",
+      "code": "VI",
+      "name": "PEKERJAAN KUSEN, PINTU DAN JENDELA",
+      "items": [
+        { "id": "S-021", "code": "3.11.3", "ahspId": "AHSP-0647", "name": "Kusen aluminium profil 3 inch powder coating", "unit": "m'", "volume": 32, "price": 115000, "total": 3680000, "directCost": 104545 },
+        { "id": "S-022", "code": "3.11.1.7", "ahspId": "AHSP-0630", "name": "Daun pintu utama panel fabrikasi / solid kayu", "unit": "unit", "volume": 1, "price": 1850000, "total": 1850000, "directCost": 1681818 },
+        { "id": "S-023", "code": "3.11.1.8", "ahspId": "AHSP-0631", "name": "Daun pintu kamar tidur double plywood fabrikasi", "unit": "unit", "volume": 2, "price": 950000, "total": 1900000, "directCost": 863636 },
+        { "id": "S-024", "code": "3.11.1.3", "ahspId": "AHSP-0626", "name": "Pintu PVC kamar mandi lengkap kunci & engsel", "unit": "unit", "volume": 1, "price": 450000, "total": 450000, "directCost": 409091 },
+        { "id": "S-025", "code": "3.11.1.6", "ahspId": "AHSP-0629", "name": "Daun jendela kaca tebal 5 mm rangka aluminium", "unit": "unit", "volume": 4, "price": 450000, "total": 1800000, "directCost": 409091 }
+      ]
+    },
+    {
+      "id": "DIV-07",
+      "code": "VII",
+      "name": "PEKERJAAN RANGKA ATAP DAN PLAFON",
+      "items": [
+        { "id": "S-026", "code": "2.1.1.1", "ahspId": "AHSP-0173", "name": "Rangka atap baja ringan profil C75 tebal 0.75 mm", "unit": "m2", "volume": 42, "price": 145000, "total": 6090000, "directCost": 131818 },
+        { "id": "S-027", "code": "3.1.1.2", "ahspId": "AHSP-0367", "name": "Penutup atap genteng metal pasir / genteng beton", "unit": "m2", "volume": 42, "price": 95000, "total": 3990000, "directCost": 86364 },
+        { "id": "S-028", "code": "3.5.2.1", "ahspId": "AHSP-0428", "name": "Plafon gypsum board tebal 9 mm rangka hollow", "unit": "m2", "volume": 30, "price": 95000, "total": 2850000, "directCost": 86364 }
+      ]
+    },
+    {
+      "id": "DIV-08",
+      "code": "VIII",
+      "name": "PEKERJAAN SANITAIR DAN PLUMBING",
+      "items": [
+        { "id": "S-029", "code": "3.18.3", "ahspId": "AHSP-0713", "name": "Kloset jongkok porselen lengkap bak cuci", "unit": "unit", "volume": 1, "price": 450000, "total": 450000, "directCost": 409091 },
+        { "id": "S-030", "code": "6.4.1.2", "ahspId": "AHSP-1568", "name": "Instalasi pipa air bersih PVC AW diameter 3/4 inch", "unit": "m'", "volume": 18, "price": 25973, "total": 467514, "directCost": 23612 },
+        { "id": "S-031", "code": "6.4.1.4", "ahspId": "AHSP-0735", "name": "Instalasi pipa air kotor dan limbah PVC tipe D 4 inch", "unit": "m'", "volume": 14, "price": 65000, "total": 910000, "directCost": 59091 },
+        { "id": "S-032", "code": "6.6.2.1", "ahspId": "AHSP-0739", "name": "Pengadaan dan pemasangan bio-septic tank 1.0 m3", "unit": "unit", "volume": 1, "price": 2850000, "total": 2850000, "directCost": 2590909 },
+        { "id": "S-033", "code": "4.1.1.20", "ahspId": "AHSP-0743", "name": "Toren tangki air 500 liter + pompa otomatis", "unit": "unit", "volume": 1, "price": 1450000, "total": 1450000, "directCost": 1318182 }
+      ]
+    },
+    {
+      "id": "DIV-09",
+      "code": "IX",
+      "name": "PEKERJAAN ELEKTRIKAL DAN LISTRIK",
+      "items": [
+        { "id": "S-034", "code": "5.3.1", "ahspId": "AHSP-1153", "name": "Instalasi titik lampu kabel NYM dalam pipa konduit", "unit": "titik", "volume": 6, "price": 165000, "total": 990000, "directCost": 150000 },
+        { "id": "S-035", "code": "5.1.5", "ahspId": "AHSP-1069", "name": "Instalasi titik stop kontak daya kabel NYM", "unit": "titik", "volume": 4, "price": 185000, "total": 740000, "directCost": 168182 },
+        { "id": "S-036", "code": "5.3.1.44", "ahspId": "AHSP-1163", "name": "Pemasangan lampu LED Downlight 9 Watt hemat energi", "unit": "buah", "volume": 6, "price": 45000, "total": 270000, "directCost": 40909 },
+        { "id": "S-037", "code": "5.4.7", "ahspId": "AHSP-1317", "name": "Pemasangan Box Panel MCB 4 Group", "unit": "unit", "volume": 1, "price": 450000, "total": 450000, "directCost": 409091 }
+      ]
+    },
+    {
+      "id": "DIV-10",
+      "code": "X",
+      "name": "PEKERJAAN PENGECATAN DAN FINISHING",
+      "items": [
+        { "id": "S-038", "code": "3.8.10.1", "ahspId": "AHSP-0493", "name": "Pengecatan dinding interior cat emulsi", "unit": "m2", "volume": 165, "price": 28500, "total": 4702500, "directCost": 25909 },
+        { "id": "S-039", "code": "3.8.10.2", "ahspId": "AHSP-0494", "name": "Pengecatan dinding eksterior weathershield tahan cuaca", "unit": "m2", "volume": 43, "price": 38000, "total": 1634000, "directCost": 34545 },
+        { "id": "S-040", "code": "3.8.20.1", "ahspId": "AHSP-0505", "name": "Pengecatan plafon gypsum putih matte", "unit": "m2", "volume": 30, "price": 25000, "total": 750000, "directCost": 22727 },
+        { "id": "S-041", "code": "1.1.4.3", "ahspId": "AHSP-0033", "name": "Pembersihan akhir dan perapihan tapak pasca konstruksi", "unit": "ls", "volume": 1, "price": 750000, "total": 750000, "directCost": 681818 }
+      ]
+    }
+  ],
+  "siteLogs": [
+    {
+      "logNumber": "QC/LOG/2026/09-001",
+      "date": "2026-09-12",
+      "inspector": "M. Ikhsan, S.T.",
+      "division": "PEKERJAAN TANAH DAN PONDASI",
+      "foreman": "Mandor Suparno",
+      "findings": "Pemasangan aanstamping batu kosong tebal 20 cm telah sesuai gambar kerja dan dipadatkan.",
+      "correctionAction": "Lanjutkan ke pasangan pondasi batu belah 1:4.",
+      "targetDate": "2026-09-15",
+      "status": "Selesai",
+      "foremanInitial": "SPN"
+    },
+    {
+      "logNumber": "QC/LOG/2026/09-002",
+      "date": "2026-09-24",
+      "inspector": "M. Ikhsan, S.T.",
+      "division": "PEKERJAAN STRUKTUR BETON BERTULANG",
+      "foreman": "Mandor Suparno",
+      "findings": "Pembesian sloof beton praktis 15/20 cm menggunakan 4D10 begel D6-150 telah terpasang rapi.",
+      "correctionAction": "Lakukan pengecoran sloof beton mutu K-175 merata dengan vibrator.",
+      "targetDate": "2026-09-26",
+      "status": "Selesai",
+      "foremanInitial": "SPN"
+    },
+    {
+      "logNumber": "QC/LOG/2026/10-003",
+      "date": "2026-10-14",
+      "inspector": "M. Ikhsan, S.T.",
+      "division": "PEKERJAAN DINDING DAN PLESTERAN",
+      "foreman": "Mandor Suparno",
+      "findings": "Pasangan dinding trasraam 1:2 kamar mandi telah terpasang setinggi 1.50 meter kedap air.",
+      "correctionAction": "Pastikan plesteran dan acian kering sempurna sebelum aplikasi cat primer dan keramik.",
+      "targetDate": "2026-10-18",
+      "status": "Selesai",
+      "foremanInitial": "SPN"
+    }
+  ],
+  "bapRecords": [
+    {
+      "bapNumber": "BAP/CGN/2026/09-001",
+      "date": "2026-09-05",
+      "phaseTitle": "Termin I - Uang Muka (Down Payment 20%)",
+      "physicalProgressPercent": 0,
+      "claimedPercent": 20,
+      "grossAmount": 26161187,
+      "dpDeduction": 0,
+      "retentionDeduction": 0,
+      "netBeforeTax": 26161187,
+      "ppnAmount": 2877731,
+      "netPayable": 29038918,
+      "status": "Lunas / Dibayar",
+      "paymentDate": "2026-09-08",
+      "notes": "Pembayaran uang muka mobilisasi pekerja, pembersihan lahan dan pengadaan material pondasi"
+    },
+    {
+      "bapNumber": "BAP/CGN/2026/10-002",
+      "date": "2026-10-20",
+      "phaseTitle": "Termin II - Kemajuan Fisik 50% (Selesai Struktur & Pasangan Dinding)",
+      "physicalProgressPercent": 52.5,
+      "claimedPercent": 30,
+      "grossAmount": 39241780,
+      "dpDeduction": 7848356,
+      "retentionDeduction": 1962089,
+      "netBeforeTax": 29431335,
+      "ppnAmount": 3237447,
+      "netPayable": 32668782,
+      "status": "Pengajuan Disetujui",
+      "paymentDate": "2026-10-25",
+      "notes": "Selesai pondasi, sloof, kolom praktis, ring balok, dan dinding bata merah terpasang"
+    },
+    {
+      "bapNumber": "BAP/CGN/2026/11-003",
+      "date": "2026-11-28",
+      "phaseTitle": "Termin III - Kemajuan Fisik 100% (Serah Terima Pertama / PHO)",
+      "physicalProgressPercent": 100,
+      "claimedPercent": 45,
+      "grossAmount": 58862670,
+      "dpDeduction": 18312831,
+      "retentionDeduction": 2943134,
+      "netBeforeTax": 37606705,
+      "ppnAmount": 4136738,
+      "netPayable": 41743443,
+      "status": "Pengajuan",
+      "paymentDate": "",
+      "notes": "Penyelesaian 100% seluruh pekerjaan konstruksi rumah subsidi tipe 30/60 siap huni"
+    }
+  ]
+};
+
+window.SAMPLE_PROJECT = window.SAMPLE_PROJECT_SUBSIDI_30;
+
+/**
+ * PROYEK CONTOH RUMAH TINGGAL TROPIS MODERN 2 LANTAI (STANDAR SNI SE PUPR 2026)
+ * Tersanitasi & Tervalidasi 100% Bebas Anomali
+ */
+window.SAMPLE_PROJECT_HOUSE = {
   "id": "PROJ-2026-001",
   "name": "Pembangunan Rumah Tinggal Tropis Modern 2 Lantai",
   "owner": "Dr. H. Hendra Gunawan, S.T., M.M.",
@@ -8,13 +613,18 @@ window.SAMPLE_PROJECT = {
   "startDate": "2026-04-01",
   "finishDate": "2026-09-30",
   "durationDays": 183,
+  "projectType": "new",
+  "buildingArea": 180,
+  "landArea": 200,
+  "existingBuildingArea": 0,
+  "rehabArea": 0,
   "docNumber": "RAB/2026/04-001",
   "regionId": "jabar-bdg",
   "regionName": "Jawa Barat - Bandung Raya & Priangan",
   "ppnRate": 11,
   "includePpn": true,
   "overheadRate": 15,
-    "signatories": {
+  "signatories": {
     "ownerName": "Dr. H. Hendra Gunawan, S.T., M.M.",
     "ownerTitle": "Pemilik Bangunan / Pemberi Tugas",
     "ownerNip": "-",
@@ -52,17 +662,19 @@ window.SAMPLE_PROJECT = {
           "unit": "m'",
           "volume": 48,
           "price": 787397,
-          "notes": "Pagar keliling batas kavling lahan"
+          "notes": "Pagar keliling batas kavling lahan",
+          "total": 37795056
         },
         {
           "id": "ITM-002",
-          "code": "1.1.2.1",
-          "ahspId": "AHSP-0007",
+          "code": "1.1.4.2",
+          "ahspId": "AHSP-0032",
           "name": "Pengukuran dan pemasangan Bouwplank",
-          "unit": "buah",
+          "unit": "m'",
           "volume": 64,
-          "price": 1909085,
-          "notes": "Papan kayu kelas III dan kaso 5/7"
+          "price": 55000,
+          "notes": "Papan kayu kelas III dan kaso 5/7",
+          "total": 3520000
         },
         {
           "id": "ITM-003",
@@ -72,17 +684,19 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 180,
           "price": 12100,
-          "notes": "Pembersihan semak dan sisa akar pepohonan"
+          "notes": "Pembersihan semak dan sisa akar pepohonan",
+          "total": 2178000
         },
         {
           "id": "ITM-004",
-          "code": "1.1.4.1",
-          "ahspId": "AHSP-0031",
+          "code": "1.1.3.1",
+          "ahspId": "AHSP-0031B",
           "name": "Pembuatan kantor direksi / gudang semen dan alat sementara",
-          "unit": "Ha",
+          "unit": "m2",
           "volume": 18,
-          "price": 3277091,
-          "notes": "Ukuran 3 x 6 meter lantai rabat beton"
+          "price": 1450000,
+          "notes": "Ukuran 3 x 6 meter lantai rabat beton",
+          "total": 26100000
         },
         {
           "id": "ITM-005",
@@ -92,9 +706,11 @@ window.SAMPLE_PROJECT = {
           "unit": "ls",
           "volume": 1,
           "price": 4500000,
-          "notes": "Sumur pantek dangkal dan daya sementara PLN"
+          "notes": "Sumur pantek dangkal dan daya sementara PLN",
+          "total": 4500000
         }
-      ]
+      ],
+      "subtotal": 74093056
     },
     {
       "id": "DIV-02",
@@ -103,23 +719,25 @@ window.SAMPLE_PROJECT = {
       "items": [
         {
           "id": "ITM-006",
-          "code": "2.1.1.1",
-          "ahspId": "AHSP-0173",
+          "code": "1.2.2.1.1",
+          "ahspId": "AHSP-0049",
           "name": "Galian tanah biasa kedalaman s.d. 1 meter",
-          "unit": "m2",
+          "unit": "m3",
           "volume": 68.5,
-          "price": 187281,
-          "notes": "Galian pondasi batu kali dan footplate"
+          "price": 91080,
+          "notes": "Galian pondasi batu kali dan footplate",
+          "total": 6238980
         },
         {
           "id": "ITM-007",
-          "code": "2.1.2.1",
-          "ahspId": "AHSP-0177",
+          "code": "1.3.1.2",
+          "ahspId": "AHSP-0086",
           "name": "Urugan pasir urug bawah pondasi tebal 10 cm",
-          "unit": "m2",
+          "unit": "m3",
           "volume": 8.2,
-          "price": 17265490,
-          "notes": "Pasir urug dipadatkan dan disiram air"
+          "price": 285000,
+          "notes": "Pasir urug dipadatkan dan disiram air",
+          "total": 2337000
         },
         {
           "id": "ITM-008",
@@ -129,7 +747,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m3",
           "volume": 12.4,
           "price": 520000,
-          "notes": "Batu belah tebal 20 cm susun berdiri"
+          "notes": "Batu belah tebal 20 cm susun berdiri",
+          "total": 6448000
         },
         {
           "id": "ITM-009",
@@ -139,7 +758,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m3",
           "volume": 38.6,
           "price": 1045000,
-          "notes": "Pondasi menerus dinding utama"
+          "notes": "Pondasi menerus dinding utama",
+          "total": 40337000
         },
         {
           "id": "ITM-010",
@@ -149,9 +769,11 @@ window.SAMPLE_PROJECT = {
           "unit": "m3",
           "volume": 24.5,
           "price": 36500,
-          "notes": "Pemadatan lapis demi lapis per 20 cm"
+          "notes": "Pemadatan lapis demi lapis per 20 cm",
+          "total": 894250
         }
-      ]
+      ],
+      "subtotal": 56255230
     },
     {
       "id": "DIV-03",
@@ -163,30 +785,33 @@ window.SAMPLE_PROJECT = {
           "code": "3.1.1.1",
           "ahspId": "AHSP-0366",
           "name": "Pondasi telapak beton bertulang footplate K-250 (100x100x30 cm)",
-          "unit": "m2",
+          "unit": "m3",
           "volume": 5.4,
-          "price": 107456,
-          "notes": "Besi D13 ulir rangkap, bekisting dan cor beton"
+          "price": 4850000,
+          "notes": "Besi D13 ulir rangkap, bekisting dan cor beton",
+          "total": 26190000
         },
         {
           "id": "ITM-012",
           "code": "3.1.2.1",
           "ahspId": "AHSP-0374",
           "name": "Sloof beton bertulang 15/25 cm mutu fc' 21.7 MPa (K-250)",
-          "unit": "m2",
+          "unit": "m3",
           "volume": 4.8,
-          "price": 94294,
-          "notes": "Tulangan utama 6 D13, sengkang D8-150"
+          "price": 5250000,
+          "notes": "Tulangan utama 6 D13, sengkang D8-150",
+          "total": 25200000
         },
         {
           "id": "ITM-013",
           "code": "3.1.3.1",
           "ahspId": "AHSP-0397",
           "name": "Kolom struktur utama 20/30 cm lantai 1 & 2 mutu K-250",
-          "unit": "m2",
+          "unit": "m3",
           "volume": 7.2,
-          "price": 90145,
-          "notes": "Tulangan 8 D16, begel D8-100/150"
+          "price": 165000,
+          "notes": "Tulangan 8 D16, begel D8-100/150",
+          "total": 1188000
         },
         {
           "id": "ITM-014",
@@ -196,7 +821,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m'",
           "volume": 96,
           "price": 115000,
-          "notes": "Besi 4 D10, begel D6-150"
+          "notes": "Besi 4 D10, begel D6-150",
+          "total": 11040000
         },
         {
           "id": "ITM-015",
@@ -205,8 +831,9 @@ window.SAMPLE_PROJECT = {
           "name": "Balok lantai 2 (20/35 cm) dan Ring Balok (15/20 cm) K-250",
           "unit": "m3",
           "volume": 8.6,
-          "price": 5920000,
-          "notes": "Tulangan 6 D16, begel D8-100/150"
+          "price": 165000,
+          "notes": "Tulangan 6 D16, begel D8-100/150",
+          "total": 1419000
         },
         {
           "id": "ITM-016",
@@ -215,8 +842,9 @@ window.SAMPLE_PROJECT = {
           "name": "Plat lantai 2 tebal 12 cm mutu beton K-250 bertulang wiremesh M8 rangkap",
           "unit": "m3",
           "volume": 14.4,
-          "price": 5450000,
-          "notes": "Bondek baja galvanis 0.75 mm dan wiremesh M8"
+          "price": 165000,
+          "notes": "Bondek baja galvanis 0.75 mm dan wiremesh M8",
+          "total": 2376000
         },
         {
           "id": "ITM-017",
@@ -226,9 +854,11 @@ window.SAMPLE_PROJECT = {
           "unit": "m3",
           "volume": 2.3,
           "price": 6100000,
-          "notes": "Trap tangga 18/30 cm finish plester aci"
+          "notes": "Trap tangga 18/30 cm finish plester aci",
+          "total": 14030000
         }
-      ]
+      ],
+      "subtotal": 81443000
     },
     {
       "id": "DIV-04",
@@ -243,7 +873,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 345,
           "price": 158500,
-          "notes": "Dinding keliling lantai 1 dan lantai 2"
+          "notes": "Dinding keliling lantai 1 dan lantai 2",
+          "total": 54682500
         },
         {
           "id": "ITM-019",
@@ -253,7 +884,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 42,
           "price": 172000,
-          "notes": "Dinding basah kamar mandi t=1.8 meter"
+          "notes": "Dinding basah kamar mandi t=1.8 meter",
+          "total": 7224000
         },
         {
           "id": "ITM-020",
@@ -263,7 +895,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 690,
           "price": 68500,
-          "notes": "Kedua sisi dinding bata merah"
+          "notes": "Kedua sisi dinding bata merah",
+          "total": 47265000
         },
         {
           "id": "ITM-021",
@@ -273,9 +906,11 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 690,
           "price": 42500,
-          "notes": "Hasil permukaan halus siap cat"
+          "notes": "Hasil permukaan halus siap cat",
+          "total": 29325000
         }
-      ]
+      ],
+      "subtotal": 138496500
     },
     {
       "id": "DIV-05",
@@ -284,45 +919,50 @@ window.SAMPLE_PROJECT = {
       "items": [
         {
           "id": "ITM-022",
-          "code": "5.1.1.1",
-          "ahspId": "AHSP-0450",
+          "code": "3.9.4.3",
+          "ahspId": "AHSP-0532",
           "name": "Pemasangan lantai Homogeneous Tile ukuran 60x60 cm polished",
           "unit": "m2",
           "volume": 138,
           "price": 325000,
-          "notes": "Lantai ruang utama, ruang tamu, keluarga & kamar"
+          "notes": "Lantai ruang utama, ruang tamu, keluarga & kamar",
+          "total": 44850000
         },
         {
           "id": "ITM-023",
-          "code": "5.1.2.1",
-          "ahspId": "AHSP-1063",
+          "code": "3.9.8.12",
+          "ahspId": "AHSP-0574",
           "name": "Pemasangan lantai keramik anti slip ukuran 30x30 cm kamar mandi & balkon",
-          "unit": "unit",
+          "unit": "m2",
           "volume": 16.5,
-          "price": 4987933,
-          "notes": "Tekstur unpolished matt"
+          "price": 165000,
+          "notes": "Tekstur unpolished matt",
+          "total": 2722500
         },
         {
           "id": "ITM-024",
-          "code": "5.1.3.1",
-          "ahspId": "AHSP-1085",
+          "code": "3.10.1.5",
+          "ahspId": "AHSP-0608B",
           "name": "Pemasangan dinding keramik ukuran 30x60 cm kamar mandi",
-          "unit": "unit",
+          "unit": "m2",
           "volume": 48,
-          "price": 312715672,
-          "notes": "Ketinggian 240 cm dari lantai"
+          "price": 245000,
+          "notes": "Ketinggian 240 cm dari lantai",
+          "total": 11760000
         },
         {
           "id": "ITM-025",
-          "code": "5.1.4.1",
-          "ahspId": "AHSP-1097",
+          "code": "3.9.4.6",
+          "ahspId": "AHSP-0535",
           "name": "Plin lantai homogeneous tile ukuran 10x60 cm",
-          "unit": "unit",
+          "unit": "m'",
           "volume": 125,
-          "price": 303601754,
-          "notes": "Keliling dinding ruang dalam"
+          "price": 42500,
+          "notes": "Keliling dinding ruang dalam",
+          "total": 5312500
         }
-      ]
+      ],
+      "subtotal": 64645000
     },
     {
       "id": "DIV-06",
@@ -331,13 +971,14 @@ window.SAMPLE_PROJECT = {
       "items": [
         {
           "id": "ITM-026",
-          "code": "6.1.1.1",
-          "ahspId": "AHSP-1538",
+          "code": "3.11.3.1",
+          "ahspId": "AHSP-0647",
           "name": "Kusen aluminium profil 4 inch powder coating warna hitam",
-          "unit": "unit",
+          "unit": "m'",
           "volume": 98,
-          "price": 7302977,
-          "notes": "Kusen pintu dan jendela exterior"
+          "price": 145000,
+          "notes": "Kusen pintu dan jendela exterior",
+          "total": 14210000
         },
         {
           "id": "ITM-027",
@@ -346,8 +987,9 @@ window.SAMPLE_PROJECT = {
           "name": "Daun pintu utama panel kayu solid jati finishing melamik",
           "unit": "unit",
           "volume": 1,
-          "price": 1433426,
-          "notes": "Ukuran 90 x 240 cm komplit engsel & kunci lever"
+          "price": 3850000,
+          "notes": "Ukuran 90 x 240 cm komplit engsel & kunci lever",
+          "total": 3850000
         },
         {
           "id": "ITM-028",
@@ -357,7 +999,8 @@ window.SAMPLE_PROJECT = {
           "unit": "unit",
           "volume": 4,
           "price": 3281828,
-          "notes": "Ukuran 80 x 215 cm komplit handle stainless"
+          "notes": "Ukuran 80 x 215 cm komplit handle stainless",
+          "total": 13127312
         },
         {
           "id": "ITM-029",
@@ -367,19 +1010,22 @@ window.SAMPLE_PROJECT = {
           "unit": "set",
           "volume": 12,
           "price": 1727858,
-          "notes": "Friction stay stainless dan rambuncis"
+          "notes": "Friction stay stainless dan rambuncis",
+          "total": 20734296
         },
         {
           "id": "ITM-030",
-          "code": "6.1.5.1",
-          "ahspId": "AHSP-1588",
+          "code": "3.12.5",
+          "ahspId": "AHSP-0682",
           "name": "Kaca bening tempered tebal 8 mm (pintu sliding & fasad)",
-          "unit": "set",
+          "unit": "m2",
           "volume": 18.5,
-          "price": 32989940,
-          "notes": "Kaca mati fasad dan pintu teras belakang"
+          "price": 475000,
+          "notes": "Kaca mati fasad dan pintu teras belakang",
+          "total": 8787500
         }
-      ]
+      ],
+      "subtotal": 60709108
     },
     {
       "id": "DIV-07",
@@ -389,22 +1035,24 @@ window.SAMPLE_PROJECT = {
         {
           "id": "ITM-031",
           "code": "7.1.1.1",
-          "ahspId": "AHSP-2128",
+          "ahspId": "AHSP-0173",
           "name": "Rangka atap baja ringan profil C75.75 & reng U30 tebal 0.45 mm",
           "unit": "m2",
           "volume": 115,
           "price": 146808,
-          "notes": "Struktur atap limasan tropis bergaransi"
+          "notes": "Struktur atap limasan tropis bergaransi",
+          "total": 16882920
         },
         {
           "id": "ITM-032",
           "code": "7.1.2.1",
           "ahspId": "AHSP-2136",
           "name": "Penutup atap genteng keramik glazuur flat modern",
-          "unit": "m'",
+          "unit": "m2",
           "volume": 115,
-          "price": 86226,
-          "notes": "Termasuk bubungan nok dan talang jurai"
+          "price": 185000,
+          "notes": "Termasuk bubungan nok dan talang jurai",
+          "total": 21275000
         },
         {
           "id": "ITM-033",
@@ -414,7 +1062,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 154,
           "price": 135000,
-          "notes": "Finishing kompon dan list profil gypsum 7 cm"
+          "notes": "Finishing kompon dan list profil gypsum 7 cm",
+          "total": 20790000
         },
         {
           "id": "ITM-034",
@@ -424,9 +1073,11 @@ window.SAMPLE_PROJECT = {
           "unit": "m2",
           "volume": 28,
           "price": 145000,
-          "notes": "Rangka hollow galvanis anti karat"
+          "notes": "Rangka hollow galvanis anti karat",
+          "total": 4060000
         }
-      ]
+      ],
+      "subtotal": 63007920
     },
     {
       "id": "DIV-08",
@@ -438,30 +1089,33 @@ window.SAMPLE_PROJECT = {
           "code": "8.1.1.1",
           "ahspId": "AHSP-2148",
           "name": "Kloset duduk monoblok dual flush lengkap jet washer",
-          "unit": "m'",
+          "unit": "unit",
           "volume": 3,
-          "price": 445551,
-          "notes": "TOTO Eco Washer / setara"
+          "price": 2850000,
+          "notes": "TOTO Eco Washer / setara",
+          "total": 8550000
         },
         {
           "id": "ITM-036",
           "code": "8.1.2.1",
           "ahspId": "AHSP-2175",
           "name": "Wastafel gantung komplit kran dingin dan cermin bevel",
-          "unit": "m'",
+          "unit": "unit",
           "volume": 3,
-          "price": 437081,
-          "notes": "Sifon leher angsa dan stop kran"
+          "price": 1350000,
+          "notes": "Sifon leher angsa dan stop kran",
+          "total": 4050000
         },
         {
           "id": "ITM-037",
           "code": "8.1.3.1",
-          "ahspId": "AHSP-2202",
+          "ahspId": "AHSP-1568",
           "name": "Instalasi pipa air bersih pipa PPR / PVC tipe AW diameter 3/4 inch",
           "unit": "m'",
           "volume": 64,
           "price": 138353,
-          "notes": "Pipa tertanam dinding dan dak beton"
+          "notes": "Pipa tertanam dinding dan dak beton",
+          "total": 8854592
         },
         {
           "id": "ITM-038",
@@ -471,7 +1125,8 @@ window.SAMPLE_PROJECT = {
           "unit": "m'",
           "volume": 42,
           "price": 88000,
-          "notes": "Saluran menuju bio-septic tank"
+          "notes": "Saluran menuju bio-septic tank",
+          "total": 3696000
         },
         {
           "id": "ITM-039",
@@ -481,7 +1136,8 @@ window.SAMPLE_PROJECT = {
           "unit": "unit",
           "volume": 1,
           "price": 4850000,
-          "notes": "Fiberglass ramah lingkungan + resapan"
+          "notes": "Fiberglass ramah lingkungan + resapan",
+          "total": 4850000
         },
         {
           "id": "ITM-040",
@@ -491,9 +1147,11 @@ window.SAMPLE_PROJECT = {
           "unit": "unit",
           "volume": 1,
           "price": 5400000,
-          "notes": "Dudukan dak beton lantai atap"
+          "notes": "Dudukan dak beton lantai atap",
+          "total": 5400000
         }
-      ]
+      ],
+      "subtotal": 35400592
     },
     {
       "id": "DIV-09",
@@ -503,22 +1161,24 @@ window.SAMPLE_PROJECT = {
         {
           "id": "ITM-041",
           "code": "9.1.1.1",
-          "ahspId": "AHSP-2253",
+          "ahspId": "AHSP-1153",
           "name": "Instalasi titik lampu kabel NYM 3x1.5 mm dalam pipa konduit",
-          "unit": "m",
+          "unit": "titik",
           "volume": 38,
-          "price": 33709,
-          "notes": "Standar SNI kabel supreme/eterna"
+          "price": 185000,
+          "notes": "Standar SNI kabel supreme/eterna",
+          "total": 7030000
         },
         {
           "id": "ITM-042",
           "code": "9.1.2.1",
-          "ahspId": "AHSP-2275",
+          "ahspId": "AHSP-1069",
           "name": "Instalasi titik stop kontak daya kabel NYM 3x2.5 mm",
-          "unit": "buah",
+          "unit": "titik",
           "volume": 24,
-          "price": 1094,
-          "notes": "Schneider Electric / setara"
+          "price": 215000,
+          "notes": "Schneider Electric / setara",
+          "total": 5160000
         },
         {
           "id": "ITM-043",
@@ -528,7 +1188,8 @@ window.SAMPLE_PROJECT = {
           "unit": "buah",
           "volume": 34,
           "price": 135000,
-          "notes": "Philips / setara slim panel"
+          "notes": "Philips / setara slim panel",
+          "total": 4590000
         },
         {
           "id": "ITM-044",
@@ -538,9 +1199,11 @@ window.SAMPLE_PROJECT = {
           "unit": "unit",
           "volume": 2,
           "price": 1850000,
-          "notes": "Lantai 1 dan lantai 2 independen"
+          "notes": "Lantai 1 dan lantai 2 independen",
+          "total": 3700000
         }
-      ]
+      ],
+      "subtotal": 20480000
     },
     {
       "id": "DIV-10",
@@ -550,44 +1213,49 @@ window.SAMPLE_PROJECT = {
         {
           "id": "ITM-045",
           "code": "10.1.1.1",
-          "ahspId": "AHSP-0910",
+          "ahspId": "AHSP-0493",
           "name": "Pengecatan dinding interior cat emulsi setara Dulux Pentalite",
           "unit": "m2",
           "volume": 480,
           "price": 46500,
-          "notes": "1 lapis alkali sealer + 2 lapis finish"
+          "notes": "1 lapis alkali sealer + 2 lapis finish",
+          "total": 22320000
         },
         {
           "id": "ITM-046",
           "code": "10.1.2.1",
-          "ahspId": "AHSP-0920",
+          "ahspId": "AHSP-0494",
           "name": "Pengecatan dinding eksterior weathershield tahan cuaca tropis",
           "unit": "m2",
           "volume": 210,
           "price": 68000,
-          "notes": "Dulux Weathershield / Jotun Jotashield"
+          "notes": "Dulux Weathershield / Jotun Jotashield",
+          "total": 14280000
         },
         {
           "id": "ITM-047",
           "code": "10.1.3.1",
-          "ahspId": "AHSP-0930",
+          "ahspId": "AHSP-0505",
           "name": "Pengecatan plafon gypsum putih matte anti jamur",
           "unit": "m2",
           "volume": 182,
           "price": 38500,
-          "notes": "Cat emulsi plafon khusus"
+          "notes": "Cat emulsi plafon khusus",
+          "total": 7007000
         },
         {
           "id": "ITM-048",
           "code": "10.1.4.1",
-          "ahspId": "AHSP-0940",
+          "ahspId": "AHSP-0033",
           "name": "Pekerjaan pembersihan akhir dan perapihan pasca konstruksi",
           "unit": "ls",
           "volume": 1,
           "price": 3500000,
-          "notes": "General cleaning siap huni"
+          "notes": "General cleaning siap huni",
+          "total": 3500000
         }
-      ]
+      ],
+      "subtotal": 47107000
     }
   ],
   "volumeCalculations": [
@@ -1042,7 +1710,7 @@ window.SAMPLE_PROJECT = {
       "volume": 8.2,
       "unit": "m2",
       "price": 17265490,
-      "cost": 141577018.0,
+      "cost": 141577018,
       "stdStartDate": "2026-04-18",
       "stdFinishDate": "2026-04-25",
       "stdDuration": 8,
@@ -1065,7 +1733,7 @@ window.SAMPLE_PROJECT = {
       "volume": 12.4,
       "unit": "m3",
       "price": 520000,
-      "cost": 6448000.0,
+      "cost": 6448000,
       "stdStartDate": "2026-04-22",
       "stdFinishDate": "2026-04-29",
       "stdDuration": 8,
@@ -1088,7 +1756,7 @@ window.SAMPLE_PROJECT = {
       "volume": 38.6,
       "unit": "m3",
       "price": 1045000,
-      "cost": 40337000.0,
+      "cost": 40337000,
       "stdStartDate": "2026-04-26",
       "stdFinishDate": "2026-05-03",
       "stdDuration": 8,
@@ -1111,7 +1779,7 @@ window.SAMPLE_PROJECT = {
       "volume": 24.5,
       "unit": "m3",
       "price": 36500,
-      "cost": 894250.0,
+      "cost": 894250,
       "stdStartDate": "2026-04-30",
       "stdFinishDate": "2026-05-07",
       "stdDuration": 8,
@@ -1180,7 +1848,7 @@ window.SAMPLE_PROJECT = {
       "volume": 7.2,
       "unit": "m2",
       "price": 90145,
-      "cost": 649044.0,
+      "cost": 649044,
       "stdStartDate": "2026-05-08",
       "stdFinishDate": "2026-05-17",
       "stdDuration": 10,
@@ -1226,7 +1894,7 @@ window.SAMPLE_PROJECT = {
       "volume": 8.6,
       "unit": "m3",
       "price": 5920000,
-      "cost": 50912000.0,
+      "cost": 50912000,
       "stdStartDate": "2026-05-18",
       "stdFinishDate": "2026-05-27",
       "stdDuration": 10,
@@ -1249,7 +1917,7 @@ window.SAMPLE_PROJECT = {
       "volume": 14.4,
       "unit": "m3",
       "price": 5450000,
-      "cost": 78480000.0,
+      "cost": 78480000,
       "stdStartDate": "2026-05-23",
       "stdFinishDate": "2026-06-01",
       "stdDuration": 10,
@@ -1571,7 +2239,7 @@ window.SAMPLE_PROJECT = {
       "volume": 18.5,
       "unit": "set",
       "price": 32989940,
-      "cost": 610313890.0,
+      "cost": 610313890,
       "stdStartDate": "2026-07-02",
       "stdFinishDate": "2026-07-12",
       "stdDuration": 11,
