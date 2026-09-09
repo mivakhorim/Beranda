@@ -64,11 +64,11 @@ window.SiteCorrection = (function() {
   function generatePrintableSheetHtml(projectInfo = null, isInteractive = true) {
     const proj = projectInfo || (window.ProjectManager && window.ProjectManager.getActiveProject()) || {};
     const sig = proj.signatories || {};
-    const qcName = sig.qcInspectorName || "Ir. M. Ridwan";
+    const qcName = sig.qcInspectorName || "Orang Keempat";
     const qcRole = sig.qcInspectorRole || "Konsultan Pengawas / QC";
-    const mandorName = sig.fieldMandorName || "Sutarji / Warsito";
+    const mandorName = sig.fieldMandorName || "Orang Keenam";
     const mandorRole = sig.fieldMandorRole || "Mandor Lapangan";
-    const smName = sig.siteManagerName || "Ir. Hendra Prasetya";
+    const smName = sig.siteManagerName || "Orang Kelima";
     const smRole = sig.siteManagerRole || "Site Manager Kontraktor";
     const qualityNotes = proj.siteQualityNotes || "";
 

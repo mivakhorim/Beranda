@@ -434,7 +434,7 @@ window.ProjectManager = (function() {
 
     // 20. Sinkronisasi Pemilik Proyek & Penandatangan Resmi (Bebas 'Bapak / Ibu' & Tanda Kurung Berlebih)
     if (!proj.owner || proj.owner.includes('Bapak / Ibu') || proj.owner.trim() === '') {
-      proj.owner = 'Dr. H. Hendra Gunawan, S.T., M.M.';
+      proj.owner = 'Orang Pertama';
       modifiedCount++;
     } else {
       proj.owner = proj.owner.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
@@ -449,13 +449,13 @@ window.ProjectManager = (function() {
     }
 
     if (!proj.signatories.contractorName || proj.signatories.contractorName.includes('...')) {
-      proj.signatories.contractorName = 'H. Ahmad Fauzi, S.T.';
+      proj.signatories.contractorName = 'Orang Ketiga';
     } else {
       proj.signatories.contractorName = proj.signatories.contractorName.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
     }
 
     if (!proj.signatories.consultantName || proj.signatories.consultantName.includes('...')) {
-      proj.signatories.consultantName = 'Ir. Bambang Hartono, S.T., M.T.';
+      proj.signatories.consultantName = 'Orang Kedua';
     } else {
       proj.signatories.consultantName = proj.signatories.consultantName.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim();
     }
@@ -548,9 +548,10 @@ window.ProjectManager = (function() {
     // Jika tidak ada proyek yang valid / seluruh data sample telah dibersihkan:
     // Sediakan TEPAT 1 proyek kosong fresh untuk test (Sesuai Mandat User)
     if (!projects || projects.length === 0) {
-      const cleanTestProj = createProject("Pembangunan Rumah Tinggal Baru", "Pemilik Proyek", "Indonesia", "std", false);
-      projects = [cleanTestProj];
-      activeProject = cleanTestProj;
+      // Izinkan data proyek kosong murni (Sesuai Mandat User)
+      projects = [];
+      activeProject = null;
+      localStorage.removeItem(ACTIVE_KEY);
       saveProjects();
     } else {
       const savedActiveId = localStorage.getItem(ACTIVE_KEY);
@@ -629,15 +630,15 @@ window.ProjectManager = (function() {
     let customAhsp = {};
 
     const defFinish = new Date(Date.now() + 180 * 86400000).toISOString().split('T')[0];
-    const cleanOwner = (owner && !owner.includes("Bapak / Ibu")) ? owner.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim() : "Pemilik Proyek";
+    const cleanOwner = (owner && owner !== "Pemilik Proyek" && !owner.includes("Bapak / Ibu")) ? owner.replace(/^\s*\(\s*|\s*\)\s*$/g, '').trim() : "Orang Pertama";
 
     const newProject = {
       id: newId,
       name: name || "Pembangunan Rumah Tinggal Baru",
       owner: cleanOwner,
-      contractor: activeProject ? activeProject.contractor : "PT. Duta Konstruksi Pratama",
-      consultant: activeProject ? activeProject.consultant : "PT. Architekta Desain Studio",
-      location: location || "Indonesia",
+      contractor: "Duta Digital Agensi",
+      consultant: "Duta Digital Agensi",
+      location: location || "Bandung",
       startDate: today,
       finishDate: defFinish,
       durationDays: 180,
@@ -654,8 +655,8 @@ window.ProjectManager = (function() {
       overheadRate: 0,
       bankInfo: {
         bankName: "Bank Mandiri",
-        accountNumber: "131-00-8899221-5",
-        accountName: activeProject ? activeProject.contractor : "PT. Duta Konstruksi Pratama"
+        accountNumber: "xxx-xxx-xxxxxxxx-x",
+        accountName: "Duta Digital Agensi"
       },
       divisions: divisions,
       volumeCalculations: volumeCalculations,
@@ -663,17 +664,17 @@ window.ProjectManager = (function() {
         ownerName: cleanOwner,
         ownerTitle: "Pemilik Bangunan / Pemberi Tugas",
         ownerNip: "-",
-        consultantCompany: activeProject ? activeProject.consultant : "PT. Architekta Desain Studio",
-        consultantName: "Ir. Bambang Hartono, S.T., MT",
-        consultantTitle: "Konsultan Perencana / Team Leader",
-        contractorCompany: activeProject ? activeProject.contractor : "PT. KONTRAKTOR PELAKSANA",
-        contractorName: "H. Ahmad Fauzi, S.T.",
-        contractorTitle: "Direktur Utama",
-        qcInspectorName: "Ir. M. Ridwan",
+        consultantCompany: "Duta Digital Agensi",
+        consultantName: "Orang Kedua",
+        consultantTitle: "Dutamik.id",
+        contractorCompany: "Duta Digital Agensi",
+        contractorName: "Orang Ketiga",
+        contractorTitle: "Dutamik.id",
+        qcInspectorName: "Orang Keempat",
         qcInspectorRole: "Site Inspector / QC",
-        fieldMandorName: "Sutarji / Warsito",
+        fieldMandorName: "Orang Keenam",
         fieldMandorRole: "Mandor Lapangan",
-        siteManagerName: "Ir. Hendra Prasetya",
+        siteManagerName: "Orang Kelima",
         siteManagerRole: "Site Manager",
         docCity: "Bandung",
         docDate: today
@@ -711,23 +712,14 @@ window.ProjectManager = (function() {
   }
 
   function deleteProject(id) {
-    if (projects.length <= 1) {
-      if (window.showNotificationModal) {
-        window.showNotificationModal({
-          title: "Perhatian",
-          subtitle: "Hapus Proyek",
-          icon: "⚠️",
-          type: "warning",
-          contentHtml: "<p>Tidak dapat menghapus satu-satunya proyek. Buat proyek baru terlebih dahulu.</p>"
-        });
-      } else {
-        alert("Tidak dapat menghapus satu-satunya proyek. Buat proyek baru terlebih dahulu.");
-      }
-      return false;
-    }
     projects = projects.filter(p => p.id !== id);
-    if (activeProject.id === id) {
-      activeProject = projects[0];
+    if (activeProject && activeProject.id === id) {
+      activeProject = projects.length > 0 ? projects[0] : null;
+    }
+    if (activeProject) {
+      localStorage.setItem(ACTIVE_KEY, activeProject.id);
+    } else {
+      localStorage.removeItem(ACTIVE_KEY);
     }
     saveProjects();
     return true;

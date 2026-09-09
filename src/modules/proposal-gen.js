@@ -83,7 +83,7 @@ window.ProposalGen = (function() {
     const labList = (resources && Array.isArray(resources.labor)) ? resources.labor : [];
 
     const sig = proj.signatories || {};
-    const companyDisplay = (sig.contractorCompany || proj.contractor || 'PT. Duta Konstruksi Pratama').trim();
+    const companyDisplay = (sig.contractorCompany || proj.contractor || 'Dutamik.id').trim();
     const footerLeftText = companyDisplay 
       ? `${companyDisplay} — Dokumen Proposal Teknis & Anggaran Biaya` 
       : `${proj.name || 'Proposal Rencana Anggaran Biaya'} — Dokumen Proposal Teknis & Anggaran Biaya`;
@@ -164,12 +164,10 @@ window.ProposalGen = (function() {
           </div>
 
           <div class="cover-emblem-wrap">
-            ${proj.logo ? `
+            ${(proj.logo && proj.logo.trim().length > 10) ? `
               <img src="${proj.logo}" alt="Logo Perusahaan" style="max-height: 55px; max-width: 170px; object-fit: contain; margin: 0 auto; display: block;" />
             ` : `
-              <div style="font-family: 'Times New Roman', serif; font-size: 13pt; font-weight: bold; letter-spacing: 2px; color: #0f172a; text-transform: uppercase;">
-                ${companyDisplay}
-              </div>
+              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>" alt="Logo Perusahaan" style="max-height: 55px; max-width: 170px; object-fit: contain; margin: 0 auto; display: block;" />
             `}
           </div>
 
@@ -871,7 +869,7 @@ window.ProposalGen = (function() {
               <div style="height: 60px; display: flex; align-items: center; justify-content: center;">
                 <span style="font-size: 7pt; color: #cbd5e1; border: 1px dashed #cbd5e1; padding: 3px 8px; border-radius: 4px;">Materai Rp 10.000</span>
               </div>
-              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: 1px solid #0f172a !important; padding-bottom: 2px;">( ${(sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || 'Ir. Budi Santoso, M.T.')} )</div>
+              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: 1px solid #0f172a !important; padding-bottom: 2px;">( ${(sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || 'Orang Pertama')} )</div>
               <div style="font-size: 7.5pt; color: #334155; margin-top: 3px;">${sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas'}</div>
               ${sig.ownerNip && sig.ownerNip !== '-' ? `<div style="font-size: 7pt; color: #64748b; margin-top: 1px;">NIP/NIK: ${sig.ownerNip}</div>` : ''}
             </td>
@@ -879,9 +877,9 @@ window.ProposalGen = (function() {
               <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px; text-transform: uppercase;">KONSULTAN PERENCANA</div>
               <div style="font-size: 7.5pt; color: #64748b; min-height: 14px;">Direncanakan &amp; Dihitung:</div>
               <div style="height: 60px;"></div>
-              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: 1px solid #0f172a !important; padding-bottom: 2px;">( ${(sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.'} )</div>
-              <div style="font-size: 7.5pt; color: #334155; margin-top: 3px;">${sig.consultantTitle || 'Konsultan Perencana / Team Leader'}</div>
-              <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${sig.consultantCompany || proj.consultant || 'PT. Sarana Buana Konsultan'}</div>
+              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: 1px solid #0f172a !important; padding-bottom: 2px;">( ${(sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Orang Kedua'} )</div>
+              <div style="font-size: 7.5pt; color: #334155; margin-top: 3px;">${sig.consultantTitle || 'Dutamik.id'}</div>
+              <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${sig.consultantCompany || proj.consultant || 'Duta Digital Agensi'}</div>
             </td>
             <td style="width: 33.33% !important; text-align: center !important; vertical-align: top !important; border: none !important; padding: 0 10px !important; background: transparent !important;">
               <div style="font-weight: 800; font-size: 8.5pt; color: #1e293b; margin-bottom: 2px; text-transform: uppercase;">KONTRAKTOR PELAKSANA</div>
@@ -889,9 +887,9 @@ window.ProposalGen = (function() {
               <div style="height: 60px; display: flex; align-items: center; justify-content: center;">
                 <span style="font-size: 7pt; color: #cbd5e1; border: 1px dashed #cbd5e1; padding: 3px 8px; border-radius: 4px;">Cap &amp; Tanda Tangan</span>
               </div>
-              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: 1px solid #0f172a !important; padding-bottom: 2px;">( ${(sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.'} )</div>
-              <div style="font-size: 7.5pt; color: #334155; margin-top: 3px;">${sig.contractorTitle || 'Direktur Utama'}</div>
-              <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${companyDisplay}</div>
+              <div style="font-weight: 700; font-size: 9pt; color: #0f172a; text-decoration: none !important; border-bottom: 1px solid #0f172a !important; padding-bottom: 2px;">( ${(sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'Orang Ketiga'} )</div>
+              <div style="font-size: 7.5pt; color: #334155; margin-top: 3px;">${sig.contractorTitle || 'Dutamik.id'}</div>
+              <div style="font-size: 7pt; color: #64748b; margin-top: 1px;">${sig.contractorCompany || companyDisplay || 'Duta Digital Agensi'}</div>
             </td>
           </tr>
         </table>

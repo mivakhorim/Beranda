@@ -1,4 +1,5 @@
 let showLaborDetailInRab = true;
+const DEFAULT_HOUSE_LOGO_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>";
 /**
  * Main Application Controller (SPA Router, Event Binding & View Rendering)
  * Mengintegrasikan seluruh subsistem AHSP, Katalog, Volume, RAB, Kurva S,
@@ -592,6 +593,27 @@ window.App = (function() {
   }
 
   function renderCurrentTabContent() {
+    const proj = window.ProjectManager.getActiveProject();
+    if (!proj && currentTab !== 'proyek' && currentTab !== 'ahsp' && currentTab !== 'katalog') {
+      const activePanel = document.getElementById(`panel-${currentTab}`);
+      if (activePanel) {
+        activePanel.innerHTML = `
+          <div class="card p-5 text-center my-4" style="border: 2px dashed #cbd5e1; border-radius: 12px; background: #f8fafc;">
+            <div style="font-size: 48px; margin-bottom: 12px;">📁</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Belum Ada Proyek Aktif</h3>
+            <p style="color: #64748b; font-size: 13px; max-width: 480px; margin: 0 auto 16px auto;">
+              Daftar proyek saat ini masih kosong. Silakan buat proyek baru atau buka menu Daftar Proyek untuk memulai penyusunan Rencana Anggaran Biaya.
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+              <button class="btn btn-primary" onclick="App.openCreateProjectModal()">+ Buat Proyek Baru</button>
+              <button class="btn btn-outline" onclick="App.switchTab('proyek')">Lihat Daftar Proyek</button>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
     switch (currentTab) {
             case "info-proyek":
         renderInfoProyekView();
@@ -648,6 +670,9 @@ window.App = (function() {
       </option>
     `).join('');
 
+    if (!projects || projects.length === 0) {
+      optionsHtml = `<option value="" disabled selected>— Belum Ada Proyek —</option>`;
+    }
     optionsHtml += `<option value="__NEW_PROJECT__" style="font-weight: 700; color: #0284c7;">➕ Buat Proyek Baru...</option>`;
     select.innerHTML = optionsHtml;
 
@@ -667,14 +692,12 @@ window.App = (function() {
 
   function updateProjectHeader() {
     const proj = window.ProjectManager.getActiveProject();
-    if (!proj) return;
-
     const nameEl = document.getElementById("currentProjectName");
-    if (nameEl) nameEl.textContent = proj.name;
+    if (nameEl) nameEl.textContent = proj ? proj.name : "Belum Ada Proyek";
 
     const select = document.getElementById("projectSelect");
-    if (select && select.value !== proj.id) {
-      select.value = proj.id;
+    if (select) {
+      select.value = proj ? proj.id : "";
     }
 
     updateAutoSyncIndicator();
@@ -1158,20 +1181,20 @@ window.App = (function() {
 
     const rawSig = proj.signatories || {};
     const sig = {
-      ownerName: cleanSignerName(rawSig.ownerName, cleanSignerName(proj.owner, "Dr. H. Hendra Gunawan, S.T., M.M.")),
+      ownerName: cleanSignerName(rawSig.ownerName, cleanSignerName(proj.owner, "Orang Pertama")),
       ownerTitle: rawSig.ownerTitle || "Kuasa Pengguna Anggaran / Pemilik",
       ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "-",
-      contractorName: cleanSignerName(rawSig.contractorName, "H. Ahmad Fauzi, S.T."),
+      contractorName: cleanSignerName(rawSig.contractorName, "Orang Ketiga"),
       contractorTitle: rawSig.contractorTitle || "Direktur Utama",
-      contractorCompany: cleanSignerName(rawSig.contractorCompany, (proj.contractor || "PT. Duta Konstruksi Pratama")),
-      consultantName: cleanSignerName(rawSig.consultantName, "Ir. Bambang Hartono, S.T., M.T."),
+      contractorCompany: cleanSignerName(rawSig.contractorCompany, (proj.contractor || "Dutamik.id")),
+      consultantName: cleanSignerName(rawSig.consultantName, "Orang Kedua"),
       consultantTitle: rawSig.consultantTitle || "Team Leader / Pengawas",
-      consultantCompany: cleanSignerName(rawSig.consultantCompany, (proj.consultant || "PT. Architekta Desain Studio")),
-      qcInspectorName: cleanSignerName(rawSig.qcInspectorName, "Ir. M. Ridwan"),
+      consultantCompany: cleanSignerName(rawSig.consultantCompany, (proj.consultant || "Duta Digital Agensi")),
+      qcInspectorName: cleanSignerName(rawSig.qcInspectorName, "Orang Keempat"),
       qcInspectorRole: rawSig.qcInspectorRole || "Konsultan Pengawas / QC",
-      fieldMandorName: cleanSignerName(rawSig.fieldMandorName, "Sutarji / Warsito"),
+      fieldMandorName: cleanSignerName(rawSig.fieldMandorName, "Orang Keenam"),
       fieldMandorRole: rawSig.fieldMandorRole || "Mandor Lapangan / Pelaksana",
-      siteManagerName: cleanSignerName(rawSig.siteManagerName, "Ir. Hendra Prasetya"),
+      siteManagerName: cleanSignerName(rawSig.siteManagerName, "Orang Kelima"),
       siteManagerRole: rawSig.siteManagerRole || "Site Manager Kontraktor",
       docCity: rawSig.docCity || proj.location || "Indonesia",
       docDate: rawSig.docDate || proj.startDate || "2026-04-01"
@@ -1180,7 +1203,7 @@ window.App = (function() {
     const bank = {
       bankName: rawBank.bankName || "Bank Mandiri",
       accountNumber: rawBank.accountNumber || "131-00-8899221-5",
-      accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "PT. Duta Konstruksi Pratama"
+      accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "Dutamik.id"
     };
 
     // Buat baris tabel estimasi kebutuhan tenaga kerja harian (Desktop & Mobile)
@@ -1585,7 +1608,7 @@ window.App = (function() {
                 </div>
                 <div style="min-width: 160px; text-align: center;">
                   <div id="projectLogoPreviewWrapper" style="width: 160px; min-height: 80px; border: 1px dashed #cbd5e1; border-radius: 6px; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px;">
-                    <img id="logoSizePreviewImg" src="${proj.logo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 80\' width=\'200\' height=\'80\'><rect width=\'200\' height=\'80\' rx=\'8\' fill=\'%230f172a\'/><path d=\'M25 60 L45 20 L65 60 Z\' fill=\'none\' stroke=\'%2338bdf8\' stroke-width=\'4\' stroke-linejoin=\'round\'/><path d=\'M35 60 L45 40 L55 60 Z\' fill=\'%2338bdf8\' opacity=\'0.7\'/><circle cx=\'45\' cy=\'18\' r=\'4\' fill=\'%23f59e0b\'/><text x=\'78\' y=\'38\' font-family=\'Arial, sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%23ffffff\'>DUTA CIPTA</text><text x=\'78\' y=\'54\' font-family=\'Arial, sans-serif\' font-size=\'9\' font-weight=\'500\' fill=\'%2394a3b8\' letter-spacing=\'1\'>KONTRAKTOR &amp; KONSULTAN</text></svg>'}" alt="Logo Proyek" style="max-width: ${proj.logoSize || 120}px; max-height: ${Math.round((proj.logoSize || 120) * 0.55)}px; object-fit: contain;">
+                    <img id="logoSizePreviewImg" src="${proj.logo || DEFAULT_HOUSE_LOGO_SVG}" alt="Logo Proyek" style="max-width: ${proj.logoSize || 120}px; max-height: ${Math.round((proj.logoSize || 120) * 0.55)}px; object-fit: contain;">
                   </div>
                   <input type="hidden" name="projectLogoBase64" id="projectLogoBase64Input" value="${proj.logo || ''}">
                   <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">Preview ukuran dokumen</div>
@@ -1627,15 +1650,15 @@ window.App = (function() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Nama Pemilik / Pemberi Tugas <span class="modal-field-required">*</span></label>
-                  <input type="text" class="form-control" name="ownerName" value="${sig.ownerName}" placeholder="Nama lengkap & gelar">
+                  <input type="text" class="form-control" name="ownerName" value="${sig.ownerName || 'Orang Pertama'}" placeholder="Nama lengkap & gelar">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Jabatan Pemilik / PPK</label>
-                  <input type="text" class="form-control" name="ownerTitle" value="${sig.ownerTitle}" placeholder="Misal: Pemilik Bangunan / PPK">
+                  <input type="text" class="form-control" name="ownerTitle" value="${sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas'}" placeholder="Misal: Pemilik Bangunan / PPK">
                 </div>
                 <div class="form-group">
                   <label class="form-label">NIP / No. Identitas Pemilik</label>
-                  <input type="text" class="form-control" name="ownerNip" value="${sig.ownerNip}" placeholder="Nomor identitas / NIP">
+                  <input type="text" class="form-control" name="ownerNip" value="${sig.ownerNip || '-'}" placeholder="Nomor identitas / NIP">
                 </div>
               </div>
             </div>
@@ -1646,15 +1669,15 @@ window.App = (function() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Nama Team Leader / Perencana <span class="modal-field-required">*</span></label>
-                  <input type="text" class="form-control" name="consultantName" value="${sig.consultantName}" placeholder="Nama Pengawas / Perencana">
+                  <input type="text" class="form-control" name="consultantName" value="${sig.consultantName || 'Orang Kedua'}" placeholder="Nama Pengawas / Perencana">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Nama Badan Usaha / Kantor Konsultan (PT / CV)</label>
-                  <input type="text" class="form-control" name="consultantCompany" value="${sig.consultantCompany}" placeholder="Nama PT / CV / Studio Konsultan">
+                  <input type="text" class="form-control" name="consultantCompany" value="${sig.consultantCompany || 'Duta Digital Agensi'}" placeholder="Nama PT / CV / Studio Konsultan">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Jabatan Konsultan</label>
-                  <input type="text" class="form-control" name="consultantTitle" value="${sig.consultantTitle}">
+                  <input type="text" class="form-control" name="consultantTitle" value="${sig.consultantTitle || 'Dutamik.id'}">
                 </div>
               </div>
             </div>
@@ -1665,15 +1688,15 @@ window.App = (function() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Nama Direktur / Penanggung Jawab <span class="modal-field-required">*</span></label>
-                  <input type="text" class="form-control" name="contractorName" value="${sig.contractorName}" placeholder="Nama Direktur / PM">
+                  <input type="text" class="form-control" name="contractorName" value="${sig.contractorName || 'Orang Ketiga'}" placeholder="Nama Direktur / PM">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Nama Perusahaan Kontraktor (PT / CV)</label>
-                  <input type="text" class="form-control" name="contractorCompany" value="${sig.contractorCompany}" placeholder="Nama PT / CV Kontraktor Pelaksana">
+                  <input type="text" class="form-control" name="contractorCompany" value="${sig.contractorCompany || 'Duta Digital Agensi'}" placeholder="Nama PT / CV Kontraktor Pelaksana">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Jabatan Kontraktor</label>
-                  <input type="text" class="form-control" name="contractorTitle" value="${sig.contractorTitle}">
+                  <input type="text" class="form-control" name="contractorTitle" value="${sig.contractorTitle || 'Dutamik.id'}">
                 </div>
               </div>
             </div>
@@ -1681,11 +1704,11 @@ window.App = (function() {
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">Kota Penetapan Dokumen Proposal</label>
-                <input type="text" class="form-control" name="docCity" value="${sig.docCity || proj.location || 'Indonesia'}">
+                <input type="text" class="form-control" name="docCity" value="${sig.docCity || proj.location || 'Bandung'}">
               </div>
               <div class="form-group">
                 <label class="form-label">Tanggal Penetapan Dokumen Proposal</label>
-                <input type="date" class="form-control" name="docDate" value="${sig.docDate || proj.startDate || '2026-04-01'}">
+                <input type="date" class="form-control" name="docDate" value="${sig.docDate || proj.startDate || '2026-09-09'}">
               </div>
             </div>
 
@@ -1698,11 +1721,11 @@ window.App = (function() {
               </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Nomor Rekening Bank</label>
-                <input type="text" class="form-control" name="accountNumber" value="${bank.accountNumber || '131-00-8899221-5'}" placeholder="Nomor rekening">
+                <input type="text" class="form-control" name="accountNumber" value="${bank.accountNumber || 'xxx-xxx-xxxxxxxx-x'}" placeholder="Nomor rekening">
               </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Atas Nama Rekening</label>
-                <input type="text" class="form-control" name="accountName" value="${bank.accountName || proj.contractor || ''}" placeholder="Nama pemilik rekening">
+                <input type="text" class="form-control" name="accountName" value="${bank.accountName || 'Duta Digital Agensi'}" placeholder="Nama pemilik rekening">
               </div>
             </div>
 
@@ -1711,7 +1734,7 @@ window.App = (function() {
             <div class="form-row">
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Konsultan Pengawas / QC (Nama & Gelar)</label>
-                <input type="text" class="form-control" name="qcInspectorName" value="${sig.qcInspectorName || 'Ir. M. Ridwan'}" placeholder="Nama Pengawas Lapangan">
+                <input type="text" class="form-control" name="qcInspectorName" value="${sig.qcInspectorName || 'Orang Keempat'}" placeholder="Nama Pengawas Lapangan">
               </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Jabatan Pengawas QC</label>
@@ -1722,22 +1745,22 @@ window.App = (function() {
             <div class="form-row">
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Mandor Lapangan / Pelaksana Harian</label>
-                <input type="text" class="form-control" name="fieldMandorName" value="${sig.fieldMandorName || 'Sutarji / Warsito'}" placeholder="Nama Mandor Lapangan">
+                <input type="text" class="form-control" name="fieldMandorName" value="${sig.fieldMandorName || 'Orang Keenam'}" placeholder="Nama Mandor Lapangan">
               </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Jabatan Mandor / Pelaksana</label>
-                <input type="text" class="form-control" name="fieldMandorRole" value="${sig.fieldMandorRole || 'Mandor / Pelaksana Lapangan'}">
+                <input type="text" class="form-control" name="fieldMandorRole" value="${sig.fieldMandorRole || 'Mandor Lapangan'}">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Site Manager Kontraktor (Nama & Gelar)</label>
-                <input type="text" class="form-control" name="siteManagerName" value="${sig.siteManagerName || 'Ir. Hendra Prasetya'}" placeholder="Nama Site Manager">
+                <input type="text" class="form-control" name="siteManagerName" value="${sig.siteManagerName || 'Orang Kelima'}" placeholder="Nama Site Manager">
               </div>
               <div class="form-group" style="flex: 1;">
                 <label class="form-label">Jabatan Site Manager</label>
-                <input type="text" class="form-control" name="siteManagerRole" value="${sig.siteManagerRole || 'Site Manager / Penanggung Jawab Teknis'}">
+                <input type="text" class="form-control" name="siteManagerRole" value="${sig.siteManagerRole || 'Site Manager'}">
               </div>
             </div>
 
@@ -1945,20 +1968,20 @@ window.App = (function() {
     };
 
     proj.signatories = {
-      ownerName: getCleanSigner(formData.get("ownerName"), (proj.signatories && proj.signatories.ownerName && !proj.signatories.ownerName.includes("Bapak / Ibu")) ? proj.signatories.ownerName : ((proj.owner && !proj.owner.includes("Bapak / Ibu")) ? proj.owner : "Dr. H. Hendra Gunawan, S.T., M.M.")),
+      ownerName: getCleanSigner(formData.get("ownerName"), (proj.signatories && proj.signatories.ownerName && !proj.signatories.ownerName.includes("Bapak / Ibu")) ? proj.signatories.ownerName : ((proj.owner && !proj.owner.includes("Bapak / Ibu")) ? proj.owner : "Orang Pertama")),
       ownerTitle: getCleanSigner(formData.get("ownerTitle"), (proj.signatories && proj.signatories.ownerTitle) || "Kuasa Pengguna Anggaran / Pemilik"),
       ownerNip: getCleanSigner(formData.get("ownerNip"), (proj.signatories && proj.signatories.ownerNip) || "-"),
-      contractorCompany: getCleanSigner(formData.get("contractorCompany"), (proj.signatories && proj.signatories.contractorCompany) || proj.contractor || "PT. Duta Konstruksi Pratama"),
-      contractorName: getCleanSigner(formData.get("contractorName"), (proj.signatories && proj.signatories.contractorName) || "H. Ahmad Fauzi, S.T."),
+      contractorCompany: getCleanSigner(formData.get("contractorCompany"), (proj.signatories && proj.signatories.contractorCompany) || proj.contractor || "Dutamik.id"),
+      contractorName: getCleanSigner(formData.get("contractorName"), (proj.signatories && proj.signatories.contractorName) || "Orang Ketiga"),
       contractorTitle: getCleanSigner(formData.get("contractorTitle"), (proj.signatories && proj.signatories.contractorTitle) || "Direktur Utama"),
-      consultantCompany: getCleanSigner(formData.get("consultantCompany"), (proj.signatories && proj.signatories.consultantCompany) || proj.consultant || "PT. Architekta Desain Studio"),
-      consultantName: getCleanSigner(formData.get("consultantName"), (proj.signatories && proj.signatories.consultantName) || "Ir. Bambang Hartono, S.T., M.T."),
+      consultantCompany: getCleanSigner(formData.get("consultantCompany"), (proj.signatories && proj.signatories.consultantCompany) || proj.consultant || "Duta Digital Agensi"),
+      consultantName: getCleanSigner(formData.get("consultantName"), (proj.signatories && proj.signatories.consultantName) || "Orang Kedua"),
       consultantTitle: getCleanSigner(formData.get("consultantTitle"), (proj.signatories && proj.signatories.consultantTitle) || "Team Leader / Pengawas"),
-      qcInspectorName: getCleanSigner(formData.get("qcInspectorName"), (proj.signatories && proj.signatories.qcInspectorName) || "Ir. M. Ridwan"),
+      qcInspectorName: getCleanSigner(formData.get("qcInspectorName"), (proj.signatories && proj.signatories.qcInspectorName) || "Orang Keempat"),
       qcInspectorRole: getCleanSigner(formData.get("qcInspectorRole"), (proj.signatories && proj.signatories.qcInspectorRole) || "Site Inspector / QC"),
-      fieldMandorName: getCleanSigner(formData.get("fieldMandorName"), (proj.signatories && proj.signatories.fieldMandorName) || "Sutarji / Warsito"),
+      fieldMandorName: getCleanSigner(formData.get("fieldMandorName"), (proj.signatories && proj.signatories.fieldMandorName) || "Orang Keenam"),
       fieldMandorRole: getCleanSigner(formData.get("fieldMandorRole"), (proj.signatories && proj.signatories.fieldMandorRole) || "Mandor Lapangan"),
-      siteManagerName: getCleanSigner(formData.get("siteManagerName"), (proj.signatories && proj.signatories.siteManagerName) || "Ir. Hendra Prasetya"),
+      siteManagerName: getCleanSigner(formData.get("siteManagerName"), (proj.signatories && proj.signatories.siteManagerName) || "Orang Kelima"),
       siteManagerRole: getCleanSigner(formData.get("siteManagerRole"), (proj.signatories && proj.signatories.siteManagerRole) || "Site Manager Kontraktor"),
       docCity: getCleanSigner(formData.get("docCity"), (proj.signatories && proj.signatories.docCity) || proj.location || "Indonesia"),
       docDate: getCleanSigner(formData.get("docDate"), (proj.signatories && proj.signatories.docDate) || proj.startDate || "2026-04-01")
@@ -2023,12 +2046,12 @@ window.App = (function() {
     };
 
     const sig = (proj && proj.signatories) || {};
-    const sigOwnerName = cleanSignerName(sig.ownerName, cleanSignerName(proj && proj.owner, 'Dr. H. Hendra Gunawan, S.T., M.M.'));
-    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
-    const sigConsultantName = cleanSignerName(sig.consultantName, 'Ir. Bambang Hartono, S.T., M.T.');
-    const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || (proj && proj.consultant) || 'CV. Architecindo Consultant';
-    const sigContractorName = cleanSignerName(sig.contractorName, 'H. Ahmad Fauzi, S.T.');
-    const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || (proj && proj.contractor) || 'PT. Karya Mandiri Perkasa';
+    const sigOwnerName = cleanSignerName(sig.ownerName, cleanSignerName(proj && proj.owner, 'Orang Pertama'));
+    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas';
+    const sigConsultantName = cleanSignerName(sig.consultantName, 'Orang Kedua');
+    const sigConsultantTitle = sig.consultantTitle || 'Dutamik.id';
+    const sigContractorName = cleanSignerName(sig.contractorName, 'Orang Ketiga');
+    const sigContractorTitle = sig.contractorTitle || 'Dutamik.id';
 
     let rowsHtml = "";
     let rekapMobileCardsHtml = "";
@@ -2280,12 +2303,12 @@ window.App = (function() {
     };
 
     const sig = proj.signatories || {};
-    const sigOwnerName = cleanSignerName(sig.ownerName, cleanSignerName(proj.owner, 'Dr. H. Hendra Gunawan, S.T., M.M.'));
-    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
-    const sigConsultantName = cleanSignerName(sig.consultantName, 'Ir. Bambang Hartono, S.T., M.T.');
-    const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || proj.consultant || 'CV. Architecindo Consultant';
-    const sigContractorName = cleanSignerName(sig.contractorName, 'H. Ahmad Fauzi, S.T.');
-    const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || proj.contractor || 'PT. Karya Mandiri Perkasa';
+    const sigOwnerName = cleanSignerName(sig.ownerName, cleanSignerName(proj.owner, 'Orang Pertama'));
+    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas';
+    const sigConsultantName = cleanSignerName(sig.consultantName, 'Orang Kedua');
+    const sigConsultantTitle = sig.consultantTitle || 'Dutamik.id';
+    const sigContractorName = cleanSignerName(sig.contractorName, 'Orang Ketiga');
+    const sigContractorTitle = sig.contractorTitle || 'Dutamik.id';
 
     let totalProjectLaborCost = 0;
     let totalProjectLaborQty = 0;
@@ -3368,6 +3391,50 @@ window.App = (function() {
           ` : ''}
         </div>
       </div>
+
+      <!-- Tabel Material -->
+      <div class="card mb-4">
+        <div class="card-header"><div class="card-title">1. Rekapitulasi Kebutuhan Material Fisik</div></div>
+        <div class="card-body p-0">
+          <!-- Desktop Table View -->
+          <div class="table-responsive d-desktop-only">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 4%">No</th>
+                  <th style="width: 10%">Kode</th>
+                  <th style="width: 28%">Nama Bahan Material</th>
+                  <th style="width: 8%" class="th-nowrap">Satuan</th>
+                  <th style="width: 11%">Total Kuantitas</th>
+                  <th style="width: 13%">Harga Satuan</th>
+                  <th style="width: 14%">Subtotal Biaya</th>
+                  <th style="width: 6%" class="th-nowrap">% Material</th>
+                  <th style="width: 6%" class="th-nowrap">% Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${matRows || '<tr><td colspan="9" class="text-center text-muted p-3">Belum ada kebutuhan material.</td></tr>'}
+              </tbody>
+              <tfoot>
+                <tr style="background: #f8fafc; font-weight: 700;">
+                  <td colspan="6" class="text-right">Subtotal Kebutuhan Material:</td>
+                  <td class="text-right">${window.CurrencyUtil.formatRupiah(res.totalMaterials, false, true)}</td>
+                  <td class="text-right">100.00%</td>
+                  <td class="text-right text-muted">${matPct}%</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Mobile Touch Cards View (Zero Horizontal Scroll!) -->
+          <div class="d-mobile-only p-3">
+            ${matMobileCards || '<div class="text-center text-muted p-3 bg-light rounded">Belum ada kebutuhan material.</div>'}
+            <div class="rab-mobile-div-footer-card">
+              <span class="font-bold text-muted">Subtotal Kebutuhan Material:</span>
+              <span class="font-black text-emerald" style="font-size: 14px;">${window.CurrencyUtil.formatRupiah(res.totalMaterials, false, true)}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Tabel Tenaga -->
@@ -4218,7 +4285,7 @@ window.App = (function() {
           <td class="text-center no-print">
             ${!isActive ? `<button class="btn btn-sm btn-primary" onclick="App.switchProject('${p.id}')">Buka</button>` : ''}
             <button class="btn btn-sm btn-outline" onclick="App.exportSingleProject('${p.id}')">Export JSON</button>
-            <button class="btn btn-sm btn-danger" onclick="App.deleteProject('${p.id}')" ${projects.length <= 1 ? 'disabled' : ''}>Hapus</button>
+            <button class="btn btn-sm btn-danger" onclick="App.deleteProject('${p.id}')">Hapus</button>
           </td>
         </tr>
       `;
@@ -4253,7 +4320,7 @@ window.App = (function() {
                 </tr>
               </thead>
               <tbody>
-                ${rowsHtml}
+                ${rowsHtml || '<tr><td colspan="6" class="text-center text-muted p-4" style="background: #f8fafc;">Belum ada proyek dalam daftar. Silakan klik tombol <strong>+ Buat Proyek Baru</strong> untuk memulai proyek baru.</td></tr>'}
               </tbody>
             </table>
           </div>
@@ -5811,7 +5878,7 @@ window.App = (function() {
       cancelText: "Batal",
       onSubmit: (data) => {
         const projName = (data && data.name && data.name.trim()) ? data.name.trim() : "Pembangunan Rumah Tinggal Baru";
-        const newProj = window.ProjectManager.createProject(projName, "Pemilik Proyek", "Indonesia", "std", false);
+        const newProj = window.ProjectManager.createProject(projName, "Orang Pertama", "Bandung", "jabar-bdg", false);
         if (newProj && newProj.id) {
           window.ProjectManager.setActiveProject(newProj.id);
         }
@@ -5834,6 +5901,19 @@ window.App = (function() {
   }
 
   function duplicateCurrentProject() {
+    const act = window.ProjectManager.getActiveProject();
+    if (!act) {
+      if (window.showNotificationModal) {
+        showNotificationModal({
+          title: "Perhatian",
+          subtitle: "Gandakan Proyek",
+          icon: "⚠️",
+          type: "warning",
+          contentHtml: "<p>Belum ada proyek aktif untuk digandakan. Silakan buat proyek baru terlebih dahulu.</p>"
+        });
+      }
+      return;
+    }
     showConfirmModal({
       title: "Gandakan Proyek Aktif",
       message: "Apakah Anda yakin ingin menggandakan proyek ini untuk membuat salinan baru?",
@@ -5842,6 +5922,7 @@ window.App = (function() {
         window.ProjectManager.duplicateCurrentProject();
         setupProjectSwitcher();
         updateProjectHeader();
+        renderProyekView();
         renderCurrentTabContent();
       }
     });
@@ -5856,6 +5937,7 @@ window.App = (function() {
         window.ProjectManager.deleteProject(id);
         setupProjectSwitcher();
         updateProjectHeader();
+        renderProyekView();
         renderCurrentTabContent();
       }
     });
@@ -5894,6 +5976,19 @@ window.App = (function() {
   }
 
   function exportCurrentProject() {
+    const act = window.ProjectManager.getActiveProject();
+    if (!act) {
+      if (window.showNotificationModal) {
+        showNotificationModal({
+          title: "Perhatian",
+          subtitle: "Export Proyek",
+          icon: "⚠️",
+          type: "warning",
+          contentHtml: "<p>Belum ada proyek aktif untuk diekspor. Silakan buat proyek baru terlebih dahulu.</p>"
+        });
+      }
+      return;
+    }
     window.ProjectManager.exportProjectJson();
   }
 
@@ -7196,12 +7291,12 @@ window.App = (function() {
     }
 
     const sig = (proj && proj.signatories) || {};
-    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : ((proj && proj.owner) || 'Ir. Budi Santoso, M.T.');
-    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Proyek';
-    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Ir. Bambang Hartono, S.T., M.T.';
-    const sigConsultantTitle = sig.consultantCompany || sig.consultantTitle || (proj && proj.consultant) || 'CV. Architecindo Consultant';
-    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'H. Ahmad Fauzi, S.T.';
-    const sigContractorTitle = sig.contractorCompany || sig.contractorTitle || (proj && proj.contractor) || 'PT. Karya Mandiri Perkasa';
+    const sigOwnerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : ((proj && proj.owner) || 'Orang Pertama');
+    const sigOwnerTitle = sig.ownerTitle || 'Pemilik Bangunan / Pemberi Tugas';
+    const sigConsultantName = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : 'Orang Kedua';
+    const sigConsultantTitle = sig.consultantTitle || 'Dutamik.id';
+    const sigContractorName = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : 'Orang Ketiga';
+    const sigContractorTitle = sig.contractorTitle || 'Dutamik.id';
 
     const fullHtml = `
       <div class="print-header-block" style="margin-bottom: 14px;">
@@ -7600,30 +7695,30 @@ window.App = (function() {
 
         const rawSig = proj.signatories || {};
         const sig = {
-          ownerName: (rawSig.ownerName && !rawSig.ownerName.includes('...')) ? rawSig.ownerName : (proj.owner || "Ir. Budi Santoso, M.T."),
-          ownerTitle: rawSig.ownerTitle || "Kuasa Pengguna Anggaran / Pemilik",
-          ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "19780512 200312 1 002",
-          contractorName: (rawSig.contractorName && !rawSig.contractorName.includes('...')) ? rawSig.contractorName : "H. Ahmad Fauzi, S.T.",
-          contractorTitle: rawSig.contractorTitle || "Direktur Utama",
-          contractorCompany: (rawSig.contractorCompany && !rawSig.contractorCompany.includes('...')) ? rawSig.contractorCompany : (proj.contractor || "PT. Karya Mandiri Perkasa"),
-          consultantName: (rawSig.consultantName && !rawSig.consultantName.includes('...')) ? rawSig.consultantName : "Ir. Bambang Hartono, S.T., M.T.",
-          consultantTitle: rawSig.consultantTitle || "Team Leader / Pengawas",
-          consultantCompany: (rawSig.consultantCompany && !rawSig.consultantCompany.includes('...')) ? rawSig.consultantCompany : (proj.consultant || "CV. Architecindo Consultant"),
-          qcInspectorName: (rawSig.qcInspectorName && !rawSig.qcInspectorName.includes('...')) ? rawSig.qcInspectorName : "Ir. M. Ridwan",
-          qcInspectorRole: rawSig.qcInspectorRole || "Konsultan Pengawas / QC",
-          fieldMandorName: (rawSig.fieldMandorName && !rawSig.fieldMandorName.includes('...')) ? rawSig.fieldMandorName : "Sutarji / Warsito",
-          fieldMandorRole: rawSig.fieldMandorRole || "Mandor Lapangan / Pelaksana",
-          siteManagerName: (rawSig.siteManagerName && !rawSig.siteManagerName.includes('...')) ? rawSig.siteManagerName : "Ir. Hendra Prasetya",
-          siteManagerRole: rawSig.siteManagerRole || "Site Manager Kontraktor",
-          docCity: rawSig.docCity || proj.location || "Indonesia",
-          docDate: rawSig.docDate || proj.startDate || "2026-04-01"
+          ownerName: (rawSig.ownerName && !rawSig.ownerName.includes('...')) ? rawSig.ownerName : (proj.owner || "Orang Pertama"),
+          ownerTitle: rawSig.ownerTitle || "Pemilik Bangunan / Pemberi Tugas",
+          ownerNip: (rawSig.ownerNip && !rawSig.ownerNip.includes('...')) ? rawSig.ownerNip : "-",
+          contractorName: (rawSig.contractorName && !rawSig.contractorName.includes('...')) ? rawSig.contractorName : "Orang Ketiga",
+          contractorTitle: rawSig.contractorTitle || "Dutamik.id",
+          contractorCompany: (rawSig.contractorCompany && !rawSig.contractorCompany.includes('...')) ? rawSig.contractorCompany : (proj.contractor || "Duta Digital Agensi"),
+          consultantName: (rawSig.consultantName && !rawSig.consultantName.includes('...')) ? rawSig.consultantName : "Orang Kedua",
+          consultantTitle: rawSig.consultantTitle || "Dutamik.id",
+          consultantCompany: (rawSig.consultantCompany && !rawSig.consultantCompany.includes('...')) ? rawSig.consultantCompany : (proj.consultant || "Duta Digital Agensi"),
+          qcInspectorName: (rawSig.qcInspectorName && !rawSig.qcInspectorName.includes('...')) ? rawSig.qcInspectorName : "Orang Keempat",
+          qcInspectorRole: rawSig.qcInspectorRole || "Site Inspector / QC",
+          fieldMandorName: (rawSig.fieldMandorName && !rawSig.fieldMandorName.includes('...')) ? rawSig.fieldMandorName : "Orang Keenam",
+          fieldMandorRole: rawSig.fieldMandorRole || "Mandor Lapangan",
+          siteManagerName: (rawSig.siteManagerName && !rawSig.siteManagerName.includes('...')) ? rawSig.siteManagerName : "Orang Kelima",
+          siteManagerRole: rawSig.siteManagerRole || "Site Manager",
+          docCity: rawSig.docCity || proj.location || "Bandung",
+          docDate: rawSig.docDate || proj.startDate || "2026-09-09"
         };
 
         const rawBank = proj.bankInfo || {};
         const bank = {
           bankName: rawBank.bankName || "Bank Mandiri",
-          accountNumber: rawBank.accountNumber || "131-00-8899221-5",
-          accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "PT. Karya Mandiri Perkasa"
+          accountNumber: rawBank.accountNumber || "xxx-xxx-xxxxxxxx-x",
+          accountName: rawBank.accountName || sig.contractorCompany || proj.contractor || "Duta Digital Agensi"
         };
 
         const dStart = new Date(proj.startDate || "2026-04-01");

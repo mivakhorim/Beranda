@@ -402,7 +402,7 @@ window.PrintEngine = (function() {
     const startStr = proj.startDate || proj.tanggalMulai || "2026-04-01";
     const finishStr = proj.finishDate || proj.tanggalSelesai || "2026-09-27";
     const regionStr = proj.regionName || proj.daerahAcuan || "Jawa Barat - Bandung Raya & Priangan (1.04x)";
-    const contractorStr = proj.contractor || proj.kontraktor || "KONTRAKTOR PELAKSANA UTAMA";
+    const contractorStr = proj.contractor || proj.kontraktor || "Dutamik.id";
     const docNumStr = proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001";
     const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -411,7 +411,7 @@ window.PrintEngine = (function() {
       ? `${Number(rawLabor).toFixed(1)} OH (~${(rawLabor / durDays).toFixed(1)} Org/Hari)`
       : "Sesuai Analisis AHSP 2026";
 
-    const defaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' width='200' height='80'><rect width='200' height='80' rx='8' fill='%230f172a'/><path d='M25 60 L45 20 L65 60 Z' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-linejoin='round'/><path d='M35 60 L45 40 L55 60 Z' fill='%2338bdf8' opacity='0.7'/><circle cx='45' cy='18' r='4' fill='%23f59e0b'/><text x='78' y='38' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='%23ffffff'>DUTA CIPTA</text><text x='78' y='54' font-family='Arial, sans-serif' font-size='9' font-weight='500' fill='%2394a3b8' letter-spacing='1'>KONTRAKTOR &amp; KONSULTAN</text></svg>";
+    const defaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>";
     const logoSrc = (proj.logo && typeof proj.logo === 'string' && proj.logo.trim().length > 10) ? proj.logo : defaultLogoSvg;
     const logoSize = Math.max(40, Math.min(300, Number(proj.logoSize) || 120));
     const logoHtml = `
@@ -498,11 +498,11 @@ window.PrintEngine = (function() {
     const durWeeks = Math.ceil(durDays / 7);
     const startStr = proj.startDate || proj.tanggalMulai || "2026-04-01";
     const finishStr = proj.finishDate || proj.tanggalSelesai || "2026-09-27";
-    const contractorStr = proj.contractor || proj.kontraktor || "KONTRAKTOR PELAKSANA UTAMA";
+    const contractorStr = proj.contractor || proj.kontraktor || "Dutamik.id";
     const docNumStr = proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001";
     const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    const lDefaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' width='200' height='80'><rect width='200' height='80' rx='8' fill='%230f172a'/><path d='M25 60 L45 20 L65 60 Z' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-linejoin='round'/><path d='M35 60 L45 40 L55 60 Z' fill='%2338bdf8' opacity='0.7'/><circle cx='45' cy='18' r='4' fill='%23f59e0b'/><text x='78' y='38' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='%23ffffff'>DUTA CIPTA</text><text x='78' y='54' font-family='Arial, sans-serif' font-size='9' font-weight='500' fill='%2394a3b8' letter-spacing='1'>KONTRAKTOR &amp; KONSULTAN</text></svg>";
+    const lDefaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>";
     const lLogoSrc = (proj.logo && typeof proj.logo === 'string' && proj.logo.trim().length > 10) ? proj.logo : lDefaultLogoSvg;
     const lLogoSize = Math.max(40, Math.min(220, Number(proj.logoSize) || 100));
     const landLogoHtml = `

@@ -1,7 +1,6 @@
 /**
  * CodeShield Security Engine — Standard SE Bina Konstruksi No. 47/2026
- * Proteksi Eksekusi Terenkripsi AES-256 (Rule 8 Hacker Mode Shield Active)
- * Anti-Tampering & Anti-Direct Code Inspection (Rule 8 Hacker Mode)
+ * Proteksi Eksekusi Terenkripsi AES-256
  */
 
 ;(function (root, factory) {
@@ -6671,28 +6670,60 @@
   if (typeof global !== 'undefined') global.CryptoJS = _crypto;
 
   // Key Derivation Obfuscated via Byte-Array Masking (Zero Plaintext Key Leak)
-  var _SEED = [0x53, 0x55, 0x52, 0x41, 0x42, 0x41, 0x59, 0x41, 0x11, 0x12, 0x13];
+  var _SEED = [0x73, 0x55, 0x52, 0x41, 0x42, 0x41, 0x59, 0x41, 0x11, 0x12, 0x13];
   var _MASK = 0x20;
   var _getKey = function() {
     return _SEED.map(function(b) { return String.fromCharCode(b ^ _MASK); }).join('');
   };
 
-    function _isAuthorized() {
+    // Aturan Otorisasi Terenkripsi AES-256 (Zero Plaintext Rule/Domain Leak)
+  var _AUTH_CIPHER = "U2FsdGVkX1/HpRgJyYuFHbYfCLNCLehSExv8dJvrUXeVd9Gtbv7SS4PlI86QBrffwMvnqN/bN4Jq/L7C6INMrA==";
+
+  function _isAuthorized() {
     try {
       if (typeof window === 'undefined' || !window.location) return true;
+      var c = (typeof window !== 'undefined' ? window.CryptoJS : global.CryptoJS) || _crypto;
+      if (!c || !c.AES) return true;
+      
+      var decryptedStr = "";
+      try {
+        var bytes = c.AES.decrypt(_AUTH_CIPHER, "Surabaya123");
+        decryptedStr = bytes.toString(c.enc.Utf8);
+        if (!decryptedStr) {
+          var bytes2 = c.AES.decrypt(_AUTH_CIPHER, "surabaya123");
+          decryptedStr = bytes2.toString(c.enc.Utf8);
+        }
+      } catch(e) {}
+
+      if (!decryptedStr) return false;
+      var rules = JSON.parse(decryptedStr);
       var h = (window.location.hostname || '').toLowerCase();
       var href = decodeURIComponent(window.location.href || '').toLowerCase();
       var p = decodeURIComponent(window.location.pathname || '').toLowerCase();
 
-      if (h === 'dutamik.id' || (h.length > 10 && h.slice(-11) === '.dutamik.id')) {
-        return true;
+      // Otorisasi Daring
+      if (rules.domains && Array.isArray(rules.domains)) {
+        for (var i = 0; i < rules.domains.length; i++) {
+          var d = rules.domains[i];
+          if (h === d || (h.length > d.length + 1 && h.slice(-(d.length + 1)) === '.' + d)) {
+            return true;
+          }
+        }
       }
+
+      // Otorisasi Luring
       var isLocal = (h === '' || h === 'localhost' || h === '127.0.0.1' || h === '::1' || (window.location.protocol === 'file:'));
-      if (isLocal && (href.indexOf('khorim') !== -1 || p.indexOf('khorim') !== -1)) {
-        return true;
+      if (isLocal && rules.roots && Array.isArray(rules.roots)) {
+        for (var j = 0; j < rules.roots.length; j++) {
+          var r = rules.roots[j];
+          if (href.indexOf(r) !== -1 || p.indexOf(r) !== -1) {
+            return true;
+          }
+        }
       }
+
       return false;
-    } catch(e) {
+    } catch(err) {
       return false;
     }
   }
@@ -6712,10 +6743,7 @@
     .shield-icon { font-size: 58px; margin-bottom: 14px; display: inline-block; filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.7)); }
     .lock-badge { display: inline-block; background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; font-size: 11.5px; font-weight: 800; letter-spacing: 1px; padding: 4px 14px; border-radius: 20px; text-transform: uppercase; margin-bottom: 16px; }
     h1 { font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 12px; }
-    p { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; text-align: left; }
-    .auth-criteria { background: rgba(15, 23, 42, 0.75); border: 1px solid #334155; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px; text-align: left; font-size: 12.5px; color: #94a3b8; }
-    .auth-criteria li { margin-bottom: 6px; list-style-position: inside; }
-    .auth-criteria strong { color: #38bdf8; }
+    p { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; text-align: center; }
     .contact-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1.5px solid #3b82f6; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; }
     .contact-title { font-size: 13px; font-weight: 700; color: #93c5fd; margin-bottom: 6px; }
     .agency-name { font-size: 17px; font-weight: 800; color: #ffffff; letter-spacing: 0.3px; }
@@ -6727,28 +6755,21 @@
 <body>
   <div class="lock-card">
     <div class="shield-icon">🔒</div>
-    <div><span class="lock-badge">Akses Terkunci &bull; Tidak Terotorisasi</span></div>
+    <div><span class="lock-badge">Akses Lisensi Terkunci</span></div>
     <h1>LISENSI SISTEM DUTA RAB S1</h1>
     <p>
-      Aplikasi ini dilindungi oleh hak cipta, enkripsi keamanan tingkat tinggi, dan lisensi terbatas.
-      Sistem secara otomatis mengunci operasional apabila dijalankan di luar infrastruktur dan direktori resmi yang terdaftar.
+      Aplikasi ini dilindungi oleh hak cipta dan lisensi resmi terbatas.
+      Sistem mendeteksi bahwa workstation atau lingkungan operasional ini belum terdaftar dalam lisensi resmi aktif.
     </p>
-    <div class="auth-criteria">
-      <div style="font-weight: 700; color: #f1f5f9; margin-bottom: 8px;">Kriteria Akses Resmi yang Diizinkan:</div>
-      <ul>
-        <li><strong>Daring (Online Cloud):</strong> Berjalan pada domain resmi <strong>dutamik.id</strong> (*.dutamik.id)</li>
-        <li><strong>Luring (Offline Lokal):</strong> Berjalan pada direktori lokal resmi berlisensi <strong>Khorim</strong></li>
-      </ul>
-    </div>
     <div class="contact-card">
       <div class="contact-title">Layanan Bantuan &amp; Aktivasi Lisensi Resmi:</div>
       <div class="agency-name">DUTA DIGITAL AGENSI</div>
-      <div style="font-size: 13px; color: #94a3b8; margin: 4px 0 10px 0;">Pengembang Resmi Aplikasi Estimasi &amp; RAB Konstruksi</div>
+      <div style="font-size: 13px; color: #94a3b8; margin: 4px 0 10px 0;">Pengembang Resmi Aplikasi Estimasi &amp; RAB Konstruksi &bull; Dutamik.id</div>
       <a class="wa-btn" href="https://wa.me/6283130300094?text=Halo%20Duta%20Digital%20Agensi,%20saya%20ingin%20aktivasi%20lisensi%20Aplikasi%20Duta%20RAB%20S1" target="_blank">
         <span>💬</span> Hubungi WhatsApp: 0831-3030-0094
       </a>
     </div>
-    <div class="footer-note">Security Hardening SE PUPR No. 47/2026 &bull; Duta Digital Agensi &bull; All Rights Reserved</div>
+    <div class="footer-note">Duta Digital Agensi &bull; Dutamik.id &bull; All Rights Reserved</div>
   </div>
 </body>
 </html>`;
@@ -6771,6 +6792,11 @@ function decryptAndExec(cipherText, key) {
       }
       var bytes = c.AES.decrypt(cipherText, k);
       var source = bytes.toString(c.enc.Utf8);
+      if (!source) {
+        var altKey = (k === "Surabaya123") ? "surabaya123" : "Surabaya123";
+        bytes = c.AES.decrypt(cipherText, altKey);
+        source = bytes.toString(c.enc.Utf8);
+      }
       if (!source) {
         throw new Error("Gagal mendekripsi modul: Kunci tidak cocok.");
       }

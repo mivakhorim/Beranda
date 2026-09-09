@@ -289,18 +289,18 @@ window.BapInvoicing = (function() {
       ? window.CurrencyUtil.terbilang(netPayable) 
       : "";
 
-    const ownerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || "Ir. Budi Santoso, M.T.");
-    const ownerTitle = sig.ownerTitle || "Pemilik Proyek / Pemberi Tugas";
-    const consultantCompany = sig.consultantCompany || proj.consultant || "PT. Sarana Buana Konsultan";
-    const consultantSigner = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : "Ir. Bambang Hartono, S.T., M.T.";
-    const consultantTitle = sig.consultantTitle || "Team Leader / Pengawas";
-    const contractorCompany = sig.contractorCompany || proj.contractor || "PT. Duta Konstruksi Pratama";
-    const contractorSigner = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : (sig.siteManagerName || "H. Ahmad Fauzi, S.T.");
-    const contractorTitle = sig.contractorTitle || "Direktur Utama";
+    const ownerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || "Orang Pertama");
+    const ownerTitle = sig.ownerTitle || "Pemilik Bangunan / Pemberi Tugas";
+    const consultantCompany = sig.consultantCompany || proj.consultant || "Duta Digital Agensi";
+    const consultantSigner = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : "Orang Kedua";
+    const consultantTitle = sig.consultantTitle || "Dutamik.id";
+    const contractorCompany = sig.contractorCompany || proj.contractor || "Duta Digital Agensi";
+    const contractorSigner = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : (sig.siteManagerName || "Orang Ketiga");
+    const contractorTitle = sig.contractorTitle || "Dutamik.id";
 
-    const bankName = bank.bankName || "Bank Mandiri (Persero) Tbk";
-    const bankAccount = bank.accountNumber || "131-00-8899221-5";
-    const bankOwner = bank.accountName || contractorCompany;
+    const bankName = bank.bankName || "Bank Mandiri";
+    const bankAccount = bank.accountNumber || "xxx-xxx-xxxxxxxx-x";
+    const bankOwner = bank.accountName || contractorCompany || "Duta Digital Agensi";
 
     return `
       <div class="printable-bap-doc a4-portrait" style="position: relative !important; width: 100%; max-width: 186mm !important; margin: 0 auto !important; min-height: 245mm; box-sizing: border-box !important; padding: 0 !important; display: flex; flex-direction: column; justify-content: space-between; overflow: visible; page-break-inside: avoid !important; page-break-after: auto !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8pt; color: #0f172a; background: #ffffff !important;">
