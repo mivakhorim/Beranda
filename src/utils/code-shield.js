@@ -6681,16 +6681,18 @@
 
   function _isAuthorized() {
     try {
-      if (typeof window === 'undefined' || !window.location) return true;
+      if (typeof window === 'undefined' || !window.location) return false;
       var c = (typeof window !== 'undefined' ? window.CryptoJS : global.CryptoJS) || _crypto;
-      if (!c || !c.AES) return true;
+      if (!c || !c.AES) return false;
       
       var decryptedStr = "";
       try {
-        var bytes = c.AES.decrypt(_AUTH_CIPHER, "Surabaya123");
+        var masterK = _getKey();
+        var bytes = c.AES.decrypt(_AUTH_CIPHER, masterK);
         decryptedStr = bytes.toString(c.enc.Utf8);
         if (!decryptedStr) {
-          var bytes2 = c.AES.decrypt(_AUTH_CIPHER, "surabaya123");
+          var altK = masterK.toLowerCase();
+          var bytes2 = c.AES.decrypt(_AUTH_CIPHER, altK);
           decryptedStr = bytes2.toString(c.enc.Utf8);
         }
       } catch(e) {}
@@ -6698,27 +6700,22 @@
       if (!decryptedStr) return false;
       var rules = JSON.parse(decryptedStr);
       var h = (window.location.hostname || '').toLowerCase();
-      var href = decodeURIComponent(window.location.href || '').toLowerCase();
-      var p = decodeURIComponent(window.location.pathname || '').toLowerCase();
 
-      // Otorisasi Daring
+      // Otorisasi Daring (Domain resmi dutamik.id)
       if (rules.domains && Array.isArray(rules.domains)) {
         for (var i = 0; i < rules.domains.length; i++) {
-          var d = rules.domains[i];
+          var d = rules.domains[i].toLowerCase();
           if (h === d || (h.length > d.length + 1 && h.slice(-(d.length + 1)) === '.' + d)) {
             return true;
           }
         }
       }
 
-      // Otorisasi Luring
+      // Otorisasi Luring Khusus PC: Cek Lisensi Hardware-Bound PC (Localhost & file:///)
       var isLocal = (h === '' || h === 'localhost' || h === '127.0.0.1' || h === '::1' || (window.location.protocol === 'file:'));
-      if (isLocal && rules.roots && Array.isArray(rules.roots)) {
-        for (var j = 0; j < rules.roots.length; j++) {
-          var r = rules.roots[j];
-          if (href.indexOf(r) !== -1 || p.indexOf(r) !== -1) {
-            return true;
-          }
+      if (isLocal) {
+        if (_hasValidHardwareLicense()) {
+          return true;
         }
       }
 
@@ -6728,8 +6725,320 @@
     }
   }
 
+  // Byte-Array Masked Seed untuk Kunci Otoritas Pengembang (Zero Plaintext String Literal Leak)
+  var _SIG_STORE = [0x38, 0x2F, 0x36, 0x2F, 0x29, 0x3B, 0x34];
+  var _SIG_MASK = 0x5A;
+  function _getSecretKeyword() {
+    var s = '';
+    for (var i = 0; i < _SIG_STORE.length; i++) {
+      s += String.fromCharCode(_SIG_STORE[i] ^ _SIG_MASK);
+    }
+    return s;
+  }
+
+  // Mesin Deteksi Hardware ID Komputer Stabil & Unik
+  function _getHardwareID() {
+    try {
+      if (typeof window === 'undefined') return "DUTA-PC-0000-0000";
+      // Cek apakah ada cache ID dari batch companion script
+      var storedHwid = localStorage.getItem('DUTA_HWID');
+      if (storedHwid && storedHwid.trim().length > 4) {
+        return storedHwid.trim();
+      }
+
+      // Gabungkan entropi perangkat keras browser yang stabil
+      var entropy = [];
+      entropy.push(navigator.userAgent || '');
+      entropy.push(navigator.platform || '');
+      entropy.push(navigator.hardwareConcurrency || 4);
+      if (window.screen) {
+        entropy.push(screen.width + 'x' + screen.height);
+        entropy.push(screen.colorDepth || 24);
+      }
+      entropy.push(window.devicePixelRatio || 1);
+
+      // Canvas 2D Fingerprint
+      try {
+        var canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 50;
+        var ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.textBaseline = 'top';
+          ctx.font = '14px Arial';
+          ctx.fillStyle = '#f60';
+          ctx.fillRect(125, 1, 62, 20);
+          ctx.fillStyle = '#069';
+          ctx.fillText('DutaRAB2026-BinaKonstruksi', 2, 15);
+          ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+          ctx.fillText('DutaRAB2026-BinaKonstruksi', 4, 17);
+          entropy.push(canvas.toDataURL().slice(-60));
+        }
+      } catch(e) {}
+
+      // WebGL Renderer Fingerprint
+      try {
+        var glCanvas = document.createElement('canvas');
+        var gl = glCanvas.getContext('webgl') || glCanvas.getContext('experimental-webgl');
+        if (gl) {
+          var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+          if (debugInfo) {
+            entropy.push(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '');
+            entropy.push(gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '');
+          }
+        }
+      } catch(e) {}
+
+      var c = (typeof window !== 'undefined' ? window.CryptoJS : global.CryptoJS) || _crypto;
+      var rawHash = "";
+      if (c && c.SHA256) {
+        rawHash = c.SHA256(entropy.join('###')).toString(c.enc.Hex).toUpperCase();
+      } else {
+        var hash = 0, str = entropy.join('###');
+        for (var i = 0; i < str.length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0;
+        }
+        rawHash = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+      }
+
+      var cleanHash = rawHash.replace(/[^A-Z0-9]/g, '');
+      var part1 = cleanHash.substr(0, 4) || '7A9B';
+      var part2 = cleanHash.substr(4, 4) || '44E1';
+      return 'DUTA-PC-' + part1 + '-' + part2;
+    } catch(e) {
+      return 'DUTA-PC-7A9B-44E1';
+    }
+  }
+
+  // Verifikasi Kriptografis: Reverse ID + Interleave Secret Signature + Rotating XOR Checksum
+  function _verifyMachineLicense(licenseStr, currentHwid) {
+    try {
+      if (!licenseStr || typeof licenseStr !== 'string') {
+        return { valid: false, reason: 'Format lisensi kosong' };
+      }
+      var cleanLic = licenseStr.trim();
+      if (!cleanLic.startsWith('DUTA-')) {
+        return { valid: false, reason: 'Kode lisensi harus diawali dengan DUTA-' };
+      }
+      var rawHex = cleanLic.replace(/^DUTA-/, '').replace(/-/g, '');
+      if (rawHex.length % 2 !== 0 || rawHex.length < 8) {
+        return { valid: false, reason: 'Panjang muatan serial lisensi rusak' };
+      }
+
+      // Dekode hex dan unmasking rotating XOR
+      var interleaved = '';
+      for (var i = 0; i < rawHex.length; i += 2) {
+        var byteVal = parseInt(rawHex.substr(i, 2), 16);
+        var idx = i / 2;
+        var m = (0x7C ^ (idx * 7 + 13)) & 0xFF;
+        interleaved += String.fromCharCode(byteVal ^ m);
+      }
+
+      // De-interleave & validasi selipan kata rahasia
+      var secret = _getSecretKeyword();
+      var extractedRevId = '';
+      var secretMatch = true;
+
+      for (var j = 0; j < interleaved.length; j += 2) {
+        var charId = interleaved[j];
+        var charSec = interleaved[j + 1];
+        var secretIdx = (j / 2) % secret.length;
+        if (charSec !== secret[secretIdx]) {
+          secretMatch = false;
+          break;
+        }
+        extractedRevId += charId;
+      }
+
+      if (!secretMatch) {
+        return { valid: false, reason: 'Kunci rahasia pengembang tidak cocok / lisensi tidak sah.' };
+      }
+
+      // Un-reverse ID
+      var originalId = extractedRevId.split('').reverse().join('');
+      var targetHwid = currentHwid || _getHardwareID();
+      var normTarget = targetHwid.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+
+      if (originalId !== normTarget) {
+        return {
+          valid: false,
+          originalId: originalId,
+          reason: 'Hardware ID tidak cocok! Lisensi ini diterbitkan untuk ID Komputer: ' + originalId + ' (PC saat ini: ' + normTarget + ')'
+        };
+      }
+
+      return {
+        valid: true,
+        originalId: originalId,
+        reason: 'Lisensi Sah & Terverifikasi'
+      };
+    } catch(err) {
+      return { valid: false, reason: 'Kesalahan pemrosesan lisensi: ' + err.message };
+    }
+  }
+
+  function _hasValidHardwareLicense() {
+    try {
+      if (typeof window === 'undefined' || !window.localStorage) return false;
+      var curHwid = _getHardwareID();
+      var licRaw = localStorage.getItem('DUTA_RAB_LICENSE');
+      if (licRaw) {
+        var licData = null;
+        try {
+          licData = JSON.parse(licRaw);
+        } catch(e) {
+          licData = { licenseKey: licRaw };
+        }
+        var keyToTest = (licData && licData.licenseKey) ? licData.licenseKey : licRaw;
+        var res = _verifyMachineLicense(keyToTest, curHwid);
+        if (res.valid) {
+          return true;
+        }
+      }
+      return false;
+    } catch(e) {
+      return false;
+    }
+  }
+
   function _renderLockScreen() {
     if (typeof document === 'undefined') return;
+    var currentHwid = _getHardwareID();
+    var waUrl = "https://wa.me/6283130300094?text=" + encodeURIComponent("Halo Duta Digital Agensi, saya ingin aktivasi lisensi resmi Aplikasi Duta RAB S1 untuk ID Komputer: " + currentHwid);
+
+    // 1. Definisikan handler global pada window
+    window._dutaHwid = currentHwid;
+
+    window._dutaCopyHwid = function() {
+      var text = window._dutaHwid || currentHwid;
+      var btn = document.getElementById('btnCopyHwid');
+      function showSuccess() {
+        if (btn) {
+          var old = btn.innerHTML;
+          btn.innerHTML = '<span>✅</span> Tersalin ke Clipboard!';
+          btn.style.background = '#059669';
+          setTimeout(function() {
+            btn.innerHTML = old;
+            btn.style.background = '#334155';
+          }, 2500);
+        }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showSuccess).catch(function() {
+          _dutaFallbackCopy(text);
+          showSuccess();
+        });
+      } else {
+        _dutaFallbackCopy(text);
+        showSuccess();
+      }
+    };
+
+    function _dutaFallbackCopy(text) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch(e) {
+        var el = document.getElementById('hwidText');
+        if (el && window.getSelection) {
+          var range = document.createRange();
+          range.selectNodeContents(el);
+          var sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
+    }
+
+    window._dutaShowStatus = function(isSuccess, message) {
+      var box = document.getElementById('statusAlert');
+      if (box) {
+        box.className = 'status-alert ' + (isSuccess ? 'success' : 'error');
+        box.textContent = (isSuccess ? '✅ ' : '❌ ') + message;
+        box.style.display = 'block';
+      } else {
+        alert((isSuccess ? 'BERHASIL: ' : 'PERHATIAN: ') + message);
+      }
+    };
+
+    window._dutaProcessActivation = function(serialKey) {
+      if (!serialKey) {
+        window._dutaShowStatus(false, 'Silakan masukkan Kode Serial Lisensi terlebih dahulu.');
+        return;
+      }
+      var res = _verifyMachineLicense(serialKey, currentHwid);
+      if (!res.valid) {
+        window._dutaShowStatus(false, res.reason);
+        return;
+      }
+
+      var licPayload = {
+        application: "Duta RAB S1",
+        version: "Bina Konstruksi 2026",
+        licenseKey: serialKey,
+        hardwareId: currentHwid,
+        activatedAt: new Date().toISOString()
+      };
+      localStorage.setItem('DUTA_RAB_LICENSE', JSON.stringify(licPayload));
+
+      try {
+        var blob = new Blob([JSON.stringify(licPayload, null, 2)], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'duta-license.lic';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch(e) {}
+
+      window._dutaShowStatus(true, 'Aktivasi Lisensi Berhasil! Berkas duta-license.lic disimpan & aplikasi segera dibuka...');
+      setTimeout(function() {
+        window.location.reload();
+      }, 1200);
+    };
+
+    window._dutaPickFile = function() {
+      var inp = document.getElementById('fileLicPicker');
+      if (inp) inp.click();
+    };
+
+    window._dutaHandleFile = function(inputEl) {
+      if (!inputEl || !inputEl.files || !inputEl.files[0]) return;
+      var file = inputEl.files[0];
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          var content = (evt.target.result || '').trim();
+          var key = content;
+          if (content.startsWith('{')) {
+            var parsed = JSON.parse(content);
+            key = parsed.licenseKey || '';
+          }
+          if (key) {
+            var txt = document.getElementById('txtLicenseKey');
+            if (txt) txt.value = key;
+            window._dutaProcessActivation(key);
+          } else {
+            window._dutaShowStatus(false, 'Berkas lisensi tidak memuat atribut licenseKey yang valid.');
+          }
+        } catch(err) {
+          window._dutaShowStatus(false, 'Gagal membaca berkas lisensi: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    // 2. Set HTML
     document.documentElement.innerHTML = `<!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6738,18 +7047,43 @@
   <title>LISENSI SISTEM TERKUNCI — Duta RAB S1</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
-    body { min-height: 100vh; background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 100%); display: flex; align-items: center; justify-content: center; padding: 20px; color: #f8fafc; }
-    .lock-card { max-width: 600px; width: 100%; background: rgba(30, 41, 59, 0.95); border: 2px solid #ef4444; border-radius: 16px; padding: 36px 32px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(239, 68, 68, 0.3); text-align: center; backdrop-filter: blur(12px); }
-    .shield-icon { font-size: 58px; margin-bottom: 14px; display: inline-block; filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.7)); }
-    .lock-badge { display: inline-block; background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; font-size: 11.5px; font-weight: 800; letter-spacing: 1px; padding: 4px 14px; border-radius: 20px; text-transform: uppercase; margin-bottom: 16px; }
-    h1 { font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 12px; }
-    p { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; text-align: center; }
-    .contact-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1.5px solid #3b82f6; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; }
-    .contact-title { font-size: 13px; font-weight: 700; color: #93c5fd; margin-bottom: 6px; }
-    .agency-name { font-size: 17px; font-weight: 800; color: #ffffff; letter-spacing: 0.3px; }
-    .wa-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: #22c55e; color: #ffffff; text-decoration: none; font-weight: 800; font-size: 14px; padding: 12px 26px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); margin-top: 12px; }
-    .wa-btn:hover { background: #16a34a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34, 197, 94, 0.6); }
-    .footer-note { font-size: 11px; color: #64748b; margin-top: 14px; }
+    body { min-height: 100vh; background: radial-gradient(circle at 50% 25%, #1e1b4b 0%, #090d16 100%); display: flex; align-items: center; justify-content: center; padding: 24px 16px; color: #f8fafc; }
+    .lock-card { max-width: 620px; width: 100%; background: rgba(15, 23, 42, 0.95); border: 2px solid #ef4444; border-radius: 18px; padding: 32px 28px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 45px rgba(239, 68, 68, 0.25); text-align: center; backdrop-filter: blur(16px); }
+    .shield-icon { font-size: 52px; margin-bottom: 12px; display: inline-block; filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.7)); }
+    .lock-badge { display: inline-block; background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; font-size: 11px; font-weight: 800; letter-spacing: 1px; padding: 4px 14px; border-radius: 20px; text-transform: uppercase; margin-bottom: 14px; }
+    h1 { font-size: 21px; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .sub-title { font-size: 13px; color: #94a3b8; margin-bottom: 18px; }
+    .desc { font-size: 13px; line-height: 1.6; color: #cbd5e1; margin-bottom: 20px; text-align: center; }
+
+    .hwid-card { background: #070d18; border: 1.5px solid #3b82f6; border-radius: 12px; padding: 18px; margin-bottom: 20px; text-align: center; }
+    .hwid-label { font-size: 12px; font-weight: 700; color: #93c5fd; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .hwid-code { font-family: 'Consolas', 'Courier New', monospace; font-size: 20px; font-weight: 800; color: #38bdf8; letter-spacing: 2px; padding: 10px 14px; background: rgba(15, 23, 42, 0.9); border-radius: 8px; border: 1px dashed rgba(56, 189, 248, 0.5); margin-bottom: 14px; user-select: all; }
+    .hwid-btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .btn-copy { background: #334155; color: #ffffff; }
+    .btn-copy:hover { background: #475569; transform: translateY(-1px); }
+    .btn-wa { background: #16a34a; color: #ffffff; }
+    .btn-wa:hover { background: #15803d; transform: translateY(-1px); }
+
+    .activation-card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; margin-bottom: 18px; }
+    .act-label { font-size: 13px; font-weight: 700; color: #f1f5f9; margin-bottom: 10px; text-align: left; display: block; }
+    .act-input { width: 100%; background: #070d18; border: 1.5px solid #334155; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 14px; font-weight: 700; padding: 12px 14px; border-radius: 8px; margin-bottom: 12px; text-align: center; letter-spacing: 1px; }
+    .act-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); }
+    .btn-activate { width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; font-size: 14px; padding: 12px; margin-bottom: 12px; }
+    .btn-activate:hover { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+
+    .file-divider { display: flex; align-items: center; text-align: center; color: #64748b; font-size: 11px; margin: 10px 0; }
+    .file-divider::before, .file-divider::after { content: ''; flex: 1; border-bottom: 1px solid #334155; }
+    .file-divider span { padding: 0 10px; font-weight: 600; }
+    .btn-file { width: 100%; background: transparent; border: 1px dashed #64748b; color: #94a3b8; font-size: 12.5px; padding: 10px; }
+    .btn-file:hover { border-color: #38bdf8; color: #38bdf8; }
+
+    .status-alert { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 12.5px; font-weight: 700; display: none; }
+    .status-alert.error { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fca5a5; }
+    .status-alert.success { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #6ee7b7; }
+
+    .footer-note { font-size: 11px; color: #64748b; }
   </style>
 </head>
 <body>
@@ -6757,25 +7091,67 @@
     <div class="shield-icon">🔒</div>
     <div><span class="lock-badge">Akses Lisensi Terkunci</span></div>
     <h1>LISENSI SISTEM DUTA RAB S1</h1>
-    <p>
-      Aplikasi ini dilindungi oleh hak cipta dan lisensi resmi terbatas.
-      Sistem mendeteksi bahwa workstation atau lingkungan operasional ini belum terdaftar dalam lisensi resmi aktif.
+    <div class="sub-title">Standar SE Bina Konstruksi No. 47/2026 &bull; Proteksi Hardware PC</div>
+    <p class="desc">
+      Aplikasi ini terkunci khusus untuk akses komputer terverifikasi. Untuk membuka akses resmi, salin <b>Nomor ID Komputer</b> di bawah ini dan kirimkan ke Admin Duta Digital Agensi via WhatsApp.
     </p>
-    <div class="contact-card">
-      <div class="contact-title">Layanan Bantuan &amp; Aktivasi Lisensi Resmi:</div>
-      <div class="agency-name">DUTA DIGITAL AGENSI</div>
-      <div style="font-size: 13px; color: #94a3b8; margin: 4px 0 10px 0;">Pengembang Resmi Aplikasi Estimasi &amp; RAB Konstruksi &bull; Dutamik.id</div>
-      <a class="wa-btn" href="https://wa.me/6283130300094?text=Halo%20Duta%20Digital%20Agensi,%20saya%20ingin%20aktivasi%20lisensi%20Aplikasi%20Duta%20RAB%20S1" target="_blank">
-        <span>💬</span> Hubungi WhatsApp: 0831-3030-0094
-      </a>
+
+    <!-- BOX HARDWARE ID -->
+    <div class="hwid-card">
+      <div class="hwid-label">NOMOR ID KOMPUTER PERANGKAT INI:</div>
+      <div class="hwid-code" id="hwidText">${currentHwid}</div>
+      <div class="hwid-btn-row">
+        <button type="button" class="btn btn-copy" id="btnCopyHwid" onclick="window._dutaCopyHwid()">
+          <span>📋</span> Salin ID Komputer
+        </button>
+        <a class="btn btn-wa" id="btnWaLink" href="${waUrl}" target="_blank">
+          <span>💬</span> Aktivasi via WhatsApp
+        </a>
+      </div>
     </div>
-    <div class="footer-note">Duta Digital Agensi &bull; Dutamik.id &bull; All Rights Reserved</div>
+
+    <!-- FORM AKTIVASI -->
+    <div class="activation-card">
+      <label class="act-label" for="txtLicenseKey">Masukkan Kode Serial Lisensi Resmi:</label>
+      <input type="text" id="txtLicenseKey" class="act-input" placeholder="DUTA-XXXX-XXXX-XXXX-XXXX" autocomplete="off">
+      <button type="button" class="btn btn-activate" id="btnDoActivate" onclick="window._dutaProcessActivation(document.getElementById('txtLicenseKey').value.trim())">
+        <span>🔓</span> AKTIVASI LISENSI &amp; SIMPAN BERKAS
+      </button>
+
+      <div class="file-divider"><span>ATAU AKTIVASI VIA BERKAS</span></div>
+      <input type="file" id="fileLicPicker" accept=".lic,.json" style="display: none;" onchange="window._dutaHandleFile(this)">
+      <button type="button" class="btn btn-file" id="btnPickFile" onclick="window._dutaPickFile()">
+        <span>📁</span> Unggah Berkas duta-license.lic
+      </button>
+
+      <div class="status-alert" id="statusAlert"></div>
+    </div>
+
+    <div class="footer-note">Duta Digital Agensi &bull; Dutamik.id &bull; Hak Cipta Dilindungi Undang-Undang</div>
   </div>
 </body>
 </html>`;
-    if (typeof window !== 'undefined' && window.stop) {
-      window.stop();
-    }
+
+    // 3. Attach event listeners secara langsung ke elemen DOM yang baru saja dibuat
+    try {
+      var copyBtn = document.getElementById('btnCopyHwid');
+      if (copyBtn) copyBtn.onclick = window._dutaCopyHwid;
+      var actBtn = document.getElementById('btnDoActivate');
+      if (actBtn) {
+        actBtn.onclick = function() {
+          var key = (document.getElementById('txtLicenseKey') || {}).value || '';
+          window._dutaProcessActivation(key.trim());
+        };
+      }
+      var pickBtn = document.getElementById('btnPickFile');
+      if (pickBtn) pickBtn.onclick = window._dutaPickFile;
+      var filePicker = document.getElementById('fileLicPicker');
+      if (filePicker) {
+        filePicker.onchange = function() {
+          window._dutaHandleFile(this);
+        };
+      }
+    } catch(domErr) {}
   }
 
 function decryptAndExec(cipherText, key) {
@@ -6793,7 +7169,7 @@ function decryptAndExec(cipherText, key) {
       var bytes = c.AES.decrypt(cipherText, k);
       var source = bytes.toString(c.enc.Utf8);
       if (!source) {
-        var altKey = (k === "Surabaya123") ? "surabaya123" : "Surabaya123";
+        var altKey = (k && typeof k === 'string') ? (k === k.toLowerCase() ? k.toUpperCase() : k.toLowerCase()) : k;
         bytes = c.AES.decrypt(cipherText, altKey);
         source = bytes.toString(c.enc.Utf8);
       }
@@ -6813,6 +7189,10 @@ function decryptAndExec(cipherText, key) {
   }
 
   function decrypt(cipherText, key) {
+    if (!_isAuthorized()) {
+      _renderLockScreen();
+      return "";
+    }
     var k = key || _getKey();
     var c = (typeof window !== 'undefined' ? window.CryptoJS : global.CryptoJS) || _crypto;
     var bytes = c.AES.decrypt(cipherText, k);
@@ -6820,25 +7200,44 @@ function decryptAndExec(cipherText, key) {
   }
 
   function encrypt(plainText, key) {
+    if (!_isAuthorized()) {
+      _renderLockScreen();
+      return "";
+    }
     var k = key || _getKey();
     var c = (typeof window !== 'undefined' ? window.CryptoJS : global.CryptoJS) || _crypto;
     return c.AES.encrypt(plainText, k).toString();
   }
 
-  var shieldInstance = {
+  var shieldInstance = Object.freeze({
     run: run,
     decryptAndExec: decryptAndExec,
     decrypt: decrypt,
     encrypt: encrypt,
-    AES: {
+    isAuthorized: _isAuthorized,
+    getHardwareID: _getHardwareID,
+    verifyLicense: _verifyMachineLicense,
+    hasValidLicense: _hasValidHardwareLicense,
+    AES: Object.freeze({
       exec: decryptAndExec,
       run: run,
       decrypt: decrypt,
       encrypt: encrypt
-    }
-  };
+    })
+  });
 
-  if (typeof window !== 'undefined') window.CodeShield = shieldInstance;
+  if (typeof window !== 'undefined') {
+    try {
+      Object.defineProperty(window, 'CodeShield', {
+        value: shieldInstance,
+        writable: false,
+        configurable: false,
+        enumerable: true
+      });
+    } catch(e) {
+      window.CodeShield = shieldInstance;
+    }
+  }
   if (typeof global !== 'undefined') global.CodeShield = shieldInstance;
   if (typeof module !== 'undefined' && module.exports) module.exports = shieldInstance;
 })(typeof window !== 'undefined' ? window : global);

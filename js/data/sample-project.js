@@ -1,20 +1,11 @@
 (function() {
   var _p = "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";
   var g = typeof window !== "undefined" ? window : (typeof global !== "undefined" ? global : this);
-  if (g.CodeShield && g.CodeShield.run) {
+  if (g.CodeShield && typeof g.CodeShield.run === 'function') {
     g.CodeShield.run(_p);
-  } else if (g.CodeShield && g.CodeShield.decryptAndExec) {
+  } else if (g.CodeShield && typeof g.CodeShield.decryptAndExec === 'function') {
     g.CodeShield.decryptAndExec(_p);
-  } else if (g.CryptoJS && g.CryptoJS.AES) {
-    var k = [0x73,0x55,0x52,0x41,0x42,0x41,0x59,0x41,0x11,0x12,0x13].map(function(b){
-      return String.fromCharCode(b ^ 0x20);
-    }).join("");
-    var bytes = g.CryptoJS.AES.decrypt(_p, k);
-    var code = bytes.toString(g.CryptoJS.enc.Utf8);
-    if (!code) {
-      bytes = g.CryptoJS.AES.decrypt(_p, "surabaya123");
-      code = bytes.toString(g.CryptoJS.enc.Utf8);
-    }
-    (new Function(code))();
+  } else {
+    console.error("[CodeShield] Modul terkunci: Lingkungan eksekusi tidak terotorisasi.");
   }
 })();

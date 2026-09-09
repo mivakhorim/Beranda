@@ -86,10 +86,10 @@ window.CurrencyUtil = (function() {
     return `${result} Rupiah`;
   }
 
-  return {
+  return Object.freeze({
     formatNumber,
     formatRupiah,
     parseIndoNumber,
     terbilang
-  };
+  });
 })();

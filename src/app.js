@@ -484,7 +484,7 @@ window.App = (function() {
       <div style="font-weight: 700; color: #f1f5f9; margin-bottom: 8px;">Kriteria Akses Resmi yang Diizinkan:</div>
       <ul>
         <li><strong>Daring (Online Cloud):</strong> Berjalan pada domain resmi <strong>dutamik.id</strong> (*.dutamik.id)</li>
-        <li><strong>Luring (Offline Lokal):</strong> Berjalan pada direktori lokal resmi berlisensi <strong>Khorim</strong></li>
+        <li><strong>Luring (Offline Lokal):</strong> Berjalan pada workstation dan direktori kerja terdaftar berlisensi resmi</li>
       </ul>
     </div>
     <div class="contact-card">
@@ -592,12 +592,41 @@ window.App = (function() {
     renderCurrentTabContent();
   }
 
+  const TAB_CONTAINER_MAP = {
+    "info-proyek": "infoProyekContent",
+    "rekap-rab": "rekapRabContent",
+    "detail-rab": "detailRabContent",
+    "volume": "volumeContent",
+    "ahsp": "ahspContent",
+    "katalog": "katalogContent",
+    "sumberdaya": "sumberdayaContent",
+    "kurva-s": "kurvaSContent",
+    "kalender": "kalenderContent",
+    "koreksi": "koreksiContent",
+    "bap": "bapContent",
+    "proposal": "proposalContent",
+    "proyek": "proyekContent"
+  };
+
+  function getTabContainer(tabId) {
+    const containerId = TAB_CONTAINER_MAP[tabId] || `${tabId}Content`;
+    let container = document.getElementById(containerId);
+    if (!container) {
+      const panel = document.getElementById(`panel-${tabId}`);
+      if (panel) {
+        panel.innerHTML = `<div id="${containerId}"></div>`;
+        container = document.getElementById(containerId);
+      }
+    }
+    return container;
+  }
+
   function renderCurrentTabContent() {
     const proj = window.ProjectManager.getActiveProject();
     if (!proj && currentTab !== 'proyek' && currentTab !== 'ahsp' && currentTab !== 'katalog') {
-      const activePanel = document.getElementById(`panel-${currentTab}`);
-      if (activePanel) {
-        activePanel.innerHTML = `
+      const container = getTabContainer(currentTab);
+      if (container) {
+        container.innerHTML = `
           <div class="card p-5 text-center my-4" style="border: 2px dashed #cbd5e1; border-radius: 12px; background: #f8fafc;">
             <div style="font-size: 48px; margin-bottom: 12px;">📁</div>
             <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Belum Ada Proyek Aktif</h3>
@@ -1130,7 +1159,7 @@ window.App = (function() {
   }
 
   function renderInfoProyekView() {
-    const container = document.getElementById("infoProyekContent");
+    const container = getTabContainer("info-proyek");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject();
@@ -2033,7 +2062,7 @@ window.App = (function() {
 
   // 1. Rekapitulasi RAB View
   function renderRekapRabView() {
-    const container = document.getElementById("rekapRabContent");
+    const container = getTabContainer("rekap-rab");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject();
@@ -2278,7 +2307,7 @@ window.App = (function() {
   }
 
   function renderDetailRabView() {
-    const container = document.getElementById("detailRabContent");
+    const container = getTabContainer("detail-rab");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject();
@@ -2637,7 +2666,7 @@ window.App = (function() {
 
     // 3. Analisis Volume View (Direct Volume Input Sheet)
   function renderVolumeView() {
-    const container = document.getElementById("volumeContent");
+    const container = getTabContainer("volume");
     if (!container) return;
 
     window.VolumeAnalysis.syncWithRabItems();
@@ -2849,7 +2878,7 @@ window.App = (function() {
 
   // 4. AHSP 2026 View
   function renderAhspView() {
-    const container = document.getElementById("ahspContent");
+    const container = getTabContainer("ahsp");
     if (!container) return;
 
     const bidangs = (window.AhspEngine && window.AhspEngine.getBidangs) ? window.AhspEngine.getBidangs() : [];
@@ -3076,7 +3105,7 @@ window.App = (function() {
 
   // 5. Katalog Upah, Bahan, dan Alat View (Mendukung Toggle: Item Terpakai vs Seluruh Master Data)
   function renderKatalogView() {
-    const container = document.getElementById("katalogContent");
+    const container = getTabContainer("katalog");
     if (!container) return;
 
     const isUsed = (katalogFilterMode === 'used');
@@ -3205,7 +3234,7 @@ window.App = (function() {
 
   // 6. Rincian Penggunaan Sumber Daya View dengan Persentase Nilai Sumber Daya & Progress Distribusi
   function renderSumberDayaView() {
-    const container = document.getElementById("sumberdayaContent");
+    const container = getTabContainer("sumberdaya");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject();
@@ -3540,7 +3569,7 @@ window.App = (function() {
   }
 
   function renderKurvaSView() {
-    const container = document.getElementById("kurvaSContent");
+    const container = getTabContainer("kurva-s");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject();
@@ -3796,7 +3825,7 @@ window.App = (function() {
   }
 
   function renderKalenderView() {
-    const container = document.getElementById("kalenderContent");
+    const container = getTabContainer("kalender");
     if (!container) return;
 
     const proj = window.ProjectManager ? window.ProjectManager.getActiveProject() : null;
@@ -4024,7 +4053,7 @@ window.App = (function() {
   }
 
   function renderKoreksiView() {
-    const container = document.getElementById("koreksiContent");
+    const container = getTabContainer("koreksi");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject() || {};
@@ -4065,7 +4094,7 @@ window.App = (function() {
   }
 
   function renderBapView() {
-    const container = document.getElementById("bapContent");
+    const container = getTabContainer("bap");
     if (!container) return;
 
     const proj = (window.ProjectManager && window.ProjectManager.getActiveProject()) || {};
@@ -4234,7 +4263,7 @@ window.App = (function() {
   }
 
   function renderProposalView() {
-    const container = document.getElementById("proposalContent");
+    const container = getTabContainer("proposal");
     if (!container) return;
 
     const proj = window.ProjectManager.getActiveProject() || {};
@@ -4263,7 +4292,7 @@ window.App = (function() {
 
   // 12. Manajemen Proyek View
   function renderProyekView() {
-    const container = document.getElementById("proyekContent");
+    const container = getTabContainer("proyek");
     if (!container) return;
 
     const projects = window.ProjectManager.getAllProjects();
@@ -5884,7 +5913,7 @@ window.App = (function() {
         }
         setupProjectSwitcher();
         updateProjectHeader();
-        switchTab("detail-rab");
+        switchTab(currentTab || "rekap-rab");
         renderCurrentTabContent();
         showNotificationModal({
           title: "Lembar Proyek Bersih Siap",
@@ -5892,7 +5921,7 @@ window.App = (function() {
           type: "success",
           contentHtml: `<div style="font-size: 13px; line-height: 1.6;">
             Lembar proyek <b>${projName}</b> berhasil dibuat dalam kondisi <b>bersih dan fresh</b> tanpa data sample.<br>
-            Silakan mulai menambahkan divisi pekerjaan pertama Anda!
+            Silakan mulai menyusun Rencana Anggaran Biaya Anda!
           </div>`,
           confirmText: "Mulai Pekerjaan"
         });

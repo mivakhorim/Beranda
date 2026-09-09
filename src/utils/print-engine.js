@@ -5,6 +5,9 @@
  */
 
 window.PrintEngine = (function() {
+  const _esc = (s) => (window.DutaSanitizer ? window.DutaSanitizer.escapeHtml(s) : String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])));
+  const _safeImg = (url, fallback) => (window.DutaSanitizer ? window.DutaSanitizer.sanitizeImageSrc(url, fallback) : ((url && typeof url === 'string' && (url.startsWith('data:image/') || url.startsWith('blob:'))) ? url : fallback));
+
   function printDocument(targetElementId, documentTitle = "") {
     const originalTitle = document.title;
     // Kosongkan document.title selama proses cetak agar peramban TIDAK mencetak nama menu atau jam di header PDF
@@ -394,25 +397,28 @@ window.PrintEngine = (function() {
       extraInfo = (typeof arg3 === 'object') ? arg3 : {};
     }
 
-    const projName = proj.name || proj.nama || "Pembangunan Rumah Tinggal Tropis Modern";
-    const projLoc = proj.location || proj.lokasi || "Bandung, Jawa Barat";
-    const projOwner = proj.owner || proj.pemilik || "Pemberi Tugas";
-    const durDays = proj.durationDays || proj.durasi || 180;
+    const projName = _esc(proj.name || proj.nama || "Pembangunan Rumah Tinggal Tropis Modern");
+    const projLoc = _esc(proj.location || proj.lokasi || "Bandung, Jawa Barat");
+    const projOwner = _esc(proj.owner || proj.pemilik || "Pemberi Tugas");
+    const durDays = Number(proj.durationDays || proj.durasi || 180) || 180;
     const durWeeks = Math.ceil(durDays / 7);
-    const startStr = proj.startDate || proj.tanggalMulai || "2026-04-01";
-    const finishStr = proj.finishDate || proj.tanggalSelesai || "2026-09-27";
-    const regionStr = proj.regionName || proj.daerahAcuan || "Jawa Barat - Bandung Raya & Priangan (1.04x)";
-    const contractorStr = proj.contractor || proj.kontraktor || "Dutamik.id";
-    const docNumStr = proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001";
-    const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    const startStr = _esc(proj.startDate || proj.tanggalMulai || "2026-04-01");
+    const finishStr = _esc(proj.finishDate || proj.tanggalSelesai || "2026-09-27");
+    const regionStr = _esc(proj.regionName || proj.daerahAcuan || "Jawa Barat - Bandung Raya & Priangan (1.04x)");
+    const contractorStr = _esc(proj.contractor || proj.kontraktor || "Dutamik.id");
+    const docNumStr = _esc(proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001");
+    const printDate = _esc(new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }));
+    const safeDocType = _esc(docType);
+    const safeDataSource = _esc(proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026');
+    const safeConsultant = _esc(proj.consultant || "Tim Perencana & Manajemen Konstruksi");
 
     const rawLabor = extraInfo.totalLaborQty || proj.totalLaborQty || proj.estimasiTenagaOH;
     let laborInfoStr = rawLabor 
-      ? `${Number(rawLabor).toFixed(1)} OH (~${(rawLabor / durDays).toFixed(1)} Org/Hari)`
+      ? `${_esc(Number(rawLabor).toFixed(1))} OH (~${_esc((rawLabor / durDays).toFixed(1))} Org/Hari)`
       : "Sesuai Analisis AHSP 2026";
 
     const defaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>";
-    const logoSrc = (proj.logo && typeof proj.logo === 'string' && proj.logo.trim().length > 10) ? proj.logo : defaultLogoSvg;
+    const logoSrc = _safeImg(proj.logo, defaultLogoSvg);
     const logoSize = Math.max(40, Math.min(300, Number(proj.logoSize) || 120));
     const logoHtml = `
       <div class="print-header-logo-container" style="flex: 0 0 auto; margin-right: 14px; display: flex; align-items: center;">
@@ -439,8 +445,8 @@ window.PrintEngine = (function() {
 
         <!-- 2. Judul Dokumen Prominen -->
         <div class="print-doc-title-box">
-          <h3 class="print-doc-title">${docType}</h3>
-          <div class="print-doc-subtitle">Berdasarkan Standar ${proj.dataSource || 'SE Direktur Jenderal Bina Konstruksi No. 47/SE/Dk/2026'}</div>
+          <h3 class="print-doc-title">${safeDocType}</h3>
+          <div class="print-doc-subtitle">Berdasarkan Standar ${safeDataSource}</div>
         </div>
 
         <!-- 3. Kotak Rincian Informasi Proyek Lengkap (Halaman 1) -->
@@ -466,7 +472,7 @@ window.PrintEngine = (function() {
             </tr>
             <tr>
               <td><strong>Konsultan:</strong></td>
-              <td>${proj.consultant || "Tim Perencana & Manajemen Konstruksi"}</td>
+              <td>${safeConsultant}</td>
               <td><strong>Wilayah Acuan:</strong></td>
               <td>${regionStr}</td>
             </tr>
@@ -491,19 +497,21 @@ window.PrintEngine = (function() {
       extraInfo = (typeof arg3 === 'object') ? arg3 : {};
     }
 
-    const projName = proj.name || proj.nama || "Pembangunan Rumah Tinggal Tropis Modern";
-    const projLoc = proj.location || proj.lokasi || "Bandung, Jawa Barat";
-    const projOwner = proj.owner || proj.pemilik || "Pemberi Tugas";
-    const durDays = proj.durationDays || proj.durasi || 180;
+    const projName = _esc(proj.name || proj.nama || "Pembangunan Rumah Tinggal Tropis Modern");
+    const projLoc = _esc(proj.location || proj.lokasi || "Bandung, Jawa Barat");
+    const projOwner = _esc(proj.owner || proj.pemilik || "Pemberi Tugas");
+    const durDays = Number(proj.durationDays || proj.durasi || 180) || 180;
     const durWeeks = Math.ceil(durDays / 7);
-    const startStr = proj.startDate || proj.tanggalMulai || "2026-04-01";
-    const finishStr = proj.finishDate || proj.tanggalSelesai || "2026-09-27";
-    const contractorStr = proj.contractor || proj.kontraktor || "Dutamik.id";
-    const docNumStr = proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001";
-    const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    const startStr = _esc(proj.startDate || proj.tanggalMulai || "2026-04-01");
+    const finishStr = _esc(proj.finishDate || proj.tanggalSelesai || "2026-09-27");
+    const contractorStr = _esc(proj.contractor || proj.kontraktor || "Dutamik.id");
+    const docNumStr = _esc(proj.docNumber || proj.nomorDokumen || proj.kodeRegistrasi || "RAB/2026/001");
+    const printDate = _esc(new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }));
+    const safeDocType = _esc(docType);
+    const safeDataSource = _esc(proj.dataSource || 'SE Dirjen Bina Konstruksi No. 47/SE/Dk/2026');
 
     const lDefaultLogoSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>";
-    const lLogoSrc = (proj.logo && typeof proj.logo === 'string' && proj.logo.trim().length > 10) ? proj.logo : lDefaultLogoSvg;
+    const lLogoSrc = _safeImg(proj.logo, lDefaultLogoSvg);
     const lLogoSize = Math.max(40, Math.min(220, Number(proj.logoSize) || 100));
     const landLogoHtml = `
       <div class="print-header-landscape-logo" style="flex: 0 0 auto; margin-right: 10px; display: flex; align-items: center;">
@@ -523,8 +531,8 @@ window.PrintEngine = (function() {
             </div>
           </div>
           <div style="width: 37%; text-align: center; line-height: 1.2;">
-            <div style="font-size: 11pt; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${docType}</div>
-            <div style="font-size: 7pt; color: #475569;">Standar ${proj.dataSource || 'SE Dirjen Bina Konstruksi No. 47/SE/Dk/2026'}</div>
+            <div style="font-size: 11pt; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">${safeDocType}</div>
+            <div style="font-size: 7pt; color: #475569;">Standar ${safeDataSource}</div>
           </div>
           <div style="width: 28%; text-align: right; font-size: 7.5pt; color: #334155; line-height: 1.25;">
             <div><strong>No. Dok:</strong> ${docNumStr}</div>
@@ -550,14 +558,15 @@ window.PrintEngine = (function() {
 
   function createPrintFooter(arg1, options = {}) {
     const proj = (typeof arg1 === 'object' && arg1) ? arg1 : ((window.ProjectManager && window.ProjectManager.getActiveProject()) || {});
-    const docNum = proj.docNumber || "RAB/2026/001";
-    const contractor = proj.contractor || "";
-    const pageStr = options.pageStr || "Halaman 1 dari 1";
+    const docNum = _esc(proj.docNumber || "RAB/2026/001");
+    const contractor = _esc(proj.contractor || "");
+    const safeDataSource = _esc(proj.dataSource || 'Standar SE PUPR No. 47/2026');
+    const pageStr = _esc(options.pageStr || "Halaman 1 dari 1");
 
     return `
       <div class="print-footer-block">
         <div class="footer-left">
-          <span>${contractor ? contractor + ' — ' : ''}${proj.dataSource || 'Standar SE PUPR No. 47/2026'}</span>
+          <span>${contractor ? contractor + ' — ' : ''}${safeDataSource}</span>
           <span style="margin-left: 8px; font-family: monospace;">(${docNum})</span>
         </div>
         <div class="footer-right">

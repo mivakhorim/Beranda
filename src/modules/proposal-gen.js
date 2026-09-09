@@ -19,6 +19,8 @@
  */
 
 window.ProposalGen = (function() {
+  const _esc = (s) => (window.DutaSanitizer ? window.DutaSanitizer.escapeHtml(s) : String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])));
+  const _safeImg = (url, fallback) => (window.DutaSanitizer ? window.DutaSanitizer.sanitizeImageSrc(url, fallback) : ((url && typeof url === 'string' && (url.startsWith('data:image/') || url.startsWith('blob:'))) ? url : fallback));
 
   function generateProposalHtml(projParam = null, rabCalcParam = null, schedParam = null, resParam = null) {
     const proj = projParam || ((window.ProjectManager && window.ProjectManager.getActiveProject) 
@@ -164,42 +166,38 @@ window.ProposalGen = (function() {
           </div>
 
           <div class="cover-emblem-wrap">
-            ${(proj.logo && proj.logo.trim().length > 10) ? `
-              <img src="${proj.logo}" alt="Logo Perusahaan" style="max-height: 55px; max-width: 170px; object-fit: contain; margin: 0 auto; display: block;" />
-            ` : `
-              <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>" alt="Logo Perusahaan" style="max-height: 55px; max-width: 170px; object-fit: contain; margin: 0 auto; display: block;" />
-            `}
+            <img src="${_safeImg(proj.logo, "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 302 342' width='302' height='342'><path d='M 23 163 L 23 150 L 150 21 L 278 150 L 278 163' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/><path d='M 44 155 L 44 317 L 110 317 L 110 220 A 40 40 0 0 1 190 220 L 190 317 L 256 317 L 256 155' fill='none' stroke='%23000000' stroke-width='13' stroke-linecap='round' stroke-linejoin='round'/></svg>")}" alt="Logo Perusahaan" style="max-height: 55px; max-width: 170px; object-fit: contain; margin: 0 auto; display: block;" />
           </div>
 
           <div class="cover-title-block">
             <h1 class="cover-main-title">PROPOSAL RENCANA ANGGARAN BIAYA<br>&amp; TEKNIS PELAKSANAAN</h1>
             <div class="cover-title-divider"></div>
             <div class="cover-project-card">
-              <div class="cover-project-name">${proj.name || "Nama Proyek Belum Ditentukan"}</div>
-              <div class="cover-project-location">📍 Lokasi Pekerjaan: ${proj.location || "Lokasi Proyek Belum Ditentukan"}</div>
+              <div class="cover-project-name">${_esc(proj.name || "Nama Proyek Belum Ditentukan")}</div>
+              <div class="cover-project-location">📍 Lokasi Pekerjaan: ${_esc(proj.location || "Lokasi Proyek Belum Ditentukan")}</div>
             </div>
           </div>
 
           <div class="cover-stakeholder-grid">
             <div class="stakeholder-card">
               <div class="stakeholder-lbl">PEMBERI TUGAS / PEMILIK</div>
-              <div class="stakeholder-val">${proj.owner || sig.ownerName || 'Pemberi Tugas'}</div>
-              <div class="stakeholder-sub">${sig.ownerTitle || 'Pemilik Proyek / Pemberi Tugas'}</div>
+              <div class="stakeholder-val">${_esc(proj.owner || sig.ownerName || 'Pemberi Tugas')}</div>
+              <div class="stakeholder-sub">${_esc(sig.ownerTitle || 'Pemilik Proyek / Pemberi Tugas')}</div>
             </div>
             <div class="stakeholder-card">
               <div class="stakeholder-lbl">KONSULTAN PERENCANA / MK</div>
-              <div class="stakeholder-val">${proj.consultant || sig.consultantCompany || 'Konsultan Perencana'}</div>
-              <div class="stakeholder-sub">${sig.consultantName ? `Team Leader: ${sig.consultantName}` : 'Konsultan Supervisi'}</div>
+              <div class="stakeholder-val">${_esc(proj.consultant || sig.consultantCompany || 'Konsultan Perencana')}</div>
+              <div class="stakeholder-sub">${sig.consultantName ? `Team Leader: ${_esc(sig.consultantName)}` : 'Konsultan Supervisi'}</div>
             </div>
             <div class="stakeholder-card">
               <div class="stakeholder-lbl">KONTRAKTOR PELAKSANA UTAMA</div>
-              <div class="stakeholder-val">${companyDisplay}</div>
-              <div class="stakeholder-sub">${sig.contractorName ? `Direktur: ${sig.contractorName}` : 'Penanggung Jawab Proyek'}</div>
+              <div class="stakeholder-val">${_esc(companyDisplay)}</div>
+              <div class="stakeholder-sub">${sig.contractorName ? `Direktur: ${_esc(sig.contractorName)}` : 'Penanggung Jawab Proyek'}</div>
             </div>
             <div class="stakeholder-card">
               <div class="stakeholder-lbl">NOMOR REGISTRASI DOKUMEN</div>
-              <div class="stakeholder-val">${proj.docNumber || 'RAB/2026/001'}</div>
-              <div class="stakeholder-sub">Durasi: ${proj.durationDays || 180} Hari Kalender</div>
+              <div class="stakeholder-val">${_esc(proj.docNumber || 'RAB/2026/001')}</div>
+              <div class="stakeholder-sub">Durasi: ${_esc(proj.durationDays || 180)} Hari Kalender</div>
             </div>
           </div>
 
@@ -210,7 +208,7 @@ window.ProposalGen = (function() {
           </div>
 
           <div class="cover-footer-meta">
-            <div>Ditetapkan di: <strong>${sig.docCity || proj.location || 'Indonesia'}</strong></div>
+            <div>Ditetapkan di: <strong>${_esc(sig.docCity || proj.location || 'Indonesia')}</strong></div>
             <div>Tahun Anggaran: <strong>${proj.budgetYear || '2026 / 2027'}</strong></div>
             <div>Status: <strong>Dokumen Penawaran Sah</strong></div>
           </div>

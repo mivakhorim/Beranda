@@ -7,6 +7,8 @@
  */
 
 window.BapInvoicing = (function() {
+  const _esc = (s) => (window.DutaSanitizer ? window.DutaSanitizer.escapeHtml(s) : String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])));
+
   function getDefaultTerminSchemes() {
     return [
       {
@@ -289,18 +291,18 @@ window.BapInvoicing = (function() {
       ? window.CurrencyUtil.terbilang(netPayable) 
       : "";
 
-    const ownerName = (sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || "Orang Pertama");
-    const ownerTitle = sig.ownerTitle || "Pemilik Bangunan / Pemberi Tugas";
-    const consultantCompany = sig.consultantCompany || proj.consultant || "Duta Digital Agensi";
-    const consultantSigner = (sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : "Orang Kedua";
-    const consultantTitle = sig.consultantTitle || "Dutamik.id";
-    const contractorCompany = sig.contractorCompany || proj.contractor || "Duta Digital Agensi";
-    const contractorSigner = (sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : (sig.siteManagerName || "Orang Ketiga");
-    const contractorTitle = sig.contractorTitle || "Dutamik.id";
+    const ownerName = _esc((sig.ownerName && !sig.ownerName.includes('...')) ? sig.ownerName : (proj.owner || "Orang Pertama"));
+    const ownerTitle = _esc(sig.ownerTitle || "Pemilik Bangunan / Pemberi Tugas");
+    const consultantCompany = _esc(sig.consultantCompany || proj.consultant || "Duta Digital Agensi");
+    const consultantSigner = _esc((sig.consultantName && !sig.consultantName.includes('...')) ? sig.consultantName : "Orang Kedua");
+    const consultantTitle = _esc(sig.consultantTitle || "Dutamik.id");
+    const contractorCompany = _esc(sig.contractorCompany || proj.contractor || "Duta Digital Agensi");
+    const contractorSigner = _esc((sig.contractorName && !sig.contractorName.includes('...')) ? sig.contractorName : (sig.siteManagerName || "Orang Ketiga"));
+    const contractorTitle = _esc(sig.contractorTitle || "Dutamik.id");
 
-    const bankName = bank.bankName || "Bank Mandiri";
-    const bankAccount = bank.accountNumber || "xxx-xxx-xxxxxxxx-x";
-    const bankOwner = bank.accountName || contractorCompany || "Duta Digital Agensi";
+    const bankName = _esc(bank.bankName || "Bank Mandiri");
+    const bankAccount = _esc(bank.accountNumber || "xxx-xxx-xxxxxxxx-x");
+    const bankOwner = _esc(bank.accountName || contractorCompany || "Duta Digital Agensi");
 
     return `
       <div class="printable-bap-doc a4-portrait" style="position: relative !important; width: 100%; max-width: 186mm !important; margin: 0 auto !important; min-height: 245mm; box-sizing: border-box !important; padding: 0 !important; display: flex; flex-direction: column; justify-content: space-between; overflow: visible; page-break-inside: avoid !important; page-break-after: auto !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8pt; color: #0f172a; background: #ffffff !important;">
@@ -314,8 +316,8 @@ window.BapInvoicing = (function() {
                 <div style="font-size: 7.5pt; color: #475569;">Kontraktor Pelaksana Konstruksi & Manajemen Proyek</div>
               </div>
               <div style="text-align: right; font-size: 8pt; color: #334155; line-height: 1.35;">
-                <div><strong>No. Dokumen:</strong> ${bapItem.bapNumber}</div>
-                <div><strong>Tanggal:</strong> ${bapItem.date}</div>
+                <div><strong>No. Dokumen:</strong> ${_esc(bapItem.bapNumber)}</div>
+                <div><strong>Tanggal:</strong> ${_esc(bapItem.date)}</div>
               </div>
             </div>
             <div style="text-align: center; margin-top: 4px;">
@@ -344,7 +346,7 @@ window.BapInvoicing = (function() {
           </div>
 
           <div style="font-size: 7.5pt; color: #334155; margin-bottom: 5px; line-height: 1.3;">
-            Menyatakan bersama bahwa prestasi kemajuan fisik pekerjaan lapangan untuk proyek <strong>${proj.name || 'Konstruksi'}</strong> telah diperiksa, diverifikasi, dan disetujui untuk penagihan pembayaran termin dengan rincian:
+            Menyatakan bersama bahwa prestasi kemajuan fisik pekerjaan lapangan untuk proyek <strong>${_esc(proj.name || 'Konstruksi')}</strong> telah diperiksa, diverifikasi, dan disetujui untuk penagihan pembayaran termin dengan rincian:
           </div>
 
           <!-- 3. Tabel Rincian Nilai Tagihan Termin BAP -->
@@ -352,7 +354,7 @@ window.BapInvoicing = (function() {
             <tbody>
               <tr style="background: #f1f5f9; font-weight: 700;">
                 <td style="border: 1px solid #cbd5e1; padding: 3px 6px; width: 55%;">Uraian Tahapan / Termin Pembayaran</td>
-                <td style="border: 1px solid #cbd5e1; padding: 3px 6px; width: 45%; text-align: right; color: #1d4ed8; font-weight: 800;">${bapItem.phaseTitle}</td>
+                <td style="border: 1px solid #cbd5e1; padding: 3px 6px; width: 45%; text-align: right; color: #1d4ed8; font-weight: 800;">${_esc(bapItem.phaseTitle)}</td>
               </tr>
               <tr>
                 <td style="border: 1px solid #cbd5e1; padding: 2.5px 6px;">Nilai Total Kontrak Rencana Anggaran Biaya (RAB)</td>
@@ -400,9 +402,9 @@ window.BapInvoicing = (function() {
           <!-- 5. Catatan Mutu Lapangan -->
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px 8px; margin-bottom: 6px; font-size: 7.5pt; line-height: 1.3;">
             <div style="font-weight: 700; color: #0f172a;">Catatan & Rekomendasi Mutu Lapangan:</div>
-            <div style="color: #334155;">${bapItem.notes || 'Pekerjaan fisik telah diperiksa bersama di lapangan dan memenuhi spesifikasi gambar kerja serta standar mutu SE PUPR.'}</div>
+            <div style="color: #334155;">${_esc(bapItem.notes || 'Pekerjaan fisik telah diperiksa bersama di lapangan dan memenuhi spesifikasi gambar kerja serta standar mutu SE PUPR.')}</div>
             ${bapItem.manualNotes ? `
-              <div style="margin-top: 3px; color: #1e40af;"><strong>Catatan Tambahan:</strong> ${bapItem.manualNotes}</div>
+              <div style="margin-top: 3px; color: #1e40af;"><strong>Catatan Tambahan:</strong> ${_esc(bapItem.manualNotes)}</div>
             ` : `
               <div style="margin-top: 3px; display: flex; align-items: center; gap: 6px;">
                 <span style="color: #64748b; font-size: 7pt;">Catatan Manual:</span>

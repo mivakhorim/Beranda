@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Aplikasi Rencana Anggaran Biaya (RAB) — Standar SE Bina Konstruksi No. 47/2026</title>
+  <title>Aplikasi Rencana Anggaran Biaya (RAB) — Standar SE Bina Konstruksi No. 47/2026</title>
   
-  
+  <!-- Security Headers (CSP & Anti-Sniff) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
   
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/print-a4.css">
   
-      <style id="anti-leak-print-guard">
+  <style id="anti-leak-print-guard">
     @media screen {
       #printableAhspBatchArea,
       .print-only,
@@ -458,7 +460,30 @@
   </div>
 
   <!-- Script Modules -->
+  <script src="js/utils/sanitizer.js"></script>
   <script src="js/utils/code-shield.js"></script>
+  <script>
+    // Auto-detect root duta-license.lic file (Aktivasi Otomatis Berkas Root)
+    (function() {
+      try {
+        if (typeof window !== 'undefined' && window.fetch && !localStorage.getItem('DUTA_RAB_LICENSE')) {
+          fetch('./duta-license.lic')
+            .then(function(res) { return res.ok ? res.json() : null; })
+            .then(function(data) {
+              if (data && data.licenseKey && window.CodeShield && window.CodeShield.verifyLicense) {
+                var curHwid = window.CodeShield.getHardwareID ? window.CodeShield.getHardwareID() : '';
+                var check = window.CodeShield.verifyLicense(data.licenseKey, curHwid);
+                if (check && check.valid) {
+                  localStorage.setItem('DUTA_RAB_LICENSE', JSON.stringify(data));
+                  console.log('[CodeShield] Berkas duta-license.lic terverifikasi di root.');
+                }
+              }
+            })
+            .catch(function() {});
+        }
+      } catch(e) {}
+    })();
+  </script>
   <script src="js/utils/currency.js"></script>
   <script src="js/utils/print-engine.js"></script>
   <script src="js/data/master-materials.js"></script>

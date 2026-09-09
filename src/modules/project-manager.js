@@ -548,10 +548,10 @@ window.ProjectManager = (function() {
     // Jika tidak ada proyek yang valid / seluruh data sample telah dibersihkan:
     // Sediakan TEPAT 1 proyek kosong fresh untuk test (Sesuai Mandat User)
     if (!projects || projects.length === 0) {
-      // Izinkan data proyek kosong murni (Sesuai Mandat User)
-      projects = [];
-      activeProject = null;
-      localStorage.removeItem(ACTIVE_KEY);
+      const freshProj = createProject("Pembangunan Rumah Tinggal Baru", "Orang Pertama", "Bandung", "jabar-bdg", false);
+      projects = [freshProj];
+      activeProject = freshProj;
+      localStorage.setItem(ACTIVE_KEY, activeProject.id);
       saveProjects();
     } else {
       const savedActiveId = localStorage.getItem(ACTIVE_KEY);
@@ -740,8 +740,14 @@ window.ProjectManager = (function() {
   // =========================================================================
 
   function sanitizeSafeName(name) {
+    if (window.DutaSanitizer && window.DutaSanitizer.sanitizeFileName) {
+      return window.DutaSanitizer.sanitizeFileName(name);
+    }
     if (!name) return "proyek";
-    return name.replace(/[/\\?%*:|"<>]/g, '_').replace(/\s+/g, '_').trim();
+    let clean = String(name).replace(/[/\\?%*:|"<>]/g, '_').replace(/\s+/g, '_').replace(/\.+$/, '').replace(/^\.+/, '').trim();
+    const reserved = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
+    if (!clean || reserved.test(clean)) clean = "proyek_" + (clean || "data");
+    return clean;
   }
 
   function getProjectStorageInfo() {
