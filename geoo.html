@@ -1,0 +1,2936 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Peta Bidang & GIS Pro (OSS & Amdalnet)</title>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; overflow: hidden; display: flex; flex-direction: column; }
+        
+        .leaflet-pane { z-index: 10 !important; }
+        .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
+        .modal-container { z-index: 9999 !important; }
+        .pm-draggable { cursor: move !important; }
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .custom-icon-noshadow { background: transparent; border: none; }
+        .icon-selected { border: 2px dashed #ef4444; border-radius: 4px; box-sizing: border-box; }
+
+        @media print {
+            @page { margin: 0; size: landscape; }
+            body, html {
+                width: 100% !important; height: 100% !important;
+                margin: 0 !important; padding: 0 !important; overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+            }
+            header, aside, .leaflet-control-container, .modal-container { 
+                display: none !important; 
+            }
+            #main-layout { 
+                position: absolute !important; top: 0 !important; left: 0 !important; 
+                width: 100% !important; height: 100% !important; display: block !important; 
+            }
+            #map-container, #map { 
+                position: absolute !important; top: 0 !important; left: 0 !important; 
+                width: 100% !important; height: 100% !important; border: none !important;
+                background: #f1f5f9 !important;
+            }
+        }
+    
+        /* Area Acuan Cetak Stabil (Dikontrol via 4 Sisi / Margin & Ukuran di Sidebar) */
+        #print-grid-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 85%; height: 82%;
+            transform: translate(-50%, -50%);
+            border: 3px dashed #ef4444;
+            background: rgba(239, 68, 68, 0.02);
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+            transition: all 0.05s ease-out;
+        }
+        #print-grid-overlay::after {
+            content: "Area Acuan Cetak (Stabil)";
+            position: absolute;
+            top: -26px; left: -3px;
+            background: #ef4444; color: white;
+            padding: 3px 10px; font-size: 11px; font-weight: bold;
+            border-radius: 4px;
+        }
+
+        @media print {
+            #print-grid-overlay { display: none !important; }
+        }
+
+        /* Legenda Floating Murni */
+        #map-legend-box {
+            position: absolute; top: 80px; left: 80px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px);
+            border: 1px solid #cbd5e1; border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            resize: both; overflow-y: auto; overflow-x: hidden;
+            min-width: 220px; min-height: 120px; max-height: 70vh; max-width: 90vw;
+            display: none;
+        }
+        .legend-locked { resize: none !important; }
+
+        body.mark-mode-active #map, body.mark-mode-active .leaflet-interactive,
+        body.coord-picker-active #map, body.coord-picker-active .leaflet-interactive { cursor: crosshair !important; }
+        .penanda-icon { background: transparent; border: none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .btn-undo-redo:disabled { opacity: 0.35; cursor: not-allowed; }
+        #penanda-list .penanda-item:hover { background: #f0fdf4; }
+        .layer-item-active { border-left: 3px solid #2563eb; background: #eff6ff; }
+
+        .custom-coord-pin { background: transparent; border: none; }
+        .coord-pin-wrapper { position: relative; width: 32px; height: 32px; pointer-events: auto; }
+        .coord-pin-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); cursor: grab; }
+        .coord-pin-center:active { cursor: grabbing; }
+        .coord-pin-pulse {
+            position: absolute; inset: -8px; border-radius: 50%;
+            border: 2px solid #0284c7;
+            animation: coordPulse 1.8s infinite ease-out;
+            pointer-events: none;
+        }
+        @keyframes coordPulse {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .coord-pin-floating-badge {
+            position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.92); color: #38bdf8;
+            padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;
+            white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+            border: 1px solid rgba(56, 189, 248, 0.4); pointer-events: none;
+        }
+        .coord-pin-floating-badge::after {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            border-width: 5px; border-style: solid;
+            border-color: rgba(15, 23, 42, 0.92) transparent transparent transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    
+    <header class="bg-white border-b border-slate-200 px-4 py-3 z-[50] shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 shrink-0">
+        <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-lg font-bold text-blue-800 tracking-tight flex items-center gap-2">
+                <span>🌍</span> GIS Manager Pro
+            </h1>
+            <span class="bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">OSS / KKPR / Amdalnet Ready</span>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+            <button type="button" onclick="doUndo()" id="btn-undo" disabled class="btn-undo-redo bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1" title="Undo (Ctrl+Z)">
+                <span>↩️</span><span class="hidden sm:inline">Undo</span>
+                <span id="undo-count" class="bg-slate-300 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+            </button>
+            <button type="button" onclick="doRedo()" id="btn-redo" disabled class="btn-undo-redo bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1" title="Redo (Ctrl+Y)">
+                <span>↪️</span><span class="hidden sm:inline">Redo</span>
+                <span id="redo-count" class="bg-slate-300 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+            </button>
+            <label class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-3 py-2 rounded-lg cursor-pointer transition shadow-sm flex items-center gap-1.5" title="Import file DXF AutoCAD">
+                <span>📁 Import DXF</span>
+                <input type="file" id="dxf-file" accept=".dxf" class="hidden">
+            </label>
+            <label class="bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold px-3 py-2 rounded-lg cursor-pointer transition shadow-sm flex items-center gap-1.5" title="Buka file proyek JSON lengkap (otomatis pulihkan semua posisi objek, skala, rotasi, warna & penanda tanpa import DXF ulang)">
+                <span>📂 Buka JSON</span>
+                <input type="file" id="project-json-input" accept=".json" class="hidden">
+            </label>
+            <button type="button" onclick="openCoordModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                <span>📍 Batch Koordinat</span>
+            </button>
+            <button type="button" onclick="toggleMarkMode()" id="btn-mark-mode" class="bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5" title="Klik peta untuk menaruh penanda titik">
+                <span id="mark-mode-label">📌 Penanda: OFF</span>
+            </button>
+            <button type="button" onclick="toggleCoordPickerMode()" id="btn-coord-picker" class="bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-300 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5" title="Klik peta untuk pasang pin koordinat, geser bebas, dan salin koordinat live">
+                <span id="coord-picker-label">🎯 Pin Koordinat: OFF</span>
+            </button>
+            <button type="button" onclick="duplicateSelectedObject()" class="bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5" title="Duplikat objek/bidang/ikon terpilih (Ctrl+D)">
+                <span>📋 Duplikat</span>
+            </button>
+            <button type="button" onclick="bringSelectedToFront()" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-xs font-semibold px-2.5 py-2 rounded-lg transition shadow-sm flex items-center gap-1" title="Naikkan objek atau layer aktif ke posisi teratas (depan)">
+                <span>⬆️ Naikkan</span>
+            </button>
+            <button type="button" onclick="sendSelectedToBack()" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-xs font-semibold px-2.5 py-2 rounded-lg transition shadow-sm flex items-center gap-1" title="Turunkan objek atau layer aktif ke posisi terbawah (belakang)">
+                <span>⬇️ Turunkan</span>
+            </button>
+            <button type="button" onclick="togglePrintGrid()" id="btn-grid" class="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                <span>📏 Grid Cetak: OFF</span>
+            </button>
+            <button type="button" onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                <span>🖨️ Cetak</span>
+            </button>
+            <button type="button" onclick="exportProjectJSON()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5" title="Simpan seluruh proyek (geometri DXF/SVG, posisi, skala, rotasi, warna kavling, layer & penanda) ke file JSON">
+                <span>💾 Simpan JSON</span>
+            </button>
+            <button type="button" onclick="exportToSVG()" class="bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5" title="Export layout kavling ke format vektor SVG murni">
+                <span>🖼️ Export SVG</span>
+            </button>
+            <button type="button" onclick="exportToSHPOSS()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                <span>📦 Export SHP (ZIP)</span>
+            </button>
+        </div>
+    </header>
+
+    
+    <div id="main-layout" class="flex-1 flex flex-col lg:flex-row w-full relative z-10 overflow-hidden" style="height: calc(100vh - 61px);">
+        
+        
+        <main class="w-full lg:flex-1 relative bg-slate-100 border-b lg:border-b-0 border-slate-200 shrink-0 h-[50vh] lg:h-full" id="map-container">
+            <div id="print-grid-overlay"></div>
+            <div id="map" class="absolute inset-0 w-full h-full z-0"></div>
+
+            <div id="coord-picker-hud" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-[400] bg-white/95 backdrop-blur-md border border-slate-300 rounded-xl shadow-2xl px-4 py-2.5 hidden flex-col sm:flex-row items-center gap-3 transition-all duration-200 pointer-events-auto">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-500 animate-ping"></span>
+                    <span class="text-xs font-bold text-slate-800 tracking-tight flex items-center gap-1">
+                        <span>🎯</span> <span>Pin Koordinat</span>
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-xs text-slate-900 font-bold">
+                    <span class="text-slate-500 font-normal">Lat, Lng:</span>
+                    <span id="hud-latlng-val">-7.000000, 110.000000</span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg font-mono text-xs text-slate-900 font-bold">
+                    <span class="text-slate-500 font-normal">X, Y (CAD):</span>
+                    <span id="hud-xy-val">110.000000, -7.000000</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="copyHudCoordinates('latlng', this)" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition" title="Salin format Lat, Lng">
+                        <span>📋</span><span>Salin Lat,Lng</span>
+                    </button>
+                    <button type="button" onclick="copyHudCoordinates('xy', this)" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition" title="Salin format X, Y untuk CAD / GIS">
+                        <span>📐</span><span>Salin X,Y</span>
+                    </button>
+                    <button type="button" onclick="saveCoordPinAsPenanda()" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition" title="Simpan sebagai Titik Penanda resmi di sidebar">
+                        <span>➕</span><span>Simpan</span>
+                    </button>
+                    <button type="button" onclick="closeCoordPicker()" class="text-slate-400 hover:text-slate-600 text-base font-bold px-1.5 py-1 leading-none" title="Tutup Pin Koordinat">✕</button>
+                </div>
+            </div>
+
+            
+            <div id="map-legend-box" class="p-3 text-[11px] font-medium space-y-1.5 select-none">
+                <div id="legend-header" class="font-bold text-slate-900 border-b pb-1 mb-1 flex justify-between items-center cursor-move bg-slate-100/80 p-1.5 rounded -mx-1 -mt-1" title="Klik dan geser dari sini untuk memindahkan legenda">
+                    <span id="legend-title-text">🏷️ Legenda Peta</span>
+                    <button onclick="toggleLegendLock()" id="btn-legend-lock" class="bg-slate-200 hover:bg-slate-300 px-1.5 py-0.5 rounded text-[10px]" title="Lock / Unlock">🔒</button>
+                </div>
+                <div class="flex items-start gap-5 mb-2.5"><div class="w-6 flex justify-center shrink-0 pt-[2px]"><span class="w-3 h-3 rounded-sm bg-white border border-slate-400 block"></span></div> <span class="leading-snug flex-1 pl-1">Rumah</span></div>
+                <div class="flex items-start gap-5 mb-2.5"><div class="w-6 flex justify-center shrink-0 pt-[2px]"><span class="w-3 h-3 rounded-sm bg-[#94a3b8] border border-slate-500 block"></span></div> <span class="leading-snug flex-1 pl-1">Jalan Perumahan</span></div>
+                <div class="flex items-start gap-5 mb-2.5"><div class="w-6 flex justify-center shrink-0 pt-[2px]"><span class="w-3 h-3 rounded-sm bg-[#ef4444] border border-red-600 block"></span></div> <span class="leading-snug flex-1 pl-1">Terjual</span></div>
+                <div class="flex items-start gap-5 mb-2.5"><div class="w-6 flex justify-center shrink-0 pt-[2px]"><span class="w-3 h-3 rounded-sm bg-[#eab308] border border-yellow-600 block"></span></div> <span class="leading-snug flex-1 pl-1">Proses Bank</span></div>
+                <div class="flex items-start gap-5 mb-2.5"><div class="w-6 flex justify-center shrink-0 pt-[2px]"><span class="w-3 h-3 rounded-sm bg-[#22c55e] border border-green-600 block"></span></div> <span class="leading-snug flex-1 pl-1">RTH</span></div>
+                <div id="dynamic-custom-legend-container"></div>
+            </div>
+        </main>
+
+        
+        <aside class="w-full lg:w-[380px] bg-white lg:border-l border-slate-200 flex flex-col z-20 shadow-xs shrink-0 h-[50vh] lg:h-full overflow-hidden relative">
+            
+            
+            <div class="p-3 border-b border-slate-200 bg-white/95 backdrop-blur-sm z-[30] shrink-0 sticky top-0 w-full shadow-sm">
+                <div class="border border-slate-200 rounded-xl p-3 shadow-sm bg-slate-50 flex items-center gap-3">
+                    <div class="w-16 h-16 lg:w-20 lg:h-20 shrink-0 bg-white border border-slate-200 rounded-lg p-1 flex items-center justify-center">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=DONASI_QRIS_SITEPLAN" alt="QRIS Donasi" class="w-full h-full object-contain rounded-md">
+                    </div>
+                    <div class="flex flex-col justify-center text-left flex-1">
+                        <h2 class="text-[11px] lg:text-xs font-bold text-slate-900 mb-0.5 leading-snug">💖 Dukung Tool Ini via QRIS</h2>
+                        <span class="inline-block bg-blue-100 text-blue-900 text-[9px] font-bold px-2 py-0.5 rounded-md border border-blue-300 w-fit">Semua Bank / e-Wallet</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto scrollbar-none flex flex-col">
+
+                <div class="p-3 border-b border-slate-200 bg-sky-50/50">
+                    <h2 class="font-bold text-slate-900 text-xs mb-2 flex items-center gap-2">🗺️ Basemap Peta</h2>
+                    <div class="grid grid-cols-2 gap-1.5" id="basemap-list">
+                        <button class="basemap-btn ring-2 ring-blue-500 bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="esri-imagery" onclick="switchBasemap('esri-imagery')">🛰️ Satelit ESRI</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="google-satellite" onclick="switchBasemap('google-satellite')">🛰️ Google Hybrid</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="osm-standard" onclick="switchBasemap('osm-standard')">🗺️ OpenStreetMap</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="esri-street" onclick="switchBasemap('esri-street')">🏙️ Street ESRI</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="esri-topo" onclick="switchBasemap('esri-topo')">🏔️ Topo ESRI</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="esri-gray" onclick="switchBasemap('esri-gray')">⬜ Canvas ESRI</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="carto-voyager" onclick="switchBasemap('carto-voyager')">🗺️ Carto Voyager</button>
+                        <button class="basemap-btn bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-blue-50 transition" data-key="opentopomap" onclick="switchBasemap('opentopomap')">🌏 OpenTopoMap</button>
+                        <div class="col-span-2 flex flex-col gap-1 mt-0.5">
+                            <button class="basemap-btn bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-lg p-2 text-[10px] font-bold text-center shadow-sm hover:bg-emerald-100 transition flex items-center justify-center gap-1.5" data-key="ksp-big-sda" onclick="switchBasemap('ksp-big-sda')">
+                                <span>🌿</span><span>KSP BIG: Satu Peta SDA &amp; Lingkungan Hidup</span>
+                            </button>
+                            <a href="https://www.arcgis.com/apps/mapviewer/index.html?url=https%3A%2F%2Fkspservices.big.go.id%2Fsatupeta%2Frest%2Fservices%2FPUBLIK%2FSUMBER_DAYA_ALAM_DAN_LINGKUNGAN%2FMapServer&source=sd" target="_blank" class="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg p-1.5 text-[9px] font-bold text-center transition flex items-center justify-center gap-1 shadow-sm">
+                                <span>🔗</span><span>Buka Database Lengkap ArcGIS MapViewer BIG ↗</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-b border-slate-100 flex items-center justify-between gap-2 bg-white">
+                    <div class="flex items-center gap-1.5 flex-wrap" id="basemap-status-bar">
+                        <span class="text-[10px] text-slate-500 font-medium">Aktif:</span>
+                        <span id="active-basemap-label" class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-200">🛰️ Satelit ESRI</span>
+                    </div>
+                    <span class="text-[9px] text-slate-400 italic">Gratis · No API Key</span>
+                </div>
+                
+                <div class="p-3 border-b border-slate-200 bg-emerald-50/40">
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="font-bold text-slate-900 text-xs flex items-center gap-1.5">🗂️ Layer Manager (AMDAL / OSS)</h2>
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="addCustomLayer()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[9px] font-bold px-2 py-1 rounded transition shadow-sm">+ Layer</button>
+                            <button type="button" onclick="toggleAllLayers()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-[9px] font-bold px-1.5 py-1 rounded transition" title="Tampilkan/Sembunyikan Semua">👁️</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between gap-1 text-[9px] text-slate-500 mb-2">
+                        <span>Drag ⠿ atau gunakan ▲/▼ untuk menaikkan posisi layer:</span>
+                        <div class="flex gap-1 shrink-0">
+                            <button type="button" onclick="bringActiveLayerToFront()" class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold px-1.5 py-0.5 rounded border border-blue-300" title="Naikkan Layer Aktif ke Paling Depan">🔝 Depan</button>
+                            <button type="button" onclick="sendActiveLayerToBack()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-1.5 py-0.5 rounded border border-slate-300" title="Turunkan Layer Aktif ke Paling Belakang">🔚 Belakang</button>
+                        </div>
+                    </div>
+                    <div id="layer-manager-list" class="space-y-1.5 max-h-52 overflow-y-auto pr-1"></div>
+                </div>
+
+                
+                <div class="p-4 border-b border-slate-200 bg-purple-50/30">
+                    <h2 class="font-bold text-slate-900 text-xs mb-3 flex items-center gap-2">🖼️ Tambah Ikon & Legenda</h2>
+                    
+                    <label class="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 rounded-lg transition shadow-sm flex justify-center cursor-pointer mb-3">
+                        <span>+ Upload Ikon (PNG/JPG)</span>
+                        <input type="file" id="icon-upload-input" accept="image/*" multiple class="hidden">
+                    </label>
+
+                    <div id="custom-icon-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+
+                    <div id="icon-editor" class="hidden p-3 bg-white border border-slate-200 rounded-lg shadow-sm space-y-3 mt-3">
+                        <h3 class="text-[11px] font-bold text-purple-700 flex justify-between">
+                            <span>Edit Ikon Terpilih</span>
+                            <span id="selected-count" class="text-slate-500">0 dipilih</span>
+                        </h3>
+                        <div>
+                            <label class="flex justify-between text-[10px] font-bold text-slate-700 mb-1">
+                                <span>Skala / Ukuran Objek (Presisi 0.000)</span>
+                                <span id="icon-scale-val" class="text-purple-700 font-mono font-bold">1.000x</span>
+                            </label>
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="stepIconScale(-0.01)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold px-1.5 py-1 rounded border border-slate-300 transition" title="Kurangi 0.010">-0.01</button>
+                                <button type="button" onclick="stepIconScale(-0.001)" class="bg-purple-100 hover:bg-purple-200 text-purple-800 text-[10px] font-bold px-2 py-1 rounded border border-purple-300 transition" title="Kurangi 0.001 (Presisi)">▼ -0.001</button>
+                                <input type="number" id="icon-scale" min="0.001" max="50.000" step="0.001" value="1.000" class="flex-1 min-w-[70px] bg-white border border-purple-300 rounded px-2 py-1 text-xs font-mono font-bold text-center text-purple-900 outline-none focus:ring-2 focus:ring-purple-400" oninput="applyIconTransform()" onchange="applyIconTransform()">
+                                <button type="button" onclick="stepIconScale(0.001)" class="bg-purple-100 hover:bg-purple-200 text-purple-800 text-[10px] font-bold px-2 py-1 rounded border border-purple-300 transition" title="Tambah 0.001 (Presisi)">▲ +0.001</button>
+                                <button type="button" onclick="stepIconScale(0.01)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold px-1.5 py-1 rounded border border-slate-300 transition" title="Tambah 0.010">+0.01</button>
+                            </div>
+                            <input type="range" id="icon-scale-slider" min="0.01" max="5" step="0.001" value="1.000" class="w-full accent-purple-600 mt-1" oninput="syncScaleFromSlider(this.value)">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-[10px] font-bold text-slate-700 mb-1">
+                                <span>Rotasi (°)</span>
+                                <span id="icon-rotate-val">0°</span>
+                            </label>
+                            <input type="range" id="icon-rotate" min="0" max="360" step="1" value="0" class="w-full accent-purple-600" oninput="applyIconTransform()">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-[10px] font-bold text-slate-700 mb-1">
+                                <span>Transparansi Group / Ikon</span>
+                                <span id="icon-opacity-val">100%</span>
+                            </label>
+                            <input type="range" id="icon-opacity" min="0.1" max="1" step="0.05" value="1" class="w-full accent-purple-600" oninput="applyIconTransform()">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="groupSelectedIcons()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white text-[10px] font-bold py-1.5 rounded transition shadow-sm">Kunci Grouping</button>
+                            <button onclick="ungroupSelectedIcons()" class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 text-[10px] font-bold py-1.5 rounded transition shadow-sm">Lepas Group</button>
+                        </div>
+                        <div class="flex gap-2 pt-1">
+                            <button onclick="duplicateSelectedObject()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold py-1.5 rounded transition shadow-sm">📋 Duplikat Ikon</button>
+                            <button onclick="toggleLockScaleIcon()" id="btn-lock-scale" class="flex-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-bold py-1.5 rounded transition shadow-sm">📏 Kunci Skala Peta</button>
+                        </div>
+                        <div class="flex gap-2 pt-1">
+                            <button onclick="deleteSelectedGroup()" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold py-1.5 rounded transition shadow-sm">🗑️ Hapus 1 Group</button>
+                            <button onclick="deleteSelectedMarkers()" class="flex-1 bg-rose-100 hover:bg-rose-200 text-rose-700 border border-rose-300 text-[10px] font-bold py-1.5 rounded transition shadow-sm">❌ Hapus Dipilih</button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="dxf-manager-panel" class="hidden flex-col border-b border-slate-200 bg-blue-50/50">
+                    <div class="p-3 bg-blue-700 text-white flex justify-between items-center">
+                        <h2 class="font-bold text-xs flex items-center gap-2">📐 Manajer DXF & Warna Kavling</h2>
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="exportProjectJSON()" class="bg-white/20 hover:bg-white/30 text-[10px] font-bold px-2 py-1 rounded transition" title="Simpan posisi & setting ke file JSON">💾 Simpan</button>
+                            <button type="button" onclick="exportToSVG()" class="bg-white/20 hover:bg-white/30 text-[10px] font-bold px-2 py-1 rounded transition" title="Export gambar layout kavling ke SVG">🖼️ SVG</button>
+                            <button type="button" onclick="centerDxfAnchor()" class="bg-white/20 hover:bg-white/30 text-[10px] px-2 py-1 rounded transition">Tengahkan</button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <button onclick="toggleLegendOnMap()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-3 rounded-lg transition shadow-sm flex items-center justify-center gap-1.5">
+                                    <span>🏷️ Tampilkan/Sembunyikan Legenda Peta</span>
+                                </button>
+                            </div>
+                            
+                            
+                            <div class="pt-2 border-t border-slate-100 space-y-2">
+                                <label class="text-[10px] font-bold text-slate-700 block">Penyesuaian 4 Sisi & Ukuran Grid Cetak:</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <span class="text-[9px] text-slate-500 block mb-0.5">Lebar (%):</span>
+                                        <input type="number" id="grid-w-input" value="85" min="20" max="100" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" oninput="updateGrid4Sides()">
+                                    </div>
+                                    <div>
+                                        <span class="text-[9px] text-slate-500 block mb-0.5">Tinggi (%):</span>
+                                        <input type="number" id="grid-h-input" value="82" min="20" max="100" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" oninput="updateGrid4Sides()">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 pt-1">
+                                    <div>
+                                        <span class="text-[9px] text-slate-500 block mb-0.5">Geser Kiri/Kanan (X):</span>
+                                        <input type="number" id="grid-x-input" value="0" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" oninput="updateGrid4Sides()" placeholder="px / offset">
+                                    </div>
+                                    <div>
+                                        <span class="text-[9px] text-slate-500 block mb-0.5">Geser Atas/Bawah (Y):</span>
+                                        <input type="number" id="grid-y-input" value="0" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" oninput="updateGrid4Sides()" placeholder="px / offset">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+                                    <span>Skala Ukuran Objek DXF (Presisi 0.000):</span>
+                                    <span id="scale-val" class="text-blue-700 font-mono font-bold">1.000x</span>
+                                </label>
+                                <div class="flex items-center gap-1 mb-1">
+                                    <button type="button" onclick="stepDxfScale(-0.01)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold px-1.5 py-1 rounded border border-slate-300 transition">-0.01</button>
+                                    <button type="button" onclick="stepDxfScale(-0.001)" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold px-2 py-1 rounded border border-blue-300 transition">▼ -0.001</button>
+                                    <input type="number" id="dxf-scale" min="0.001" max="50.000" step="0.001" value="1.000" class="flex-1 min-w-[70px] bg-white border border-blue-300 rounded px-2 py-1 text-xs font-mono font-bold text-center text-blue-900 outline-none focus:ring-2 focus:ring-blue-400" oninput="updateDxfPositions()" onchange="updateDxfPositions()">
+                                    <button type="button" onclick="stepDxfScale(0.001)" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold px-2 py-1 rounded border border-blue-300 transition">▲ +0.001</button>
+                                    <button type="button" onclick="stepDxfScale(0.01)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold px-1.5 py-1 rounded border border-slate-300 transition">+0.01</button>
+                                </div>
+                                <input type="range" id="dxf-scale-slider" min="0.01" max="5" step="0.001" value="1.000" class="w-full accent-blue-600" oninput="syncDxfScaleFromSlider(this.value)">
+                            </div>
+                            <div>
+                                <label class="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+                                    <span>Orientasi Putaran (°):</span>
+                                    <span id="rotate-val" class="text-emerald-700">0°</span>
+                                </label>
+                                <input type="range" id="dxf-rotate" min="-180" max="180" step="1" value="0" class="w-full accent-emerald-600" oninput="updateDxfPositions()">
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-xs text-slate-800 mb-2 flex justify-between items-center">
+                                <span>Status & Warna Bidang</span>
+                                <span id="dxf-count-badge" class="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full font-semibold">0 Bidang</span>
+                            </h3>
+                            <div id="dxf-feature-list" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-b border-slate-200 bg-teal-50/40">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="font-bold text-slate-900 text-xs flex items-center gap-2">📌 Titik Penanda</h2>
+                        <div class="flex items-center gap-1.5">
+                            <select id="penanda-type-select" class="text-[10px] border border-slate-300 rounded px-1.5 py-1 bg-white font-semibold">
+                                <option value="📍">📍 Titik Umum</option>
+                                <option value="💧">💧 Sumur / Air</option>
+                                <option value="🌊">🌊 Sumber Air</option>
+                                <option value="⚠️">⚠️ Bahaya</option>
+                                <option value="🌿">🌿 Vegetasi</option>
+                                <option value="🏭">🏭 Industri</option>
+                                <option value="🏠">🏠 Pemukiman</option>
+                                <option value="🌾">🌾 Pertanian</option>
+                                <option value="🔴">🔴 Titik Kontrol</option>
+                                <option value="🔵">🔵 Titik Referensi</option>
+                            </select>
+                            <button onclick="clearAllPenanda()" class="bg-red-100 hover:bg-red-200 text-red-700 text-[10px] font-bold px-2 py-1 rounded transition" title="Hapus semua penanda">Hapus Semua</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <button type="button" onclick="toggleCoordPickerMode()" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition">
+                            <span>🎯</span><span>Pin Koordinat (Geser & Salin)</span>
+                        </button>
+                    </div>
+                    <div id="penanda-list" class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                        <div class="text-[10px] text-slate-400 italic text-center py-3">Aktifkan Mode Penanda → klik peta untuk menempatkan titik</div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-slate-50 flex flex-col flex-1 min-h-[250px]">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="font-bold text-slate-900 text-xs flex items-center gap-2">📐 Titik Koordinat (WGS84)</h2>
+                        <button onclick="generateCoordinates()" class="bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold px-2 py-1 rounded transition shadow-sm">Ekstrak</button>
+                    </div>
+                    <textarea id="coord-output" readonly class="w-full flex-1 text-[10px] font-mono text-slate-700 bg-white border border-slate-300 rounded-lg p-2 focus:outline-none resize-none shadow-inner" placeholder="Hasil ekstrak titik..."></textarea>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    
+    <div id="modal-coord" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center modal-container p-4" role="dialog">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-5 border border-slate-200 flex flex-col">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-200">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">📍 Batch Koordinat</h2>
+                <button onclick="closeCoordModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold transition">&times;</button>
+            </div>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <label class="text-[11px] font-bold text-slate-700">Format Koordinat:</label>
+                    <label class="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[10px] font-bold px-2 py-1 rounded cursor-pointer transition flex items-center gap-1">
+                        <span>📂 Upload CSV / TXT</span>
+                        <input type="file" id="coord-file-upload" accept=".txt,.csv" class="hidden">
+                    </label>
+                </div>
+                <select id="coordFormat" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-semibold">
+                    <option value="latlng">Latitude, Longitude (Y, X) - Standar GPS/Google</option>
+                    <option value="lnglat">Longitude, Latitude (X, Y) - Format AutoCAD / GIS</option>
+                </select>
+                <div>
+                    <label class="text-[10px] font-semibold text-slate-600 block mb-1">Daftar Koordinat (Paste / Upload):</label>
+                    <textarea id="batchCoords" rows="5" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs font-mono outline-none shadow-inner" placeholder="-7.669812, 110.575237&#10;-7.669160, 110.575286&#10;..."></textarea>
+                    <span class="text-[9px] text-slate-400 block mt-0.5">Mendukung pemisah koma, titik koma, tab, atau spasi. 1 baris = 1 titik.</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] font-semibold text-slate-600 block mb-1">Bentuk Objek:</label>
+                        <select id="drawType" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+                            <option value="polygon">Area Bidang (Polygon)</option>
+                            <option value="polyline">Garis / Sempadan (Polyline)</option>
+                            <option value="points">Titik-titik (Multi Point / Marker)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-semibold text-slate-600 block mb-1">Target Layer:</label>
+                        <select id="coord-target-layer" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+                            <option value="active">Layer Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-1">
+                    <button onclick="closeCoordModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-xs font-bold py-2.5 rounded-xl">Batal</button>
+                    <button onclick="drawBatch()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold py-2.5 rounded-xl shadow-sm">🗺️ Gambar ke Peta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/esri-leaflet@3.0.10/dist/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dxf-parser@1.1.2/dist/dxf-parser.min.js"></script>
+    <script src="https://unpkg.com/@mapbox/shp-write@latest/shpwrite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    
+    <script>
+        const map = L.map('map').setView([-7.1396, 110.4046], 14);
+        window.map = map;
+
+        const baseLayers = {
+            'esri-imagery': {
+                label: '🛰️ Satelit ESRI',
+                layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 23, attribution: 'Tiles &copy; Esri &mdash; Source: Esri, USGS, NOAA'
+                })
+            },
+            'google-satellite': {
+                label: '🛰️ Google Hybrid',
+                layer: L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                    maxZoom: 22, attribution: '&copy; Google Maps'
+                })
+            },
+            'osm-standard': {
+                label: '🗺️ OpenStreetMap',
+                layer: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+                })
+            },
+            'esri-street': {
+                label: '🏙️ Street ESRI',
+                layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 23, attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, USGS'
+                })
+            },
+            'esri-topo': {
+                label: '🏔️ Topo ESRI',
+                layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 23, attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, Intermap, USGS'
+                })
+            },
+            'esri-gray': {
+                label: '⬜ Canvas ESRI',
+                layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 16, attribution: 'Tiles &copy; Esri &mdash; Esri, HERE'
+                })
+            },
+            'carto-voyager': {
+                label: '🗺️ Carto Voyager',
+                layer: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                    maxZoom: 22, attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
+                })
+            },
+            'carto-light': {
+                label: '☁️ Carto Light',
+                layer: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    maxZoom: 22, attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
+                })
+            },
+            'opentopomap': {
+                label: '🌏 OpenTopoMap',
+                layer: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 17, attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)'
+                })
+            },
+            'ksp-big-sda': {
+                label: '🌿 KSP BIG Satu Peta SDA & Lingkungan',
+                get layer() {
+                    if (!this._inst) {
+                        try {
+                            if (typeof L.esri !== 'undefined' && typeof L.esri.dynamicMapLayer === 'function') {
+                                this._inst = L.esri.dynamicMapLayer({
+                                    url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer',
+                                    opacity: 0.85,
+                                    useCors: false,
+                                    attribution: 'Badan Informasi Geospasial (BIG)'
+                                });
+                                this._inst.on('error', function(err) {
+                                    console.warn('KSP BIG info:', err);
+                                });
+                            }
+                        } catch(e) {
+                            console.warn('Fallback basemap KSP:', e);
+                        }
+                        if (!this._inst) {
+                            this._inst = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                maxZoom: 22, attribution: 'Badan Informasi Geospasial (BIG) &mdash; Satelit ESRI Fallback'
+                            });
+                        }
+                    }
+                    return this._inst;
+                }
+            }
+        };
+        window.baseLayers = baseLayers;
+
+        let currentBaseLayerKey = 'esri-imagery';
+        baseLayers['esri-imagery'].layer.addTo(map);
+
+        window.switchBasemap = function(key) {
+            if (!baseLayers[key]) return;
+            if (currentBaseLayerKey && baseLayers[currentBaseLayerKey]) {
+                map.removeLayer(baseLayers[currentBaseLayerKey].layer);
+            }
+            baseLayers[key].layer.addTo(map);
+            baseLayers[key].layer.bringToBack();
+            currentBaseLayerKey = key;
+            const labelEl = document.getElementById('active-basemap-label');
+            if (labelEl) labelEl.textContent = baseLayers[key].label;
+            document.querySelectorAll('.basemap-btn').forEach(btn => {
+                const isActive = btn.dataset.key === key;
+                btn.classList.toggle('ring-2', isActive);
+                btn.classList.toggle('ring-blue-500', isActive);
+            });
+        };
+
+        setTimeout(() => { map.invalidateSize(); }, 200);
+
+        function registerSnappable(layer) {
+            if (!layer) return;
+            try {
+                if (layer.pm) {
+                    layer.pm.options = layer.pm.options || {};
+                    layer.pm.options.snappable = true;
+                }
+            } catch(e) {}
+        }
+
+        map.pm.setGlobalOptions({
+            snappable: true,
+            snapDistance: 25,
+            allowSelfIntersection: false,
+            finishOn: 'contextmenu'
+        });
+
+        map.pm.addControls({
+            position: 'topleft', drawMarker: false, drawCircleMarker: false, drawCircle: false, drawRectangle: false,
+            drawPolygon: true, drawPolyline: true, drawText: true,
+            editMode: true, dragMode: true, removalMode: true, rotateMode: true, cutPolygon: false
+        });
+
+        map.on('contextmenu', function(e) {
+            if (e && e.originalEvent) {
+                e.originalEvent.preventDefault();
+                e.originalEvent.stopPropagation();
+            }
+            if (map.pm && map.pm.globalDrawModeEnabled()) {
+                const mode = map.pm.getGlobalDrawMode();
+                if (mode === 'Line' && map.pm.Draw && map.pm.Draw.Line) {
+                    if (typeof map.pm.Draw.Line._finishShape === 'function') {
+                        map.pm.Draw.Line._finishShape();
+                    } else {
+                        map.pm.disableDraw();
+                    }
+                } else if (mode === 'Polygon' && map.pm.Draw && map.pm.Draw.Polygon) {
+                    if (typeof map.pm.Draw.Polygon._finishShape === 'function') {
+                        map.pm.Draw.Polygon._finishShape();
+                    } else {
+                        map.pm.disableDraw();
+                    }
+                }
+            }
+        });
+
+        let activeFeatureGroup = L.featureGroup().addTo(map);
+
+        const AMDAL_OSS_LAYERS = [
+            { id: 'batas_tapak', name: 'Batas Tapak / Kajian', color: '#dc2626', fill: '#ef4444', opacity: 0.25, weight: 3, dash: '', type: 'AMDAL' },
+            { id: 'sempadan_sungai', name: 'Sempadan Sungai / Air', color: '#0284c7', fill: '#38bdf8', opacity: 0.35, weight: 2, dash: '', type: 'AMDAL' },
+            { id: 'kawasan_hutan', name: 'Kawasan Hutan / Konservasi', color: '#15803d', fill: '#22c55e', opacity: 0.35, weight: 2, dash: '', type: 'AMDAL' },
+            { id: 'pemukiman', name: 'Pemukiman Sekitar', color: '#d97706', fill: '#f59e0b', opacity: 0.3, weight: 2, dash: '', type: 'AMDAL' },
+            { id: 'rth_kdh', name: 'RTH / KDH (Ruang Hijau)', color: '#16a34a', fill: '#4ade80', opacity: 0.4, weight: 2, dash: '', type: 'OSS' },
+            { id: 'kdb_bangunan', name: 'KDB (Bidang Bangunan)', color: '#b91c1c', fill: '#f87171', opacity: 0.35, weight: 2, dash: '', type: 'OSS' },
+            { id: 'sempadan_jalan', name: 'Sempadan Bangunan & Jalan', color: '#ea580c', fill: '#fb923c', opacity: 0.25, weight: 2, dash: '6,4', type: 'OSS' },
+            { id: 'utilitas_saluran', name: 'Utilitas & Drainase', color: '#0891b2', fill: '#06b6d4', opacity: 0.3, weight: 2, dash: '', type: 'AMDAL' },
+            { id: 'rona_lingkungan', name: 'Rona Lingkungan Awal', color: '#0d9488', fill: '#14b8a6', opacity: 0.3, weight: 2, dash: '', type: 'AMDAL' }
+        ];
+
+        const layerGroups = {};
+        let activeLayerId = 'batas_tapak';
+
+        function initLayerManager() {
+            AMDAL_OSS_LAYERS.forEach(def => {
+                layerGroups[def.id] = {
+                    def: def,
+                    fg: L.featureGroup().addTo(map),
+                    visible: true,
+                    opacity: def.opacity
+                };
+            });
+            renderLayerManagerList();
+            updateTargetLayerSelect();
+        }
+
+        function getLayerStyle(lyrId) {
+            const def = AMDAL_OSS_LAYERS.find(l => l.id === lyrId) || AMDAL_OSS_LAYERS[0];
+            const lg = layerGroups[lyrId];
+            const op = lg ? lg.opacity : def.opacity;
+            return {
+                color: def.color,
+                fillColor: def.fill,
+                fillOpacity: op,
+                weight: def.weight,
+                dashArray: def.dash || null
+            };
+        }
+
+        let draggedLayerId = null;
+
+        window.handleLayerDragStart = function(e, id) {
+            draggedLayerId = id;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', id);
+            e.currentTarget.classList.add('opacity-40', 'border-blue-500', 'border-dashed');
+        };
+
+        window.handleLayerDragOver = function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        };
+
+        window.handleLayerDrop = function(e, targetId) {
+            e.preventDefault();
+            if (!draggedLayerId || draggedLayerId === targetId) return;
+            const fromIdx = AMDAL_OSS_LAYERS.findIndex(l => l.id === draggedLayerId);
+            const toIdx = AMDAL_OSS_LAYERS.findIndex(l => l.id === targetId);
+            if (fromIdx !== -1 && toIdx !== -1) {
+                const [moved] = AMDAL_OSS_LAYERS.splice(fromIdx, 1);
+                AMDAL_OSS_LAYERS.splice(toIdx, 0, moved);
+                applyLayerZIndexOrder();
+                renderLayerManagerList();
+            }
+            draggedLayerId = null;
+        };
+
+        window.handleLayerDragEnd = function(e) {
+            e.currentTarget.classList.remove('opacity-40', 'border-blue-500', 'border-dashed');
+            draggedLayerId = null;
+        };
+
+        window.moveLayerUp = function(id) {
+            const idx = AMDAL_OSS_LAYERS.findIndex(l => l.id === id);
+            if (idx > 0) {
+                const [moved] = AMDAL_OSS_LAYERS.splice(idx, 1);
+                AMDAL_OSS_LAYERS.splice(idx - 1, 0, moved);
+                applyLayerZIndexOrder();
+                renderLayerManagerList();
+            }
+        };
+
+        window.moveLayerDown = function(id) {
+            const idx = AMDAL_OSS_LAYERS.findIndex(l => l.id === id);
+            if (idx !== -1 && idx < AMDAL_OSS_LAYERS.length - 1) {
+                const [moved] = AMDAL_OSS_LAYERS.splice(idx, 1);
+                AMDAL_OSS_LAYERS.splice(idx + 1, 0, moved);
+                applyLayerZIndexOrder();
+                renderLayerManagerList();
+            }
+        };
+
+        window.bringLayerToFront = function(id) {
+            const idx = AMDAL_OSS_LAYERS.findIndex(l => l.id === id);
+            if (idx > 0) {
+                const [moved] = AMDAL_OSS_LAYERS.splice(idx, 1);
+                AMDAL_OSS_LAYERS.unshift(moved);
+                applyLayerZIndexOrder();
+                renderLayerManagerList();
+            }
+        };
+
+        window.sendLayerToBack = function(id) {
+            const idx = AMDAL_OSS_LAYERS.findIndex(l => l.id === id);
+            if (idx !== -1 && idx < AMDAL_OSS_LAYERS.length - 1) {
+                const [moved] = AMDAL_OSS_LAYERS.splice(idx, 1);
+                AMDAL_OSS_LAYERS.push(moved);
+                applyLayerZIndexOrder();
+                renderLayerManagerList();
+            }
+        };
+
+        window.bringActiveLayerToFront = function() {
+            bringLayerToFront(activeLayerId);
+        };
+
+        window.sendActiveLayerToBack = function() {
+            sendLayerToBack(activeLayerId);
+        };
+
+        window.bringSelectedToFront = function() {
+            if (selectedMarkers.size > 0) {
+                selectedMarkers.forEach(m => {
+                    if (m.marker && m.marker.setZIndexOffset) m.marker.setZIndexOffset(3000);
+                    if (m.marker && m.marker.bringToFront) m.marker.bringToFront();
+                });
+                return;
+            }
+            bringActiveLayerToFront();
+        };
+
+        window.sendSelectedToBack = function() {
+            if (selectedMarkers.size > 0) {
+                selectedMarkers.forEach(m => {
+                    if (m.marker && m.marker.setZIndexOffset) m.marker.setZIndexOffset(10);
+                    if (m.marker && m.marker.bringToBack) m.marker.bringToBack();
+                });
+                return;
+            }
+            sendActiveLayerToBack();
+        };
+
+        function applyLayerZIndexOrder() {
+            AMDAL_OSS_LAYERS.slice().reverse().forEach(def => {
+                const lg = layerGroups[def.id];
+                if (lg && lg.visible && lg.fg) {
+                    lg.fg.bringToFront();
+                }
+            });
+            if (activeFeatureGroup) {
+                activeFeatureGroup.bringToFront();
+            }
+            placedMarkers.forEach(m => {
+                if (m.marker && m.marker._icon) {
+                    if (m.marker.bringToFront) m.marker.bringToFront();
+                }
+            });
+            penandaList.forEach(p => {
+                if (p.marker && p.marker._icon) {
+                    if (p.marker.bringToFront) p.marker.bringToFront();
+                }
+            });
+        }
+
+        function renderLayerManagerList() {
+            const container = document.getElementById('layer-manager-list');
+            if (!container) return;
+            container.innerHTML = AMDAL_OSS_LAYERS.map((def, idx) => {
+                const lg = layerGroups[def.id];
+                const count = lg ? lg.fg.getLayers().length : 0;
+                const isActive = def.id === activeLayerId;
+                const currentOp = lg ? lg.opacity : def.opacity;
+                return `
+                <div class="p-1.5 bg-white border ${isActive ? 'border-blue-500 shadow-sm layer-item-active ring-1 ring-blue-400' : 'border-slate-200'} rounded-lg text-[10px] cursor-pointer transition hover:bg-slate-50 flex flex-col gap-1" draggable="true" ondragstart="handleLayerDragStart(event, '${def.id}')" ondragover="handleLayerDragOver(event)" ondrop="handleLayerDrop(event, '${def.id}')" ondragend="handleLayerDragEnd(event)" onclick="setActiveLayer('${def.id}')">
+                    <div class="flex items-center justify-between gap-1">
+                        <div class="flex items-center gap-1.5 truncate flex-1">
+                            <span class="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-700 font-bold px-0.5 text-xs select-none" title="Drag & Drop untuk memindahkan posisi urutan layer">⠿</span>
+                            <span class="w-3 h-3 rounded-sm shrink-0 border" style="background:${def.fill};border-color:${def.color}"></span>
+                            <span class="font-bold text-slate-800 truncate">${def.name}</span>
+                        </div>
+                        <div class="flex items-center gap-0.5 shrink-0">
+                            <button type="button" onclick="event.stopPropagation();moveLayerUp('${def.id}')" class="text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded px-1 py-0.5 font-bold text-[10px]" title="Naikkan Layer (Ke Depan)">▲</button>
+                            <button type="button" onclick="event.stopPropagation();moveLayerDown('${def.id}')" class="text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded px-1 py-0.5 font-bold text-[10px]" title="Turunkan Layer (Ke Belakang)">▼</button>
+                            <span class="text-[9px] bg-slate-100 text-slate-600 px-1 py-0.2 rounded font-semibold ml-0.5">${count}</span>
+                            <button type="button" onclick="event.stopPropagation();toggleLayerVisibility('${def.id}')" class="text-xs px-1 hover:bg-slate-100 rounded" title="Toggle Visibilitas">${lg && lg.visible ? '👁️' : '🙈'}</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 pt-0.5" onclick="event.stopPropagation()">
+                        <span class="text-[9px] text-slate-400">Transparansi:</span>
+                        <input type="range" min="0" max="1" step="0.05" value="${currentOp}" class="flex-1 h-1 accent-emerald-600" oninput="setLayerOpacity('${def.id}', parseFloat(this.value))">
+                        <span class="text-[9px] text-slate-500 font-mono w-7 text-right">${Math.round(currentOp * 100)}%</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.setActiveLayer = function(id) {
+            activeLayerId = id;
+            renderLayerManagerList();
+        };
+
+        window.toggleLayerVisibility = function(id) {
+            const lg = layerGroups[id];
+            if (!lg) return;
+            lg.visible = !lg.visible;
+            if (lg.visible) {
+                map.addLayer(lg.fg);
+            } else {
+                map.removeLayer(lg.fg);
+            }
+            renderLayerManagerList();
+        };
+
+        window.setLayerOpacity = function(id, val) {
+            const lg = layerGroups[id];
+            if (!lg) return;
+            lg.opacity = val;
+            lg.fg.eachLayer(layer => {
+                if (layer.setStyle) layer.setStyle({ fillOpacity: val });
+            });
+            renderLayerManagerList();
+        };
+
+        window.toggleAllLayers = function() {
+            const anyVisible = Object.values(layerGroups).some(lg => lg.visible);
+            Object.keys(layerGroups).forEach(id => {
+                layerGroups[id].visible = !anyVisible;
+                if (!anyVisible) map.addLayer(layerGroups[id].fg);
+                else map.removeLayer(layerGroups[id].fg);
+            });
+            renderLayerManagerList();
+        };
+
+        window.addCustomLayer = function() {
+            const name = prompt('Nama layer baru (AMDAL / OSS):', 'Kawasan Lindung');
+            if (!name) return;
+            const id = 'custom_' + Date.now();
+            const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+            const def = { id, name, color, fill: color, opacity: 0.3, weight: 2, dash: '', type: 'CUSTOM' };
+            AMDAL_OSS_LAYERS.push(def);
+            layerGroups[id] = { def, fg: L.featureGroup().addTo(map), visible: true, opacity: 0.3 };
+            activeLayerId = id;
+            renderLayerManagerList();
+            updateTargetLayerSelect();
+        };
+
+        function updateTargetLayerSelect() {
+            const sel = document.getElementById('coord-target-layer');
+            if (!sel) return;
+            sel.innerHTML = '<option value="active">Layer Aktif (' + (AMDAL_OSS_LAYERS.find(l => l.id === activeLayerId)?.name || 'Pilihan') + ')</option>' +
+                AMDAL_OSS_LAYERS.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+        }
+
+        const undoStack = [];
+        const redoStack = [];
+
+        function pushUndo(action) {
+            undoStack.push(action);
+            redoStack.length = 0;
+            updateUndoRedoUI();
+        }
+
+        function updateUndoRedoUI() {
+            const btnU = document.getElementById('btn-undo');
+            const btnR = document.getElementById('btn-redo');
+            const cntU = document.getElementById('undo-count');
+            const cntR = document.getElementById('redo-count');
+            btnU.disabled = undoStack.length === 0;
+            btnR.disabled = redoStack.length === 0;
+            if (undoStack.length > 0) { cntU.textContent = undoStack.length; cntU.classList.remove('hidden'); } else { cntU.classList.add('hidden'); }
+            if (redoStack.length > 0) { cntR.textContent = redoStack.length; cntR.classList.remove('hidden'); } else { cntR.classList.add('hidden'); }
+        }
+
+        window.doUndo = function() {
+            if (undoStack.length === 0) return;
+            const action = undoStack.pop();
+            if (action.type === 'add_layer') {
+                if (action.targetFg) action.targetFg.removeLayer(action.layer);
+                else activeFeatureGroup.removeLayer(action.layer);
+                map.removeLayer(action.layer);
+                redoStack.push({ type: 'remove_layer', layer: action.layer, targetFg: action.targetFg });
+            } else if (action.type === 'remove_layer') {
+                if (action.targetFg) action.targetFg.addLayer(action.layer);
+                else activeFeatureGroup.addLayer(action.layer);
+                action.layer.addTo(map);
+                redoStack.push({ type: 'add_layer', layer: action.layer, targetFg: action.targetFg });
+            } else if (action.type === 'add_marker') {
+                map.removeLayer(action.markerData.marker);
+                placedMarkers = placedMarkers.filter(m => m.id !== action.markerData.id);
+                selectedMarkers.delete(action.markerData);
+                redoStack.push({ type: 'remove_marker', markerData: action.markerData });
+                updateEditorUI();
+            } else if (action.type === 'remove_marker') {
+                action.markerData.marker.addTo(map);
+                placedMarkers.push(action.markerData);
+                redoStack.push({ type: 'add_marker', markerData: action.markerData });
+            } else if (action.type === 'add_penanda') {
+                map.removeLayer(action.penanda.marker);
+                penandaList = penandaList.filter(p => p.id !== action.penanda.id);
+                redoStack.push({ type: 'remove_penanda', penanda: action.penanda });
+                renderPenandaList();
+            } else if (action.type === 'remove_penanda') {
+                action.penanda.marker.addTo(map);
+                penandaList.push(action.penanda);
+                redoStack.push({ type: 'add_penanda', penanda: action.penanda });
+                renderPenandaList();
+            } else if (action.type === 'move_layer') {
+                if (action.layer.setLatLngs) action.layer.setLatLngs(action.from);
+                else if (action.layer.setLatLng) action.layer.setLatLng(action.from);
+                redoStack.push({ type: 'move_layer', layer: action.layer, from: action.to, to: action.from });
+            } else if (action.type === 'move_marker') {
+                action.markerData.marker.setLatLng(action.from);
+                redoStack.push({ type: 'move_marker', markerData: action.markerData, from: action.to, to: action.from });
+            } else if (action.type === 'move_penanda') {
+                action.penanda.marker.setLatLng(action.from);
+                action.penanda.latlng = action.from;
+                redoStack.push({ type: 'move_penanda', penanda: action.penanda, from: action.to, to: action.from });
+                renderPenandaList();
+            }
+            generateCoordinates();
+            renderLayerManagerList();
+            updateUndoRedoUI();
+        };
+
+        window.doRedo = function() {
+            if (redoStack.length === 0) return;
+            const action = redoStack.pop();
+            if (action.type === 'add_layer') {
+                if (action.targetFg) action.targetFg.addLayer(action.layer);
+                else activeFeatureGroup.addLayer(action.layer);
+                action.layer.addTo(map);
+                undoStack.push({ type: 'remove_layer', layer: action.layer, targetFg: action.targetFg });
+            } else if (action.type === 'remove_layer') {
+                if (action.targetFg) action.targetFg.removeLayer(action.layer);
+                else activeFeatureGroup.removeLayer(action.layer);
+                map.removeLayer(action.layer);
+                undoStack.push({ type: 'add_layer', layer: action.layer, targetFg: action.targetFg });
+            } else if (action.type === 'add_marker') {
+                action.markerData.marker.addTo(map);
+                placedMarkers.push(action.markerData);
+                undoStack.push({ type: 'remove_marker', markerData: action.markerData });
+            } else if (action.type === 'remove_marker') {
+                map.removeLayer(action.markerData.marker);
+                placedMarkers = placedMarkers.filter(m => m.id !== action.markerData.id);
+                selectedMarkers.delete(action.markerData);
+                undoStack.push({ type: 'add_marker', markerData: action.markerData });
+                updateEditorUI();
+            } else if (action.type === 'add_penanda') {
+                action.penanda.marker.addTo(map);
+                penandaList.push(action.penanda);
+                undoStack.push({ type: 'remove_penanda', penanda: action.penanda });
+                renderPenandaList();
+            } else if (action.type === 'remove_penanda') {
+                map.removeLayer(action.penanda.marker);
+                penandaList = penandaList.filter(p => p.id !== action.penanda.id);
+                undoStack.push({ type: 'add_penanda', penanda: action.penanda });
+                renderPenandaList();
+            } else if (action.type === 'move_layer') {
+                if (action.layer.setLatLngs) action.layer.setLatLngs(action.from);
+                else if (action.layer.setLatLng) action.layer.setLatLng(action.from);
+                undoStack.push({ type: 'move_layer', layer: action.layer, from: action.to, to: action.from });
+            } else if (action.type === 'move_marker') {
+                action.markerData.marker.setLatLng(action.from);
+                undoStack.push({ type: 'move_marker', markerData: action.markerData, from: action.to, to: action.from });
+            } else if (action.type === 'move_penanda') {
+                action.penanda.marker.setLatLng(action.from);
+                action.penanda.latlng = action.from;
+                undoStack.push({ type: 'move_penanda', penanda: action.penanda, from: action.to, to: action.from });
+                renderPenandaList();
+            }
+            generateCoordinates();
+            renderLayerManagerList();
+            updateUndoRedoUI();
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); doUndo(); }
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); doRedo(); }
+        });
+
+        let _dragStartPos = null;
+        map.on('pm:dragstart', (e) => {
+            const l = e.layer;
+            try {
+                _dragStartPos = {
+                    layer: l,
+                    coords: l.getLatLngs ? JSON.parse(JSON.stringify(l.getLatLngs())) : (l.getLatLng ? l.getLatLng() : null)
+                };
+            } catch(err) { _dragStartPos = null; }
+        });
+
+        map.on('pm:dragend', (e) => {
+            const l = e.layer;
+            if (_dragStartPos && _dragStartPos.layer === l && _dragStartPos.coords) {
+                try {
+                    const toCoords = l.getLatLngs ? JSON.parse(JSON.stringify(l.getLatLngs())) : (l.getLatLng ? l.getLatLng() : null);
+                    pushUndo({ type: 'move_layer', layer: l, from: _dragStartPos.coords, to: toCoords });
+                } catch(err) {}
+            }
+            _dragStartPos = null;
+            generateCoordinates();
+        });
+
+        map.on('pm:create', (e) => {
+            const targetFg = layerGroups[activeLayerId] ? layerGroups[activeLayerId].fg : activeFeatureGroup;
+            const style = getLayerStyle(activeLayerId);
+            if (e.layer.setStyle) e.layer.setStyle(style);
+            targetFg.addLayer(e.layer);
+            pushUndo({ type: 'add_layer', layer: e.layer, targetFg: targetFg });
+            renderLayerManagerList();
+            generateCoordinates();
+        });
+
+        map.on('pm:remove', (e) => {
+            let foundFg = activeFeatureGroup;
+            Object.values(layerGroups).forEach(lg => {
+                if (lg.fg.hasLayer(e.layer)) foundFg = lg.fg;
+            });
+            foundFg.removeLayer(e.layer);
+            pushUndo({ type: 'remove_layer', layer: e.layer, targetFg: foundFg });
+            renderLayerManagerList();
+            generateCoordinates();
+        });
+
+        let dxfState = null;
+        let dxfAnchorMarker = null;
+        let isAnchorDragging = false;
+        let hoverTimeout;
+
+        const statusConfig = {
+            'rumah': { label: 'Rumah (Putih)', fill: '#ffffff', stroke: '#0284c7', opacity: 0.8 },
+            'jalan': { label: 'Jalan Perumahan (Abu-abu)', fill: '#94a3b8', stroke: '#64748b', opacity: 0.8 },
+            'terjual': { label: 'Terjual (Merah)', fill: '#ef4444', stroke: '#b91c1c', opacity: 0.8 },
+            'bank': { label: 'Proses Bank (Kuning)', fill: '#eab308', stroke: '#a16207', opacity: 0.8 },
+            'rth': { label: 'RTH (Hijau)', fill: '#22c55e', stroke: '#15803d', opacity: 0.8 }
+        };
+
+        // ==========================================
+        // MANAJEMEN IKON, SELECT, GROUPING
+        // ==========================================
+        let customIcons = []; 
+        let placedMarkers = []; 
+        let selectedMarkers = new Set();
+        let currentGroupId = 1;
+        let activePlacementIcon = null;
+
+        document.getElementById('icon-upload-input').addEventListener('change', function(e) {
+            const files = e.target.files;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const id = 'icon_' + Date.now() + Math.floor(Math.random() * 1000);
+                    customIcons.push({
+                        id: id,
+                        src: event.target.result,
+                        desc: file.name.split('.')[0]
+                    });
+                    renderIconLegend();
+                    updateLegendHTML();
+                };
+                reader.readAsDataURL(file);
+            }
+            e.target.value = '';
+        });
+
+        function renderIconLegend() {
+            const container = document.getElementById('custom-icon-list');
+            container.innerHTML = '';
+            customIcons.forEach(icon => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center gap-2 mb-2 p-2 bg-white border border-slate-200 rounded-lg shadow-sm';
+                div.innerHTML = `
+                    <img src="${icon.src}" class="w-8 h-8 object-contain bg-slate-50 border rounded p-0.5">
+                    <input type="text" class="text-[10px] border border-slate-300 rounded p-1.5 flex-1 font-semibold" value="${icon.desc}" onchange="updateIconDesc('${icon.id}', this.value)" placeholder="Keterangan Ikon...">
+                    <button onclick="activateIconPlacement('${icon.id}')" class="bg-purple-600 hover:bg-purple-700 text-white px-2.5 py-1.5 rounded text-[10px] font-bold transition shadow-sm">Tempatkan</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateIconDesc(id, newDesc) {
+            const icon = customIcons.find(i => i.id === id);
+            if (icon) icon.desc = newDesc;
+            updateLegendHTML();
+        }
+
+        function activateIconPlacement(id) {
+            activePlacementIcon = customIcons.find(i => i.id === id);
+            document.getElementById('map').style.cursor = 'crosshair';
+        }
+
+
+        function placeCustomIcon(latlng, iconData) {
+            const markerId = 'marker_' + Date.now() + Math.floor(Math.random() * 1000);
+            const html = `
+                <div id="wrapper_${markerId}" style="width: 50px; height: 50px; display:flex; justify-content:center; align-items:center; transform: scale(1) rotate(0deg); transform-origin: center center; transition: transform 0.1s ease-out;">
+                    <img id="img_${markerId}" src="${iconData.src}" style="width: 100%; height: 100%; object-fit: contain; padding: 2px;">
+                </div>
+            `;
+            const divIcon = L.divIcon({ html: html, className: 'custom-icon-noshadow', iconSize: [50, 50], iconAnchor: [25, 25] });
+            const marker = L.marker(latlng, { draggable: true, icon: divIcon }).addTo(map);
+            
+            const markerData = { id: markerId, marker: marker, iconData: iconData, scale: 1, rotate: 0, groupId: null };
+            placedMarkers.push(markerData);
+
+            marker.on('click', function(e) {
+                L.DomEvent.stopPropagation(e);
+                toggleSelection(markerData, e.originalEvent.shiftKey);
+            });
+
+            let startLatLngs = {};
+            marker.on('dragstart', function(e) {
+                if (markerData.groupId) {
+                    const groupMembers = placedMarkers.filter(m => m.groupId === markerData.groupId);
+                    groupMembers.forEach(m => { startLatLngs[m.id] = m.marker.getLatLng(); });
+                    startLatLngs.main = e.target.getLatLng();
+                }
+            });
+
+            marker.on('drag', function(e) {
+                if (markerData.groupId) {
+                    const currentMain = e.target.getLatLng();
+                    const deltaLat = currentMain.lat - startLatLngs.main.lat;
+                    const deltaLng = currentMain.lng - startLatLngs.main.lng;
+                    const groupMembers = placedMarkers.filter(m => m.groupId === markerData.groupId && m.id !== markerData.id);
+                    groupMembers.forEach(m => {
+                        const start = startLatLngs[m.id];
+                        if(start) { m.marker.setLatLng([start.lat + deltaLat, start.lng + deltaLng]); }
+                    });
+                }
+            });
+        }
+
+        function toggleSelection(markerData, multi = false) {
+            if (!multi) {
+                selectedMarkers.forEach(m => { if (m !== markerData) setMarkerSelectedState(m, false); });
+                selectedMarkers.clear();
+            }
+            if (selectedMarkers.has(markerData)) {
+                selectedMarkers.delete(markerData);
+                setMarkerSelectedState(markerData, false);
+            } else {
+                selectedMarkers.add(markerData);
+                setMarkerSelectedState(markerData, true);
+                if (markerData.groupId) {
+                    const groupMembers = placedMarkers.filter(m => m.groupId === markerData.groupId);
+                    groupMembers.forEach(m => { selectedMarkers.add(m); setMarkerSelectedState(m, true); });
+                }
+            }
+            updateEditorUI();
+        }
+
+        function clearSelection() {
+            selectedMarkers.forEach(m => setMarkerSelectedState(m, false));
+            selectedMarkers.clear();
+            updateEditorUI();
+        }
+
+        function setMarkerSelectedState(markerData, isSelected) {
+            const imgEl = document.getElementById(`img_${markerData.id}`);
+            if (imgEl) {
+                if(isSelected) imgEl.classList.add('icon-selected');
+                else imgEl.classList.remove('icon-selected');
+            }
+        }
+
+        function updateEditorUI() {
+            const editor = document.getElementById('icon-editor');
+            const countEl = document.getElementById('selected-count');
+            countEl.innerText = `${selectedMarkers.size} dipilih`;
+            if (selectedMarkers.size > 0) {
+                editor.classList.remove('hidden');
+                const first = Array.from(selectedMarkers)[0];
+                const s = parseFloat(first.scale || 1);
+                document.getElementById('icon-scale').value = s.toFixed(3);
+                const slider = document.getElementById('icon-scale-slider');
+                if (slider) slider.value = s;
+                document.getElementById('icon-rotate').value = first.rotate || 0;
+                document.getElementById('icon-opacity').value = first.opacity !== undefined ? first.opacity : 1;
+                document.getElementById('icon-scale-val').innerText = s.toFixed(3) + 'x';
+                document.getElementById('icon-rotate-val').innerText = (first.rotate || 0) + '°';
+                document.getElementById('icon-opacity-val').innerText = Math.round((first.opacity !== undefined ? first.opacity : 1) * 100) + '%';
+            } else {
+                editor.classList.add('hidden');
+            }
+        }
+
+        window.applyIconTransform = function() {
+            const scale = parseFloat(document.getElementById('icon-scale').value) || 1.000;
+            const rotate = parseFloat(document.getElementById('icon-rotate').value) || 0;
+            const opacity = parseFloat(document.getElementById('icon-opacity').value);
+            document.getElementById('icon-scale-val').innerText = scale.toFixed(3) + 'x';
+            document.getElementById('icon-rotate-val').innerText = rotate + '°';
+            document.getElementById('icon-opacity-val').innerText = Math.round(opacity * 100) + '%';
+            const slider = document.getElementById('icon-scale-slider');
+            if (slider && document.activeElement !== slider) slider.value = scale;
+            selectedMarkers.forEach(m => {
+                m.scale = scale;
+                m.rotate = rotate;
+                m.opacity = opacity;
+                updatePlacedMarkerTransform(m);
+            });
+        };
+
+        window.stepIconScale = function(delta) {
+            const inp = document.getElementById('icon-scale');
+            let val = parseFloat(inp.value) || 1.000;
+            val = Math.max(0.001, parseFloat((val + delta).toFixed(3)));
+            inp.value = val.toFixed(3);
+            const slider = document.getElementById('icon-scale-slider');
+            if (slider) slider.value = val;
+            applyIconTransform();
+        };
+
+        window.syncScaleFromSlider = function(val) {
+            const inp = document.getElementById('icon-scale');
+            if (inp) inp.value = parseFloat(val).toFixed(3);
+            applyIconTransform();
+        };
+
+        window.groupSelectedIcons = function() {
+            if (selectedMarkers.size < 2) return alert("Pilih minimal 2 ikon (Shift+Klik) untuk mengunci posisi (Grouping).");
+            currentGroupId++;
+            selectedMarkers.forEach(m => m.groupId = currentGroupId);
+            alert(`Grouping berhasil! ${selectedMarkers.size} ikon terkunci dalam 1 group.`);
+        };
+        
+        window.ungroupSelectedIcons = function() {
+            if (selectedMarkers.size === 0) return;
+            selectedMarkers.forEach(m => m.groupId = null);
+            alert("Group dilepas!");
+        };
+
+        window.duplicateSelectedObject = function() {
+            if (selectedMarkers.size > 0) {
+                const clones = [];
+                selectedMarkers.forEach(orig => {
+                    const origLL = orig.marker.getLatLng();
+                    const newLL = L.latLng(origLL.lat + 0.0003, origLL.lng + 0.0003);
+                    const markerId = 'marker_' + Date.now() + Math.floor(Math.random() * 1000);
+                    const curScale = orig.scale || 1;
+                    const curRot = orig.rotate || 0;
+                    const curOp = orig.opacity !== undefined ? orig.opacity : 1;
+                    const html = `
+                        <div id="wrapper_${markerId}" style="width: 50px; height: 50px; display:flex; justify-content:center; align-items:center; transform: scale(${curScale}) rotate(${curRot}deg); transform-origin: center center; opacity:${curOp}; transition: transform 0.1s ease-out;">
+                            <img id="img_${markerId}" src="${orig.iconData.src}" style="width: 100%; height: 100%; object-fit: contain; padding: 2px;">
+                        </div>
+                    `;
+                    const divIcon = L.divIcon({ html: html, className: 'custom-icon-noshadow', iconSize: [50, 50], iconAnchor: [25, 25] });
+                    const marker = L.marker(newLL, { draggable: true, icon: divIcon }).addTo(map);
+                    const markerData = {
+                        id: markerId,
+                        marker: marker,
+                        iconData: orig.iconData,
+                        scale: curScale,
+                        rotate: curRot,
+                        opacity: curOp,
+                        groupId: null,
+                        lockedScale: orig.lockedScale || false,
+                        baseZoom: orig.baseZoom || map.getZoom()
+                    };
+                    placedMarkers.push(markerData);
+                    pushUndo({ type: 'add_marker', markerData: markerData });
+
+                    marker.on('click', function(e) {
+                        L.DomEvent.stopPropagation(e);
+                        toggleSelection(markerData, e.originalEvent.shiftKey);
+                    });
+                    clones.push(markerData);
+                });
+                clearSelection();
+                clones.forEach(c => toggleSelection(c, true));
+                alert(`Berhasil menduplikat ${clones.length} ikon dengan ukuran dan rotasi seragam!`);
+                return;
+            }
+
+            let lastDrawnLayer = null;
+            const activeLg = layerGroups[activeLayerId];
+            const targetFg = activeLg ? activeLg.fg : activeFeatureGroup;
+            targetFg.eachLayer(l => {
+                if (l instanceof L.Polygon || l instanceof L.Polyline) {
+                    lastDrawnLayer = l;
+                }
+            });
+
+            if (lastDrawnLayer) {
+                const style = getLayerStyle(activeLayerId);
+                let clonedLayer;
+                if (lastDrawnLayer instanceof L.Polygon) {
+                    const origPts = lastDrawnLayer.getLatLngs()[0];
+                    const newPts = origPts.map(pt => [pt.lat + 0.0003, pt.lng + 0.0003]);
+                    clonedLayer = L.polygon(newPts, style).addTo(map);
+                } else {
+                    const origPts = lastDrawnLayer.getLatLngs();
+                    const newPts = origPts.map(pt => [pt.lat + 0.0003, pt.lng + 0.0003]);
+                    clonedLayer = L.polyline(newPts, style).addTo(map);
+                }
+                targetFg.addLayer(clonedLayer);
+                pushUndo({ type: 'add_layer', layer: clonedLayer, targetFg: targetFg });
+                renderLayerManagerList();
+                generateCoordinates();
+                alert(`Berhasil menduplikat bidang/garis terakhir pada layer "${activeLg ? activeLg.def.name : 'Aktif'}" dengan ukuran dan bentuk seragam!`);
+                return;
+            }
+
+            alert("Pilih terlebih dahulu ikon di peta atau gambar bidang poligon/garis yang ingin diduplikat.");
+        };
+
+        function updatePlacedMarkerTransform(m) {
+            const wrapper = document.getElementById(`wrapper_${m.id}`);
+            if (!wrapper) return;
+            const curZoom = map.getZoom();
+            const factor = (m.lockedScale && m.baseZoom !== undefined) ? Math.pow(2, curZoom - m.baseZoom) : 1;
+            const effScale = (m.scale || 1) * factor;
+            wrapper.style.transform = `scale(${effScale}) rotate(${m.rotate || 0}deg)`;
+            wrapper.style.opacity = (m.opacity !== undefined) ? m.opacity : 1;
+        }
+
+        window.toggleLockScaleIcon = function() {
+            if (selectedMarkers.size === 0) return alert("Pilih ikon terlebih dahulu.");
+            const currentZoom = map.getZoom();
+            let isLocking = false;
+            selectedMarkers.forEach(m => {
+                m.lockedScale = !m.lockedScale;
+                m.baseZoom = currentZoom;
+                isLocking = m.lockedScale;
+                updatePlacedMarkerTransform(m);
+            });
+            const btn = document.getElementById('btn-lock-scale');
+            if (btn) {
+                if (isLocking) {
+                    btn.className = "flex-1 bg-amber-600 text-white border border-amber-700 text-[10px] font-bold py-1.5 rounded transition shadow-sm";
+                    btn.innerHTML = "🔒 Skala Terkunci (Geo)";
+                } else {
+                    btn.className = "flex-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-bold py-1.5 rounded transition shadow-sm";
+                    btn.innerHTML = "📏 Kunci Skala Peta";
+                }
+            }
+            alert(isLocking ? "Objek terkunci pada skala geografis peta. Ukuran meter akan tetap proporsional dan tidak berubah saat zoom in/out!" : "Kunci skala dilepas. Ukuran kembali mengikuti pixel layar.");
+        };
+
+        map.on('zoom zoomend', function() {
+            placedMarkers.forEach(m => {
+                if (m.lockedScale) {
+                    updatePlacedMarkerTransform(m);
+                }
+            });
+        });
+
+        map.on('click', function(e) {
+            if (isCoordPickerMode) {
+                placeOrMoveCoordPin(e.latlng);
+                return;
+            }
+            if (isMarkMode) {
+                placePenanda(e.latlng);
+                return;
+            }
+            if (activePlacementIcon) {
+                placeCustomIcon(e.latlng, activePlacementIcon);
+                activePlacementIcon = null;
+                document.getElementById('map').style.cursor = '';
+            } else {
+                clearSelection();
+            }
+        });
+
+        window.deleteSelectedGroup = function() {
+            if (selectedMarkers.size === 0) return alert("Pilih dulu ikon dalam group (klik ikon, lalu tekan tombol ini).");
+            const first = Array.from(selectedMarkers)[0];
+            if (!first.groupId) {
+                if (!confirm("Ikon ini tidak dalam group. Hapus ikon ini saja?")) return;
+                map.removeLayer(first.marker);
+                placedMarkers = placedMarkers.filter(m => m.id !== first.id);
+                pushUndo({ type: 'add_marker', markerData: first });
+                selectedMarkers.clear();
+                updateEditorUI();
+                return;
+            }
+            const gid = first.groupId;
+            const groupMembers = placedMarkers.filter(m => m.groupId === gid);
+            if (!confirm(`Hapus seluruh group (${groupMembers.length} ikon)?`)) return;
+            groupMembers.forEach(m => {
+                map.removeLayer(m.marker);
+                pushUndo({ type: 'add_marker', markerData: m });
+            });
+            placedMarkers = placedMarkers.filter(m => m.groupId !== gid);
+            selectedMarkers.clear();
+            updateEditorUI();
+        }
+
+        window.deleteSelectedMarkers = function() {
+            if (selectedMarkers.size === 0) return alert("Pilih dulu ikon yang ingin dihapus (klik ikon).");
+            if (!confirm(`Hapus ${selectedMarkers.size} ikon terpilih?`)) return;
+            selectedMarkers.forEach(m => {
+                map.removeLayer(m.marker);
+                placedMarkers = placedMarkers.filter(p => p.id !== m.id);
+                pushUndo({ type: 'add_marker', markerData: m });
+            });
+            selectedMarkers.clear();
+            updateEditorUI();
+        }
+
+        window.showToast = function(msg, icon = '✅') {
+            const toast = document.getElementById('global-toast');
+            const msgEl = document.getElementById('global-toast-msg');
+            const iconEl = document.getElementById('global-toast-icon');
+            if (!toast) return;
+            if (msgEl) msgEl.textContent = msg;
+            if (iconEl) iconEl.textContent = icon;
+            toast.classList.remove('opacity-0', '-translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            clearTimeout(window._toastTimeout);
+            window._toastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-4');
+            }, 2500);
+        };
+
+        let isCoordPickerMode = false;
+        let activeCoordMarker = null;
+
+        function buildCoordPinIcon(latlng) {
+            const lat = latlng.lat.toFixed(6);
+            const lng = latlng.lng.toFixed(6);
+            return L.divIcon({
+                className: 'custom-coord-pin',
+                html: `
+                <div class="coord-pin-wrapper">
+                    <div class="coord-pin-pulse"></div>
+                    <div class="coord-pin-center">
+                        <svg width="32" height="32" viewBox="0 0 32 32">
+                            <circle cx="16" cy="16" r="14" stroke="#0284c7" stroke-width="2.5" fill="rgba(255, 255, 255, 0.95)"/>
+                            <circle cx="16" cy="16" r="4.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
+                            <line x1="16" y1="0" x2="16" y2="8" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="16" y1="24" x2="16" y2="32" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="0" y1="16" x2="8" y2="16" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="24" y1="16" x2="32" y2="16" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="coord-pin-floating-badge" id="coord-pin-badge">
+                        <span class="coord-pin-badge-text font-mono">${lat}, ${lng}</span>
+                    </div>
+                </div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+        }
+
+        function updateCoordPinUI(latlng) {
+            const lat = latlng.lat.toFixed(6);
+            const lng = latlng.lng.toFixed(6);
+            const badge = document.getElementById('coord-pin-badge');
+            if (badge) {
+                const textSpan = badge.querySelector('.coord-pin-badge-text') || badge;
+                textSpan.textContent = `${lat}, ${lng}`;
+            }
+            const hudLatLng = document.getElementById('hud-latlng-val');
+            const hudXY = document.getElementById('hud-xy-val');
+            if (hudLatLng) hudLatLng.textContent = `${lat}, ${lng}`;
+            if (hudXY) hudXY.textContent = `${lng}, ${lat}`;
+
+            const coordOutput = document.getElementById('coord-output');
+            if (coordOutput) {
+                coordOutput.value = `Lat, Lng: ${lat}, ${lng}\nX, Y: ${lng}, ${lat}`;
+            }
+        }
+
+        function buildCoordPinPopupHTML(latlng) {
+            const latStr = latlng.lat.toFixed(6);
+            const lngStr = latlng.lng.toFixed(6);
+            const latLngText = `${latStr}, ${lngStr}`;
+            const xyText = `${lngStr}, ${latStr}`;
+            return `
+            <div style="min-width:250px;font-family:sans-serif;padding:6px">
+                <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-bottom:8px">
+                    <div style="font-weight:800;font-size:13px;color:#0f172a;display:flex;align-items:center;gap:6px">
+                        <span>🎯</span><span>Pin Koordinat Presisi</span>
+                    </div>
+                    <span style="font-size:10px;background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:700">WGS84</span>
+                </div>
+                <div style="margin-bottom:6px">
+                    <div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px">Format Lat, Lng (GPS / Google Maps):</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:5px 8px">
+                        <span style="font-family:monospace;font-size:12px;font-weight:700;color:#0f172a">${latLngText}</span>
+                        <button type="button" onclick="copyCoordinates('${latLngText}', this)" style="background:#2563eb;color:white;border:none;border-radius:4px;padding:4px 9px;font-size:11px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:4px" title="Salin Lat, Lng">
+                            <span>📋</span><span>Salin</span>
+                        </button>
+                    </div>
+                </div>
+                <div style="margin-bottom:8px">
+                    <div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px">Format X, Y (CAD / GIS / Shapefile):</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;padding:5px 8px">
+                        <span style="font-family:monospace;font-size:12px;font-weight:700;color:#0f172a">${xyText}</span>
+                        <button type="button" onclick="copyCoordinates('${xyText}', this)" style="background:#059669;color:white;border:none;border-radius:4px;padding:4px 9px;font-size:11px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:4px" title="Salin X, Y">
+                            <span>📐</span><span>Salin X,Y</span>
+                        </button>
+                    </div>
+                </div>
+                <div style="display:flex;gap:6px;margin-top:6px;padding-top:6px;border-top:1px solid #f1f5f9">
+                    <button type="button" onclick="saveCoordPinAsPenanda()" style="flex:1;background:#7c3aed;color:white;border:none;border-radius:6px;padding:6px;font-size:11px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px" title="Simpan sebagai titik penanda permanen di sidebar">
+                        <span>➕ Simpan Penanda</span>
+                    </button>
+                    <button type="button" onclick="removeCoordPin()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:6px 8px;font-size:11px;font-weight:bold;cursor:pointer" title="Hapus Pin">
+                        <span>🗑️ Hapus</span>
+                    </button>
+                </div>
+            </div>`;
+        }
+
+        window.toggleCoordPickerMode = function(forceState) {
+            if (forceState !== undefined) {
+                isCoordPickerMode = forceState;
+            } else {
+                isCoordPickerMode = !isCoordPickerMode;
+            }
+            const btn = document.getElementById('btn-coord-picker');
+            const label = document.getElementById('coord-picker-label');
+            const hud = document.getElementById('coord-picker-hud');
+
+            if (isCoordPickerMode) {
+                if (isMarkMode) toggleMarkMode();
+                if (label) label.textContent = '🎯 Pin Koordinat: ON';
+                if (btn) {
+                    btn.classList.replace('bg-cyan-50', 'bg-cyan-600');
+                    btn.classList.replace('text-cyan-800', 'text-white');
+                    btn.classList.replace('border-cyan-300', 'border-cyan-700');
+                }
+                document.body.classList.add('coord-picker-active');
+                if (activeCoordMarker) {
+                    if (hud) hud.classList.remove('hidden');
+                } else {
+                    const center = map.getCenter();
+                    placeOrMoveCoordPin(center);
+                }
+            } else {
+                if (label) label.textContent = '🎯 Pin Koordinat: OFF';
+                if (btn) {
+                    btn.classList.replace('bg-cyan-600', 'bg-cyan-50');
+                    btn.classList.replace('text-white', 'text-cyan-800');
+                    btn.classList.replace('border-cyan-700', 'border-cyan-300');
+                }
+                document.body.classList.remove('coord-picker-active');
+            }
+        };
+
+        window.placeOrMoveCoordPin = function(latlng) {
+            const lat = latlng.lat;
+            const lng = latlng.lng;
+            if (!activeCoordMarker) {
+                activeCoordMarker = L.marker(latlng, {
+                    draggable: true,
+                    icon: buildCoordPinIcon(latlng),
+                    zIndexOffset: 10000
+                }).addTo(map);
+                registerSnappable(activeCoordMarker);
+
+                activeCoordMarker.on('drag', function(e) {
+                    updateCoordPinUI(e.target.getLatLng());
+                });
+                activeCoordMarker.on('dragend', function(e) {
+                    const pos = e.target.getLatLng();
+                    updateCoordPinUI(pos);
+                    activeCoordMarker.setPopupContent(buildCoordPinPopupHTML(pos));
+                    showToast(`Koordinat disesuaikan: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`, '📍');
+                });
+                activeCoordMarker.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    activeCoordMarker.setPopupContent(buildCoordPinPopupHTML(activeCoordMarker.getLatLng()));
+                    activeCoordMarker.openPopup();
+                });
+            } else {
+                activeCoordMarker.setLatLng(latlng);
+                activeCoordMarker.setIcon(buildCoordPinIcon(latlng));
+            }
+
+            activeCoordMarker.bindPopup(buildCoordPinPopupHTML(latlng), { closeButton: true, offset: [0, -18] });
+            updateCoordPinUI(latlng);
+            const hud = document.getElementById('coord-picker-hud');
+            if (hud) hud.classList.remove('hidden');
+            showToast(`Pin aktif: ${lat.toFixed(6)}, ${lng.toFixed(6)}`, '🎯');
+        };
+
+        window.copyHudCoordinates = function(type, btn) {
+            if (!activeCoordMarker) {
+                showToast('Klik di peta untuk meletakkan pin koordinat!', '⚠️');
+                return;
+            }
+            const pos = activeCoordMarker.getLatLng();
+            const latStr = pos.lat.toFixed(6);
+            const lngStr = pos.lng.toFixed(6);
+            const textToCopy = (type === 'xy') ? `${lngStr}, ${latStr}` : `${latStr}, ${lngStr}`;
+            const labelType = (type === 'xy') ? 'X, Y (CAD)' : 'Lat, Lng';
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast(`✅ ${labelType} Tersalin: ${textToCopy}`);
+                if (btn) {
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = '<span>✅</span><span>Tersalin!</span>';
+                    setTimeout(() => { btn.innerHTML = orig; }, 1500);
+                }
+            }).catch(() => {
+                prompt(`Salin koordinat ${labelType}:`, textToCopy);
+            });
+        };
+
+        window.saveCoordPinAsPenanda = function() {
+            if (!activeCoordMarker) return;
+            const pos = activeCoordMarker.getLatLng();
+            placePenanda(pos, `Titik ${penandaCounter}`);
+            showToast('Titik koordinat berhasil disimpan ke daftar penanda!', '💾');
+        };
+
+        window.removeCoordPin = function() {
+            if (activeCoordMarker) {
+                map.removeLayer(activeCoordMarker);
+                activeCoordMarker = null;
+            }
+            const hud = document.getElementById('coord-picker-hud');
+            if (hud) hud.classList.add('hidden');
+            showToast('Pin koordinat dinonaktifkan', '🗑️');
+        };
+
+        window.closeCoordPicker = function() {
+            toggleCoordPickerMode(false);
+            const hud = document.getElementById('coord-picker-hud');
+            if (hud) hud.classList.add('hidden');
+        };
+
+        let isMarkMode = false;
+        let penandaList = [];
+        let penandaCounter = 1;
+
+        window.toggleMarkMode = function() {
+            isMarkMode = !isMarkMode;
+            const btn = document.getElementById('btn-mark-mode');
+            const label = document.getElementById('mark-mode-label');
+            if (isMarkMode) {
+                if (isCoordPickerMode) toggleCoordPickerMode(false);
+                label.textContent = '📌 Penanda: ON';
+                btn.classList.replace('bg-teal-50', 'bg-teal-500');
+                btn.classList.replace('text-teal-700', 'text-white');
+                btn.classList.replace('border-teal-200', 'border-teal-600');
+                document.body.classList.add('mark-mode-active');
+            } else {
+                label.textContent = '📌 Penanda: OFF';
+                btn.classList.replace('bg-teal-500', 'bg-teal-50');
+                btn.classList.replace('text-white', 'text-teal-700');
+                btn.classList.replace('border-teal-600', 'border-teal-200');
+                document.body.classList.remove('mark-mode-active');
+            }
+        };
+
+        function buildPenandaPopupHTML(penanda) {
+            const latStr = penanda.latlng.lat.toFixed(6);
+            const lngStr = penanda.latlng.lng.toFixed(6);
+            const coordPair = `${latStr}, ${lngStr}`;
+            const coordCAD = `${lngStr}, ${latStr}`;
+            return `
+            <div style="min-width:240px;font-family:sans-serif;padding:4px">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+                    <span style="font-size:20px;line-height:1">${penanda.emoji}</span>
+                    <input type="text" id="pop-label-${penanda.id}" value="${penanda.label}" style="flex:1;font-size:12px;font-weight:700;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;outline:none" placeholder="Nama Penanda" onchange="updatePenandaLabel('${penanda.id}', this.value)">
+                    <button type="button" onclick="updatePenandaLabel('${penanda.id}', document.getElementById('pop-label-${penanda.id}').value)" style="background:#10b981;color:white;border:none;border-radius:6px;padding:5px 8px;font-size:11px;font-weight:bold;cursor:pointer" title="Simpan Nama">💾</button>
+                    <button type="button" onclick="removePenanda('${penanda.id}')" style="background:#ef4444;color:white;border:none;border-radius:6px;padding:5px 8px;font-size:11px;font-weight:bold;cursor:pointer" title="Hapus Penanda">🗑️</button>
+                </div>
+                <div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px;letter-spacing:0.5px">Lat, Lng (GPS / Maps):</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px 8px;margin-bottom:6px">
+                    <span style="font-family:monospace;font-size:12px;font-weight:700;color:#0f172a">${coordPair}</span>
+                    <button type="button" onclick="copyCoordinates('${coordPair}', this)" style="background:#2563eb;color:white;border:none;border-radius:4px;padding:4px 9px;font-size:11px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:4px" title="Salin Lat, Lng ke Clipboard">
+                        <span>📋</span><span>Salin</span>
+                    </button>
+                </div>
+                <div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px;letter-spacing:0.5px">X, Y (CAD / GIS / Shapefile):</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px 8px">
+                    <span style="font-family:monospace;font-size:12px;font-weight:700;color:#0f172a">${coordCAD}</span>
+                    <button type="button" onclick="copyCoordinates('${coordCAD}', this)" style="background:#059669;color:white;border:none;border-radius:4px;padding:4px 9px;font-size:11px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:4px" title="Salin X, Y ke Clipboard">
+                        <span>📐</span><span>Salin X,Y</span>
+                    </button>
+                </div>
+            </div>`;
+        }
+
+        window.copyCoordinates = function(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                if (btn) {
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = '<span>✅</span><span>Tersalin!</span>';
+                    btn.style.background = '#10b981';
+                    setTimeout(() => {
+                        btn.innerHTML = orig;
+                        btn.style.background = '';
+                    }, 1500);
+                }
+                showToast(`Koordinat tersalin: ${text}`, '📋');
+            }).catch(() => {
+                prompt('Salin koordinat:', text);
+            });
+        };
+
+        window.updatePenandaLabel = function(id, newLabel) {
+            const p = penandaList.find(x => x.id === id);
+            if (!p) return;
+            const finalVal = (newLabel || '').trim() || p.label;
+            p.label = finalVal;
+            const iconHtml = `<div style="font-size:28px;line-height:1;text-align:center;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))">${p.emoji}<div style="font-size:9px;font-weight:700;color:#1e293b;background:rgba(255,255,255,0.92);border-radius:3px;padding:1px 4px;margin-top:1px;white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;text-align:center">${finalVal}</div></div>`;
+            p.marker.setIcon(L.divIcon({ html: iconHtml, className: 'penanda-icon', iconSize: [70, 52], iconAnchor: [35, 48] }));
+            p.marker.setPopupContent(buildPenandaPopupHTML(p));
+            renderPenandaList();
+        };
+
+        function placePenanda(latlng, optionalLabel) {
+            const emojiEl = document.getElementById('penanda-type-select');
+            const emoji = emojiEl ? emojiEl.value : '📍';
+            const finalLabel = (optionalLabel !== undefined && optionalLabel !== null) 
+                ? optionalLabel 
+                : `Titik ${penandaCounter}`;
+            penandaCounter++;
+
+            const iconHtml = `<div style="font-size:28px;line-height:1;text-align:center;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))">${emoji}<div style="font-size:9px;font-weight:700;color:#1e293b;background:rgba(255,255,255,0.92);border-radius:3px;padding:1px 4px;margin-top:1px;white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;text-align:center">${finalLabel}</div></div>`;
+            const divIcon = L.divIcon({ html: iconHtml, className: 'penanda-icon', iconSize: [70, 52], iconAnchor: [35, 48] });
+            const marker = L.marker(latlng, { draggable: true, icon: divIcon }).addTo(map);
+            registerSnappable(marker);
+
+            const penanda = { id: 'p_' + Date.now(), emoji, label: finalLabel, latlng, marker };
+            penandaList.push(penanda);
+            pushUndo({ type: 'add_penanda', penanda });
+
+            marker.bindPopup(buildPenandaPopupHTML(penanda), { closeButton: true });
+
+            marker.on('click', function(e) {
+                L.DomEvent.stopPropagation(e);
+                marker.setPopupContent(buildPenandaPopupHTML(penanda));
+                marker.openPopup();
+            });
+
+            let _penandaDragStartPos = null;
+            marker.on('dragstart', function(e) {
+                _penandaDragStartPos = e.target.getLatLng();
+            });
+            marker.on('drag', function(e) {
+                const curPos = e.target.getLatLng();
+                penanda.latlng = curPos;
+                if (marker.isPopupOpen()) {
+                    marker.setPopupContent(buildPenandaPopupHTML(penanda));
+                }
+            });
+            marker.on('dragend', function(e) {
+                const newLatLng = e.target.getLatLng();
+                const oldPos = _penandaDragStartPos || penanda.latlng;
+                penanda.latlng = newLatLng;
+                marker.setPopupContent(buildPenandaPopupHTML(penanda));
+                renderPenandaList();
+                pushUndo({ type: 'move_penanda', penanda: penanda, from: oldPos, to: newLatLng });
+                showToast(`Posisi penanda ${penanda.label} diperbarui: ${newLatLng.lat.toFixed(6)}, ${newLatLng.lng.toFixed(6)}`, '📍');
+            });
+
+            renderPenandaList();
+            marker.openPopup();
+            showToast(`Penanda ditambahkan: ${finalLabel}`, '📌');
+            return penanda;
+        }
+        window.placePenanda = placePenanda;
+
+        window.removePenanda = function(id) {
+            const penanda = penandaList.find(p => p.id === id);
+            if (!penanda) return;
+            map.removeLayer(penanda.marker);
+            penandaList = penandaList.filter(p => p.id !== id);
+            pushUndo({ type: 'remove_penanda', penanda });
+            renderPenandaList();
+        };
+
+        window.clearAllPenanda = function() {
+            if (penandaList.length === 0) return;
+            if (!confirm(`Hapus semua ${penandaList.length} titik penanda?`)) return;
+            penandaList.forEach(p => { map.removeLayer(p.marker); pushUndo({ type: 'remove_penanda', penanda: p }); });
+            penandaList = [];
+            renderPenandaList();
+        };
+
+        function renderPenandaList() {
+            const container = document.getElementById('penanda-list');
+            if (!container) return;
+            if (penandaList.length === 0) {
+                container.innerHTML = '<div class="text-[10px] text-slate-400 italic text-center py-3">Aktifkan Mode Penanda → klik peta untuk menempatkan titik</div>';
+                return;
+            }
+            container.innerHTML = penandaList.map(p => {
+                const lat = p.latlng.lat.toFixed(6), lng = p.latlng.lng.toFixed(6);
+                const coordPair = `${lat}, ${lng}`;
+                const coordCAD = `${lng}, ${lat}`;
+                return `
+                <div class="penanda-item flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-2 shadow-sm text-[10px] cursor-pointer hover:bg-slate-50 transition" onclick="map.setView([${p.latlng.lat},${p.latlng.lng}],17);p.marker&&p.marker.openPopup()">
+                    <span class="text-xl leading-none shrink-0">${p.emoji}</span>
+                    <div class="flex-1 overflow-hidden">
+                        <div class="font-bold text-slate-800 truncate">${p.label}</div>
+                        <div class="font-mono text-slate-600 font-semibold">${coordPair}</div>
+                    </div>
+                    <button type="button" onclick="event.stopPropagation();copyCoordinates('${coordPair}', this)" class="text-blue-600 hover:text-blue-800 font-bold px-1.5 py-0.5 bg-blue-50 hover:bg-blue-100 rounded" title="Salin Lat, Lng">📋</button>
+                    <button type="button" onclick="event.stopPropagation();copyCoordinates('${coordCAD}', this)" class="text-emerald-600 hover:text-emerald-800 font-bold px-1.5 py-0.5 bg-emerald-50 hover:bg-emerald-100 rounded" title="Salin X, Y (CAD)">📐</button>
+                    <button type="button" onclick="event.stopPropagation();removePenanda('${p.id}')" class="text-red-400 hover:text-red-600 font-bold text-base px-1 leading-none" title="Hapus">×</button>
+                </div>`;
+            }).join('');
+        }
+
+        // ==========================================
+        // FLOATING HTML LEGENDA & LOCK SYSTEM
+        // ==========================================
+        let isLegendLocked = false;
+
+        function updateLegendHTML() {
+            const container = document.getElementById('dynamic-custom-legend-container');
+            if (!container) return;
+            let html = '';
+            if (customIcons && customIcons.length > 0) {
+                html += `<div class="font-bold text-slate-900 border-b pb-1 mt-3 mb-1 flex justify-between items-center"><span>⭐ Legenda Objek/Ikon</span></div>`;
+                customIcons.forEach(icon => {
+                    html += `<div class="flex items-start gap-5 mt-3 mb-2 break-words"><div class="w-6 flex justify-center shrink-0 pt-[1px]"><img src="${icon.src}" class="w-6 h-6 object-contain bg-white border border-slate-300 rounded-[3px] p-[2px] shadow-sm block"></div> <span class="flex-1 leading-snug pt-[4px] pl-1">${icon.desc}</span></div>`;
+                });
+            }
+            if (typeof AMDAL_OSS_LAYERS !== 'undefined') {
+                const activeLayersWithItems = AMDAL_OSS_LAYERS.filter(def => layerGroups[def.id] && layerGroups[def.id].fg.getLayers().length > 0);
+                if (activeLayersWithItems.length > 0) {
+                    html += `<div class="font-bold text-slate-900 border-b pb-1 mt-3 mb-1 flex justify-between items-center"><span>📑 Layer AMDAL / OSS</span></div>`;
+                    activeLayersWithItems.forEach(def => {
+                        html += `<div class="flex items-center gap-3 mt-2 mb-1.5"><span class="w-3.5 h-3.5 rounded-sm border shrink-0" style="background:${def.fill};border-color:${def.color}"></span><span class="flex-1 leading-snug text-[10px] text-slate-700 font-semibold">${def.name}</span></div>`;
+                    });
+                }
+            }
+            if (currentBaseLayerKey === 'ksp-big-sda') {
+                html += `
+                <div class="font-bold text-slate-900 border-b pb-1 mt-3 mb-1 flex justify-between items-center"><span>🌿 KSP BIG Satu Peta</span></div>
+                <div class="p-2 bg-emerald-50 border border-emerald-200 rounded text-[10px] text-emerald-900 leading-relaxed mt-1">
+                    <strong>Sumber Daya Alam & Lingkungan Hidup:</strong><br>
+                    • Tutupan Lahan & Hutan Konservasi<br>
+                    • Daerah Aliran Sungai & Mangrove<br>
+                    • Sumber Daya Tambang & Mineral<br>
+                    <a href="https://www.arcgis.com/apps/mapviewer/index.html?url=https%3A%2F%2Fkspservices.big.go.id%2Fsatupeta%2Frest%2Fservices%2FPUBLIK%2FSUMBER_DAYA_ALAM_DAN_LINGKUNGAN%2FMapServer&source=sd" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2 py-1 rounded inline-flex items-center gap-1 mt-1.5 shadow-sm text-[10px] no-underline">
+                        <span>🔗</span><span>Buka Database Lengkap ArcGIS MapViewer BIG ↗</span>
+                    </a>
+                </div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        window.toggleLegendOnMap = function() {
+            const legendBox = document.getElementById('map-legend-box');
+            if (legendBox.style.display === 'block') {
+                legendBox.style.display = 'none';
+            } else {
+                legendBox.style.display = 'block';
+                updateLegendHTML();
+            }
+        }
+
+        function toggleLegendLock() {
+            isLegendLocked = !isLegendLocked;
+            const btn = document.getElementById('btn-legend-lock');
+            const legendBox = document.getElementById('map-legend-box');
+            const header = document.getElementById('legend-header');
+
+            if (isLegendLocked) {
+                btn.innerText = '🔓';
+                legendBox.classList.add('legend-locked');
+                header.style.cursor = 'default';
+            } else {
+                btn.innerText = '🔒';
+                legendBox.classList.remove('legend-locked');
+                header.style.cursor = 'move';
+            }
+        }
+
+        // Drag Handler untuk Floating Legenda
+        const legendBox = document.getElementById('map-legend-box');
+        const legendHeader = document.getElementById('legend-header');
+
+        legendHeader.onmousedown = function(e) {
+            if (isLegendLocked) return;
+            if (e.target.id === 'btn-legend-lock' || e.target.closest('#btn-legend-lock')) return;
+            
+            let shiftX = e.clientX - legendBox.getBoundingClientRect().left;
+            let shiftY = e.clientY - legendBox.getBoundingClientRect().top;
+
+            function moveAt(pageX, pageY) {
+                legendBox.style.left = (pageX - shiftX) + 'px';
+                legendBox.style.top = (pageY - shiftY) + 'px';
+            }
+
+            function onMouseMove(e) { moveAt(e.pageX, e.pageY); }
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.onmouseup = null;
+            };
+        };
+        legendHeader.ondragstart = function() { return false; };
+
+        // ==========================================
+        // STABLE GRID CETAK (PENGATURAN 4 SISI & UKURAN)
+        // ==========================================
+        function togglePrintGrid() {
+            const grid = document.getElementById('print-grid-overlay');
+            const btn = document.getElementById('btn-grid').querySelector('span');
+            if(grid.style.display === 'block') {
+                grid.style.display = 'none';
+                btn.innerText = '📏 Grid Cetak: OFF';
+                document.getElementById('btn-grid').classList.replace('bg-blue-600', 'bg-blue-50');
+                document.getElementById('btn-grid').classList.replace('text-white', 'text-blue-700');
+            } else {
+                grid.style.display = 'block';
+                btn.innerText = '📏 Grid Cetak: ON';
+                document.getElementById('btn-grid').classList.replace('bg-blue-50', 'bg-blue-600');
+                document.getElementById('btn-grid').classList.replace('text-blue-700', 'text-white');
+                if(map) { setTimeout(() => map.invalidateSize(), 100); }
+            }
+        }
+
+        function updateGrid4Sides() {
+            const wVal = document.getElementById('grid-w-input').value;
+            const hVal = document.getElementById('grid-h-input').value;
+            const xVal = document.getElementById('grid-x-input').value || 0;
+            const yVal = document.getElementById('grid-y-input').value || 0;
+            const grid = document.getElementById('print-grid-overlay');
+            
+            if (grid) {
+                grid.style.width = wVal + '%';
+                grid.style.height = hVal + '%';
+                grid.style.transform = `translate(calc(-50% + ${xVal}px), calc(-50% + ${yVal}px))`;
+            }
+        }
+
+        // ==========================================
+        // DXF & KOORDINAT BASE SCRIPT
+        // ==========================================
+        document.getElementById('dxf-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const dxf = new DxfParser().parseSync(event.target.result);
+                    initDXFData(dxf);
+                } catch (err) { alert("Format DXF tidak valid."); }
+                e.target.value = ''; 
+            };
+            reader.readAsText(file);
+        });
+
+        const projectJsonEl = document.getElementById('project-json-input');
+        if (projectJsonEl) {
+            projectJsonEl.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const parsed = JSON.parse(event.target.result);
+                        loadProjectJSON(parsed);
+                    } catch (err) {
+                        alert("Format file JSON tidak valid: " + err.message);
+                    }
+                    e.target.value = '';
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        function initDXFData(dxf) {
+            let polygons = [];
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+            dxf.entities.forEach(entity => {
+                if ((entity.type === 'LWPOLYLINE' || entity.type === 'POLYLINE') && entity.vertices.length >= 3) {
+                    if (entity.shape || entity.isClosed) {
+                        let pts = entity.vertices.map(v => {
+                            minX = Math.min(minX, v.x); maxX = Math.max(maxX, v.x);
+                            minY = Math.min(minY, v.y); maxY = Math.max(maxY, v.y);
+                            return {x: v.x, y: v.y};
+                        });
+                        polygons.push({ id: Math.random().toString(36).substr(2, 9), cadPts: pts, status: 'rumah' });
+                    }
+                }
+            });
+            if (polygons.length === 0) return alert("DXF tidak mengandung poligon tertutup.");
+
+            const mapBounds = map.getBounds();
+            const cadWidth = maxX - minX;
+            const baseScale = ((mapBounds.getEast() - mapBounds.getWest()) / cadWidth) * 0.4;
+
+            dxfState = {
+                cadCenter: { x: minX + cadWidth/2, y: minY + (maxY - minY)/2 },
+                mapCenter: map.getCenter(),
+                baseScale: baseScale,
+                scaleMultiplier: 1.000,
+                rotation: 0,
+                features: polygons
+            };
+
+            document.getElementById('dxf-manager-panel').classList.remove('hidden');
+            document.getElementById('dxf-manager-panel').classList.add('flex');
+            document.getElementById('dxf-count-badge').innerText = polygons.length + ' Bidang';
+            
+            buildDxfUIList();
+            renderDxfBatch();
+        }
+
+        function renderDxfBatch() {
+            if(dxfState && dxfState.features) {
+                dxfState.features.forEach(f => { if (f.layer) activeFeatureGroup.removeLayer(f.layer); });
+            }
+            if (dxfAnchorMarker) map.removeLayer(dxfAnchorMarker);
+            
+            const anchorIcon = L.divIcon({ html: '📍', className: 'text-3xl drop-shadow-md', iconSize: [30,30], iconAnchor: [15,30] });
+            dxfAnchorMarker = L.marker(dxfState.mapCenter, { draggable: true, icon: anchorIcon, opacity: 0, zIndexOffset: 1000 }).addTo(map);
+            
+            dxfAnchorMarker.on('mouseover', () => dxfAnchorMarker.setOpacity(1));
+            dxfAnchorMarker.on('mouseout', () => { if(!isAnchorDragging) dxfAnchorMarker.setOpacity(0); });
+            dxfAnchorMarker.on('dragstart', () => { isAnchorDragging = true; dxfAnchorMarker.setOpacity(1); });
+            dxfAnchorMarker.on('dragend', (e) => { isAnchorDragging = false; dxfAnchorMarker.setOpacity(0); dxfState.mapCenter = e.target.getLatLng(); updateDxfPositions(); });
+            dxfAnchorMarker.on('drag', e => { dxfState.mapCenter = e.target.getLatLng(); updateDxfPositions(); });
+
+            dxfState.features.forEach(f => {
+                const cfg = statusConfig[f.status || 'rumah'];
+                f.layer = L.polygon([], { color: cfg.stroke, weight: 2, fillColor: cfg.fill, fillOpacity: cfg.opacity });
+                f.layer.on('click', function(e) {
+                    if (isMarkMode) {
+                        L.DomEvent.stopPropagation(e);
+                        placePenanda(e.latlng);
+                    }
+                });
+                activeFeatureGroup.addLayer(f.layer);
+            });
+            updateDxfPositions();
+        }
+
+        window.stepDxfScale = function(delta) {
+            const inp = document.getElementById('dxf-scale');
+            let val = parseFloat(inp.value) || 1.000;
+            val = Math.max(0.001, parseFloat((val + delta).toFixed(3)));
+            inp.value = val.toFixed(3);
+            const slider = document.getElementById('dxf-scale-slider');
+            if (slider) slider.value = val;
+            updateDxfPositions();
+        };
+
+        window.syncDxfScaleFromSlider = function(val) {
+            const inp = document.getElementById('dxf-scale');
+            if (inp) inp.value = parseFloat(val).toFixed(3);
+            updateDxfPositions();
+        };
+
+        window.updateDxfPositions = function() {
+            const curVal = parseFloat(document.getElementById('dxf-scale').value) || 1.000;
+            document.getElementById('scale-val').innerText = curVal.toFixed(3) + 'x';
+            const dxfSlider = document.getElementById('dxf-scale-slider');
+            if (dxfSlider && document.activeElement !== dxfSlider) dxfSlider.value = curVal;
+            if (!dxfState) return;
+            dxfState.scaleMultiplier = curVal;
+            dxfState.rotation = parseFloat(document.getElementById('dxf-rotate').value) || 0;
+            document.getElementById('rotate-val').innerText = dxfState.rotation + '°';
+
+            let center = dxfState.mapCenter;
+            let finalScale = dxfState.baseScale * dxfState.scaleMultiplier;
+            let rad = dxfState.rotation * Math.PI / 180;
+            let cos = Math.cos(rad), sin = Math.sin(rad);
+            let latLngRatio = Math.cos(center.lat * Math.PI / 180);
+
+            dxfState.features.forEach((f) => {
+                let latlngs = f.cadPts.map(pt => {
+                    let dx = pt.x - dxfState.cadCenter.x;
+                    let dy = pt.y - dxfState.cadCenter.y;
+                    let rx = dx * cos - dy * sin;
+                    let ry = dx * sin + dy * cos;
+                    return [center.lat + (ry * finalScale), center.lng + ((rx * finalScale) / latLngRatio)];
+                });
+                f.layer.setLatLngs(latlngs);
+            });
+            generateCoordinates();
+        }
+
+        function buildDxfUIList() {
+            const container = document.getElementById('dxf-feature-list');
+            container.innerHTML = '';
+            dxfState.features.forEach((f, i) => {
+                const div = document.createElement('div');
+                div.id = `feature-card-${f.id}`;
+                div.className = 'p-2.5 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2';
+                
+                let selectHtml = `<select class="text-[11px] font-semibold p-1.5 border border-slate-300 rounded outline-none bg-slate-50" onchange="updateFeatureStatus('${f.id}', this.value)">`;
+                for (let key in statusConfig) {
+                    selectHtml += `<option value="${key}" ${f.status === key ? 'selected' : ''}>${statusConfig[key].label}</option>`;
+                }
+                selectHtml += `</select>`;
+
+                div.innerHTML = `<span class="font-bold text-[11px] text-slate-700 whitespace-nowrap">Bidang #${i+1}</span><div class="flex-1 text-right">${selectHtml}</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        window.updateFeatureStatus = (id, newStatus) => {
+            const feature = dxfState.features.find(f => f.id === id);
+            if (feature) {
+                feature.status = newStatus;
+                const cfg = statusConfig[newStatus];
+                feature.layer.setStyle({ color: cfg.stroke, fillColor: cfg.fill, fillOpacity: cfg.opacity });
+            }
+        }
+
+        window.centerDxfAnchor = () => {
+            if(!dxfState) return;
+            dxfState.mapCenter = map.getCenter();
+            if(dxfAnchorMarker) dxfAnchorMarker.setLatLng(dxfState.mapCenter);
+            updateDxfPositions();
+        }
+
+        document.getElementById('coord-file-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                document.getElementById('batchCoords').value = evt.target.result.trim();
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        function generateCoordinates() {
+            let outputText = "=== TITIK KOORDINAT WGS84 ===\n\n";
+            let index = 1;
+
+            const scanGroup = (fg, labelName) => {
+                fg.eachLayer(layer => {
+                    if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                        outputText += `--- ${labelName} #${index} ---\nTitik, Latitude (Y), Longitude (X)\n`;
+                        const pts = (layer instanceof L.Polygon ? layer.getLatLngs()[0] : layer.getLatLngs());
+                        if (Array.isArray(pts)) {
+                            pts.forEach((ll, i) => {
+                                outputText += `P${i+1}, ${ll.lat.toFixed(6)}, ${ll.lng.toFixed(6)}\n`;
+                            });
+                        }
+                        outputText += "\n";
+                        index++;
+                    } else if (layer instanceof L.CircleMarker || layer instanceof L.Marker) {
+                        const ll = layer.getLatLng();
+                        outputText += `[Point] ${labelName} #${index}: ${ll.lat.toFixed(6)}, ${ll.lng.toFixed(6)}\n`;
+                        index++;
+                    }
+                });
+            };
+
+            Object.values(layerGroups).forEach(lg => {
+                scanGroup(lg.fg, lg.def.name);
+            });
+
+            if (dxfState && dxfState.features && dxfState.features.length > 0) {
+                outputText += "--- [DXF Import] ---\n";
+                dxfState.features.forEach((f, i) => {
+                    const cfg = statusConfig[f.status || 'rumah'];
+                    outputText += `--- Bidang DXF #${i+1} (${cfg.label}) ---\nTitik, Latitude (Y), Longitude (X)\n`;
+                    if (f.layer && f.layer.getLatLngs && f.layer.getLatLngs()[0]) {
+                        f.layer.getLatLngs()[0].forEach((ll, idx) => {
+                            outputText += `P${idx+1}, ${ll.lat.toFixed(6)}, ${ll.lng.toFixed(6)}\n`;
+                        });
+                    }
+                    outputText += "\n";
+                });
+            }
+
+            document.getElementById('coord-output').value = (index === 1 && (!dxfState || !dxfState.features.length)) ? "Belum ada bidang atau titik di peta." : outputText;
+        }
+
+        function openCoordModal() {
+            updateTargetLayerSelect();
+            document.getElementById('modal-coord').classList.replace('hidden', 'flex');
+        }
+        function closeCoordModal() { document.getElementById('modal-coord').classList.replace('flex', 'hidden'); }
+
+        function drawBatch() {
+            const text = document.getElementById('batchCoords').value.trim();
+            if (!text) return alert("Data koordinat masih kosong. Paste atau upload file CSV/TXT terlebih dahulu.");
+            const drawType = document.getElementById('drawType').value;
+            const format = document.getElementById('coordFormat').value;
+            const targetSel = document.getElementById('coord-target-layer').value;
+            const targetId = targetSel === 'active' ? activeLayerId : targetSel;
+            const targetFg = layerGroups[targetId] ? layerGroups[targetId].fg : activeFeatureGroup;
+            const style = getLayerStyle(targetId);
+
+            const latlngs = text.split('\n').map(l => {
+                const clean = l.trim();
+                if (!clean) return null;
+                const pts = clean.split(/[\t,;|\s]+/);
+                if (pts.length >= 2) {
+                    let v1 = parseFloat(pts[0].trim());
+                    let v2 = parseFloat(pts[1].trim());
+                    if (!isNaN(v1) && !isNaN(v2)) {
+                        return format === 'latlng' ? [v1, v2] : [v2, v1];
+                    }
+                }
+                return null;
+            }).filter(Boolean);
+
+            if (drawType === 'points') {
+                if (latlngs.length < 1) return alert("Tidak ditemukan baris koordinat yang valid.");
+                latlngs.forEach((ll, i) => {
+                    const marker = L.circleMarker(ll, {
+                        radius: 6,
+                        color: style.color,
+                        fillColor: style.fillColor,
+                        fillOpacity: 0.85,
+                        weight: 2
+                    }).addTo(map);
+                    const coordPair = `${ll[0].toFixed(6)}, ${ll[1].toFixed(6)}`;
+                    const popupHtml = `
+                    <div style="min-width:190px;font-family:sans-serif;padding:2px">
+                        <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:4px">Titik #${i+1} (${targetSel==='active'?(AMDAL_OSS_LAYERS.find(l=>l.id===activeLayerId)?.name||'Layer'):targetSel})</div>
+                        <div style="font-size:10px;font-weight:600;color:#64748b;margin-bottom:2px">Lat, Lng</div>
+                        <div style="display:flex;align-items:center;justify-content:between;gap:6px;background:#f1f5f9;border-radius:6px;padding:5px 8px">
+                            <span style="font-family:monospace;font-size:11px;font-weight:600;color:#1e293b">${coordPair}</span>
+                            <button type="button" onclick="copyCoordinates('${coordPair}', this)" style="background:#3b82f6;color:white;border:none;border-radius:4px;padding:3px 7px;font-size:10px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:3px;margin-left:auto" title="Salin Lat, Lng">
+                                <span>📋</span><span>Salin</span>
+                            </button>
+                        </div>
+                    </div>`;
+                    marker.bindPopup(popupHtml);
+                    targetFg.addLayer(marker);
+                    pushUndo({ type: 'add_layer', layer: marker, targetFg: targetFg });
+                });
+                const groupBounds = L.latLngBounds(latlngs);
+                map.fitBounds(groupBounds, { padding: [40, 40] });
+                alert(`Berhasil menambahkan ${latlngs.length} titik ke layer!`);
+            } else {
+                if (latlngs.length < 2) return alert("Minimal 2 baris koordinat untuk membuat Poligon atau Polyline.");
+                let shape;
+                if (drawType === 'polygon') {
+                    shape = L.polygon(latlngs, style).addTo(map);
+                } else {
+                    shape = L.polyline(latlngs, { color: style.color, weight: style.weight, dashArray: style.dashArray }).addTo(map);
+                }
+                targetFg.addLayer(shape);
+                pushUndo({ type: 'add_layer', layer: shape, targetFg: targetFg });
+                map.fitBounds(shape.getBounds(), { padding: [40, 40] });
+            }
+
+            renderLayerManagerList();
+            generateCoordinates();
+            closeCoordModal();
+        }
+
+        const WGS84_PRJ = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]';
+
+        async function exportToSHPOSS() {
+            const zip = new JSZip();
+            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            const rootFolderName = `SHP_AMDAL_OSS_${dateStr}`;
+            const root = zip.folder(rootFolderName);
+            let hasAnyData = false;
+
+            for (const def of AMDAL_OSS_LAYERS) {
+                const lg = layerGroups[def.id];
+                if (!lg || lg.fg.getLayers().length === 0) continue;
+                const geojson = lg.fg.toGeoJSON();
+                if (!geojson.features || geojson.features.length === 0) continue;
+
+                geojson.features.forEach((feature, i) => {
+                    feature.properties = {
+                        Id: i + 1,
+                        Layer: def.name,
+                        Kategori: def.type,
+                        CRS: 'WGS 84 (EPSG:4326)'
+                    };
+                });
+
+                const safeName = def.name.replace(/[^a-zA-Z0-9_]/g, '_').substring(0, 30);
+                try {
+                    const zipBase64 = await shpwrite.zip(geojson, {
+                        folder: safeName,
+                        types: { point: safeName + '_pt', polygon: safeName, line: safeName + '_ln' }
+                    });
+                    const layerZip = await JSZip.loadAsync(zipBase64, { base64: true });
+                    const targetFolder = root.folder(safeName);
+
+                    for (const [fname, fileObj] of Object.entries(layerZip.files)) {
+                        if (fileObj.dir) continue;
+                        const baseFileName = fname.split('/').pop();
+                        const fileData = await fileObj.async('arraybuffer');
+                        targetFolder.file(baseFileName, fileData);
+                        if (baseFileName.endsWith('.shp')) {
+                            const prjName = baseFileName.replace('.shp', '.prj');
+                            const cpgName = baseFileName.replace('.shp', '.cpg');
+                            const qpjName = baseFileName.replace('.shp', '.qpj');
+                            targetFolder.file(prjName, WGS84_PRJ);
+                            targetFolder.file(cpgName, 'UTF-8');
+                            targetFolder.file(qpjName, WGS84_PRJ);
+                        }
+                    }
+                    hasAnyData = true;
+                } catch(err) {
+                    console.warn('Gagal export layer:', def.name, err);
+                }
+            }
+
+            if (dxfState && dxfState.features && dxfState.features.length > 0) {
+                const dxfGeoJSON = activeFeatureGroup.toGeoJSON();
+                if (dxfGeoJSON.features && dxfGeoJSON.features.length > 0) {
+                    dxfGeoJSON.features.forEach((f, i) => {
+                        let statusVal = "Rumah";
+                        if (dxfState.features[i]) {
+                            statusVal = statusConfig[dxfState.features[i].status || 'rumah'].label;
+                        }
+                        f.properties = {
+                            Id: i + 1,
+                            Status: statusVal,
+                            Layer: 'DXF_Siteplan',
+                            CRS: 'WGS 84 (EPSG:4326)'
+                        };
+                    });
+                    try {
+                        const dxfZipB64 = await shpwrite.zip(dxfGeoJSON, {
+                            folder: 'DXF_Siteplan',
+                            types: { polygon: 'Kavling_Siteplan', line: 'Garis_Sempadan', point: 'Titik' }
+                        });
+                        const dxfLoaded = await JSZip.loadAsync(dxfZipB64, { base64: true });
+                        const dxfFolder = root.folder('DXF_Siteplan');
+                        for (const [fname, fileObj] of Object.entries(dxfLoaded.files)) {
+                            if (fileObj.dir) continue;
+                            const baseFileName = fname.split('/').pop();
+                            const fileData = await fileObj.async('arraybuffer');
+                            dxfFolder.file(baseFileName, fileData);
+                            if (baseFileName.endsWith('.shp')) {
+                                dxfFolder.file(baseFileName.replace('.shp', '.prj'), WGS84_PRJ);
+                                dxfFolder.file(baseFileName.replace('.shp', '.cpg'), 'UTF-8');
+                                dxfFolder.file(baseFileName.replace('.shp', '.qpj'), WGS84_PRJ);
+                            }
+                        }
+                        hasAnyData = true;
+                    } catch(err) {
+                        console.warn('Gagal export DXF ke SHP:', err);
+                    }
+                }
+            }
+
+            if (!hasAnyData) {
+                return alert("Belum ada objek gambar atau DXF di peta untuk diexport.");
+            }
+
+            try {
+                const finalBlob = await zip.generateAsync({ type: "blob" });
+                saveAs(finalBlob, `${rootFolderName}.zip`);
+                alert(`✅ Export ESRI Shapefile Sukses!\n\nPaket ZIP telah dilengkapi format QGIS & Standar OSS/AMDAL:\n- .shp (Geometri WGS84)\n- .shx (Shape Index)\n- .dbf (Tabel Atribut)\n- .prj (Proyeksi WGS 84)\n- .cpg (Encoding UTF-8)\n- .qpj (QGIS Projection Support)`);
+            } catch(err) {
+                alert("Terjadi kesalahan saat mengompres paket ZIP.");
+            }
+        }
+
+        function generateSiteplanSVG(state) {
+            if (!state || !state.features || state.features.length === 0) return null;
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            state.features.forEach(f => {
+                if (!f.cadPts) return;
+                f.cadPts.forEach(p => {
+                    if (p.x < minX) minX = p.x;
+                    if (p.x > maxX) maxX = p.x;
+                    if (p.y < minY) minY = p.y;
+                    if (p.y > maxY) maxY = p.y;
+                });
+            });
+            if (minX === Infinity) return null;
+            const w = Math.max(maxX - minX, 1);
+            const h = Math.max(maxY - minY, 1);
+            const pad = Math.max(w, h) * 0.05;
+            const vbX = (minX - pad).toFixed(2);
+            const vbY = (-maxY - pad).toFixed(2);
+            const vbW = (w + 2 * pad).toFixed(2);
+            const vbH = (h + 2 * pad).toFixed(2);
+            const strokeW = Math.max(w * 0.0025, 0.2).toFixed(3);
+
+            let polygonsSvg = state.features.map((f, i) => {
+                const cfg = statusConfig[f.status || 'rumah'] || statusConfig['rumah'];
+                const pts = (f.cadPts || []).map(p => `${p.x.toFixed(3)},${(-p.y).toFixed(3)}`).join(' ');
+                return `    <polygon id="kavling-${f.id || i}" data-status="${f.status || 'rumah'}" data-index="${i+1}" points="${pts}" fill="${cfg.fill}" stroke="${cfg.stroke}" stroke-width="${strokeW}" fill-opacity="${cfg.opacity || 0.8}">
+      <title>Kavling #${i+1} - ${cfg.label}</title>
+    </polygon>`;
+            }).join('\n');
+
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vbX} ${vbY} ${vbW} ${vbH}" width="100%" height="100%">
+  <defs>
+    <style>
+      polygon { transition: all 0.2s ease; cursor: pointer; }
+      polygon:hover { stroke-width: ${(w * 0.005).toFixed(3)}; filter: brightness(1.15); }
+    </style>
+  </defs>
+  <g id="siteplan-layer">
+${polygonsSvg}
+  </g>
+</svg>`;
+        }
+
+        window.exportToSVG = function() {
+            if (!dxfState || !dxfState.features || dxfState.features.length === 0) {
+                return alert("Belum ada objek DXF atau layout kavling yang aktif untuk diexport ke SVG. Silakan import DXF atau buka proyek JSON terlebih dahulu.");
+            }
+            const svgStr = generateSiteplanSVG(dxfState);
+            if (!svgStr) {
+                return alert("Gagal membuat data SVG dari layout bidang.");
+            }
+            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+            saveAs(blob, `Siteplan_Layout_${dateStr}.svg`);
+            showToast('Berhasil mengexport file SVG!', '🖼️');
+        };
+
+        window.exportProjectJSON = function() {
+            const hasDxf = dxfState && dxfState.features && dxfState.features.length > 0;
+            const hasMarkers = placedMarkers && placedMarkers.length > 0;
+            const hasPenanda = penandaList && penandaList.length > 0;
+            let hasDrawnLayers = false;
+            Object.values(layerGroups).forEach(lg => {
+                if (lg.fg && lg.fg.getLayers().length > 0) hasDrawnLayers = true;
+            });
+
+            if (!hasDxf && !hasMarkers && !hasPenanda && !hasDrawnLayers) {
+                return alert("Belum ada objek atau bidang di peta untuk disimpan ke proyek JSON. Silakan import DXF atau letakkan objek terlebih dahulu.");
+            }
+
+            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            const timeStr = new Date().toTimeString().slice(0, 8).replace(/:/g, '');
+
+            const projectData = {
+                app: "GIS Manager Pro (OSS & Amdalnet)",
+                version: "1.0",
+                savedAt: new Date().toISOString(),
+                map: {
+                    center: { lat: map.getCenter().lat, lng: map.getCenter().lng },
+                    zoom: map.getZoom(),
+                    basemap: currentBaseLayerKey
+                },
+                dxfState: hasDxf ? {
+                    cadCenter: dxfState.cadCenter,
+                    mapCenter: { lat: dxfState.mapCenter.lat, lng: dxfState.mapCenter.lng },
+                    baseScale: dxfState.baseScale,
+                    scaleMultiplier: dxfState.scaleMultiplier,
+                    rotation: dxfState.rotation,
+                    featuresCount: dxfState.features.length,
+                    features: dxfState.features.map((f, idx) => {
+                        let latlngs = [];
+                        if (f.layer && f.layer.getLatLngs) {
+                            const raw = f.layer.getLatLngs();
+                            const ring = Array.isArray(raw[0]) ? raw[0] : raw;
+                            latlngs = ring.map(ll => [parseFloat(ll.lat.toFixed(7)), parseFloat(ll.lng.toFixed(7))]);
+                        }
+                        return {
+                            id: f.id || ('f_' + idx),
+                            status: f.status || 'rumah',
+                            cadPts: f.cadPts || [],
+                            latlngs: latlngs,
+                            svgPath: f.cadPts ? f.cadPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(3)} ${(-p.y).toFixed(3)}`).join(' ') + ' Z' : ''
+                        };
+                    }),
+                    svg: generateSiteplanSVG(dxfState)
+                } : null,
+                drawnLayers: {},
+                customIcons: customIcons.map(ic => ({ id: ic.id, src: ic.src, desc: ic.desc })),
+                placedMarkers: placedMarkers.map(m => ({
+                    id: m.id,
+                    latlng: { lat: m.marker.getLatLng().lat, lng: m.marker.getLatLng().lng },
+                    iconData: m.iconData,
+                    scale: m.scale || 1,
+                    rotate: m.rotate || 0,
+                    opacity: m.opacity !== undefined ? m.opacity : 1,
+                    groupId: m.groupId,
+                    lockedScale: m.lockedScale || false,
+                    baseZoom: m.baseZoom || map.getZoom()
+                })),
+                penandaList: penandaList.map(p => ({
+                    id: p.id,
+                    emoji: p.emoji,
+                    label: p.label,
+                    latlng: { lat: p.latlng.lat, lng: p.latlng.lng }
+                })),
+                printGrid: {
+                    width: document.getElementById('grid-w-input')?.value || 85,
+                    height: document.getElementById('grid-h-input')?.value || 82,
+                    x: document.getElementById('grid-x-input')?.value || 0,
+                    y: document.getElementById('grid-y-input')?.value || 0,
+                    visible: document.getElementById('print-grid-overlay')?.style.display === 'block'
+                },
+                legend: {
+                    visible: document.getElementById('map-legend-box')?.style.display === 'block',
+                    top: document.getElementById('map-legend-box')?.style.top || '80px',
+                    left: document.getElementById('map-legend-box')?.style.left || '80px',
+                    locked: isLegendLocked
+                }
+            };
+
+            AMDAL_OSS_LAYERS.forEach(def => {
+                const lg = layerGroups[def.id];
+                if (lg && lg.fg.getLayers().length > 0) {
+                    projectData.drawnLayers[def.id] = {
+                        visible: lg.visible,
+                        opacity: lg.opacity,
+                        geoJSON: lg.fg.toGeoJSON()
+                    };
+                }
+            });
+
+            const jsonStr = JSON.stringify(projectData, null, 2);
+            const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
+            saveAs(blob, `Project_GIS_${dateStr}_${timeStr}.json`);
+            showToast('Proyek berhasil disimpan ke JSON!', '💾');
+        };
+
+        window.loadProjectJSON = function(data) {
+            try {
+                if (!data || typeof data !== 'object') throw new Error("File JSON tidak valid.");
+
+                if (data.map) {
+                    if (data.map.basemap && baseLayers[data.map.basemap]) {
+                        switchBasemap(data.map.basemap);
+                    }
+                    if (data.map.center && typeof data.map.center.lat === 'number' && typeof data.map.center.lng === 'number') {
+                        map.setView([data.map.center.lat, data.map.center.lng], data.map.zoom || 16);
+                    }
+                }
+
+                if (data.printGrid) {
+                    const gw = document.getElementById('grid-w-input');
+                    const gh = document.getElementById('grid-h-input');
+                    const gx = document.getElementById('grid-x-input');
+                    const gy = document.getElementById('grid-y-input');
+                    if (gw && data.printGrid.width !== undefined) gw.value = data.printGrid.width;
+                    if (gh && data.printGrid.height !== undefined) gh.value = data.printGrid.height;
+                    if (gx && data.printGrid.x !== undefined) gx.value = data.printGrid.x;
+                    if (gy && data.printGrid.y !== undefined) gy.value = data.printGrid.y;
+                    if (typeof updateGrid4Sides === 'function') updateGrid4Sides();
+                    const gridOverlay = document.getElementById('print-grid-overlay');
+                    const btnGrid = document.getElementById('btn-grid');
+                    if (gridOverlay && btnGrid && data.printGrid.visible !== undefined) {
+                        if (data.printGrid.visible) {
+                            gridOverlay.style.display = 'block';
+                            btnGrid.innerHTML = '<span>📏 Grid Cetak: ON</span>';
+                            btnGrid.classList.replace('bg-blue-50', 'bg-blue-600');
+                            btnGrid.classList.replace('text-blue-700', 'text-white');
+                        } else {
+                            gridOverlay.style.display = 'none';
+                            btnGrid.innerHTML = '<span>📏 Grid Cetak: OFF</span>';
+                            btnGrid.classList.replace('bg-blue-600', 'bg-blue-50');
+                            btnGrid.classList.replace('text-white', 'text-blue-700');
+                        }
+                    }
+                }
+
+                if (data.legend) {
+                    const lb = document.getElementById('map-legend-box');
+                    if (lb) {
+                        if (data.legend.top) lb.style.top = data.legend.top;
+                        if (data.legend.left) lb.style.left = data.legend.left;
+                        if (data.legend.visible) lb.style.display = 'block';
+                        if (data.legend.locked !== undefined) {
+                            isLegendLocked = data.legend.locked;
+                            lb.classList.toggle('legend-locked', isLegendLocked);
+                            const lockBtn = document.getElementById('btn-legend-lock');
+                            if (lockBtn) lockBtn.textContent = isLegendLocked ? '🔓' : '🔒';
+                        }
+                    }
+                }
+
+                if (Array.isArray(data.customIcons)) {
+                    customIcons = data.customIcons;
+                    renderIconLegend();
+                    updateLegendHTML();
+                }
+
+                if (Array.isArray(data.placedMarkers)) {
+                    placedMarkers.forEach(m => {
+                        if (m && m.marker) map.removeLayer(m.marker);
+                    });
+                    placedMarkers = [];
+                    selectedMarkers.clear();
+                    updateEditorUI();
+
+                    data.placedMarkers.forEach(pm => {
+                        if (!pm.latlng || !pm.iconData) return;
+                        const markerId = pm.id || ('marker_' + Date.now() + Math.floor(Math.random() * 1000));
+                        const s = pm.scale || 1;
+                        const r = pm.rotate || 0;
+                        const op = pm.opacity !== undefined ? pm.opacity : 1;
+                        const html = `
+                            <div id="wrapper_${markerId}" style="width: 50px; height: 50px; display:flex; justify-content:center; align-items:center; transform: scale(${s}) rotate(${r}deg); transform-origin: center center; opacity:${op}; transition: transform 0.1s ease-out;">
+                                <img id="img_${markerId}" src="${pm.iconData.src}" style="width: 100%; height: 100%; object-fit: contain; padding: 2px;">
+                            </div>
+                        `;
+                        const divIcon = L.divIcon({ html: html, className: 'custom-icon-noshadow', iconSize: [50, 50], iconAnchor: [25, 25] });
+                        const marker = L.marker([pm.latlng.lat, pm.latlng.lng], { draggable: true, icon: divIcon }).addTo(map);
+
+                        const markerData = {
+                            id: markerId,
+                            marker: marker,
+                            iconData: pm.iconData,
+                            scale: s,
+                            rotate: r,
+                            opacity: op,
+                            groupId: pm.groupId || null,
+                            lockedScale: pm.lockedScale || false,
+                            baseZoom: pm.baseZoom || map.getZoom()
+                        };
+                        placedMarkers.push(markerData);
+
+                        marker.on('click', function(e) {
+                            L.DomEvent.stopPropagation(e);
+                            toggleSelection(markerData, e.originalEvent.shiftKey);
+                        });
+
+                        let startLatLngs = {};
+                        marker.on('dragstart', function(e) {
+                            if (markerData.groupId) {
+                                const groupMembers = placedMarkers.filter(m => m.groupId === markerData.groupId);
+                                groupMembers.forEach(m => { startLatLngs[m.id] = m.marker.getLatLng(); });
+                                startLatLngs.main = e.target.getLatLng();
+                            }
+                        });
+                        marker.on('drag', function(e) {
+                            if (markerData.groupId) {
+                                const currentMain = e.target.getLatLng();
+                                const deltaLat = currentMain.lat - startLatLngs.main.lat;
+                                const deltaLng = currentMain.lng - startLatLngs.main.lng;
+                                const groupMembers = placedMarkers.filter(m => m.groupId === markerData.groupId && m.id !== markerData.id);
+                                groupMembers.forEach(m => {
+                                    const start = startLatLngs[m.id];
+                                    if(start) { m.marker.setLatLng([start.lat + deltaLat, start.lng + deltaLng]); }
+                                });
+                            }
+                        });
+
+                        updatePlacedMarkerTransform(markerData);
+                    });
+                }
+
+                if (Array.isArray(data.penandaList)) {
+                    penandaList.forEach(p => {
+                        if (p && p.marker) map.removeLayer(p.marker);
+                    });
+                    penandaList = [];
+
+                    data.penandaList.forEach(p => {
+                        if (!p.latlng) return;
+                        const emoji = p.emoji || '📍';
+                        const label = p.label || 'Titik';
+                        const penandaId = p.id || ('p_' + Date.now() + Math.floor(Math.random() * 1000));
+                        const latlng = L.latLng(p.latlng.lat, p.latlng.lng);
+
+                        const iconHtml = `<div style="font-size:28px;line-height:1;text-align:center;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))">${emoji}<div style="font-size:9px;font-weight:700;color:#1e293b;background:rgba(255,255,255,0.92);border-radius:3px;padding:1px 4px;margin-top:1px;white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;text-align:center">${label}</div></div>`;
+                        const divIcon = L.divIcon({ html: iconHtml, className: 'penanda-icon', iconSize: [70, 52], iconAnchor: [35, 48] });
+                        const marker = L.marker(latlng, { draggable: true, icon: divIcon }).addTo(map);
+                        registerSnappable(marker);
+
+                        const penandaObj = { id: penandaId, emoji: emoji, label: label, latlng: latlng, marker: marker };
+                        penandaList.push(penandaObj);
+
+                        marker.bindPopup(buildPenandaPopupHTML(penandaObj), { closeButton: true });
+                        marker.on('click', function(e) {
+                            L.DomEvent.stopPropagation(e);
+                            marker.setPopupContent(buildPenandaPopupHTML(penandaObj));
+                            marker.openPopup();
+                        });
+
+                        let _penandaDragStartPos = null;
+                        marker.on('dragstart', function(e) { _penandaDragStartPos = e.target.getLatLng(); });
+                        marker.on('drag', function(e) {
+                            penandaObj.latlng = e.target.getLatLng();
+                            if (marker.isPopupOpen()) marker.setPopupContent(buildPenandaPopupHTML(penandaObj));
+                        });
+                        marker.on('dragend', function(e) {
+                            const newLL = e.target.getLatLng();
+                            penandaObj.latlng = newLL;
+                            marker.setPopupContent(buildPenandaPopupHTML(penandaObj));
+                            renderPenandaList();
+                        });
+                    });
+                    renderPenandaList();
+                }
+
+                if (data.drawnLayers && typeof data.drawnLayers === 'object') {
+                    Object.keys(data.drawnLayers).forEach(layerId => {
+                        const layerInfo = data.drawnLayers[layerId];
+                        const lg = layerGroups[layerId];
+                        if (lg && layerInfo.geoJSON) {
+                            lg.fg.clearLayers();
+                            const style = getLayerStyle(layerId);
+                            L.geoJSON(layerInfo.geoJSON, {
+                                style: style,
+                                onEachFeature: function(feat, layer) {
+                                    registerSnappable(layer);
+                                    lg.fg.addLayer(layer);
+                                }
+                            });
+                        }
+                    });
+                    renderLayerManagerList();
+                }
+
+                if (data.dxfState && Array.isArray(data.dxfState.features) && data.dxfState.features.length > 0) {
+                    if (dxfState && dxfState.features) {
+                        dxfState.features.forEach(f => { if (f.layer) activeFeatureGroup.removeLayer(f.layer); });
+                    }
+                    if (dxfAnchorMarker) map.removeLayer(dxfAnchorMarker);
+
+                    const dMapCenter = (data.dxfState.mapCenter && typeof data.dxfState.mapCenter.lat === 'number')
+                        ? L.latLng(data.dxfState.mapCenter.lat, data.dxfState.mapCenter.lng)
+                        : map.getCenter();
+
+                    let cadCenter = data.dxfState.cadCenter || { x: 0, y: 0 };
+                    const baseScale = data.dxfState.baseScale || 0.0001;
+                    const scaleMultiplier = data.dxfState.scaleMultiplier !== undefined ? parseFloat(data.dxfState.scaleMultiplier) : 1.000;
+                    const rotation = data.dxfState.rotation !== undefined ? parseFloat(data.dxfState.rotation) : 0;
+
+                    const restoredFeatures = data.dxfState.features.map((f, idx) => {
+                        let pts = f.cadPts || [];
+                        if ((!pts || pts.length === 0) && Array.isArray(f.latlngs) && f.latlngs.length > 0) {
+                            const latLngRatio = Math.cos(dMapCenter.lat * Math.PI / 180);
+                            pts = f.latlngs.map(ll => {
+                                const dLat = ll[0] - dMapCenter.lat;
+                                const dLng = (ll[1] - dMapCenter.lng) * latLngRatio;
+                                return {
+                                    x: cadCenter.x + (dLng / (baseScale * scaleMultiplier)),
+                                    y: cadCenter.y + (dLat / (baseScale * scaleMultiplier))
+                                };
+                            });
+                        }
+                        return {
+                            id: f.id || ('f_' + idx),
+                            cadPts: pts,
+                            status: f.status || 'rumah'
+                        };
+                    });
+
+                    dxfState = {
+                        cadCenter: cadCenter,
+                        mapCenter: dMapCenter,
+                        baseScale: baseScale,
+                        scaleMultiplier: scaleMultiplier,
+                        rotation: rotation,
+                        features: restoredFeatures
+                    };
+
+                    const inpScale = document.getElementById('dxf-scale');
+                    if (inpScale) inpScale.value = scaleMultiplier.toFixed(3);
+                    const sliderScale = document.getElementById('dxf-scale-slider');
+                    if (sliderScale) sliderScale.value = scaleMultiplier;
+                    const lblScale = document.getElementById('scale-val');
+                    if (lblScale) lblScale.innerText = scaleMultiplier.toFixed(3) + 'x';
+
+                    const inpRotate = document.getElementById('dxf-rotate');
+                    if (inpRotate) inpRotate.value = rotation;
+                    const lblRotate = document.getElementById('rotate-val');
+                    if (lblRotate) lblRotate.innerText = rotation + '°';
+
+                    const pnl = document.getElementById('dxf-manager-panel');
+                    if (pnl) {
+                        pnl.classList.remove('hidden');
+                        pnl.classList.add('flex');
+                    }
+                    const badge = document.getElementById('dxf-count-badge');
+                    if (badge) badge.innerText = restoredFeatures.length + ' Bidang';
+
+                    buildDxfUIList();
+                    renderDxfBatch();
+
+                    map.panTo(dMapCenter);
+                }
+
+                generateCoordinates();
+                showToast('Proyek berhasil dimuat lengkap dari JSON!', '📂');
+                alert(`✅ Proyek Berhasil Dimuat!\n\nSeluruh data dan posisi objek dikembalikan persis seperti terakhir disimpan:\n- ${dxfState ? dxfState.features.length : 0} Bidang Kavling DXF/SVG (posisi, skala, rotasi & warna)\n- ${placedMarkers.length} Ikon / Marker Terpasang\n- ${penandaList.length} Titik Penanda Koordinat\n\nSemua posisi objek telah sinkron tanpa perlu mengimport ulang file DXF!`);
+            } catch (err) {
+                console.error("Gagal load project JSON:", err);
+                alert("Gagal memuat file proyek JSON: " + err.message);
+            }
+        };
+
+        window.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+        window.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                const fname = file.name.toLowerCase();
+                if (fname.endsWith('.json')) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        try {
+                            const parsed = JSON.parse(evt.target.result);
+                            loadProjectJSON(parsed);
+                        } catch (err) {
+                            alert("Format file JSON tidak valid: " + err.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                } else if (fname.endsWith('.dxf')) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        try {
+                            const dxf = new DxfParser().parseSync(event.target.result);
+                            initDXFData(dxf);
+                        } catch (err) {
+                            alert("Format DXF tidak valid.");
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                exportProjectJSON();
+            }
+        });
+
+        initLayerManager();
+    
+        window.addEventListener('beforeprint', function() { if(map) map.invalidateSize(); });
+        window.addEventListener('afterprint', function() { if(map) map.invalidateSize(); });
+    </script>
+    <div id="global-toast" class="fixed top-5 right-5 z-[99999] bg-slate-900/90 backdrop-blur text-white px-4 py-2.5 rounded-xl shadow-2xl font-sans text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 pointer-events-none opacity-0 -translate-y-4">
+        <span id="global-toast-icon">✅</span>
+        <span id="global-toast-msg">Koordinat Tersalin</span>
+    </div>
+</body>
+</html>
